@@ -9,6 +9,9 @@ namespace PetSoLive.Core.Interfaces
     {
         Task<User> AuthenticateAsync(string username, string password);
         Task RegisterAsync(User user);
+        
+        
+        
     }
 
 }

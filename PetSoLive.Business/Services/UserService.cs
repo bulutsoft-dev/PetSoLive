@@ -13,15 +13,15 @@ namespace PetSoLive.Business.Services
 
         public async Task<User> AuthenticateAsync(string username, string password)
         {
-            // Authentication logic
-            return await _userRepository.GetByIdAsync(1); // Example
+            // Simulated hashing for demonstration
+            var user = await _userRepository.GetAllAsync();
+            return user.FirstOrDefault(u => u.Username == username && u.PasswordHash == password);
         }
 
         public async Task RegisterAsync(User user)
         {
-            // Registration logic
+            // Hash password in real application
             await _userRepository.AddAsync(user);
         }
     }
-
 }
