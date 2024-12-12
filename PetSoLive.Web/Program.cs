@@ -1,7 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+using PetSoLive.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add ApplicationDbContext
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+        b => b.MigrationsAssembly("PetSoLive.Data")));
+
+
 
 var app = builder.Build();
 
