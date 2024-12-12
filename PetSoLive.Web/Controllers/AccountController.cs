@@ -5,7 +5,6 @@ using PetSoLive.Core.Interfaces;
 // Controllers (MVC pattern)
 namespace PetSoLive.Web.Controllers
 {
-
     public class AccountController : Controller
     {
         private readonly IUserService _userService;
@@ -15,8 +14,10 @@ namespace PetSoLive.Web.Controllers
             _userService = userService;
         }
 
+        // Login page (GET)
         public IActionResult Login() => View();
 
+        // Login (POST)
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
@@ -27,24 +28,28 @@ namespace PetSoLive.Web.Controllers
                 HttpContext.Session.SetString("Username", user.Username);
                 return RedirectToAction("Index", "Home");
             }
+
             ModelState.AddModelError("", "Invalid username or password");
             return View();
         }
 
+        // Register page (GET)
         public IActionResult Register() => View();
 
+        // Register (POST)
         [HttpPost]
         public async Task<IActionResult> Register(string username, string email, string password)
         {
             if (ModelState.IsValid)
             {
-                var user = new User { Username = username, Email = email, PasswordHash = password }; // Hash password in real app
+                var user = new User { Username = username, Email = email, PasswordHash = password };
                 await _userService.RegisterAsync(user);
                 return RedirectToAction("Login");
             }
             return View();
         }
 
+        // Logout
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

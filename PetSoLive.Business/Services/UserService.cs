@@ -1,8 +1,9 @@
 // 4. Business Logic Layer (/PetSoLive.Business)
-
+using BCrypt.Net;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
 
+// Add password hashing to UserService
 namespace PetSoLive.Business.Services
 {
     public class UserService : IUserService
@@ -13,15 +14,21 @@ namespace PetSoLive.Business.Services
 
         public async Task<User> AuthenticateAsync(string username, string password)
         {
-            // Simulated hashing for demonstration
-            var user = await _userRepository.GetAllAsync();
-            return user.FirstOrDefault(u => u.Username == username && u.PasswordHash == password);
+            var user = (await _userRepository.GetAllAsync()).FirstOrDefault(u => u.Username == username);
+
+            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+            {
+                return user;
+            }
+
+            return null;
         }
 
         public async Task RegisterAsync(User user)
         {
-            // Hash password in real application
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash); // Şifreyi hashle
             await _userRepository.AddAsync(user);
         }
+
     }
 }
