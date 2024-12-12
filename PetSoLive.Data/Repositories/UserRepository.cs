@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
 
@@ -19,12 +20,16 @@ public class UserRepository : IRepository<User>
         return _repositoryImplementation.GetByIdAsync(id);
     }
 
-    public Task<IEnumerable<User>> GetAllAsync()
+    public async Task AddAsync(User entity)
     {
-        return _repositoryImplementation.GetAllAsync();
+        await _context.Users.AddAsync(entity);
+        await _context.SaveChangesAsync(); // Veritabanına işlemleri yazar
     }
 
-    public async Task AddAsync(User entity) => await _context.Users.AddAsync(entity);
+    public async Task<IEnumerable<User>> GetAllAsync()
+    {
+        return await _context.Users.ToListAsync();
+    }
 
     public Task UpdateAsync(User entity)
     {
