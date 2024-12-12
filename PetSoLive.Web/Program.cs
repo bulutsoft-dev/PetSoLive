@@ -8,31 +8,43 @@ using PetSoLive.Data.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews();  // Add MVC support
 
-// Add services to the container
-builder.Services.AddControllersWithViews();
-builder.Services.AddSession();
+// Add session configuration
+builder.Services.AddDistributedMemoryCache(); // Add memory cache for session
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
+    options.Cookie.HttpOnly = true;  // Cookie is only accessible via HTTP, not JavaScript
+});
 
-// Add ApplicationDbContext
+// Add ApplicationDbContext (EF Core)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
         b => b.MigrationsAssembly("PetSoLive.Data")));
 
-// Register repositories and services
+// Register Repositories and Services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 
+// Add authentication and authorization services (cookie-based authentication)
+builder.Services.AddAuthentication()
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login"; // Redirect to login page if not authenticated
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Cookie expiration time
+        options.SlidingExpiration = true; // Enable sliding expiration
+    });
 
+builder.Services.AddAuthorization();
 
-
+// Build the application
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -40,10 +52,15 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// Enable session middleware (must come before routing)
 app.UseSession();
+
+// Authentication and authorization middleware
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Map controller routes
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
