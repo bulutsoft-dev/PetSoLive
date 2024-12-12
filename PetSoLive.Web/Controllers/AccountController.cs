@@ -24,9 +24,7 @@ public class AccountController : Controller
         {
             // Store user information in session
             HttpContext.Session.SetString("Username", user.Username);
-            // Set session info to ViewData for access in layout
-            ViewData["Username"] = user.Username;
-
+            Console.WriteLine($"User {user.Username} logged in and session set."); // Debugging line
             return RedirectToAction("Index", "Home");
         }
 

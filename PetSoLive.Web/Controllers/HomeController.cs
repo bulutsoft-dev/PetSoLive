@@ -9,13 +9,7 @@ namespace PetSoLive.Web.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
-        {
-            // Check session for username
-            var username = HttpContext.Session.GetString("Username");
-            ViewData["Username"] = username;
-            return View();
-        }
+        public IActionResult Index() => View();
         public IActionResult About() => View();
     }
 

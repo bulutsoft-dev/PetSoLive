@@ -6,7 +6,7 @@
     <title>@ViewData["Title"] - PetSoLive.Web</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/PetSoLive.Web.styles.css" asp-append-version="true"/>
+ 
 </head>
 <body>
 
@@ -32,7 +32,10 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-2">
                     @* Check if the user is logged in using session *@
-                    @if (ViewData["Username"] == null)
+                    @{
+                    var username = Context.Session.GetString("Username");
+                    }
+                    @if (string.IsNullOrEmpty(username))
                     {
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
@@ -47,6 +50,8 @@
                         <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Logout</a>
                     </li>
                     }
+
+
                 </ul>
             </div>
         </div>
