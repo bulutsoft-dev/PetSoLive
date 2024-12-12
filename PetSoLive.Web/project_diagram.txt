@@ -1,0 +1,67 @@
+/PetSoLive (Ana Çözüm Klasörü)
+├── /PetSoLive.Web (Sunum Katmanı)
+│   ├── /Controllers
+│   │   ├── HomeController.cs
+│   │   ├── AccountController.cs
+│   │   ├── AdoptionController.cs
+│   │   ├── AssistanceController.cs
+│   ├── /Views
+│   │   ├── /Home
+│   │   │   ├── Index.cshtml
+│   │   │   ├── About.cshtml
+│   │   ├── /Account
+│   │   │   ├── Login.cshtml
+│   │   │   ├── Register.cshtml
+│   │   ├── /Adoption
+│   │   │   ├── Index.cshtml
+│   │   │   ├── Details.cshtml
+│   │   ├── /Assistance
+│   │       ├── Create.cshtml
+│   │       ├── List.cshtml
+│   ├── /wwwroot
+│       ├── /css
+│       ├── /js
+│       ├── /images
+│   ├── Program.cs
+│   ├── Startup.cs
+│   ├── appsettings.json
+│   ├── appsettings.Development.json
+├── /PetSoLive.Core (Çekirdek Katman)
+│   ├── /Entities
+│   │   ├── User.cs
+│   │   ├── Pet.cs
+│   │   ├── Announcement.cs
+│   │   ├── Adoption.cs
+│   ├── /Interfaces
+│   │   ├── IRepository.cs
+│   │   ├── IAdoptionService.cs
+│   │   ├── IAssistanceService.cs
+│   │   ├── IUserService.cs
+│   ├── /DTOs
+│   │   ├── UserDto.cs
+│   │   ├── PetDto.cs
+│   ├── /Helpers
+│       ├── NotificationHelper.cs
+├── /PetSoLive.Data (Veri Erişim Katmanı)
+│   ├── /Repositories
+│   │   ├── UserRepository.cs
+│   │   ├── PetRepository.cs
+│   │   ├── AdoptionRepository.cs
+│   │   ├── AnnouncementRepository.cs
+│   ├── ApplicationDbContext.cs
+│   ├── Migrations
+│       ├── [Migration Files]
+├── /PetSoLive.Business (İş Mantığı Katmanı)
+│   ├── /Services
+│   │   ├── AdoptionService.cs
+│   │   ├── AssistanceService.cs
+│   │   ├── UserService.cs
+│   ├── BusinessRules.cs
+├── /PetSoLive.Tests (Test Katmanı)
+│   ├── /UnitTests
+│   │   ├── AdoptionServiceTests.cs
+│   │   ├── AssistanceServiceTests.cs
+│   ├── /IntegrationTests
+│       ├── UserControllerTests.cs
+│   ├── PetSoLive.Tests.csproj
+├── PetSoLive.sln
