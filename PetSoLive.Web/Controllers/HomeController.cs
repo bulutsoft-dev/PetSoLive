@@ -1,23 +1,21 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using PetSoLive.Models;
+using PetSoLive.Web.Models;
 
-namespace PetSoLive.Controllers;
+namespace PetSoLive.Web.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    private readonly IAdoptionService _adoptionService;
+    public HomeController(IAdoptionService adoptionService)
     {
-        _logger = logger;
+        _adoptionService = adoptionService;
     }
-
     public IActionResult Index()
     {
-        return View();
+        var adoptions = _adoptionService.GetAllAdoptions();
+        return View(adoptions);
     }
-
     public IActionResult Privacy()
     {
         return View();
