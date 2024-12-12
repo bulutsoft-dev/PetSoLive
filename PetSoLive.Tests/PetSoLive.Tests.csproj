@@ -6,9 +6,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Folder Include="IntegrationTests\" />
-      <Folder Include="UnitTests\" />
-    </ItemGroup>
-
 </Project>

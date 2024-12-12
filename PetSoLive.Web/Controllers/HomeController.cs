@@ -1,29 +1,27 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using PetSoLive.Web.Models;
+// PetSoLive Solution Structure (Simplified Implementation)
 
-namespace PetSoLive.Web.Controllers;
+// 1. Presentation Layer (/PetSoLive.Web)
 
-public class HomeController : Controller
+// Controllers (MVC pattern)
+namespace PetSoLive.Web.Controllers
 {
-    private readonly IAdoptionService _adoptionService;
-    public HomeController(IAdoptionService adoptionService)
+    public class HomeController : Controller
     {
-        _adoptionService = adoptionService;
-    }
-    public IActionResult Index()
-    {
-        var adoptions = _adoptionService.GetAllAdoptions();
-        return View(adoptions);
-    }
-    public IActionResult Privacy()
-    {
-        return View();
+        public IActionResult Index() => View();
+        public IActionResult About() => View();
     }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
+    
 }
+
+// Views (HTML with Razor Syntax in /Views folders)
+// - Home: Index.cshtml, About.cshtml
+// - Account: Login.cshtml, Register.cshtml
+// - Adoption: Index.cshtml, Details.cshtml
+// - Assistance: Create.cshtml, List.cshtml
+
+// Static files served from /wwwroot (CSS, JS, Images)
+// Program.cs: Entry point to configure and run the ASP.NET application
+// Startup.cs: Middleware configuration and service dependency injection
