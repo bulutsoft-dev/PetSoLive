@@ -29,9 +29,10 @@ namespace PetSoLive.Business.Services
         }
         
         // Implement GetPetByIdAsync method
-        public async Task<Pet> GetPetByIdAsync(int petId)
+        public async Task<Pet> GetPetByIdAsync(int id)
         {
-            return await _petRepository.GetByIdAsync(petId); // Assuming the repository method is implemented correctly
+            return await _petRepository.GetByIdAsync(id); // Fetch the pet by ID from the repository
         }
-    }
+    
+}
 }

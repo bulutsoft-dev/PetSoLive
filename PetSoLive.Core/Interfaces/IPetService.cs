@@ -7,8 +7,10 @@ namespace PetSoLive.Core.Interfaces
         Task CreatePetAsync(Pet? pet); // Method to create a pet
         Task<Pet?> GetByIdAsync(int petId); // Method to get a pet by ID
         
-        Task<Pet> GetPetByIdAsync(int petId);  // Add this method to the interface
+        Task<Pet> GetPetByIdAsync(int id); // Fetch pet by ID
         Task<IEnumerable<Pet>> GetAllPetsAsync(); // This method fetches all pets
+        
+        
 
     }
 }
