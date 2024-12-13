@@ -27,6 +27,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 
+
+builder.Services.AddScoped<IRepository<Assistance>, AssistanceRepository>();
+builder.Services.AddScoped<IAssistanceService, AssistanceService>();
+builder.Services.AddScoped<IRepository<Adoption>, AdoptionRepository>();
+builder.Services.AddScoped<IAdoptionService, AdoptionService>();
+
+
 // Add authentication and authorization services (cookie-based authentication)
 builder.Services.AddAuthentication()
     .AddCookie(options =>
