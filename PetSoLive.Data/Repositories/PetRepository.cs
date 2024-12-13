@@ -13,15 +13,21 @@ namespace PetSoLive.Data.Repositories
             _context = context;
         }
 
-        public async Task AddAsync(Pet pet)
+        public async Task AddAsync(Pet? pet)
         {
             await _context.Pets.AddAsync(pet);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Pet>> GetAllAsync()
+        public async Task<List<Pet?>> GetAllAsync()
         {
             return await _context.Pets.ToListAsync();
+        }
+        
+        // Implement the GetByIdAsync method
+        public async Task<Pet?> GetByIdAsync(int petId)
+        {
+            return await _context.Pets.FirstOrDefaultAsync(p => p != null && p.Id == petId);
         }
     }
 }

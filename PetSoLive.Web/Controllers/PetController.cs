@@ -23,7 +23,7 @@ namespace PetSoLive.Web.Controllers
         // POST: /Pet/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Pet pet)
+        public async Task<IActionResult> Create(Pet? pet)
         {
             if (ModelState.IsValid)
             {

@@ -53,16 +53,22 @@ namespace PetSoLive.Web.Controllers
         /// <summary>
         /// Displays a list of all adoptions.
         /// </summary>
+        /// <summary>
+        /// Displays a list of available pets for adoption.
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var adoptions = await _adoptionService.GetAllAdoptionsAsync();
-            return View(adoptions);
+            // Fetch all pets available for adoption
+            var pets = await _petService.GetAllPetsAsync();
+
+            return View(pets);  // Pass the list of pets to the view
         }
+
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePet(Pet pet)
+        public async Task<IActionResult> CreatePet(Pet? pet)
         {
             if (ModelState.IsValid)
             {
