@@ -34,6 +34,11 @@ builder.Services.AddScoped<IRepository<Adoption>, AdoptionRepository>();
 builder.Services.AddScoped<IAdoptionService, AdoptionService>();
 
 
+// Register PetService with DI container
+builder.Services.AddScoped<IPetService, PetService>();
+builder.Services.AddScoped<IPetRepository, PetRepository>();
+
+
 // Add authentication and authorization services (cookie-based authentication)
 builder.Services.AddAuthentication()
     .AddCookie(options =>

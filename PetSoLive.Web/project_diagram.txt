@@ -1,5 +1,5 @@
-/PetSoLive (Ana Çözüm Klasörü)
-├── /PetSoLive.Web (Sunum Katmanı)
+/PetSoLive (Main Solution Folder)
+├── /PetSoLive.Web (Presentation Layer)
 │   ├── /Controllers
 │   │   ├── HomeController.cs
 │   │   ├── AccountController.cs
@@ -26,14 +26,14 @@
 │   ├── Startup.cs
 │   ├── appsettings.json
 │   ├── appsettings.Development.json
-├── /PetSoLive.Core (Çekirdek Katman)
+├── /PetSoLive.Core (Core Layer)
 │   ├── /Entities
 │   │   ├── User.cs
 │   │   ├── Pet.cs
 │   │   ├── Announcement.cs
 │   │   ├── Adoption.cs
 │   ├── /Enums
-│   │   ├── AdoptionStatus.cs  // Newly created Enum
+│   │   ├── AdoptionStatus.cs
 │   ├── /Interfaces
 │   │   ├── IRepository.cs
 │   │   ├── IAdoptionService.cs
@@ -44,22 +44,22 @@
 │   │   ├── PetDto.cs
 │   ├── /Helpers
 │       ├── NotificationHelper.cs
-├── /PetSoLive.Data (Veri Erişim Katmanı)
+├── /PetSoLive.Data (Data Access Layer)
 │   ├── /Repositories
 │   │   ├── UserRepository.cs
 │   │   ├── PetRepository.cs
 │   │   ├── AdoptionRepository.cs
 │   │   ├── AnnouncementRepository.cs
 │   ├── ApplicationDbContext.cs
-│   ├── Migrations
+│   ├── /Migrations
 │       ├── [Migration Files]
-├── /PetSoLive.Business (İş Mantığı Katmanı)
+├── /PetSoLive.Business (Business Logic Layer)
 │   ├── /Services
 │   │   ├── AdoptionService.cs
 │   │   ├── AssistanceService.cs
 │   │   ├── UserService.cs
 │   ├── BusinessRules.cs
-├── /PetSoLive.Tests (Test Katmanı)
+├── /PetSoLive.Tests (Testing Layer)
 │   ├── /UnitTests
 │   │   ├── AdoptionServiceTests.cs
 │   │   ├── AssistanceServiceTests.cs

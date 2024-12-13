@@ -8,14 +8,16 @@ using System;
 namespace PetSoLive.Web.Controllers
 {
     public class AdoptionController : Controller
+    
     {
         private readonly IAdoptionService _adoptionService;
+        private readonly IPetService _petService; // Inject IPetService
 
-        public AdoptionController(IAdoptionService adoptionService)
+        public AdoptionController(IAdoptionService adoptionService, IPetService petService)
         {
             _adoptionService = adoptionService;
+            _petService = petService; // Assign the injected pet service
         }
-
         /// <summary>
         /// Displays the form for creating a new adoption.
         /// </summary>
@@ -57,5 +59,21 @@ namespace PetSoLive.Web.Controllers
             var adoptions = await _adoptionService.GetAllAdoptionsAsync();
             return View(adoptions);
         }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePet(Pet pet)
+        {
+            if (ModelState.IsValid)
+            {
+                // You can handle image uploading here, if needed
+                await _petService.CreatePetAsync(pet); // This will depend on your service layer
+                return RedirectToAction(nameof(Index)); // Redirect to the list of pets or adoptions
+            }
+
+            return View(pet);
+        }
+
+
     }
 }
