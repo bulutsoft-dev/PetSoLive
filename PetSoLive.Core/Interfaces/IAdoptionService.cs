@@ -9,6 +9,7 @@ namespace PetSoLive.Core.Interfaces
     {
         Task<IEnumerable<Adoption>> GetAllAdoptionsAsync();
         Task<Adoption> GetAdoptionByIdAsync(int id);
-        Task UpdateAdoptionAsync(Adoption adoption); // Add this method to the interface
+        Task UpdateAdoptionAsync(Adoption adoption);
+        Task CreateAdoptionAsync(Adoption adoption);
     }
 }

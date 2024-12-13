@@ -13,18 +13,46 @@ Layout = "_Layout";  // Ensure you're using the layout
     <div class="row">
         @foreach (var adoption in Model)
         {
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
-                <!-- Pet Image -->
-                <img src="@adoption.Pet.ImageUrl" class="card-img-top" alt="@adoption.Pet.Name" />
-                <div class="card-body">
-                    <h5 class="card-title">@adoption.Pet.Name</h5>
-                    <p class="card-text">@adoption.Pet.Description</p>
-                    <!-- View Details Button -->
-                    <a asp-controller="Adoption" asp-action="Details" asp-route-id="@adoption.Id" class="btn btn-primary">View Details</a>
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <!-- Pet Image -->
+                    <img src="@adoption.Pet.ImageUrl" class="card-img-top" alt="@adoption.Pet.Name" />
+                    <div class="card-body">
+                        <h5 class="card-title">@adoption.Pet.Name</h5>
+                        <p class="card-text">@adoption.Pet.Description</p>
+                        <!-- View Details Button -->
+                        <a asp-controller="Adoption" asp-action="Details" asp-route-id="@adoption.Id" class="btn btn-primary">View Details</a>
+                    </div>
                 </div>
             </div>
-        </div>
         }
     </div>
+    <br/>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Adoption ID</th>
+            <th>Pet ID</th>
+            <th>User ID</th>
+            <th>Adoption Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var adoption in Model)
+        {
+        <tr>
+            <td>@adoption.Id</td>
+            <td>@adoption.PetId</td>
+            <td>@adoption.UserId</td>
+            <td>@adoption.AdoptionDate.ToString("yyyy-MM-dd")</td>
+            <td>@adoption.Status</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@adoption.Id" class="btn btn-info">Details</a>
+            </td>
+        </tr>
+        }
+        </tbody>
+    </table>
 </div>

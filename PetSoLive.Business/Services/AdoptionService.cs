@@ -27,7 +27,12 @@ namespace PetSoLive.Business.Services
 
         public async Task UpdateAdoptionAsync(Adoption adoption)
         {
-            await _adoptionRepository.UpdateAsync(adoption); // Assuming the repository method is asynchronous
+            await _adoptionRepository.UpdateAsync(adoption);
+        }
+
+        public async Task CreateAdoptionAsync(Adoption adoption)
+        {
+            await _adoptionRepository.AddAsync(adoption);
         }
     }
 }
