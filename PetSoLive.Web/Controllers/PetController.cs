@@ -1,55 +1,36 @@
-// /PetSoLive.Web/Controllers/PetController.cs
 using Microsoft.AspNetCore.Mvc;
-using PetSoLive.Core.Interfaces;
 using PetSoLive.Core.Entities;
+using PetSoLive.Core.Interfaces;
 using System.Threading.Tasks;
 
 namespace PetSoLive.Web.Controllers
 {
     public class PetController : Controller
     {
-        private readonly IRepository<Pet> _petRepository;
+        private readonly IPetService _petService;
 
-        public PetController(IRepository<Pet> petRepository)
+        public PetController(IPetService petService)
         {
-            _petRepository = petRepository;
+            _petService = petService;
         }
 
-        /// <summary>
-        /// Displays the form for adding a new pet.
-        /// </summary>
-        [HttpGet]
+        // GET: /Pet/Create
         public IActionResult Create()
         {
-            return View(new Pet()); // Pass an empty Pet model for the form.
+            return View();
         }
 
-        /// <summary>
-        /// Handles the submission of the pet creation form.
-        /// </summary>
+        // POST: /Pet/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Pet pet)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(pet);
+                await _petService.CreatePetAsync(pet);
+                return RedirectToAction("Create"); // Redirect to pet list or adoption page
             }
-
-            // Save the new pet to the database.
-            await _petRepository.AddAsync(pet);
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        /// <summary>
-        /// Displays a list of all pets.
-        /// </summary>
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var pets = await _petRepository.GetAllAsync();
-            return View(pets);
+            return View(pet); // Return to the form with validation errors if any
         }
     }
 }
