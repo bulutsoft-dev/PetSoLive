@@ -5,6 +5,7 @@
 │   │   ├── AccountController.cs
 │   │   ├── AdoptionController.cs
 │   │   ├── AssistanceController.cs
+│   │   ├── PetController.cs  <-- Added PetController
 │   ├── /Views
 │   │   ├── /Home
 │   │   │   ├── Index.cshtml
@@ -15,6 +16,8 @@
 │   │   ├── /Adoption
 │   │   │   ├── Index.cshtml
 │   │   │   ├── Details.cshtml
+│   │   ├── /Pet   <-- Added Pet Folder
+│   │   │   ├── Details.cshtml  <-- Added Pet Details View
 │   │   ├── /Assistance
 │   │       ├── Create.cshtml
 │   │       ├── List.cshtml
@@ -39,6 +42,7 @@
 │   │   ├── IAdoptionService.cs
 │   │   ├── IAssistanceService.cs
 │   │   ├── IUserService.cs
+│   │   ├── IPetService.cs  <-- Added IPetService
 │   ├── /DTOs
 │   │   ├── UserDto.cs
 │   │   ├── PetDto.cs
@@ -58,6 +62,7 @@
 │   │   ├── AdoptionService.cs
 │   │   ├── AssistanceService.cs
 │   │   ├── UserService.cs
+│   │   ├── PetService.cs  <-- Added PetService
 │   ├── BusinessRules.cs
 ├── /PetSoLive.Tests (Testing Layer)
 │   ├── /UnitTests
