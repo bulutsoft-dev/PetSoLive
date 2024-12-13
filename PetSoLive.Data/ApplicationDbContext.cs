@@ -1,4 +1,3 @@
-// 3. Data Access Layer (/PetSoLive.Data)
 using Microsoft.EntityFrameworkCore;
 using PetSoLive.Core.Entities;
 
@@ -6,13 +5,11 @@ namespace PetSoLive.Data
 {
     public class ApplicationDbContext : DbContext
     {
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        // Constructor accepting DbContextOptions
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Database=PetSoLiveDB;User Id=sa;Password=Furkan6068!;Encrypt=False;TrustServerCertificate=True",
-                b => b.MigrationsAssembly("PetSoLive.Data"));
         }
-
 
         public DbSet<User> Users { get; set; }
         public DbSet<Pet> Pets { get; set; }
@@ -20,7 +17,6 @@ namespace PetSoLive.Data
         public DbSet<Adoption> Adoptions { get; set; }
         public DbSet<Assistance> Assistances { get; set; }
 
-        
         // Configure relationships if necessary
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +33,4 @@ namespace PetSoLive.Data
                 .HasForeignKey(a => a.UserId);
         }
     }
-    }
-    
-
+}
