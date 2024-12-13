@@ -1,8 +1,17 @@
-@model dynamic
-
+@model IEnumerable<PetSoLive.Core.Entities.Assistance>
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewData["Title"] = "Assistance Requests";
 }
 
-<h2>title</h2>
+<div class="container">
+    <h2>Assistance Requests</h2>
+    <ul class="list-group">
+        @foreach (var assistance in Model)
+        {
+            <li class="list-group-item">
+                <h5>@assistance.Title</h5>
+                <p>@assistance.Description</p>
+            </li>
+        }
+    </ul>
+</div>

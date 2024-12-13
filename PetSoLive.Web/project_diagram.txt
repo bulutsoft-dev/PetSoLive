@@ -32,6 +32,8 @@
 │   │   ├── Pet.cs
 │   │   ├── Announcement.cs
 │   │   ├── Adoption.cs
+│   ├── /Enums
+│   │   ├── AdoptionStatus.cs  // Newly created Enum
 │   ├── /Interfaces
 │   │   ├── IRepository.cs
 │   │   ├── IAdoptionService.cs
