@@ -20,7 +20,7 @@ namespace PetSoLive.Business.Services
         public UserService(IRepository<User> userRepository, IConfiguration configuration)
         {
             _userRepository = userRepository;
-            _secretKey = configuration["JwtSettings:SecretKey"]; // This should work
+            _secretKey = configuration["JwtSettings:SecretKey"];
         }
 
 
@@ -44,6 +44,12 @@ namespace PetSoLive.Business.Services
             if (string.IsNullOrWhiteSpace(user.PasswordHash))
             {
                 throw new ArgumentException("Password cannot be empty.");
+            }
+
+            // Ensure the user has a default role if no roles are provided
+            if (user.Roles == null || !user.Roles.Any())
+            {
+                user.Roles = new List<string> { "User" }; // Default role
             }
 
             // Hash the user's password before saving to the database
