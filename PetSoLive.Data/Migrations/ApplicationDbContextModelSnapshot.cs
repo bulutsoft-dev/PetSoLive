@@ -22,7 +22,7 @@ namespace PetSoLive.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Adoption", b =>
+            modelBuilder.Entity("PetSoLive.Core.Entities.Adoption", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -144,6 +144,10 @@ namespace PetSoLive.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.PrimitiveCollection<string>("Roles")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -153,7 +157,7 @@ namespace PetSoLive.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Adoption", b =>
+            modelBuilder.Entity("PetSoLive.Core.Entities.Adoption", b =>
                 {
                     b.HasOne("PetSoLive.Core.Entities.Pet", "Pet")
                         .WithMany()

@@ -36,7 +36,8 @@ namespace PetSoLive.Web.Controllers
             if (user != null)
             {
                 HttpContext.Session.SetString("Username", user.Username); // Store in session
-                return RedirectToAction("Index", "Home");
+                HttpContext.Session.SetInt32("UserId", user.Id); // Store user ID in session
+                return RedirectToAction("Index", "Home"); // Redirect to home or dashboard
             }
 
             ModelState.AddModelError("", "Invalid username or password.");
