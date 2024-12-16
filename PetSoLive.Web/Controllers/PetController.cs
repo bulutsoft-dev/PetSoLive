@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace PetSoLive.Web.Controllers
 {
@@ -17,6 +19,12 @@ namespace PetSoLive.Web.Controllers
         // GET: /Pet/Create
         public IActionResult Create()
         {
+            // Check if user session exists
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             return View();
         }
 
@@ -25,14 +33,25 @@ namespace PetSoLive.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Pet? pet)
         {
+            if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             if (ModelState.IsValid)
             {
                 await _petService.CreatePetAsync(pet);
-                return RedirectToAction("Create"); // Redirect to pet list or adoption page
+
+                // Redirect to AdoptionController.Index
+                return RedirectToAction("Index", "Adoption");
             }
-            return View(pet); // Return to the form with validation errors if any
+
+            // Return to the form with validation errors if any
+            return View(pet);
         }
 
+        // GET: /Pet/Details/{id}
+        [AllowAnonymous] // Allow unauthenticated users to view pet details
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
@@ -41,10 +60,11 @@ namespace PetSoLive.Web.Controllers
 
             if (pet == null)
             {
-                return NotFound();  // Return 404 if the pet is not found
+                return NotFound(); // Return 404 if the pet is not found
             }
 
-            return View(pet);  // Pass the pet to the view
+            return View(pet); // Pass the pet to the view
         }
     }
 }
+

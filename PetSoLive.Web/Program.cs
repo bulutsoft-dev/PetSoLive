@@ -40,13 +40,22 @@ builder.Services.AddScoped<IPetRepository, PetRepository>();
 
 
 // Add authentication and authorization services (cookie-based authentication)
-builder.Services.AddAuthentication()
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Extend session timeout as needed
+    options.Cookie.HttpOnly = true; // Ensure session cookie is secure
+    options.Cookie.IsEssential = true; // Ensure cookie is not ignored by browsers
+});
+
+builder.Services.AddAuthentication("Cookies")
     .AddCookie(options =>
     {
-        options.LoginPath = "/Account/Login"; // Redirect to login page if not authenticated
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Cookie expiration time
-        options.SlidingExpiration = true; // Enable sliding expiration
+        options.LoginPath = "/Account/Login";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Adjust expiration as needed
+        options.SlidingExpiration = true; // Extend cookie expiration with activity
     });
+
+
 
 builder.Services.AddAuthorization();
 
@@ -71,6 +80,7 @@ app.UseSession();
 // Authentication and authorization middleware
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession(); // Ensure session middleware is also in the pipeline
 
 // Map controller routes
 app.MapControllerRoute(

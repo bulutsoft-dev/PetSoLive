@@ -1,60 +1,74 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
+using System.Threading.Tasks;
 
-// Controllers (MVC pattern)
-public class AccountController : Controller
+namespace PetSoLive.Web.Controllers
 {
-    private readonly IUserService _userService;
-
-    public AccountController(IUserService userService)
+    public class AccountController : Controller
     {
-        _userService = userService;
-    }
+        private readonly IUserService _userService;
 
-    // Login page (GET)
-    public IActionResult Login() => View();
-
-    // Login (POST)
-    [HttpPost]
-    public async Task<IActionResult> Login(string username, string password)
-    {
-        var user = await _userService.AuthenticateAsync(username, password);
-        if (user != null)
+        public AccountController(IUserService userService)
         {
-            // Store user information in session
-            HttpContext.Session.SetString("Username", user.Username);
-            Console.WriteLine($"User {user.Username} logged in and session set."); // Debugging line
-            return RedirectToAction("Index", "Home");
+            _userService = userService;
         }
 
-        ModelState.AddModelError("", "Invalid username or password");
-        return View();
-    }
-
-    // Register page (GET)
-    public IActionResult Register() => View();
-
-    // Register (POST)
-    [HttpPost]
-    public async Task<IActionResult> Register(string username, string email, string password)
-    {
-        if (ModelState.IsValid)
+        // GET: /Account/Login
+        public IActionResult Login()
         {
-            var user = new User { Username = username, Email = email, PasswordHash = password };
-            await _userService.RegisterAsync(user);
+            return View();
+        }
+
+        // POST: /Account/Login
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(string username, string password)
+        {
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                ModelState.AddModelError("", "Username and password are required.");
+                return View();
+            }
+
+            var user = await _userService.AuthenticateAsync(username, password);
+            if (user != null)
+            {
+                HttpContext.Session.SetString("Username", user.Username); // Store in session
+                return RedirectToAction("Index", "Home");
+            }
+
+            ModelState.AddModelError("", "Invalid username or password.");
+            return View();
+        }
+
+        // GET: /Account/Register
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        // POST: /Account/Register
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(string username, string email, string password)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new User { Username = username, Email = email, PasswordHash = password };
+                await _userService.RegisterAsync(user);
+                return RedirectToAction("Login");
+            }
+
+            return View();
+        }
+
+        // GET: /Account/Logout
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear(); // Clear session data
             return RedirectToAction("Login");
         }
-        return View();
     }
-
-    // Logout
-    public IActionResult Logout()
-    {
-        HttpContext.Session.Clear(); // Clears all session data
-        return RedirectToAction("Login", "Account"); // Redirect to Login page
-    }
-
 }
-
-

@@ -1,44 +1,51 @@
 using Microsoft.EntityFrameworkCore;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace PetSoLive.Data.Repositories;
-
-public class UserRepository : IRepository<User>
+namespace PetSoLive.Data.Repositories
 {
-    private readonly ApplicationDbContext _context;
-    private IRepository<User> _repositoryImplementation;
-
-    public UserRepository(ApplicationDbContext context) { _context = context; }
-    
-    
-    
-    
-    
-    public Task<User> GetByIdAsync(int id)
+    public class UserRepository : IRepository<User>
     {
-        return _repositoryImplementation.GetByIdAsync(id);
-    }
+        private readonly ApplicationDbContext _context;
 
-    public async Task AddAsync(User entity)
-    {
-        await _context.Users.AddAsync(entity);
-        await _context.SaveChangesAsync(); // Veritabanına işlemleri yazar
-    }
+        public UserRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
-    public async Task<IEnumerable<User>> GetAllAsync()
-    {
-        return await _context.Users.ToListAsync();
-    }
+        public async Task<User> GetByIdAsync(int id)
+        {
+            return await _context.Users.FindAsync(id);
+        }
 
-    public Task UpdateAsync(User entity)
-    {
-        return _repositoryImplementation.UpdateAsync(entity);
-    }
+        public async Task AddAsync(User entity)
+        {
+            await _context.Users.AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
 
-    public Task DeleteAsync(int id)
-    {
-        return _repositoryImplementation.DeleteAsync(id);
+        public async Task<IEnumerable<User>> GetAllAsync()
+        {
+            return await _context.Users.ToListAsync();
+        }
+
+        public async Task UpdateAsync(User entity)
+        {
+            _context.Users.Update(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
-    // Implement other IRepository methods
 }
