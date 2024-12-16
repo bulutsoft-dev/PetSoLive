@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace PetSoLive.Web.Controllers
 {
+    // [Authorize] // Ensure all actions in this controller require authentication unless specified. ( Not working correctly )
     public class PetController : Controller
     {
         private readonly IPetService _petService;
