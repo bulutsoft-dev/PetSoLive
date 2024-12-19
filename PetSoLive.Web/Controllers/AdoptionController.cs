@@ -89,27 +89,47 @@ namespace PetSoLive.Web.Controllers
             await _adoptionService.UpdateAdoptionStatusAsync(id, AdoptionStatus.Approved);
             return RedirectToAction(nameof(Index));
         }
+       
         
-        public IActionResult Adopt(int id)
+        [HttpPost]
+        public async Task<IActionResult> Adopt(int petId)
         {
             // Kullanıcının giriş yapıp yapmadığını kontrol et
-            if (HttpContext.Session.GetString("Username") == null)
+            var username = HttpContext.Session.GetString("Username");
+            if (string.IsNullOrEmpty(username))
             {
                 // Giriş yapılmamışsa, giriş sayfasına yönlendir
                 return RedirectToAction("Login", "Account");
             }
-            var username = HttpContext.Session.GetString("Username");
-
             // ViewBag veya ViewData kullanarak bu değeri view'a iletebilirsiniz
             ViewBag.IsUserLoggedIn = !string.IsNullOrEmpty(username);
-            
 
-            // Evcil hayvanı evlat edinme işlemini gerçekleştirin.
-            // Örneğin: Evlat edinme durumunu güncelleyin ve kullanıcıya atayın.
-            // (Burada evlat edinme işlemini gerçekleştirecek kodu yazmalısınız)
+            // Kullanıcıyı veritabanından almak
+            var userId = 1; // Burada, giriş yapmış kullanıcıyı almanız gerekebilir. Örneğin, User ID'yi session'dan veya başka bir kaynaktan alabilirsiniz.
 
-            return RedirectToAction("Index"); // İşlem sonrası listeye yönlendirme
+            // PetId ile hayvanı al
+            var pet = await _petService.GetPetByIdAsync(petId);
+            if (pet == null)
+            {
+                return NotFound(); // Hayvan bulunamadıysa hata döndür
+            }
+
+            // Yeni bir Adoption nesnesi oluştur
+            var adoption = new Adoption
+            {
+                PetId = petId,
+                UserId = userId, // Giriş yapan kullanıcının ID'si
+                AdoptionDate = DateTime.Now,
+                Status = AdoptionStatus.Pending
+            };
+
+            // Adoption'ı veritabanına kaydet
+            await _adoptionService.CreateAdoptionAsync(adoption);
+
+            // İşlem başarılı, listeye geri yönlendir
+            return RedirectToAction("Index", "Adoption");
         }
+        
 
 
 
