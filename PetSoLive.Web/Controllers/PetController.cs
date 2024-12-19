@@ -55,16 +55,16 @@ namespace PetSoLive.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            // Fetch the pet by ID
             var pet = await _petService.GetPetByIdAsync(id);
-
             if (pet == null)
             {
-                return NotFound(); // Return 404 if the pet is not found
+                return NotFound();
             }
 
-            return View(pet); // Pass the pet to the view
+            ViewBag.IsUserLoggedIn = HttpContext.Session.GetString("Username") != null;
+            return View(pet);
         }
+
     }
 }
 

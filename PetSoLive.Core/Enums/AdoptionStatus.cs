@@ -4,7 +4,7 @@ namespace PetSoLive.Core.Enums
     public enum AdoptionStatus
     {
         Pending,
-        Adopted,
+        Approved,
         Rejected
     }
 }
