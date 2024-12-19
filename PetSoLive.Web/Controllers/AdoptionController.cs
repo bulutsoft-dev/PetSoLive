@@ -90,7 +90,6 @@ namespace PetSoLive.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
        
-        
         [HttpPost]
         public async Task<IActionResult> Adopt(int petId)
         {
@@ -101,11 +100,16 @@ namespace PetSoLive.Web.Controllers
                 // Giriş yapılmamışsa, giriş sayfasına yönlendir
                 return RedirectToAction("Login", "Account");
             }
+
             // ViewBag veya ViewData kullanarak bu değeri view'a iletebilirsiniz
             ViewBag.IsUserLoggedIn = !string.IsNullOrEmpty(username);
 
-            // Kullanıcıyı veritabanından almak
-            var userId = 1; // Burada, giriş yapmış kullanıcıyı almanız gerekebilir. Örneğin, User ID'yi session'dan veya başka bir kaynaktan alabilirsiniz.
+            // Kullanıcının ID'sini session'dan al
+            var userId = HttpContext.Session.GetInt32("UserId"); // UserId'nin session'dan alınması
+            if (userId == null)
+            {
+                return Unauthorized(); // Kullanıcı ID'si yoksa yetkisiz hatası döndür
+            }
 
             // PetId ile hayvanı al
             var pet = await _petService.GetPetByIdAsync(petId);
@@ -118,7 +122,7 @@ namespace PetSoLive.Web.Controllers
             var adoption = new Adoption
             {
                 PetId = petId,
-                UserId = userId, // Giriş yapan kullanıcının ID'si
+                UserId = userId.Value, // Giriş yapan kullanıcının ID'si
                 AdoptionDate = DateTime.Now,
                 Status = AdoptionStatus.Pending
             };
@@ -129,8 +133,6 @@ namespace PetSoLive.Web.Controllers
             // İşlem başarılı, listeye geri yönlendir
             return RedirectToAction("Index", "Adoption");
         }
-        
-
 
 
     }
