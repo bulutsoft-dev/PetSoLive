@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PetSoLive.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class UserRole : Migration
+    public partial class First : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -43,21 +43,6 @@ namespace PetSoLive.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pets",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Species = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Breed = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pets", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -71,6 +56,29 @@ namespace PetSoLive.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Pets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Species = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Breed = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsAdopted = table.Column<bool>(type: "bit", nullable: false),
+                    AdoptedByUserId = table.Column<int>(type: "int", nullable: true),
+                    AdoptionDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Pets_Users_AdoptedByUserId",
+                        column: x => x.AdoptedByUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -110,6 +118,11 @@ namespace PetSoLive.Data.Migrations
                 name: "IX_Adoptions_UserId",
                 table: "Adoptions",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pets_AdoptedByUserId",
+                table: "Pets",
+                column: "AdoptedByUserId");
         }
 
         /// <inheritdoc />

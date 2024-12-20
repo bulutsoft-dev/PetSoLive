@@ -111,9 +111,18 @@ namespace PetSoLive.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AdoptedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("AdoptionDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Breed")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAdopted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -124,6 +133,8 @@ namespace PetSoLive.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AdoptedByUserId");
 
                     b.ToTable("Pets");
                 });
@@ -174,6 +185,15 @@ namespace PetSoLive.Data.Migrations
                     b.Navigation("Pet");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PetSoLive.Core.Entities.Pet", b =>
+                {
+                    b.HasOne("PetSoLive.Core.Entities.User", "AdoptedByUser")
+                        .WithMany()
+                        .HasForeignKey("AdoptedByUserId");
+
+                    b.Navigation("AdoptedByUser");
                 });
 #pragma warning restore 612, 618
         }

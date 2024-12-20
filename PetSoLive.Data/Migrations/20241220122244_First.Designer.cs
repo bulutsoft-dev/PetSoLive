@@ -12,8 +12,8 @@ using PetSoLive.Data;
 namespace PetSoLive.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241216111942_UserRole")]
-    partial class UserRole
+    [Migration("20241220122244_First")]
+    partial class First
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -114,9 +114,18 @@ namespace PetSoLive.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AdoptedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("AdoptionDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Breed")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAdopted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -127,6 +136,8 @@ namespace PetSoLive.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AdoptedByUserId");
 
                     b.ToTable("Pets");
                 });
@@ -177,6 +188,15 @@ namespace PetSoLive.Data.Migrations
                     b.Navigation("Pet");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PetSoLive.Core.Entities.Pet", b =>
+                {
+                    b.HasOne("PetSoLive.Core.Entities.User", "AdoptedByUser")
+                        .WithMany()
+                        .HasForeignKey("AdoptedByUserId");
+
+                    b.Navigation("AdoptedByUser");
                 });
 #pragma warning restore 612, 618
         }

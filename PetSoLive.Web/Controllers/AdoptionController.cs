@@ -65,30 +65,6 @@ namespace PetSoLive.Web.Controllers
 
             return View(pets);  // Pass the list of pets to the view
         }
-
-        
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePet(Pet? pet)
-        {
-            if (ModelState.IsValid)
-            {
-                // You can handle image uploading here, if needed
-                await _petService.CreatePetAsync(pet); // This will depend on your service layer
-                return RedirectToAction(nameof(Index)); // Redirect to the list of pets or adoptions
-            }
-
-            return View(pet);
-        }
-        
-        
-        
-        [HttpPost]
-        public async Task<IActionResult> Approve(int id)
-        {
-            await _adoptionService.UpdateAdoptionStatusAsync(id, AdoptionStatus.Approved);
-            return RedirectToAction(nameof(Index));
-        }
        
         [HttpPost]
         public async Task<IActionResult> Adopt(int petId)
