@@ -37,10 +37,6 @@ namespace PetSoLive.Data.Repositories
             return await _context.Assistances.ToListAsync();
         }
 
-        public async Task<Assistance> GetByIdAsync(int id)
-        {
-            return await _context.Assistances.FindAsync(id);
-        }
 
         public async Task UpdateAsync(Assistance entity)
         {

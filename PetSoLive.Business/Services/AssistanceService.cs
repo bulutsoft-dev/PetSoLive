@@ -1,6 +1,4 @@
 // /PetSoLive.Business/Services/AssistanceService.cs
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Core.Entities;
 

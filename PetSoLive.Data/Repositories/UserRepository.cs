@@ -16,10 +16,6 @@ namespace PetSoLive.Data.Repositories
             _context = context;
         }
 
-        public async Task<User> GetByIdAsync(int id)
-        {
-            return await _context.Users.FindAsync(id);
-        }
 
         public async Task AddAsync(User entity)
         {

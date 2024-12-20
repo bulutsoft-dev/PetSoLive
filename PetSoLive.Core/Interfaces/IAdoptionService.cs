@@ -6,10 +6,7 @@ namespace PetSoLive.Core.Interfaces
 {
     public interface IAdoptionService
     {
-        Task<List<Adoption>> GetAllAdoptionsAsync();
-        Task<Adoption> GetAdoptionByIdAsync(int id);
-        Task UpdateAdoptionAsync(Adoption adoption);
         Task CreateAdoptionAsync(Adoption adoption);
-        Task UpdateAdoptionStatusAsync(int id, AdoptionStatus status);
+
     }
 }

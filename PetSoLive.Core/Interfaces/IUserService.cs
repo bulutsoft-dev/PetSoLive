@@ -1,5 +1,4 @@
 // Interfaces (Abstraction for services and repositories)
-
 using PetSoLive.Core.Entities;
 // Core Layer Updates
 // Update IUserService with methods for authentication and registration

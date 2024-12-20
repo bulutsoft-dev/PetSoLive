@@ -1,26 +1,17 @@
-using BCrypt.Net;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace PetSoLive.Business.Services
 {
     public class UserService : IUserService
     {
         private readonly IRepository<User> _userRepository;
-        private readonly string _secretKey;
 
         public UserService(IRepository<User> userRepository, IConfiguration configuration)
         {
             _userRepository = userRepository;
-            _secretKey = configuration["JwtSettings:SecretKey"];
         }
 
 
@@ -56,32 +47,6 @@ namespace PetSoLive.Business.Services
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash); 
             await _userRepository.AddAsync(user);
         }
-
-        // Generate JWT token for authenticated user
-        private string GenerateJwtToken(User user)
-        {
-            // Claims can be extended for further user-specific details (e.g., roles, permissions)
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, string.Join(",", user.Roles)) // Joining roles as a comma-separated string
-            };
-
-            // Use the secret key from configuration to sign the token
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            // Create and return the JWT token
-            var token = new JwtSecurityToken(
-                issuer: "PetSoLive",
-                audience: "PetSoLiveUser",
-                claims: claims,
-                expires: DateTime.Now.AddHours(1), // Token expiration time (1 hour)
-                signingCredentials: creds
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token); // Return the JWT as a string
-        }
+        
     }
 }

@@ -23,11 +23,6 @@ namespace PetSoLive.Business.Services
             return await _petRepository.GetAllAsync(); // Fetch all pets from the repository
         }
         
-        public async Task<Pet?> GetByIdAsync(int petId)
-        {
-            return await _petRepository.GetByIdAsync(petId); // Assuming you have a method in the repository to fetch by ID
-        }
-        
         // Implement GetPetByIdAsync method
         public async Task<Pet> GetPetByIdAsync(int id)
         {

@@ -44,15 +44,6 @@ namespace PetSoLive.Data.Repositories
                 .ToListAsync();
         }
 
-        // Get a single Adoption by its ID with related Pet and User entities
-        public async Task<Adoption> GetByIdAsync(int id)
-        {
-            return await _context.Adoptions
-                .Include(a => a.Pet) // Eagerly load Pet data
-                .Include(a => a.User) // Eagerly load User data
-                .FirstOrDefaultAsync(a => a.Id == id);
-        }
-
         // Update an existing Adoption entity asynchronously
         public async Task UpdateAsync(Adoption entity)
         {
