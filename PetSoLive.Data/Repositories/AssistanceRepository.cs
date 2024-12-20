@@ -22,26 +22,11 @@ namespace PetSoLive.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
-        {
-            var entity = await _context.Assistances.FindAsync(id);
-            if (entity != null)
-            {
-                _context.Assistances.Remove(entity);
-                await _context.SaveChangesAsync();
-            }
-        }
-
         public async Task<IEnumerable<Assistance>> GetAllAsync()
         {
             return await _context.Assistances.ToListAsync();
         }
 
 
-        public async Task UpdateAsync(Assistance entity)
-        {
-            _context.Assistances.Update(entity);
-            await _context.SaveChangesAsync();
-        }
     }
 }
