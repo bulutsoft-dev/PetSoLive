@@ -1,2 +1,2 @@
-dotnet ef migrations add AddoptionStatusRemoveFRomPet --project ../PetSoLive.Data --startup-project .
+dotnet ef migrations add petowner --project ../PetSoLive.Data --startup-project .
 dotnet ef database update

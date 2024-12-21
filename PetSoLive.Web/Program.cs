@@ -49,6 +49,8 @@ builder.Services.AddScoped<IPetRepository, PetRepository>();
 //added
 builder.Services.AddScoped<IAdoptionRepository, AdoptionRepository>();
 builder.Services.AddScoped<IAdoptionService, AdoptionService>();
+builder.Services.AddScoped<IPetOwnerRepository, PetOwnerRepository>();
+
 
 
 // Add authentication and authorization services (cookie-based authentication)

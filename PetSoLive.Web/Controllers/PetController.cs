@@ -10,11 +10,13 @@ namespace PetSoLive.Web.Controllers
     public class PetController : Controller
     {
         private readonly IPetService _petService;
+        private readonly IUserService _userService; // Add IUserService to access user data
         private readonly IAdoptionService _adoptionService;
 
-        public PetController(IPetService petService, IAdoptionService adoptionService)
+        public PetController(IPetService petService, IUserService userService, IAdoptionService adoptionService)
         {
             _petService = petService;
+            _userService = userService;
             _adoptionService = adoptionService;
         }
 
@@ -30,27 +32,47 @@ namespace PetSoLive.Web.Controllers
             return View();
         }
 
-        // POST: /Pet/Create
+// POST: /Pet/Create
+// POST: /Pet/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Pet? pet)
+        public async Task<IActionResult> Create(Pet pet)
         {
-            if (HttpContext.Session.GetString("Username") == null)
+            // Check if user session exists
+            var username = HttpContext.Session.GetString("Username");
+            if (username == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
+            // Get the user from session
+            var user = await _userService.GetUserByUsernameAsync(username);
+
             if (ModelState.IsValid)
             {
+                // Create the pet first
                 await _petService.CreatePetAsync(pet);
 
-                // Redirect to AdoptionController.Index
+                // Now create the PetOwner relationship
+                var petOwner = new PetOwner
+                {
+                    PetId = pet.Id,
+                    UserId = user.Id,
+                    OwnershipDate = DateTime.Now  // Track when the user became the owner
+                };
+
+                // Associate the pet with the user as an owner
+                await _petService.AssignPetOwnerAsync(petOwner);
+
+                // Redirect to AdoptionController.Index or another page
                 return RedirectToAction("Index", "Adoption");
             }
 
             // Return to the form with validation errors if any
             return View(pet);
         }
+
+
 
         // GET: /Pet/Details/{id}
         public async Task<IActionResult> Details(int id)
@@ -69,6 +91,68 @@ namespace PetSoLive.Web.Controllers
             ViewBag.Adoption = adoption;  // Adoption bilgilerini view'a gönder
             return View(pet);
         }
+        
+        // GET: /Pet/Edit/{id}
+        public async Task<IActionResult> Edit(int id)
+        {
+            // Check if user session exists
+            var username = HttpContext.Session.GetString("Username");
+            if (username == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Retrieve the pet details by its ID
+            var pet = await _petService.GetPetByIdAsync(id);
+            if (pet == null)
+            {
+                return NotFound(); // Pet not found, return 404
+            }
+
+            // Retrieve user data based on username from session
+            var user = await _userService.GetUserByUsernameAsync(username);
+
+            // Check if the user is the owner of the pet
+            if (!await _petService.IsUserOwnerOfPetAsync(id, user.Id))
+            {
+                return Unauthorized("You are not authorized to edit this pet.");
+            }
+
+            return View(pet); // Return the pet data to the Edit view
+        }
+
+        // POST: /Pet/Edit/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Pet updatedPet)
+        {
+            var username = HttpContext.Session.GetString("Username");
+            if (username == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _userService.GetUserByUsernameAsync(username);
+            var pet = await _petService.GetPetByIdAsync(id);
+
+            if (pet == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the user is the owner of the pet
+            if (!await _petService.IsUserOwnerOfPetAsync(id, user.Id))
+            {
+                return Unauthorized("You are not authorized to edit this pet.");
+            }
+
+            // Update the pet
+            await _petService.UpdatePetAsync(id, updatedPet, user.Id);
+
+            return RedirectToAction("Details", new { id = pet.Id }); // Redirect to the pet details page
+        }
+
+
 
 
     }
