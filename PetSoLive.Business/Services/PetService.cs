@@ -78,4 +78,22 @@ public class PetService : IPetService
         await _petOwnerRepository.AddAsync(petOwner); // Add PetOwner to repository
         await _petOwnerRepository.SaveChangesAsync();  // Commit the changes to the database
     }
+    public async Task DeletePetAsync(int petId, int userId)
+    {
+        var pet = await _petRepository.GetByIdAsync(petId);
+        if (pet == null)
+        {
+            throw new KeyNotFoundException("Pet not found.");
+        }
+
+        // Check if the user is the owner of the pet
+        if (!await IsUserOwnerOfPetAsync(petId, userId))
+        {
+            throw new UnauthorizedAccessException("You are not authorized to delete this pet.");
+        }
+
+        // Delete the pet
+        await _petRepository.DeleteAsync(pet);
+    }
+
 }

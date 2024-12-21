@@ -41,4 +41,11 @@ public class PetRepository : IPetRepository
         _context.Pets.Update(existingPet);
         await _context.SaveChangesAsync();
     }
+    
+    public async Task DeleteAsync(Pet pet)
+    {
+        _context.Pets.Remove(pet);
+        await _context.SaveChangesAsync();
+    }
+
 }

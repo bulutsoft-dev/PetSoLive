@@ -76,15 +76,19 @@ Layout = "_Layout";
             <button type="submit" class="btn btn-primary ml-2">Adopt</button>
         </form>
         }
-        else
+
+        @if (ViewBag.IsOwner)
         {
-        @if (ViewBag.IsOwner && ViewBag.Adoption == null)
+        @if (ViewBag.Adoption == null)
         {
         <a asp-controller="Pet" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning ml-2">Edit</a>
+        <form asp-controller="Pet" asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
+            <button type="submit" class="btn btn-danger ml-2">Delete</button>
+        </form>
         }
         else
         {
-        <p class="text-warning mt-2">This pet has already been adopted.</p>
+        <p class="text-warning mt-2">This pet has already been adopted and cannot be deleted.</p>
         }
         }
         }

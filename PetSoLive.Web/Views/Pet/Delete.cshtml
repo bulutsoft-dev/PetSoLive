@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Delete Pet";
+}
+
+<div class="container">
+    <h2>Delete Pet</h2>
+    <p>Are you sure you want to delete the pet <strong>@Model.Name</strong>?</p>
+
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

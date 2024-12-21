@@ -193,6 +193,81 @@ namespace PetSoLive.Web.Controllers
         return RedirectToAction("Details", new { id = pet.Id });
     }
 
+    // GET: /Pet/Delete/{id}
+    public async Task<IActionResult> Delete(int id)
+    {
+        var username = HttpContext.Session.GetString("Username");
+        if (username == null)
+        {
+            ViewBag.ErrorMessage = "You must be logged in to delete a pet.";
+            return View("Error");
+        }
+
+        var pet = await _petService.GetPetByIdAsync(id);
+        if (pet == null)
+        {
+            ViewBag.ErrorMessage = "The pet you're trying to delete does not exist.";
+            return View("Error");
+        }
+
+        var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
+        if (adoption != null)
+        {
+            ViewBag.ErrorMessage = "This pet has already been adopted and cannot be deleted.";
+            return View("Error");
+        }
+
+        var user = await _userService.GetUserByUsernameAsync(username);
+        if (!await _petService.IsUserOwnerOfPetAsync(id, user.Id))
+        {
+            ViewBag.ErrorMessage = "You are not authorized to delete this pet.";
+            return View("Error");
+        }
+
+        return View(pet); // Show confirmation page
+    }
+
+    
+// POST: /Pet/Delete/{id}
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var username = HttpContext.Session.GetString("Username");
+        if (username == null)
+        {
+            ViewBag.ErrorMessage = "You must be logged in to delete a pet.";
+            return View("Error");
+        }
+
+        var user = await _userService.GetUserByUsernameAsync(username);
+        var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
+
+        if (adoption != null)
+        {
+            ViewBag.ErrorMessage = "This pet has already been adopted and cannot be deleted.";
+            return View("Error");
+        }
+
+        try
+        {
+            await _petService.DeletePetAsync(id, user.Id);
+            return RedirectToAction("Index", "Adoption"); // Redirect to main page
+        }
+        catch (UnauthorizedAccessException)
+        {
+            ViewBag.ErrorMessage = "You are not authorized to delete this pet.";
+            return View("Error");
+        }
+        catch (KeyNotFoundException)
+        {
+            ViewBag.ErrorMessage = "The pet you're trying to delete does not exist.";
+            return View("Error");
+        }
+    }
+
+
+
 
 
     }

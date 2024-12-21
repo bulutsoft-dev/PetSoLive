@@ -14,5 +14,6 @@ namespace PetSoLive.Core.Interfaces
      
         // Add GetPetOwnersAsync method
         Task<List<PetOwner>> GetPetOwnersAsync(int petId);
+        Task DeleteAsync(Pet pet);
     }
 }
