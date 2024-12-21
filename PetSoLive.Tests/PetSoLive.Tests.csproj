@@ -6,4 +6,18 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0" />
+      <PackageReference Include="Moq" Version="4.20.72" />
+      <PackageReference Include="xunit" Version="2.9.2" />
+      <PackageReference Include="xunit.extensibility.core" Version="2.9.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\PetSoLive.Business\PetSoLive.Business.csproj" />
+      <ProjectReference Include="..\PetSoLive.Core\PetSoLive.Core.csproj" />
+      <ProjectReference Include="..\PetSoLive.Data\PetSoLive.Data.csproj" />
+      <ProjectReference Include="..\PetSoLive.Web\PetSoLive.Web.csproj" />
+    </ItemGroup>
+
 </Project>
