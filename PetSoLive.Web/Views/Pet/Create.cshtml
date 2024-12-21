@@ -101,10 +101,15 @@ Layout = "_Layout";
         </div>
 
         <!-- Is Neutered -->
-        <div class="form-group form-check">
-            <label for="IsNeutered" class="form-check-label">Is Neutered?</label>
-            <input type="checkbox" class="form-check-input" id="IsNeutered" name="IsNeutered" @(Model?.IsNeutered == true ? "checked" : "") />
+        <div class="form-group">
+            <label for="IsNeutered">Is Neutered?</label>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="IsNeutered" name="IsNeutered" value="true" @(Model?.IsNeutered == true ? "checked" : "") />
+                <label class="form-check-label" for="IsNeutered">Yes, this pet is neutered.</label>
+            </div>
         </div>
+
+
 
         <!-- Submit Button -->
         <button type="submit" class="btn btn-success">Create Pet</button>

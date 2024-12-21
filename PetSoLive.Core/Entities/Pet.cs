@@ -14,7 +14,8 @@ namespace PetSoLive.Core.Entities
         public string Description { get; set; }
         public string VaccinationStatus { get; set; }
         public string MicrochipId { get; set; }
-        public bool IsNeutered { get; set; }
+        public bool? IsNeutered { get; set; }
+
         public string ImageUrl { get; set; }
 
         // PetOwners is a navigation property for the relationship

@@ -32,8 +32,6 @@ namespace PetSoLive.Web.Controllers
             return View();
         }
 
-// POST: /Pet/Create
-// POST: /Pet/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Pet pet)
@@ -47,6 +45,12 @@ namespace PetSoLive.Web.Controllers
 
             // Get the user from session
             var user = await _userService.GetUserByUsernameAsync(username);
+
+            // Check if 'IsNeutered' value is null when not checked
+            if (pet.IsNeutered == null)
+            {
+                pet.IsNeutered = false; // or leave it as null, depending on your requirements
+            }
 
             if (ModelState.IsValid)
             {
@@ -74,6 +78,8 @@ namespace PetSoLive.Web.Controllers
 
 
 
+
+
         // GET: /Pet/Details/{id}
         public async Task<IActionResult> Details(int id)
         {
@@ -92,7 +98,7 @@ namespace PetSoLive.Web.Controllers
             return View(pet);
         }
         
-        // GET: /Pet/Edit/{id}
+// GET: /Pet/Edit/{id}
         public async Task<IActionResult> Edit(int id)
         {
             // Check if user session exists
@@ -109,6 +115,12 @@ namespace PetSoLive.Web.Controllers
                 return NotFound(); // Pet not found, return 404
             }
 
+            // If IsNeutered is null, set it to false
+            if (pet.IsNeutered == null)
+            {
+                pet.IsNeutered = false;
+            }
+
             // Retrieve user data based on username from session
             var user = await _userService.GetUserByUsernameAsync(username);
 
@@ -121,7 +133,7 @@ namespace PetSoLive.Web.Controllers
             return View(pet); // Return the pet data to the Edit view
         }
 
-        // POST: /Pet/Edit/{id}
+// POST: /Pet/Edit/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Pet updatedPet)
@@ -144,6 +156,12 @@ namespace PetSoLive.Web.Controllers
             if (!await _petService.IsUserOwnerOfPetAsync(id, user.Id))
             {
                 return Unauthorized("You are not authorized to edit this pet.");
+            }
+
+            // If IsNeutered is null, set it to false
+            if (updatedPet.IsNeutered == null)
+            {
+                updatedPet.IsNeutered = false;
             }
 
             // Update the pet

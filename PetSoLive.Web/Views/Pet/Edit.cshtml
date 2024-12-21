@@ -56,8 +56,13 @@ ViewData["Title"] = "Edit Pet";
     </div>
     <div class="form-group">
         <label for="IsNeutered">Is Neutered?</label>
-        <input type="checkbox" id="IsNeutered" name="IsNeutered" @if(Model.IsNeutered) { <text>checked</text> } />
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="IsNeutered" name="IsNeutered" value="true" @(Model?.IsNeutered == true ? "checked" : "") />
+            <label class="form-check-label" for="IsNeutered">Yes, this pet is neutered.</label>
+        </div>
     </div>
+
+
     <div class="form-group">
         <label for="ImageUrl">Image URL</label>
         <input type="text" class="form-control" id="ImageUrl" name="ImageUrl" value="@Model.ImageUrl" />
