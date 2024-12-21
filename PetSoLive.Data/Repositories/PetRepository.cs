@@ -1,33 +1,44 @@
 using Microsoft.EntityFrameworkCore;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
+using PetSoLive.Data;
 
-namespace PetSoLive.Data.Repositories
+public class PetRepository : IPetRepository
 {
-    public class PetRepository : IPetRepository
+    private readonly ApplicationDbContext _context;
+
+    public PetRepository(ApplicationDbContext context)
     {
-        private readonly ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public PetRepository(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+    public async Task AddAsync(Pet? pet)
+    {
+        await _context.Pets.AddAsync(pet);
+        await _context.SaveChangesAsync();
+    }
 
-        public async Task AddAsync(Pet? pet)
-        {
-            await _context.Pets.AddAsync(pet);
-            await _context.SaveChangesAsync();
-        }
+    public async Task<List<Pet?>> GetAllAsync()
+    {
+        return await _context.Pets.ToListAsync();
+    }
 
-        public async Task<List<Pet?>> GetAllAsync()
-        {
-            return await _context.Pets.ToListAsync();
-        }
-        
-        // Implement the GetByIdAsync method
-        public async Task<Pet?> GetByIdAsync(int petId)
-        {
-            return await _context.Pets.FirstOrDefaultAsync(p => p != null && p.Id == petId);
-        }
+    public async Task<Pet?> GetByIdAsync(int petId)
+    {
+        return await _context.Pets.FirstOrDefaultAsync(p => p.Id == petId);
+    }
+
+    // New method to get pet owners
+    public async Task<List<PetOwner>> GetPetOwnersAsync(int petId)
+    {
+        return await _context.PetOwners
+            .Where(po => po.PetId == petId)
+            .ToListAsync();
+    }
+
+    public async Task UpdateAsync(Pet existingPet)
+    {
+        _context.Pets.Update(existingPet);
+        await _context.SaveChangesAsync();
     }
 }

@@ -6,9 +6,9 @@ namespace PetSoLive.Core.Entities
         public string Username { get; set; }
         public string Email { get; set; }
         public string PasswordHash { get; set; }
-        // This list holds the roles assigned to the user, used for authorization.
-        // It is initialized as a new list of strings, meaning it starts empty but ready to be added to.
         public List<string> Roles { get; set; } = new List<string>();
+
+        // Navigation property to pets owned by the user
+        public ICollection<PetOwner> PetOwners { get; set; }  // Collection of pets owned by the user
     }
 }
-

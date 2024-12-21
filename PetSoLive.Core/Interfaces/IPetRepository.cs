@@ -8,7 +8,11 @@ namespace PetSoLive.Core.Interfaces
         Task<List<Pet?>> GetAllAsync(); // Method to get all pets
         
         Task<Pet?> GetByIdAsync(int petId); // Define the method to get pet by ID
-        
-        
+
+
+        Task UpdateAsync(Pet existingPet);
+     
+        // Add GetPetOwnersAsync method
+        Task<List<PetOwner>> GetPetOwnersAsync(int petId);
     }
 }

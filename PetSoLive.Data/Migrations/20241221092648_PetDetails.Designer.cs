@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetSoLive.Data;
 
@@ -11,9 +12,11 @@ using PetSoLive.Data;
 namespace PetSoLive.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241221092648_PetDetails")]
+    partial class PetDetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,6 +114,10 @@ namespace PetSoLive.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AdoptionStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
@@ -130,10 +137,6 @@ namespace PetSoLive.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -162,24 +165,6 @@ namespace PetSoLive.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Pets");
-                });
-
-            modelBuilder.Entity("PetSoLive.Core.Entities.PetOwner", b =>
-                {
-                    b.Property<int>("PetId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("OwnershipDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("PetId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PetOwners");
                 });
 
             modelBuilder.Entity("PetSoLive.Core.Entities.User", b =>
@@ -228,35 +213,6 @@ namespace PetSoLive.Data.Migrations
                     b.Navigation("Pet");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PetSoLive.Core.Entities.PetOwner", b =>
-                {
-                    b.HasOne("PetSoLive.Core.Entities.Pet", "Pet")
-                        .WithMany("PetOwners")
-                        .HasForeignKey("PetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PetSoLive.Core.Entities.User", "User")
-                        .WithMany("PetOwners")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Pet");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PetSoLive.Core.Entities.Pet", b =>
-                {
-                    b.Navigation("PetOwners");
-                });
-
-            modelBuilder.Entity("PetSoLive.Core.Entities.User", b =>
-                {
-                    b.Navigation("PetOwners");
                 });
 #pragma warning restore 612, 618
         }

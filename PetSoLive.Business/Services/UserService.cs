@@ -48,5 +48,18 @@ namespace PetSoLive.Business.Services
             await _userRepository.AddAsync(user);
         }
         
+        // Get user by username
+        public async Task<User?> GetUserByUsernameAsync(string username)
+        {
+            if (string.IsNullOrEmpty(username))
+            {
+                throw new ArgumentException("Username cannot be null or empty.", nameof(username));
+            }
+
+            // Retrieve the user by username
+            return await _userRepository.GetAllAsync()
+                .ContinueWith(task => task.Result.FirstOrDefault(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase)));
+        }
+        
     }
 }
