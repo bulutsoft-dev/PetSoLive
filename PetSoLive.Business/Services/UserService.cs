@@ -9,7 +9,7 @@ namespace PetSoLive.Business.Services
     {
         private readonly IRepository<User> _userRepository;
 
-        public UserService(IRepository<User> userRepository, IConfiguration configuration)
+        public UserService(IRepository<User> userRepository)
         {
             _userRepository = userRepository;
         }

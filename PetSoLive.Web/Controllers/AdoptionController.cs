@@ -69,46 +69,45 @@ namespace PetSoLive.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Adopt(int petId)
         {
-            // Kullanıcının giriş yapıp yapmadığını kontrol et
             var username = HttpContext.Session.GetString("Username");
             if (string.IsNullOrEmpty(username))
             {
-                // Giriş yapılmamışsa, giriş sayfasına yönlendir
                 return RedirectToAction("Login", "Account");
             }
 
-            // ViewBag veya ViewData kullanarak bu değeri view'a iletebilirsiniz
-            ViewBag.IsUserLoggedIn = !string.IsNullOrEmpty(username);
-
-            // Kullanıcının ID'sini session'dan al
-            var userId = HttpContext.Session.GetInt32("UserId"); // UserId'nin session'dan alınması
+            var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null)
             {
-                return Unauthorized(); // Kullanıcı ID'si yoksa yetkisiz hatası döndür
+                return Unauthorized();
             }
 
-            // PetId ile hayvanı al
             var pet = await _petService.GetPetByIdAsync(petId);
             if (pet == null)
             {
-                return NotFound(); // Hayvan bulunamadıysa hata döndür
+                return NotFound();
             }
 
-            // Yeni bir Adoption nesnesi oluştur
-            var adoption = new Adoption
+            try
             {
-                PetId = petId,
-                UserId = userId.Value, // Giriş yapan kullanıcının ID'si
-                AdoptionDate = DateTime.Now,
-                Status = AdoptionStatus.Pending
-            };
+                var adoption = new Adoption
+                {
+                    PetId = petId,
+                    UserId = userId.Value,
+                    AdoptionDate = DateTime.Now,
+                    Status = AdoptionStatus.Pending
+                };
 
-            // Adoption'ı veritabanına kaydet
-            await _adoptionService.CreateAdoptionAsync(adoption);
-
-            // İşlem başarılı, listeye geri yönlendir
-            return RedirectToAction("Index", "Adoption");
+                await _adoptionService.CreateAdoptionAsync(adoption);
+                return RedirectToAction("Index", "Adoption");
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Kullanıcıya hata mesajı göster
+                ViewBag.ErrorMessage = ex.Message;
+                return View("Error");
+            }
         }
+
 
 
     }
