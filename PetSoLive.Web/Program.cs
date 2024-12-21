@@ -1,3 +1,4 @@
+using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using PetSoLive.Business.Services;
 using PetSoLive.Core.Entities;
@@ -10,10 +11,22 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();  // Add MVC support
 
-// Add ApplicationDbContext (EF Core)
+
+
+// .env dosyasını yükleyin
+Env.Load();  // .env dosyasındaki çevresel değişkenleri yükler
+
+// Veritabanı bağlantı dizesini al
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("DATABASE_CONNECTION_STRING environment variable is not set.");
+}
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-        b => b.MigrationsAssembly("PetSoLive.Data")));
+{
+    options.UseSqlServer(connectionString, b => b.MigrationsAssembly("PetSoLive.Data"));
+});
 
 // Add session configuration
 builder.Services.AddDistributedMemoryCache(); // Add memory cache for session
