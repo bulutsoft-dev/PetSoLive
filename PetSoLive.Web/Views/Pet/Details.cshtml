@@ -7,32 +7,32 @@ Layout = "_Layout";
 }
 
 <div class="container">
-    <h2 class="my-4 text-center">@Model.Name's Details</h2>
+    <h2 class="my-4 text-center text-primary">@Model.Name's Details</h2>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 mb-4">
             <!-- Pet Image -->
             <div class="text-center">
-                <img src="@Model.ImageUrl" class="img-fluid rounded" alt="@Model.Name" />
+                <img src="@Model.ImageUrl" class="img-fluid rounded shadow" alt="@Model.Name" style="max-height: 400px; object-fit: cover;" />
             </div>
         </div>
 
         <div class="col-md-6">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-body">
-                    <h3>@Model.Name</h3>
-                    <p><strong>Species:</strong> @Model.Species</p>
+                    <h3 class="text-info">@Model.Name</h3>
+                    <p><strong>Species:</strong> <span class="badge bg-secondary">@Model.Species</span></p>
                     <p><strong>Breed:</strong> @Model.Breed</p>
-                    <p><strong>Age:</strong> @Model.Age</p>
+                    <p><strong>Age:</strong> @Model.Age years</p>
                     <p><strong>Gender:</strong> @Model.Gender</p>
                     <p><strong>Weight:</strong> @Model.Weight kg</p>
-                    <p><strong>Color:</strong> @Model.Color</p>
+                    <p><strong>Color:</strong> <span class="badge bg-light text-dark">@Model.Color</span></p>
                     <p><strong>Date of Birth:</strong> @Model.DateOfBirth?.ToString("MM/dd/yyyy")</p>
                     <p><strong>Description:</strong> @Model.Description</p>
 
                     @if (!string.IsNullOrEmpty(Model.VaccinationStatus))
                     {
-                    <p><strong>Vaccination Status:</strong> @Model.VaccinationStatus</p>
+                    <p><strong>Vaccination Status:</strong> <span class="badge bg-success">@Model.VaccinationStatus</span></p>
                     }
 
                     @if (!string.IsNullOrEmpty(Model.MicrochipId))
@@ -40,19 +40,19 @@ Layout = "_Layout";
                     <p><strong>Microchip ID:</strong> @Model.MicrochipId</p>
                     }
 
-                    <p><strong>Neutered:</strong> @(Model.IsNeutered ? "Yes" : "No")</p>
+                    <p><strong>Neutered:</strong> <span class="badge bg-@(Model.IsNeutered ? "success" : "danger")">@(Model.IsNeutered ? "Yes" : "No")</span></p>
 
                     @if (ViewBag.Adoption != null)
                     {
                     <hr>
-                    <h5>Adoption Status:</h5>
+                    <h5 class="text-success">Adoption Details:</h5>
                     <p><strong>Adopted:</strong> Yes</p>
                     <p><strong>Adopted by:</strong> @ViewBag.Adoption.User.Username</p>
                     <p><strong>Adoption Date:</strong> @ViewBag.Adoption.AdoptionDate.ToString("MM/dd/yyyy")</p>
                     }
                     else
                     {
-                    <p><strong>Adopted:</strong> No</p>
+                    <p><strong>Adopted:</strong> <span class="badge bg-danger">No</span></p>
                     }
                 </div>
             </div>
@@ -60,8 +60,8 @@ Layout = "_Layout";
     </div>
 
     <!-- Buttons Section -->
-    <div class="text-right mt-4">
-        <a asp-controller="Adoption" asp-action="Index" class="btn btn-secondary">Back to Adoption List</a>
+    <div class="text-end mt-4">
+        <a asp-controller="Adoption" asp-action="Index" class="btn btn-secondary me-2">Back to Adoption List</a>
 
         @if (!ViewBag.IsUserLoggedIn)
         {
@@ -73,7 +73,7 @@ Layout = "_Layout";
         {
         <form asp-controller="Adoption" asp-action="Adopt" method="post" class="d-inline">
             <input type="hidden" name="PetId" value="@Model.Id" />
-            <button type="submit" class="btn btn-primary ml-2">Adopt</button>
+            <button type="submit" class="btn btn-primary">Adopt</button>
         </form>
         }
 
@@ -81,9 +81,9 @@ Layout = "_Layout";
         {
         @if (ViewBag.Adoption == null)
         {
-        <a asp-controller="Pet" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning ml-2">Edit</a>
+        <a asp-controller="Pet" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">Edit</a>
         <form asp-controller="Pet" asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
-            <button type="submit" class="btn btn-danger ml-2">Delete</button>
+            <button type="submit" class="btn btn-danger">Delete</button>
         </form>
         }
         else
