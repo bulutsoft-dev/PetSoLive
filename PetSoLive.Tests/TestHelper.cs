@@ -29,7 +29,6 @@ namespace PetSoLive.Tests
 
             // Add repositories and services
             services.AddScoped<IRepository<User>, UserRepository>();
-            services.AddScoped<IRepository<Adoption>, AdoptionRepository>();
             services.AddScoped<IAdoptionService, AdoptionService>();
 
             return services.BuildServiceProvider();

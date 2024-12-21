@@ -14,6 +14,7 @@ public class PetRepository : IPetRepository
 
     public async Task AddAsync(Pet? pet)
     {
+        if (pet == null) throw new ArgumentNullException(nameof(pet));  // Ensure pet is not null
         await _context.Pets.AddAsync(pet);
         await _context.SaveChangesAsync();
     }
@@ -28,7 +29,7 @@ public class PetRepository : IPetRepository
         return await _context.Pets.FirstOrDefaultAsync(p => p.Id == petId);
     }
 
-    // New method to get pet owners
+    // Fetch pet owners
     public async Task<List<PetOwner>> GetPetOwnersAsync(int petId)
     {
         return await _context.PetOwners
@@ -41,11 +42,10 @@ public class PetRepository : IPetRepository
         _context.Pets.Update(existingPet);
         await _context.SaveChangesAsync();
     }
-    
+
     public async Task DeleteAsync(Pet pet)
     {
         _context.Pets.Remove(pet);
         await _context.SaveChangesAsync();
     }
-
 }

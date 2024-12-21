@@ -1,10 +1,15 @@
 using PetSoLive.Core.Entities;
 
-namespace PetSoLive.Core.Interfaces;
-
-public interface IAdoptionRepository : IRepository<Adoption>
+public interface IAdoptionRepository
 {
-    Task<bool> IsPetAlreadyAdoptedAsync(int adoptionPetId);
-
+    Task AddAsync(Adoption adoption);
+    Task AddAsync(AdoptionRequest adoptionRequest);
     Task<Adoption?> GetAdoptionByPetIdAsync(int petId);
+    Task<AdoptionRequest?> GetAdoptionRequestByPetIdAsync(int petId);
+    Task<AdoptionRequest?> GetAdoptionRequestByIdAsync(int id);
+    Task UpdateAsync(AdoptionRequest adoptionRequest);
+    Task UpdateAsync(Adoption adoption);
+    Task<bool> IsPetAlreadyAdoptedAsync(int petId);
+    
+    
 }

@@ -1,21 +1,24 @@
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Core.Entities;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class PetService : IPetService
 {
     private readonly IPetRepository _petRepository;
-    private readonly IPetOwnerRepository _petOwnerRepository; // Add dependency for PetOwnerRepository
+    private readonly IPetOwnerRepository _petOwnerRepository; // PetOwnerRepository for managing ownership relations
 
-    // Constructor for PetService
     public PetService(IPetRepository petRepository, IPetOwnerRepository petOwnerRepository)
     {
         _petRepository = petRepository;
-        _petOwnerRepository = petOwnerRepository; // Inject PetOwnerRepository
+        _petOwnerRepository = petOwnerRepository;
     }
 
     // Create a new pet
     public async Task CreatePetAsync(Pet? pet)
     {
+        if (pet == null) throw new ArgumentNullException(nameof(pet));
         await _petRepository.AddAsync(pet);
     }
 
@@ -28,14 +31,19 @@ public class PetService : IPetService
     // Get a pet by its ID
     public async Task<Pet> GetPetByIdAsync(int id)
     {
-        return await _petRepository.GetByIdAsync(id);
+        var pet = await _petRepository.GetByIdAsync(id);
+        if (pet == null)
+        {
+            throw new KeyNotFoundException("Pet not found.");
+        }
+        return pet;
     }
 
-    // Method to check if the user is the owner of the pet
+    // Check if the user is the owner of the pet
     public async Task<bool> IsUserOwnerOfPetAsync(int petId, int userId)
     {
-        var petOwner = await _petRepository.GetPetOwnersAsync(petId);
-        return petOwner.Any(po => po.UserId == userId); // Check if the user owns this pet
+        var petOwners = await _petRepository.GetPetOwnersAsync(petId);
+        return petOwners.Any(po => po.UserId == userId); // Check if the user owns this pet
     }
 
     // Update an existing pet
@@ -53,7 +61,7 @@ public class PetService : IPetService
             throw new UnauthorizedAccessException("You are not authorized to update this pet.");
         }
 
-        // Update the pet's properties
+        // Update pet properties
         pet.Name = updatedPet.Name;
         pet.Species = updatedPet.Species;
         pet.Breed = updatedPet.Breed;
@@ -72,12 +80,15 @@ public class PetService : IPetService
         await _petRepository.UpdateAsync(pet);
     }
 
-    // Method to assign the pet to a user
+    // Assign pet ownership
     public async Task AssignPetOwnerAsync(PetOwner petOwner)
     {
-        await _petOwnerRepository.AddAsync(petOwner); // Add PetOwner to repository
-        await _petOwnerRepository.SaveChangesAsync();  // Commit the changes to the database
+        if (petOwner == null) throw new ArgumentNullException(nameof(petOwner));
+        await _petOwnerRepository.AddAsync(petOwner);
+        await _petOwnerRepository.SaveChangesAsync();  // Commit changes to DB
     }
+
+    // Delete a pet
     public async Task DeletePetAsync(int petId, int userId)
     {
         var pet = await _petRepository.GetByIdAsync(petId);
@@ -95,19 +106,4 @@ public class PetService : IPetService
         // Delete the pet
         await _petRepository.DeleteAsync(pet);
     }
-    
-    // Inside PetService.cs
-
-    public async Task<PetOwner> GetPetOwnerAsync(int petId)
-    {
-        var petOwner = await _petOwnerRepository.GetPetOwnerByPetIdAsync(petId);  // Make sure this repository method exists
-        if (petOwner == null)
-        {
-            throw new KeyNotFoundException("Pet owner not found.");
-        }
-
-        return petOwner;
-    }
-
-
 }

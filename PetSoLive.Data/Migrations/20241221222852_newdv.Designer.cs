@@ -12,8 +12,8 @@ using PetSoLive.Data;
 namespace PetSoLive.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241221163219_ModelView")]
-    partial class ModelView
+    [Migration("20241221222852_newdv")]
+    partial class newdv
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,51 @@ namespace PetSoLive.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("AdoptionRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PetId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PetId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AdoptionRequests", (string)null);
+                });
 
             modelBuilder.Entity("PetSoLive.Core.Entities.Adoption", b =>
                 {
@@ -51,7 +96,7 @@ namespace PetSoLive.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Adoptions");
+                    b.ToTable("Adoptions", (string)null);
                 });
 
             modelBuilder.Entity("PetSoLive.Core.Entities.Announcement", b =>
@@ -182,7 +227,7 @@ namespace PetSoLive.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PetOwners");
+                    b.ToTable("PetOwners", (string)null);
                 });
 
             modelBuilder.Entity("PetSoLive.Core.Entities.User", b =>
@@ -212,6 +257,25 @@ namespace PetSoLive.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("AdoptionRequest", b =>
+                {
+                    b.HasOne("PetSoLive.Core.Entities.Pet", "Pet")
+                        .WithMany("AdoptionRequests")
+                        .HasForeignKey("PetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PetSoLive.Core.Entities.User", "User")
+                        .WithMany("AdoptionRequests")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pet");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PetSoLive.Core.Entities.Adoption", b =>
@@ -254,11 +318,15 @@ namespace PetSoLive.Data.Migrations
 
             modelBuilder.Entity("PetSoLive.Core.Entities.Pet", b =>
                 {
+                    b.Navigation("AdoptionRequests");
+
                     b.Navigation("PetOwners");
                 });
 
             modelBuilder.Entity("PetSoLive.Core.Entities.User", b =>
                 {
+                    b.Navigation("AdoptionRequests");
+
                     b.Navigation("PetOwners");
                 });
 #pragma warning restore 612, 618

@@ -58,8 +58,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<IRepository<Assistance>, AssistanceRepository>();
 builder.Services.AddScoped<IAssistanceService, AssistanceService>();
-builder.Services.AddScoped<IRepository<Adoption>, AdoptionRepository>();
 builder.Services.AddScoped<IAdoptionService, AdoptionService>();
+builder.Services.AddScoped<IAdoptionRepository, AdoptionRepository>();
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
 //added

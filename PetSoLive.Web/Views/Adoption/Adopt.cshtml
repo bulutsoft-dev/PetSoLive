@@ -1,49 +1,38 @@
-@model PetSoLive.Core.Entities.AdoptionRequest
-
 @{
-    ViewData["Title"] = "Adopt Pet";
+ViewData["Title"] = "Adopt Pet";
+}
+@{
+Layout = "_Layout";
 }
 
-<h2>Adopt Pet</h2>
+<div class="container">
+    <h2 class="text-center my-4">Adopt @Model.Name</h2>
 
-<form asp-action="SubmitAdoptRequest" method="post">
-    @Html.AntiForgeryToken()
+    <form method="post" asp-controller="Adoption" asp-action="Adopt" class="needs-validation" novalidate>
+        <input type="hidden" name="PetId" value="@Model.Id" />
 
-    <div class="form-group">
-        <label asp-for="Pet.Name" class="control-label"></label>
-        <input asp-for="Pet.Name" class="form-control" disabled />
-    </div>
+        <div class="mb-3">
+            <label for="Name" class="form-label">Your Name</label>
+            <input type="text" class="form-control" id="Name" name="Name" required />
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Pet.Species" class="control-label"></label>
-        <input asp-for="Pet.Species" class="form-control" disabled />
-    </div>
+        <div class="mb-3">
+            <label for="Email" class="form-label">Your Email</label>
+            <input type="email" class="form-control" id="Email" name="Email" required />
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Pet.Breed" class="control-label"></label>
-        <input asp-for="Pet.Breed" class="form-control" disabled />
-    </div>
+        <div class="mb-3">
+            <label for="Phone" class="form-label">Your Phone Number</label>
+            <input type="text" class="form-control" id="Phone" name="Phone" />
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Pet.Age" class="control-label"></label>
-        <input asp-for="Pet.Age" class="form-control" disabled />
-    </div>
+        <div class="mb-3">
+            <label for="Message" class="form-label">Message</label>
+            <textarea class="form-control" id="Message" name="Message"></textarea>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Pet.Color" class="control-label"></label>
-        <input asp-for="Pet.Color" class="form-control" disabled />
-    </div>
-
-    <div class="form-group">
-        <label for="Message">Your Message</label>
-        <textarea asp-for="Message" id="Message" class="form-control" rows="4" placeholder="Write your adoption message here..." required></textarea>
-    </div>
-
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Submit Adoption Request</button>
-    </div>
-</form>
-
-<div>
-    <a href="@Url.Action("Index", "Adoption")" class="btn btn-secondary">Back to Pet List</a>
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">Submit Adoption Request</button>
+        </div>
+    </form>
 </div>

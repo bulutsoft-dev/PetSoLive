@@ -1,97 +1,124 @@
-// /PetSoLive.Web/Controllers/AdoptionController.cs
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Core.Entities;
-using System.Threading.Tasks;
-using System;
 using PetSoLive.Core.Enums;
+using Microsoft.AspNetCore.Identity;
 
-namespace PetSoLive.Web.Controllers
+public class AdoptionController : Controller
 {
-    public class AdoptionController : Controller
-    
+    private readonly IAdoptionService _adoptionService;
+    private readonly IPetService _petService;
+    private readonly IUserService _userService;
+    private readonly IEmailService _emailService;
+    private readonly IPetOwnerService _petOwnerService;
+
+    public AdoptionController(IAdoptionService adoptionService, IPetService petService, IUserService userService, IEmailService emailService, IPetOwnerService petOwnerService)
     {
-        private readonly IAdoptionService _adoptionService;
-        private readonly IPetService _petService;
-        private readonly IUserService _userService;
-        private readonly IEmailService _emailService;
-        private readonly IPetOwnerService _petOwnerService;
+        _adoptionService = adoptionService;
+        _petService = petService;
+        _userService = userService;
+        _emailService = emailService;
+        _petOwnerService = petOwnerService;
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        // Fetch all pets available for adoption
+        var pets = await _petService.GetAllPetsAsync();
 
-        public AdoptionController(IAdoptionService adoptionService, IPetService petService, IUserService userService, IEmailService emailService, IPetOwnerService petOwnerService)
-        {
-            _adoptionService = adoptionService;
-            _petService = petService;
-            _userService = userService;
-            _emailService = emailService;
-            _petOwnerService = petOwnerService;
-        }
-
-        /// <summary>
-        /// Displays a list of all adoptions.
-        /// </summary>
-        /// <summary>
-        /// Displays a list of available pets for adoption.
-        /// </summary>
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            // Fetch all pets available for adoption
-            var pets = await _petService.GetAllPetsAsync();
-
-            return View(pets);  // Pass the list of pets to the view
-        }
-       
-        // Action to show the adoption request form
+        return View(pets);  // Pass the list of pets to the view
+    }
+  // GET: /Adoption/Adopt/{id}
         [HttpGet]
         public async Task<IActionResult> Adopt(int petId)
         {
+            // Check if user session exists
+            var username = HttpContext.Session.GetString("Username");
+            if (username == null)
+            {
+                return RedirectToAction("Login", "Account"); // Redirect to login if the user is not logged in
+            }
+
+            // Fetch the pet details
             var pet = await _petService.GetPetByIdAsync(petId);
             if (pet == null)
             {
                 return NotFound();
             }
 
-            var username = HttpContext.Session.GetString("Username");
-            if (string.IsNullOrEmpty(username))
+            // Get the logged-in user from session
+            var user = await _userService.GetUserByUsernameAsync(username);
+            if (user == null)
             {
-                return RedirectToAction("Login", "Account");
+                return BadRequest("User not found.");
             }
 
-            var user = await _userService.GetUserByUsernameAsync(username);
+            return View(pet);  // Pass pet and user details to the view
+        }
 
+        // POST: /Adoption/Adopt
+        [HttpPost]
+        public async Task<IActionResult> Adopt(int petId, string name, string email, string phone, string message)
+        {
+            // Check if user session exists
+            var username = HttpContext.Session.GetString("Username");
+            if (username == null)
+            {
+                return RedirectToAction("Login", "Account"); // Redirect to login if the user is not logged in
+            }
+
+            // Fetch the pet details
+            var pet = await _petService.GetPetByIdAsync(petId);
+            if (pet == null)
+            {
+                return NotFound();
+            }
+
+            // Get the logged-in user from session
+            var user = await _userService.GetUserByUsernameAsync(username);
+            if (user == null)
+            {
+                return BadRequest("User not found.");
+            }
+
+            // Create adoption request
             var adoptionRequest = new AdoptionRequest
             {
                 PetId = petId,
-                Pet = pet,
-                UserId = user.Id,
-                User = user
+                Name = name,
+                Email = email,
+                Phone = phone,
+                Message = message,
+                Status = AdoptionStatus.Pending,
+                RequestDate = DateTime.Now,
+                UserId = user.Id,  // Automatically set user from the session
+                User = user         // Set the navigation property for the user
             };
 
-            return View(adoptionRequest);
+            // Save the adoption request
+            await _adoptionService.CreateAdoptionRequestAsync(adoptionRequest);
+
+            // Send notification to the pet owner
+            await SendAdoptionRequestNotificationAsync(adoptionRequest);
+
+            // Redirect to the pet details page after adoption request
+            return RedirectToAction("Details", "Pet", new { id = petId });
         }
 
-        // Action to submit the adoption request form
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SubmitAdoptRequest(AdoptionRequest adoptionRequest)
+        // This method sends an email to the pet owner regarding the new adoption request
+        public async Task SendAdoptionRequestNotificationAsync(AdoptionRequest adoptionRequest)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("Adopt", adoptionRequest);
-            }
+            var petOwner = await _petOwnerService.GetPetOwnerByPetIdAsync(adoptionRequest.PetId);
+            var petOwnerUser = await _userService.GetUserByIdAsync(petOwner.UserId);
 
-            // Get the pet owner
-            var petOwner = await _petOwnerService.GetPetOwnerAsync(adoptionRequest.PetId);  // Call the PetOwnerService
-            var petOwnerEmail = petOwner.User.Email;
+            var subject = "New Adoption Request for Your Pet";
+            var body = $"You have a new adoption request for your pet {adoptionRequest.Pet.Name}.\n\n" +
+                       $"Requested by: {adoptionRequest.User.Username}\n" +
+                       $"Request Message: {adoptionRequest.Message}\n" +
+                       $"Status: {adoptionRequest.Status}\n";
 
-            // Send an email to the pet owner
-            await _emailService.SendEmailAsync(petOwnerEmail, "Adoption Request for " + adoptionRequest.Pet.Name, adoptionRequest.Message);
-
-            // Redirect to a confirmation page
-            return RedirectToAction("Index", "Adoption");
+            await _emailService.SendEmailAsync(petOwnerUser.Email, subject, body);
         }
-
-
-
-    }
 }

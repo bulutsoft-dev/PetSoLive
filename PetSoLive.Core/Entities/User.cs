@@ -10,5 +10,8 @@ namespace PetSoLive.Core.Entities
 
         // Navigation property to pets owned by the user
         public ICollection<PetOwner> PetOwners { get; set; }  // Collection of pets owned by the user
+
+        // Relationship with Adoption Requests (One User can make many Adoption Requests)
+        public ICollection<AdoptionRequest> AdoptionRequests { get; set; } = new List<AdoptionRequest>();
     }
 }

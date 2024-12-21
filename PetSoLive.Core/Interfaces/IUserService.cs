@@ -8,6 +8,7 @@ namespace PetSoLive.Core.Interfaces
     {
         Task<User> AuthenticateAsync(string username, string password);
         Task RegisterAsync(User user);
-        Task<User> GetUserByUsernameAsync(string username);
+        Task<User?> GetUserByUsernameAsync(string username);
+        Task<User> GetUserByIdAsync(int userId);  // Change to accept an int
     }
 }

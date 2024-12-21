@@ -7,6 +7,7 @@ namespace PetSoLive.Core.Interfaces
         Task<IEnumerable<T>> GetAllAsync();
 
         Task AddAsync(T entity);
+        Task<T> GetByIdAsync(int id);
 
     }
 }

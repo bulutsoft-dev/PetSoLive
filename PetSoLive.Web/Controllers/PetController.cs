@@ -79,7 +79,6 @@ namespace PetSoLive.Web.Controllers
 
 
 
-// GET: /Pet/Details/{id}
         public async Task<IActionResult> Details(int id)
         {
             var pet = await _petService.GetPetByIdAsync(id);
@@ -112,6 +111,7 @@ namespace PetSoLive.Web.Controllers
     
             return View(pet);
         }
+
 
    // GET: /Pet/Edit/{id}
     public async Task<IActionResult> Edit(int id)
