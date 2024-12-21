@@ -114,6 +114,7 @@ namespace PetSoLive.Web.Controllers
         }
 
 // GET: /Pet/Edit/{id}
+// GET: /Pet/Edit/{id}
         public async Task<IActionResult> Edit(int id)
         {
             // Check if user session exists
@@ -130,10 +131,12 @@ namespace PetSoLive.Web.Controllers
                 return NotFound(); // Pet not found, return 404
             }
 
-            // If IsNeutered is null, set it to false
-            if (pet.IsNeutered == null)
+            // Check if the pet has already been adopted
+            var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
+            if (adoption != null)
             {
-                pet.IsNeutered = false;
+                // If adopted, prevent editing
+                return Unauthorized("This pet has already been adopted and cannot be edited.");
             }
 
             // Retrieve user data based on username from session
@@ -147,6 +150,7 @@ namespace PetSoLive.Web.Controllers
 
             return View(pet); // Return the pet data to the Edit view
         }
+
 
 // POST: /Pet/Edit/{id}
         [HttpPost]
