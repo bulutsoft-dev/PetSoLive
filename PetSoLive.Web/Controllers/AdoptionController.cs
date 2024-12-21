@@ -12,43 +12,18 @@ namespace PetSoLive.Web.Controllers
     
     {
         private readonly IAdoptionService _adoptionService;
-        private readonly IPetService _petService; // Inject IPetService
+        private readonly IPetService _petService;
+        private readonly IUserService _userService;
+        private readonly IEmailService _emailService;
+        private readonly IPetOwnerService _petOwnerService;
 
-        public AdoptionController(IAdoptionService adoptionService, IPetService petService)
+        public AdoptionController(IAdoptionService adoptionService, IPetService petService, IUserService userService, IEmailService emailService, IPetOwnerService petOwnerService)
         {
             _adoptionService = adoptionService;
-            _petService = petService; // Assign the injected pet service
-        }   
-        /// <summary>
-        /// Displays the form for creating a new adoption.
-        /// </summary>
-        [HttpGet]
-        public IActionResult Create()
-        {
-            var model = new Adoption(); // Pass an empty model for the form.
-            return View(model);
-        }
-
-        /// <summary>
-        /// Handles the submission of the adoption creation form.
-        /// </summary>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Adoption adoption)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(adoption);
-            }
-
-            // Set default values for the new adoption.
-            adoption.AdoptionDate = DateTime.Now;
-            adoption.Status = Core.Enums.AdoptionStatus.Pending;
-
-            // Save the new adoption to the database.
-            await _adoptionService.CreateAdoptionAsync(adoption);
-
-            return RedirectToAction(nameof(Index));
+            _petService = petService;
+            _userService = userService;
+            _emailService = emailService;
+            _petOwnerService = petOwnerService;
         }
 
         /// <summary>
@@ -66,47 +41,55 @@ namespace PetSoLive.Web.Controllers
             return View(pets);  // Pass the list of pets to the view
         }
        
+        // Action to show the adoption request form
+        [HttpGet]
+        public async Task<IActionResult> Adopt(int petId)
+        {
+            var pet = await _petService.GetPetByIdAsync(petId);
+            if (pet == null)
+            {
+                return NotFound();
+            }
+
+            var username = HttpContext.Session.GetString("Username");
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _userService.GetUserByUsernameAsync(username);
+
+            var adoptionRequest = new AdoptionRequest
+            {
+                PetId = petId,
+                Pet = pet,
+                UserId = user.Id,
+                User = user
+            };
+
+            return View(adoptionRequest);
+        }
+
+        // Action to submit the adoption request form
         [HttpPost]
-[HttpPost]
-public async Task<IActionResult> Adopt(int petId)
-{
-    var username = HttpContext.Session.GetString("Username");
-    if (string.IsNullOrEmpty(username))
-    {
-        return RedirectToAction("Login", "Account");
-    }
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubmitAdoptRequest(AdoptionRequest adoptionRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Adopt", adoptionRequest);
+            }
 
-    var userId = HttpContext.Session.GetInt32("UserId");
-    if (userId == null)
-    {
-        return Unauthorized();
-    }
+            // Get the pet owner
+            var petOwner = await _petOwnerService.GetPetOwnerAsync(adoptionRequest.PetId);  // Call the PetOwnerService
+            var petOwnerEmail = petOwner.User.Email;
 
-    var pet = await _petService.GetPetByIdAsync(petId);
-    if (pet == null)
-    {
-        return NotFound();
-    }
+            // Send an email to the pet owner
+            await _emailService.SendEmailAsync(petOwnerEmail, "Adoption Request for " + adoptionRequest.Pet.Name, adoptionRequest.Message);
 
-    // Pet'in daha önce sahiplenilip sahiplenilmediğini kontrol et
-    var existingAdoption = await _adoptionService.GetAdoptionByPetIdAsync(petId);
-    if (existingAdoption != null)
-    {
-        ViewBag.ErrorMessage = "This pet has already been adopted.";
-        return View("Error");
-    }
-
-    var adoption = new Adoption
-    {
-        PetId = petId,
-        UserId = userId.Value,
-        AdoptionDate = DateTime.Now,
-        Status = AdoptionStatus.Approved
-    };
-
-    await _adoptionService.CreateAdoptionAsync(adoption);
-    return RedirectToAction("Index", "Adoption");
-}
+            // Redirect to a confirmation page
+            return RedirectToAction("Index", "Adoption");
+        }
 
 
 

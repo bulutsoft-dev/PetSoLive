@@ -68,6 +68,7 @@ builder.Services.AddScoped<IAdoptionService, AdoptionService>();
 builder.Services.AddScoped<IPetOwnerRepository, PetOwnerRepository>();
 //added for mail
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IPetOwnerService, PetOwnerService>();
 
 
 

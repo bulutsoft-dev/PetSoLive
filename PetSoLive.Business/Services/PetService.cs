@@ -95,5 +95,19 @@ public class PetService : IPetService
         // Delete the pet
         await _petRepository.DeleteAsync(pet);
     }
+    
+    // Inside PetService.cs
+
+    public async Task<PetOwner> GetPetOwnerAsync(int petId)
+    {
+        var petOwner = await _petOwnerRepository.GetPetOwnerByPetIdAsync(petId);  // Make sure this repository method exists
+        if (petOwner == null)
+        {
+            throw new KeyNotFoundException("Pet owner not found.");
+        }
+
+        return petOwner;
+    }
+
 
 }

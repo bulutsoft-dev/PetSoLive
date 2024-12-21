@@ -1,0 +1,49 @@
+@model PetSoLive.Core.Entities.AdoptionRequest
+
+@{
+    ViewData["Title"] = "Adopt Pet";
+}
+
+<h2>Adopt Pet</h2>
+
+<form asp-action="SubmitAdoptRequest" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="Pet.Name" class="control-label"></label>
+        <input asp-for="Pet.Name" class="form-control" disabled />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Pet.Species" class="control-label"></label>
+        <input asp-for="Pet.Species" class="form-control" disabled />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Pet.Breed" class="control-label"></label>
+        <input asp-for="Pet.Breed" class="form-control" disabled />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Pet.Age" class="control-label"></label>
+        <input asp-for="Pet.Age" class="form-control" disabled />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Pet.Color" class="control-label"></label>
+        <input asp-for="Pet.Color" class="form-control" disabled />
+    </div>
+
+    <div class="form-group">
+        <label for="Message">Your Message</label>
+        <textarea asp-for="Message" id="Message" class="form-control" rows="4" placeholder="Write your adoption message here..." required></textarea>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit Adoption Request</button>
+    </div>
+</form>
+
+<div>
+    <a href="@Url.Action("Index", "Adoption")" class="btn btn-secondary">Back to Pet List</a>
+</div>

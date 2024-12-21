@@ -71,10 +71,7 @@ Layout = "_Layout";
         {
         @if (ViewBag.Adoption == null && !ViewBag.IsOwner)
         {
-        <form asp-controller="Adoption" asp-action="Adopt" method="post" class="d-inline">
-            <input type="hidden" name="PetId" value="@Model.Id" />
-            <button type="submit" class="btn btn-primary">Adopt</button>
-        </form>
+            <a asp-controller="Adoption" asp-action="Adopt" asp-route-petId="@Model.Id" class="btn btn-primary">Adopt</a>
         }
 
         @if (ViewBag.IsOwner)
