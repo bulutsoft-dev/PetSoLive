@@ -1,6 +1,7 @@
 @{
-ViewData["Title"] = "Pet Details";
+ViewData["Title"] = "@Model.Name's Details";
 }
+
 @{
 Layout = "_Layout";
 }
@@ -11,13 +12,30 @@ Layout = "_Layout";
     <div class="row">
         <div class="col-md-6">
             <!-- Pet Image -->
-            <img src="" class="img-fluid" alt="@Model.Name" />
+            <img src="@Model.ImageUrl" class="img-fluid" alt="@Model.Name" />
         </div>
         <div class="col-md-6">
             <h3>@Model.Name</h3>
             <p><strong>Species:</strong> @Model.Species</p>
             <p><strong>Breed:</strong> @Model.Breed</p>
-            <p><strong>Age:</strong> @Model.Name</p> <!-- Add more fields as needed -->
+            <p><strong>Age:</strong> @Model.Age</p>
+            <p><strong>Gender:</strong> @Model.Gender</p>
+            <p><strong>Weight:</strong> @Model.Weight kg</p>
+            <p><strong>Color:</strong> @Model.Color</p>
+            <p><strong>Date of Birth:</strong> @Model.DateOfBirth?.ToString("MM/dd/yyyy")</p>
+            <p><strong>Description:</strong> @Model.Description</p>
+
+            @if (!string.IsNullOrEmpty(Model.VaccinationStatus))
+            {
+            <p><strong>Vaccination Status:</strong> @Model.VaccinationStatus</p>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.MicrochipId))
+            {
+            <p><strong>Microchip ID:</strong> @Model.MicrochipId</p>
+            }
+
+            <p><strong>Neutered:</strong> @(Model.IsNeutered ? "Yes" : "No")</p>
 
             @if (ViewBag.Adoption != null)
             {
