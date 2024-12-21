@@ -5,6 +5,7 @@ using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Data;
 using PetSoLive.Data.Repositories;
+using SmtpSettings = PetSoLive.Core.Entities.SmtpSettings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,21 @@ builder.Services.AddControllersWithViews();  // Add MVC support
 
 // .env dosyasını yükleyin
 Env.Load();  // .env dosyasındaki çevresel değişkenleri yükler
+
+// SMTP ayarlarını .env dosyasından alın
+var smtpSettings = new SmtpSettings
+{
+    Host = Environment.GetEnvironmentVariable("SMTP_HOST"),
+    Port = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT")),
+    Username = Environment.GetEnvironmentVariable("SMTP_USERNAME"),
+    Password = Environment.GetEnvironmentVariable("SMTP_PASSWORD"),
+    FromEmail = Environment.GetEnvironmentVariable("SMTP_FROM_EMAIL"),
+    EnableSsl = bool.TryParse(Environment.GetEnvironmentVariable("SMTP_ENABLE_SSL"), out var enableSsl) && enableSsl
+
+};
+
+// SMTP ayarlarını DI container'a ekleyin
+builder.Services.AddSingleton(smtpSettings);
 
 // Veritabanı bağlantı dizesini al
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
@@ -50,6 +66,9 @@ builder.Services.AddScoped<IPetRepository, PetRepository>();
 builder.Services.AddScoped<IAdoptionRepository, AdoptionRepository>();
 builder.Services.AddScoped<IAdoptionService, AdoptionService>();
 builder.Services.AddScoped<IPetOwnerRepository, PetOwnerRepository>();
+//added for mail
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 
 
 

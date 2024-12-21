@@ -1,0 +1,25 @@
+/PetSoLive.Tests
+│
+├── /UnitTests              <-- Contains unit tests
+│   ├── /Services           <-- Tests for service classes like AdoptionService, PetService, etc.
+│   │   ├── AdoptionServiceTests.cs
+│   │   ├── AssistanceServiceTests.cs
+│   │   ├── PetServiceTests.cs  <-- For PetService (Business Logic Layer)
+│   ├── /Repositories       <-- Tests for repositories
+│   │   ├── UserRepositoryTests.cs
+│   │   ├── PetRepositoryTests.cs
+│   │   ├── AdoptionRepositoryTests.cs
+│   ├── /Helpers            <-- Tests for helper classes like NotificationHelper
+│   │   ├── NotificationHelperTests.cs
+│   └── /DTOs               <-- Tests for Data Transfer Objects
+│       ├── UserDtoTests.cs
+│       ├── PetDtoTests.cs
+│
+├── /IntegrationTests       <-- Contains integration tests for controllers and services
+│   ├── UserControllerTests.cs
+│   ├── AdoptionControllerTests.cs
+│   ├── PetControllerTests.cs
+│   ├── AssistanceControllerTests.cs
+│   └── EmailServiceIntegrationTests.cs
+│
+└── PetSoLive.Tests.csproj   <-- Test project file
