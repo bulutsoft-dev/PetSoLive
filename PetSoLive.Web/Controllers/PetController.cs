@@ -10,10 +10,12 @@ namespace PetSoLive.Web.Controllers
     public class PetController : Controller
     {
         private readonly IPetService _petService;
+        private readonly IAdoptionService _adoptionService;
 
-        public PetController(IPetService petService)
+        public PetController(IPetService petService, IAdoptionService adoptionService)
         {
             _petService = petService;
+            _adoptionService = adoptionService;
         }
 
         // GET: /Pet/Create
@@ -51,8 +53,6 @@ namespace PetSoLive.Web.Controllers
         }
 
         // GET: /Pet/Details/{id}
-        [AllowAnonymous] // Allow unauthenticated users to view pet details
-        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             var pet = await _petService.GetPetByIdAsync(id);
@@ -61,9 +61,15 @@ namespace PetSoLive.Web.Controllers
                 return NotFound();
             }
 
+            // Pet'in sahiplenilip sahiplenilmediğini kontrol et
+            var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
+
+            // Pet detaylarını view'a gönder
             ViewBag.IsUserLoggedIn = HttpContext.Session.GetString("Username") != null;
+            ViewBag.Adoption = adoption;  // Adoption bilgilerini view'a gönder
             return View(pet);
         }
+
 
     }
 }

@@ -67,46 +67,46 @@ namespace PetSoLive.Web.Controllers
         }
        
         [HttpPost]
-        public async Task<IActionResult> Adopt(int petId)
-        {
-            var username = HttpContext.Session.GetString("Username");
-            if (string.IsNullOrEmpty(username))
-            {
-                return RedirectToAction("Login", "Account");
-            }
+[HttpPost]
+public async Task<IActionResult> Adopt(int petId)
+{
+    var username = HttpContext.Session.GetString("Username");
+    if (string.IsNullOrEmpty(username))
+    {
+        return RedirectToAction("Login", "Account");
+    }
 
-            var userId = HttpContext.Session.GetInt32("UserId");
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
+    var userId = HttpContext.Session.GetInt32("UserId");
+    if (userId == null)
+    {
+        return Unauthorized();
+    }
 
-            var pet = await _petService.GetPetByIdAsync(petId);
-            if (pet == null)
-            {
-                return NotFound();
-            }
+    var pet = await _petService.GetPetByIdAsync(petId);
+    if (pet == null)
+    {
+        return NotFound();
+    }
 
-            try
-            {
-                var adoption = new Adoption
-                {
-                    PetId = petId,
-                    UserId = userId.Value,
-                    AdoptionDate = DateTime.Now,
-                    Status = AdoptionStatus.Pending
-                };
+    // Pet'in daha önce sahiplenilip sahiplenilmediğini kontrol et
+    var existingAdoption = await _adoptionService.GetAdoptionByPetIdAsync(petId);
+    if (existingAdoption != null)
+    {
+        ViewBag.ErrorMessage = "This pet has already been adopted.";
+        return View("Error");
+    }
 
-                await _adoptionService.CreateAdoptionAsync(adoption);
-                return RedirectToAction("Index", "Adoption");
-            }
-            catch (InvalidOperationException ex)
-            {
-                // Kullanıcıya hata mesajı göster
-                ViewBag.ErrorMessage = ex.Message;
-                return View("Error");
-            }
-        }
+    var adoption = new Adoption
+    {
+        PetId = petId,
+        UserId = userId.Value,
+        AdoptionDate = DateTime.Now,
+        Status = AdoptionStatus.Approved
+    };
+
+    await _adoptionService.CreateAdoptionAsync(adoption);
+    return RedirectToAction("Index", "Adoption");
+}
 
 
 

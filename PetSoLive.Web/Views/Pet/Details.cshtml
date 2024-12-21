@@ -1,11 +1,11 @@
 @{
-    ViewData["Title"] = "Pet Details";
+ViewData["Title"] = "Pet Details";
 }
-    @{
-        Layout = "_Layout";
-    }
+@{
+Layout = "_Layout";
+}
 
-    <div class="container">
+<div class="container">
     <h2 class="my-4 text-center">@Model.Name's Details</h2>
 
     <div class="row">
@@ -18,26 +18,41 @@
             <p><strong>Species:</strong> @Model.Species</p>
             <p><strong>Breed:</strong> @Model.Breed</p>
             <p><strong>Age:</strong> @Model.Name</p> <!-- Add more fields as needed -->
-            <p><strong>Adopted:</strong> @(Model.Name)</p> <!-- Assuming you have an IsAdopted field -->
-        </div>
-    </div>
-        <!-- Buttons Section -->
-        <div class="text-right mt-4">
-            <a asp-controller="Adoption" asp-action="Index" class="btn btn-secondary">Back to Adoption List</a>
-            @if (!ViewBag.IsUserLoggedIn)
+
+            @if (ViewBag.Adoption != null)
             {
-            <p class="text-danger mt-2">You need to log in to adopt a pet.</p>
+            <p><strong>Adopted:</strong> Yes</p>
+            <p><strong>Adopted by:</strong> @ViewBag.Adoption.User.Username</p>
+            <p><strong>Adoption Date:</strong> @ViewBag.Adoption.AdoptionDate.ToString("MM/dd/yyyy")</p>
             }
             else
             {
-            <form asp-controller="Adoption" asp-action="Adopt" method="post" class="d-inline">
-                <input type="hidden" name="PetId" value="@Model.Id" />
-                <button type="submit" class="btn btn-primary ml-2">Adopt</button>
-            </form>
+            <p><strong>Adopted:</strong> No</p>
             }
         </div>
-
-
-
-
     </div>
+
+    <!-- Buttons Section -->
+    <div class="text-right mt-4">
+        <a asp-controller="Adoption" asp-action="Index" class="btn btn-secondary">Back to Adoption List</a>
+
+        @if (!ViewBag.IsUserLoggedIn)
+        {
+        <p class="text-danger mt-2">You need to log in to adopt a pet.</p>
+        }
+        else
+        {
+        @if (ViewBag.Adoption == null)
+        {
+        <form asp-controller="Adoption" asp-action="Adopt" method="post" class="d-inline">
+            <input type="hidden" name="PetId" value="@Model.Id" />
+            <button type="submit" class="btn btn-primary ml-2">Adopt</button>
+        </form>
+        }
+        else
+        {
+        <p class="text-warning mt-2">This pet has already been adopted.</p>
+        }
+        }
+    </div>
+</div>
