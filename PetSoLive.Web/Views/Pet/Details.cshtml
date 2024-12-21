@@ -1,11 +1,3 @@
-@{
-ViewData["Title"] = "@Model.Name's Details";
-}
-
-@{
-Layout = "_Layout";
-}
-
 <div class="container">
     <h2 class="my-4 text-center">@Model.Name's Details</h2>
 
@@ -60,7 +52,7 @@ Layout = "_Layout";
         }
         else
         {
-        @if (ViewBag.Adoption == null)
+        @if (ViewBag.Adoption == null && !ViewBag.IsOwner)
         {
         <form asp-controller="Adoption" asp-action="Adopt" method="post" class="d-inline">
             <input type="hidden" name="PetId" value="@Model.Id" />
@@ -69,8 +61,18 @@ Layout = "_Layout";
         }
         else
         {
-        <p class="text-warning mt-2">This pet has already been adopted.</p>
+            @if (ViewBag.IsOwner && ViewBag.Adoption == null)
+            {
+                <a asp-controller="Pet" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning ml-2">Edit</a>
+            }
+            else
+            {
+                <p class="text-warning mt-2">This pet has already been adopted.</p>
+
+            }
         }
+
+       
         }
     </div>
 </div>

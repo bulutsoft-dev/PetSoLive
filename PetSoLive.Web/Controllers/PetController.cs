@@ -79,8 +79,7 @@ namespace PetSoLive.Web.Controllers
 
 
 
-
-        // GET: /Pet/Details/{id}
+// GET: /Pet/Details/{id}
         public async Task<IActionResult> Details(int id)
         {
             var pet = await _petService.GetPetByIdAsync(id);
@@ -89,15 +88,31 @@ namespace PetSoLive.Web.Controllers
                 return NotFound();
             }
 
-            // Pet'in sahiplenilip sahiplenilmediğini kontrol et
+            // Check if the pet has been adopted
             var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
 
-            // Pet detaylarını view'a gönder
-            ViewBag.IsUserLoggedIn = HttpContext.Session.GetString("Username") != null;
-            ViewBag.Adoption = adoption;  // Adoption bilgilerini view'a gönder
+            // Retrieve the username from session
+            var username = HttpContext.Session.GetString("Username");
+            var isUserLoggedIn = username != null;
+            var isOwner = false;
+
+            if (isUserLoggedIn)
+            {
+                // Get the logged-in user
+                var user = await _userService.GetUserByUsernameAsync(username);
+        
+                // Check if the user is the owner of this pet
+                isOwner = await _petService.IsUserOwnerOfPetAsync(id, user.Id);
+            }
+
+            // Pass the necessary information to the view
+            ViewBag.IsUserLoggedIn = isUserLoggedIn;
+            ViewBag.Adoption = adoption;
+            ViewBag.IsOwner = isOwner;  // Indicate whether the logged-in user is the pet's owner
+    
             return View(pet);
         }
-        
+
 // GET: /Pet/Edit/{id}
         public async Task<IActionResult> Edit(int id)
         {
