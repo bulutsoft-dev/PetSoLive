@@ -26,5 +26,12 @@ namespace PetSoLive.Business.Services
 
             await _adoptionRepository.AddAsync(adoption);
         }
+        
+        public async Task<Adoption?> GetAdoptionByPetIdAsync(int petId)
+        {
+            // Pet'in sahiplenilip sahiplenilmediğini kontrol et
+            return await _adoptionRepository.GetAdoptionByPetIdAsync(petId);
+        }
+
     }
 }

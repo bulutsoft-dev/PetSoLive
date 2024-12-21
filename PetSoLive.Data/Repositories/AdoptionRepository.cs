@@ -39,7 +39,14 @@ namespace PetSoLive.Data.Repositories
         {
             return await _context.Adoptions.AnyAsync(a => a.PetId == petId && a.Status == AdoptionStatus.Approved);
         }
-        
+        public async Task<Adoption?> GetAdoptionByPetIdAsync(int petId)
+        {
+            // Pet'in sahiplenilme bilgilerini getir
+            return await _context.Adoptions
+                .Include(a => a.User)
+                .FirstOrDefaultAsync(a => a.PetId == petId && a.Status == AdoptionStatus.Approved);
+        }
+
         
         
         

@@ -6,4 +6,5 @@ public interface IAdoptionRepository : IRepository<Adoption>
 {
     Task<bool> IsPetAlreadyAdoptedAsync(int adoptionPetId);
 
+    Task<Adoption?> GetAdoptionByPetIdAsync(int petId);
 }
