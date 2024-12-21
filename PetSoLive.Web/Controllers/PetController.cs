@@ -113,82 +113,85 @@ namespace PetSoLive.Web.Controllers
             return View(pet);
         }
 
-// GET: /Pet/Edit/{id}
-// GET: /Pet/Edit/{id}
-        public async Task<IActionResult> Edit(int id)
+   // GET: /Pet/Edit/{id}
+    public async Task<IActionResult> Edit(int id)
+    {
+        var username = HttpContext.Session.GetString("Username");
+        if (username == null)
         {
-            // Check if user session exists
-            var username = HttpContext.Session.GetString("Username");
-            if (username == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            // Retrieve the pet details by its ID
-            var pet = await _petService.GetPetByIdAsync(id);
-            if (pet == null)
-            {
-                return NotFound(); // Pet not found, return 404
-            }
-
-            // Check if the pet has already been adopted
-            var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
-            if (adoption != null)
-            {
-                // If adopted, prevent editing
-                return Unauthorized("This pet has already been adopted and cannot be edited.");
-            }
-
-            // Retrieve user data based on username from session
-            var user = await _userService.GetUserByUsernameAsync(username);
-
-            // Check if the user is the owner of the pet
-            if (!await _petService.IsUserOwnerOfPetAsync(id, user.Id))
-            {
-                return Unauthorized("You are not authorized to edit this pet.");
-            }
-
-            return View(pet); // Return the pet data to the Edit view
+            // Redirect to error page with an authentication message
+            ViewBag.ErrorMessage = "You must be logged in to edit a pet.";
+            return View("Error");
         }
 
-
-// POST: /Pet/Edit/{id}
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Pet updatedPet)
+        var pet = await _petService.GetPetByIdAsync(id);
+        if (pet == null)
         {
-            var username = HttpContext.Session.GetString("Username");
-            if (username == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var user = await _userService.GetUserByUsernameAsync(username);
-            var pet = await _petService.GetPetByIdAsync(id);
-
-            if (pet == null)
-            {
-                return NotFound();
-            }
-
-            // Check if the user is the owner of the pet
-            if (!await _petService.IsUserOwnerOfPetAsync(id, user.Id))
-            {
-                return Unauthorized("You are not authorized to edit this pet.");
-            }
-
-            // If IsNeutered is null, set it to false
-            if (updatedPet.IsNeutered == null)
-            {
-                updatedPet.IsNeutered = false;
-            }
-
-            // Update the pet
-            await _petService.UpdatePetAsync(id, updatedPet, user.Id);
-
-            return RedirectToAction("Details", new { id = pet.Id }); // Redirect to the pet details page
+            // Pet not found, return error page
+            ViewBag.ErrorMessage = "The pet you're trying to edit does not exist.";
+            return View("Error");
         }
 
+        var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
+        if (adoption != null)
+        {
+            // If adopted, prevent editing and show an error message
+            ViewBag.ErrorMessage = "This pet has already been adopted and cannot be edited.";
+            return View("Error");
+        }
+
+        var user = await _userService.GetUserByUsernameAsync(username);
+        if (!await _petService.IsUserOwnerOfPetAsync(id, user.Id))
+        {
+            // If the user is not the pet's owner, show an error
+            ViewBag.ErrorMessage = "You are not authorized to edit this pet.";
+            return View("Error");
+        }
+
+        return View(pet); // If all checks pass, show the edit form
+    }
+
+    // POST: /Pet/Edit/{id}
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, Pet updatedPet)
+    {
+        var username = HttpContext.Session.GetString("Username");
+        if (username == null)
+        {
+            // Redirect to error page with an authentication message
+            ViewBag.ErrorMessage = "You must be logged in to edit a pet.";
+            return View("Error");
+        }
+
+        var user = await _userService.GetUserByUsernameAsync(username);
+        var pet = await _petService.GetPetByIdAsync(id);
+
+        if (pet == null)
+        {
+            // Pet not found, return error page
+            ViewBag.ErrorMessage = "The pet you're trying to edit does not exist.";
+            return View("Error");
+        }
+
+        if (!await _petService.IsUserOwnerOfPetAsync(id, user.Id))
+        {
+            // If the user is not the pet's owner, show an error
+            ViewBag.ErrorMessage = "You are not authorized to edit this pet.";
+            return View("Error");
+        }
+
+        // If IsNeutered is null, set it to false
+        if (updatedPet.IsNeutered == null)
+        {
+            updatedPet.IsNeutered = false;
+        }
+
+        // Update the pet
+        await _petService.UpdatePetAsync(id, updatedPet, user.Id);
+
+        return RedirectToAction("Details", new { id = pet.Id });
+    }
 
 
 
