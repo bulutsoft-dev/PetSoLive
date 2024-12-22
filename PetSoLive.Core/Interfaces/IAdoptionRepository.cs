@@ -12,4 +12,5 @@ public interface IAdoptionRepository
     Task<AdoptionRequest?> GetAdoptionRequestByUserAndPetAsync(int userId, int petId);
     
     
+    
 }

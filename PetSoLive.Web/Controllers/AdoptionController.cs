@@ -14,8 +14,16 @@ public class AdoptionController : Controller
     private readonly IEmailService _emailService;
     private readonly IPetOwnerService _petOwnerService;
     private readonly IAdoptionRequestService _adoptionRequestService;
+    private readonly IAdoptionRequestRepository _adoptionRequestRepository; // Injected repository
 
-    public AdoptionController(IAdoptionService adoptionService, IPetService petService, IUserService userService, IEmailService emailService, IPetOwnerService petOwnerService,IAdoptionRequestService adoptionRequestService)
+    public AdoptionController(
+        IAdoptionService adoptionService, 
+        IPetService petService, 
+        IUserService userService, 
+        IEmailService emailService, 
+        IPetOwnerService petOwnerService,
+        IAdoptionRequestService adoptionRequestService,
+        IAdoptionRequestRepository adoptionRequestRepository) // Inject repository
     {
         _adoptionService = adoptionService;
         _petService = petService;
@@ -23,7 +31,9 @@ public class AdoptionController : Controller
         _emailService = emailService;
         _petOwnerService = petOwnerService;
         _adoptionRequestService = adoptionRequestService;
+        _adoptionRequestRepository = adoptionRequestRepository;  // Set injected repository
     }
+
     
     [HttpGet]
     public async Task<IActionResult> Index()
@@ -152,45 +162,51 @@ public async Task<IActionResult> Adopt(int petId, string name, string email, str
 
         await _emailService.SendEmailAsync(user.Email, subject, body);
     }
-    
-    
+    [HttpPost]
     public async Task<IActionResult> ApproveRequest(int adoptionRequestId, int petId)
     {
-        var adoptionRequest = await _adoptionRequestService.GetAdoptionRequestByIdAsync(adoptionRequestId);
+        // Get the logged-in user (owner of the pet)
+        var username = HttpContext.Session.GetString("Username");
+        if (username == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var user = await _userService.GetUserByUsernameAsync(username);
+        var pet = await _petService.GetPetByIdAsync(petId);
+
+        if (pet == null || !await _petService.IsUserOwnerOfPetAsync(petId, user.Id))
+        {
+            // If the pet doesn't exist or the user is not the owner, show error
+            return View("Error");
+        }
+
+        // Get the adoption request to approve
+        var adoptionRequest = await _adoptionRequestRepository.GetByIdAsync(adoptionRequestId);
+
         if (adoptionRequest == null || adoptionRequest.PetId != petId)
         {
-            return NotFound();
+            // If adoption request doesn't exist or doesn't match the pet, show error
+            return View("Error");
         }
 
-        // Check if the pet is owned by the current user
-        var pet = await _petService.GetPetByIdAsync(petId);
-        var petOwner = pet.PetOwners.FirstOrDefault();  // Get pet owner from PetOwner
-
-        // Ensure that the current user is the pet owner
-        if (petOwner?.UserId.ToString() != User.Identity.Name)
-        {
-            return Unauthorized();
-        }
-
-        // Approve the adoption request and change its status
+        // Update the status of the adoption request to "Approved"
         adoptionRequest.Status = AdoptionStatus.Approved;
-        await _adoptionRequestService.UpdateAdoptionRequestAsync(adoptionRequest);
+        await _adoptionRequestRepository.UpdateAsync(adoptionRequest);
 
-        // Create an adoption record and set the status to approved
-        var adoption = new Adoption
+        // Reject all other pending requests for this pet
+        var pendingRequests = await _adoptionRequestRepository.GetPendingRequestsByPetIdAsync(petId);
+        foreach (var request in pendingRequests)
         {
-            PetId = petId,
-            UserId = adoptionRequest.UserId,
-            AdoptionDate = DateTime.Now,
-            Status = AdoptionStatus.Approved,
-            Pet = pet,
-            User = adoptionRequest.User
-        };
+            if (request.Id != adoptionRequestId)
+            {
+                request.Status = AdoptionStatus.Rejected;
+                await _adoptionRequestRepository.UpdateAsync(request);
+            }
+        }
 
-        // Save the adoption record (you need to create an AdoptionService to handle this or directly save via repository)
-        await _adoptionService.CreateAdoptionAsync(adoption);  // Assuming CreateAdoptionAsync method is implemented
-
-        return RedirectToAction("Index");
+        // After approval, redirect to the pet details page (or adoption list)
+        return RedirectToAction("Details", "Pet", new { id = petId });
     }
 
 
