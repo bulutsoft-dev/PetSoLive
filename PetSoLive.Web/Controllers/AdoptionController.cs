@@ -87,9 +87,6 @@ public class AdoptionController : Controller
             var adoptionRequest = new AdoptionRequest
             {
                 PetId = petId,
-                Name = name,
-                Email = email,
-                Phone = phone,
                 Message = message,
                 Status = AdoptionStatus.Pending,
                 RequestDate = DateTime.Now,

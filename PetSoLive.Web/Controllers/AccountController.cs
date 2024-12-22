@@ -53,17 +53,28 @@ namespace PetSoLive.Web.Controllers
         // POST: /Account/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(string username, string email, string password)
+        public async Task<IActionResult> Register(string username, string email, string password, string phoneNumber, string address, DateTime dateOfBirth, string profileImageUrl)
         {
             if (ModelState.IsValid)
             {
-                var user = new User { Username = username, Email = email, PasswordHash = password };
+                var user = new User
+                {
+                    Username = username,
+                    Email = email,
+                    PasswordHash = password,
+                    PhoneNumber = phoneNumber,
+                    Address = address,
+                    DateOfBirth = dateOfBirth,
+                    ProfileImageUrl = profileImageUrl
+                };
+
                 await _userService.RegisterAsync(user);
                 return RedirectToAction("Login");
             }
 
             return View();
         }
+
 
         // GET: /Account/Logout
         public IActionResult Logout()

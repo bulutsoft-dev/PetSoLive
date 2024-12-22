@@ -25,7 +25,7 @@ public class UserService : IUserService
         return null; // Invalid credentials
     }
 
-    // Register a new user with hashed password
+    // Register a new user with hashed password and full details
     public async Task RegisterAsync(User user)
     {
         if (string.IsNullOrWhiteSpace(user.PasswordHash))
@@ -33,7 +33,6 @@ public class UserService : IUserService
             throw new ArgumentException("Password cannot be empty.");
         }
 
-        // Ensure the user has a default role if no roles are provided
         if (user.Roles == null || !user.Roles.Any())
         {
             user.Roles = new List<string> { "User" }; // Default role
@@ -41,6 +40,9 @@ public class UserService : IUserService
 
         // Hash the user's password before saving to the database
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
+        user.CreatedDate = DateTime.UtcNow;
+        user.IsActive = true;
+
         await _userRepository.AddAsync(user);
     }
 
