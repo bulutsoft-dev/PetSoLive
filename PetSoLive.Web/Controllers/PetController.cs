@@ -83,15 +83,19 @@ namespace PetSoLive.Web.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
+            // Fetch the pet details using the provided id
             var pet = await _petService.GetPetByIdAsync(id);
             if (pet == null)
             {
+                // If pet is not found, return a 404 error
                 return NotFound();
             }
 
+            // Fetch related data
             var adoptionRequests = await _adoptionRequestRepository.GetAdoptionRequestsByPetIdAsync(id);
             var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
 
+            // Get the currently logged-in user's information
             var username = HttpContext.Session.GetString("Username");
             var isUserLoggedIn = username != null;
             var isOwner = false;
@@ -100,18 +104,32 @@ namespace PetSoLive.Web.Controllers
             if (isUserLoggedIn)
             {
                 var user = await _userService.GetUserByUsernameAsync(username);
+
+                // Check if the logged-in user is the pet owner
                 isOwner = await _petService.IsUserOwnerOfPetAsync(id, user.Id);
 
                 // Check if the user has already submitted an adoption request for this pet
                 hasAdoptionRequest = await _adoptionService.GetAdoptionRequestByUserAndPetAsync(user.Id, id) != null;
             }
 
+            // If the pet has been adopted, prevent further adoption requests
+            if (adoption != null)
+            {
+                ViewBag.AdoptionStatus = "This pet has already been adopted.";
+            }
+            else
+            {
+                ViewBag.AdoptionStatus = "This pet is available for adoption.";
+            }
+
+            // Pass all necessary data to the view
             ViewBag.IsUserLoggedIn = isUserLoggedIn;
             ViewBag.Adoption = adoption;
             ViewBag.IsOwner = isOwner;
             ViewBag.AdoptionRequests = adoptionRequests;
-            ViewBag.HasAdoptionRequest = hasAdoptionRequest; // Pass the flag to the view
+            ViewBag.HasAdoptionRequest = hasAdoptionRequest; // Pass the flag to indicate if the user already requested adoption
 
+            // Return the pet details view
             return View(pet);
         }
 

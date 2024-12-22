@@ -13,14 +13,16 @@ public class AdoptionController : Controller
     private readonly IUserService _userService;
     private readonly IEmailService _emailService;
     private readonly IPetOwnerService _petOwnerService;
+    private readonly IAdoptionRequestService _adoptionRequestService;
 
-    public AdoptionController(IAdoptionService adoptionService, IPetService petService, IUserService userService, IEmailService emailService, IPetOwnerService petOwnerService)
+    public AdoptionController(IAdoptionService adoptionService, IPetService petService, IUserService userService, IEmailService emailService, IPetOwnerService petOwnerService,IAdoptionRequestService adoptionRequestService)
     {
         _adoptionService = adoptionService;
         _petService = petService;
         _userService = userService;
         _emailService = emailService;
         _petOwnerService = petOwnerService;
+        _adoptionRequestService = adoptionRequestService;
     }
     
     [HttpGet]
@@ -150,5 +152,46 @@ public async Task<IActionResult> Adopt(int petId, string name, string email, str
 
         await _emailService.SendEmailAsync(user.Email, subject, body);
     }
+    
+    
+    public async Task<IActionResult> ApproveRequest(int adoptionRequestId, int petId)
+    {
+        var adoptionRequest = await _adoptionRequestService.GetAdoptionRequestByIdAsync(adoptionRequestId);
+        if (adoptionRequest == null || adoptionRequest.PetId != petId)
+        {
+            return NotFound();
+        }
+
+        // Check if the pet is owned by the current user
+        var pet = await _petService.GetPetByIdAsync(petId);
+        var petOwner = pet.PetOwners.FirstOrDefault();  // Get pet owner from PetOwner
+
+        // Ensure that the current user is the pet owner
+        if (petOwner?.UserId.ToString() != User.Identity.Name)
+        {
+            return Unauthorized();
+        }
+
+        // Approve the adoption request and change its status
+        adoptionRequest.Status = AdoptionStatus.Approved;
+        await _adoptionRequestService.UpdateAdoptionRequestAsync(adoptionRequest);
+
+        // Create an adoption record and set the status to approved
+        var adoption = new Adoption
+        {
+            PetId = petId,
+            UserId = adoptionRequest.UserId,
+            AdoptionDate = DateTime.Now,
+            Status = AdoptionStatus.Approved,
+            Pet = pet,
+            User = adoptionRequest.User
+        };
+
+        // Save the adoption record (you need to create an AdoptionService to handle this or directly save via repository)
+        await _adoptionService.CreateAdoptionAsync(adoption);  // Assuming CreateAdoptionAsync method is implemented
+
+        return RedirectToAction("Index");
+    }
+
 
 }

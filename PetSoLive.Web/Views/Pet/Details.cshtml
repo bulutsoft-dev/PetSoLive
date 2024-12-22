@@ -175,6 +175,16 @@ Layout = "_Layout";
                             </div>
                             <p class="mt-2 text-muted">@request.Message</p>
                             <small class="text-secondary">Requested on: @request.RequestDate.ToString("MM/dd/yyyy")</small>
+
+                            @if (request.Status == AdoptionStatus.Pending && ViewBag.IsOwner)
+                            {
+                            <!-- Only show the approve button if the current user is the owner of the pet -->
+                            <form asp-controller="Adoption" asp-action="ApproveRequest" method="post">
+                                <input type="hidden" name="adoptionRequestId" value="@request.Id" />
+                                <input type="hidden" name="petId" value="@Model.Id" />
+                                <button type="submit" class="btn btn-success mt-2">Approve</button>
+                            </form>
+                            }
                         </li>
                         }
                     </ul>
@@ -183,6 +193,7 @@ Layout = "_Layout";
                     {
                     <p class="text-muted">No adoption requests yet.</p>
                     }
+
                 </div>
             </div>
         </div>
