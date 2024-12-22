@@ -318,6 +318,88 @@ public class EmailHelper
     }
 
 
+    public string GeneratePetDeletionEmailBody(User user, Pet pet)
+    {
+        return $@"
+    <html>
+    <head>
+        <style>
+            /* Style similar to previous templates */
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <h2>Pet Removed: {pet.Name}</h2>
+            <p>Dear {user.Username},</p>
+            <p>We regret to inform you that the pet <span class='highlight'>{pet.Name}</span> you were interested in has been removed from our platform. It is no longer available for adoption.</p>
+            <p>We apologize for any inconvenience this may have caused. Please feel free to explore other available pets.</p>
+
+            <div class='footer'>
+                <p>Best regards,</p>
+                <p>The PetSoLive Team</p>
+            </div>
+        </div>
+    </body>
+    </html>";
+    }
+
+    public string GeneratePetUpdateEmailBody(User user, Pet pet)
+    {
+        return $@"
+    <html>
+    <head>
+        <style>
+            /* Style similar to previous templates */
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <h2>Pet Information Updated: {pet.Name}</h2>
+            <p>Dear {user.Username},</p>
+            <p>The details of the pet you were interested in, <span class='highlight'>{pet.Name}</span>, have been updated. Please review the updated information.</p>
+            <p>Here are the updated details:</p>
+            <ul>
+                <li><span class='highlight'>Name:</span> {pet.Name}</li>
+                <li><span class='highlight'>Breed:</span> {pet.Breed}</li>
+                <li><span class='highlight'>Age:</span> {pet.Age} years old</li>
+                <!-- Add more details as required -->
+            </ul>
+            <p>Please log into your account to view the full details.</p>
+
+            <div class='footer'>
+                <p>Best regards,</p>
+                <p>The PetSoLive Team</p>
+            </div>
+        </div>
+    </body>
+    </html>";
+    }
+
+    public string GeneratePetCreationEmailBody(User user, Pet pet)
+    {
+        return $@"
+    <html>
+    <head>
+        <style>
+            /* Style similar to previous templates */
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <h2>Your Pet {pet.Name} Has Been Successfully Created</h2>
+            <p>Dear {user.Username},</p>
+            <p>Thank you for creating a profile for your pet, <span class='highlight'>{pet.Name}</span>. The pet has been successfully added to our system.</p>
+            <p>You can now view and manage the pet's details from your profile.</p>
+
+            <div class='footer'>
+                <p>Best regards,</p>
+                <p>The PetSoLive Team</p>
+            </div>
+        </div>
+    </body>
+    </html>";
+    }
+
     
 
 }

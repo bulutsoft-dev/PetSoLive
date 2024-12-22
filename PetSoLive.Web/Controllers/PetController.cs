@@ -13,13 +13,15 @@ namespace PetSoLive.Web.Controllers
         private readonly IUserService _userService; // Add IUserService to access user data
         private readonly IAdoptionService _adoptionService;
         private readonly IAdoptionRequestRepository _adoptionRequestRepository;
+        private readonly IEmailService _emailService;
 
-        public PetController(IPetService petService, IUserService userService, IAdoptionService adoptionService, IAdoptionRequestRepository adoptionRequestRepository)
+        public PetController(IPetService petService, IUserService userService, IAdoptionService adoptionService, IAdoptionRequestRepository adoptionRequestRepository,IEmailService emailService)
         {
             _petService = petService;
             _userService = userService;
             _adoptionService = adoptionService;
             _adoptionRequestRepository = adoptionRequestRepository;
+            _emailService = emailService;
         }
 
         // GET: /Pet/Create
@@ -133,166 +135,155 @@ namespace PetSoLive.Web.Controllers
             return View(pet);
         }
 
-
-
-
-   // GET: /Pet/Edit/{id}
-    public async Task<IActionResult> Edit(int id)
-    {
-        var username = HttpContext.Session.GetString("Username");
-        if (username == null)
+        
+        
+        // GET: /Pet/Edit/{id}
+        public async Task<IActionResult> Edit(int id)
         {
-            // Redirect to error page with an authentication message
-            ViewBag.ErrorMessage = "You must be logged in to edit a pet.";
-            return View("Error");
+            var username = HttpContext.Session.GetString("Username");
+            if (username == null)
+            {
+                // Redirect to error page with an authentication message
+                ViewBag.ErrorMessage = "You must be logged in to edit a pet.";
+                return View("Error");
+            }
+
+            var pet = await _petService.GetPetByIdAsync(id);
+            if (pet == null)
+            {
+                // Pet not found, return error page
+                ViewBag.ErrorMessage = "The pet you're trying to edit does not exist.";
+                return View("Error");
+            }
+
+            var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
+            if (adoption != null)
+            {
+                // If adopted, prevent editing and show an error message
+                ViewBag.ErrorMessage = "This pet has already been adopted and cannot be edited.";
+                return View("Error");
+            }
+
+            var user = await _userService.GetUserByUsernameAsync(username);
+            if (!await _petService.IsUserOwnerOfPetAsync(id, user.Id))
+            {
+                // If the user is not the pet's owner, show an error
+                ViewBag.ErrorMessage = "You are not authorized to edit this pet.";
+                return View("Error");
+            }
+
+            return View(pet); // If all checks pass, show the edit form
         }
 
-        var pet = await _petService.GetPetByIdAsync(id);
-        if (pet == null)
+
+
+   // POST: /Pet/Edit/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Pet updatedPet)
         {
-            // Pet not found, return error page
-            ViewBag.ErrorMessage = "The pet you're trying to edit does not exist.";
-            return View("Error");
+            var username = HttpContext.Session.GetString("Username");
+            if (username == null)
+            {
+                ViewBag.ErrorMessage = "You must be logged in to edit a pet.";
+                return View("Error");
+            }
+
+            var user = await _userService.GetUserByUsernameAsync(username);
+            var pet = await _petService.GetPetByIdAsync(id);
+
+            if (pet == null)
+            {
+                ViewBag.ErrorMessage = "The pet you're trying to edit does not exist.";
+                return View("Error");
+            }
+
+            if (!await _petService.IsUserOwnerOfPetAsync(id, user.Id))
+            {
+                ViewBag.ErrorMessage = "You are not authorized to edit this pet.";
+                return View("Error");
+            }
+
+            // If IsNeutered is null, set it to false
+            if (updatedPet.IsNeutered == null)
+            {
+                updatedPet.IsNeutered = false;
+            }
+
+            // Update the pet
+            await _petService.UpdatePetAsync(id, updatedPet, user.Id);
+
+            // Fetch adoption requests for the updated pet
+            var adoptionRequests = await _adoptionRequestRepository.GetAdoptionRequestsByPetIdAsync(id);
+            foreach (var request in adoptionRequests)
+            {
+                var recipientEmail = request.User.Email;
+                var subject = "Pet Information Updated";
+                var message = $"The details of the pet '{pet.Name}' have been updated. Please check the updated details.";
+                await _emailService.SendEmailAsync(recipientEmail, subject, message);
+            }
+
+            // Redirect to the pet details page
+            return RedirectToAction("Details", new { id = pet.Id });
         }
 
-        var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
-        if (adoption != null)
+        // POST: /Pet/Delete/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            // If adopted, prevent editing and show an error message
-            ViewBag.ErrorMessage = "This pet has already been adopted and cannot be edited.";
-            return View("Error");
+            var username = HttpContext.Session.GetString("Username");
+            if (username == null)
+            {
+                ViewBag.ErrorMessage = "You must be logged in to delete a pet.";
+                return View("Error");
+            }
+
+            var user = await _userService.GetUserByUsernameAsync(username);
+            var pet = await _petService.GetPetByIdAsync(id);
+            var adoptionRequests = await _adoptionRequestRepository.GetAdoptionRequestsByPetIdAsync(id);
+
+            if (pet == null)
+            {
+                ViewBag.ErrorMessage = "The pet you're trying to delete does not exist.";
+                return View("Error");
+            }
+
+            // Fetch adoption information to prevent deletion of adopted pets
+            var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
+            if (adoption != null)
+            {
+                ViewBag.ErrorMessage = "This pet has already been adopted and cannot be deleted.";
+                return View("Error");
+            }
+
+            try
+            {
+                // Delete the pet
+                await _petService.DeletePetAsync(id, user.Id);
+
+                // Send email notifications to users who requested adoption for this pet
+                foreach (var request in adoptionRequests)
+                {
+                    var recipientEmail = request.User.Email;
+                    var subject = "Pet Deleted";
+                    var message = $"The pet you were interested in, '{request.Pet.Name}', has been removed from the adoption list.";
+                    await _emailService.SendEmailAsync(recipientEmail, subject, message);
+                }
+
+                // Redirect to the adoption index page after deletion
+                return RedirectToAction("Index", "Adoption");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                ViewBag.ErrorMessage = "You are not authorized to delete this pet.";
+                return View("Error");
+            }
+            catch (KeyNotFoundException)
+            {
+                ViewBag.ErrorMessage = "The pet you're trying to delete does not exist.";
+                return View("Error");
+            }
         }
-
-        var user = await _userService.GetUserByUsernameAsync(username);
-        if (!await _petService.IsUserOwnerOfPetAsync(id, user.Id))
-        {
-            // If the user is not the pet's owner, show an error
-            ViewBag.ErrorMessage = "You are not authorized to edit this pet.";
-            return View("Error");
-        }
-
-        return View(pet); // If all checks pass, show the edit form
-    }
-
-    // POST: /Pet/Edit/{id}
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, Pet updatedPet)
-    {
-        var username = HttpContext.Session.GetString("Username");
-        if (username == null)
-        {
-            // Redirect to error page with an authentication message
-            ViewBag.ErrorMessage = "You must be logged in to edit a pet.";
-            return View("Error");
-        }
-
-        var user = await _userService.GetUserByUsernameAsync(username);
-        var pet = await _petService.GetPetByIdAsync(id);
-
-        if (pet == null)
-        {
-            // Pet not found, return error page
-            ViewBag.ErrorMessage = "The pet you're trying to edit does not exist.";
-            return View("Error");
-        }
-
-        if (!await _petService.IsUserOwnerOfPetAsync(id, user.Id))
-        {
-            // If the user is not the pet's owner, show an error
-            ViewBag.ErrorMessage = "You are not authorized to edit this pet.";
-            return View("Error");
-        }
-
-        // If IsNeutered is null, set it to false
-        if (updatedPet.IsNeutered == null)
-        {
-            updatedPet.IsNeutered = false;
-        }
-
-        // Update the pet
-        await _petService.UpdatePetAsync(id, updatedPet, user.Id);
-
-        return RedirectToAction("Details", new { id = pet.Id });
-    }
-
-    // GET: /Pet/Delete/{id}
-    public async Task<IActionResult> Delete(int id)
-    {
-        var username = HttpContext.Session.GetString("Username");
-        if (username == null)
-        {
-            ViewBag.ErrorMessage = "You must be logged in to delete a pet.";
-            return View("Error");
-        }
-
-        var pet = await _petService.GetPetByIdAsync(id);
-        if (pet == null)
-        {
-            ViewBag.ErrorMessage = "The pet you're trying to delete does not exist.";
-            return View("Error");
-        }
-
-        var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
-        if (adoption != null)
-        {
-            ViewBag.ErrorMessage = "This pet has already been adopted and cannot be deleted.";
-            return View("Error");
-        }
-
-        var user = await _userService.GetUserByUsernameAsync(username);
-        if (!await _petService.IsUserOwnerOfPetAsync(id, user.Id))
-        {
-            ViewBag.ErrorMessage = "You are not authorized to delete this pet.";
-            return View("Error");
-        }
-
-        return View(pet); // Show confirmation page
-    }
-
-    
-// POST: /Pet/Delete/{id}
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        var username = HttpContext.Session.GetString("Username");
-        if (username == null)
-        {
-            ViewBag.ErrorMessage = "You must be logged in to delete a pet.";
-            return View("Error");
-        }
-
-        var user = await _userService.GetUserByUsernameAsync(username);
-        var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
-
-        if (adoption != null)
-        {
-            ViewBag.ErrorMessage = "This pet has already been adopted and cannot be deleted.";
-            return View("Error");
-        }
-
-        try
-        {
-            await _petService.DeletePetAsync(id, user.Id);
-            return RedirectToAction("Index", "Adoption"); // Redirect to main page
-        }
-        catch (UnauthorizedAccessException)
-        {
-            ViewBag.ErrorMessage = "You are not authorized to delete this pet.";
-            return View("Error");
-        }
-        catch (KeyNotFoundException)
-        {
-            ViewBag.ErrorMessage = "The pet you're trying to delete does not exist.";
-            return View("Error");
-        }
-    }
-
-
-
-
-
     }
 }
-
