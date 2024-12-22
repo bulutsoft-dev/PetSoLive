@@ -13,7 +13,6 @@ public class AdoptionController : Controller
     private readonly IUserService _userService;
     private readonly IEmailService _emailService;
     private readonly IPetOwnerService _petOwnerService;
-    private readonly IAdoptionRequestService _adoptionRequestService;
     private readonly IAdoptionRequestRepository _adoptionRequestRepository; // Injected repository
 
     public AdoptionController(
@@ -22,7 +21,6 @@ public class AdoptionController : Controller
         IUserService userService, 
         IEmailService emailService, 
         IPetOwnerService petOwnerService,
-        IAdoptionRequestService adoptionRequestService,
         IAdoptionRequestRepository adoptionRequestRepository) // Inject repository
     {
         _adoptionService = adoptionService;
@@ -30,7 +28,6 @@ public class AdoptionController : Controller
         _userService = userService;
         _emailService = emailService;
         _petOwnerService = petOwnerService;
-        _adoptionRequestService = adoptionRequestService;
         _adoptionRequestRepository = adoptionRequestRepository;  // Set injected repository
     }
 

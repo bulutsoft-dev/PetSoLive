@@ -71,8 +71,6 @@ builder.Services.AddScoped<IPetOwnerRepository, PetOwnerRepository>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPetOwnerService, PetOwnerService>();
 builder.Services.AddScoped<IAdoptionRequestRepository, AdoptionRequestRepository>();
-builder.Services.AddScoped<IAdoptionRequestService, AdoptionRequestService>();
-
 
 
 
