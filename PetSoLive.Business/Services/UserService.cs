@@ -65,7 +65,14 @@ public class UserService : IUserService
 
     public async Task<User> GetUserByIdAsync(int userId)
     {
-        return await _userRepository.GetByIdAsync(userId);
+        var user = await _userRepository.GetByIdAsync(userId);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException("User not found.");
+        }
+
+        return user;
     }
 
     public async Task UpdateUserAsync(User user)

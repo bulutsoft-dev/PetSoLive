@@ -19,11 +19,11 @@ public class EmailServiceTests
         _mockEmailSender = new Mock<IEmailSender>();
         _smtpSettings = new SmtpSettings
         {
-            Host = "smtp.example.com",
+            Host = "smtp.gmail.com",
             Port = 587,
-            Username = "testuser",
-            Password = "testpassword",
-            FromEmail = "no-reply@example.com",
+            Username = "furkanbtng@gmail.com",
+            Password = "lflq tzfv emph uzop",
+            FromEmail = "furkanbtng@gmail.com",
             EnableSsl = true
         };
 
@@ -35,7 +35,7 @@ public class EmailServiceTests
     public async Task SendEmailAsync_ShouldSendEmail_WhenValidParameters()
     {
         // Arrange
-        var to = "recipient@example.com";
+        var to = "furkanbtng@gmail.com";
         var subject = "Test Subject";
         var body = "Test Body";
 
@@ -70,7 +70,7 @@ public class EmailServiceTests
     public async Task SendEmailAsync_ShouldThrowArgumentNullException_WhenSubjectIsNull()
     {
         // Arrange
-        var to = "recipient@example.com";
+        var to = "furkanbtng@gmail.com";
         var body = "Test Body";
 
         // Act & Assert
@@ -81,7 +81,7 @@ public class EmailServiceTests
     public async Task SendEmailAsync_ShouldThrowArgumentNullException_WhenBodyIsNull()
     {
         // Arrange
-        var to = "recipient@example.com";
+        var to = "furkanbtng@gmail.com";
         var subject = "Test Subject";
 
         // Act & Assert
