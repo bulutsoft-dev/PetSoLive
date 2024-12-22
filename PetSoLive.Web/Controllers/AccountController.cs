@@ -3,35 +3,34 @@ using Microsoft.AspNetCore.Http;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
 using System.Threading.Tasks;
-
-namespace PetSoLive.Web.Controllers
+public class AccountController : Controller
 {
-    public class AccountController : Controller
+    private readonly IUserService _userService;
+
+    public AccountController(IUserService userService)
     {
-        private readonly IUserService _userService;
+        _userService = userService;
+    }
 
-        public AccountController(IUserService userService)
-        {
-            _userService = userService;
-        }
+    // GET: /Account/Login
+    public IActionResult Login()
+    {
+        return View();
+    }
 
-        // GET: /Account/Login
-        public IActionResult Login()
+    // POST: /Account/Login
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Login(string username, string password)
+    {
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
+            ModelState.AddModelError("", "Username and password are required.");
             return View();
         }
 
-        // POST: /Account/Login
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(string username, string password)
+        try
         {
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
-            {
-                ModelState.AddModelError("", "Username and password are required.");
-                return View();
-            }
-
             var user = await _userService.AuthenticateAsync(username, password);
             if (user != null)
             {
@@ -41,46 +40,58 @@ namespace PetSoLive.Web.Controllers
             }
 
             ModelState.AddModelError("", "Invalid username or password.");
-            return View();
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError("", ex.Message);
         }
 
-        // GET: /Account/Register
-        public IActionResult Register()
-        {
-            return View();
-        }
+        return View();
+    }
 
-        // POST: /Account/Register
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(string username, string email, string password, string phoneNumber, string address, DateTime dateOfBirth, string profileImageUrl)
+    // GET: /Account/Register
+    public IActionResult Register()
+    {
+        return View();
+    }
+
+    // POST: /Account/Register
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Register(string username, string email, string password, string phoneNumber, string address, DateTime dateOfBirth, string profileImageUrl)
+    {
+        if (ModelState.IsValid)
         {
-            if (ModelState.IsValid)
+            var user = new User
             {
-                var user = new User
-                {
-                    Username = username,
-                    Email = email,
-                    PasswordHash = password,
-                    PhoneNumber = phoneNumber,
-                    Address = address,
-                    DateOfBirth = dateOfBirth,
-                    ProfileImageUrl = profileImageUrl
-                };
+                Username = username,
+                Email = email,
+                PasswordHash = password,
+                PhoneNumber = phoneNumber,
+                Address = address,
+                DateOfBirth = dateOfBirth,
+                ProfileImageUrl = profileImageUrl
+            };
 
+            try
+            {
                 await _userService.RegisterAsync(user);
                 return RedirectToAction("Login");
             }
-
-            return View();
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
         }
 
+        return View();
+    }
 
-        // GET: /Account/Logout
-        public IActionResult Logout()
-        {
-            HttpContext.Session.Clear(); // Clear session data
-            return RedirectToAction("Login");
-        }
+    // GET: /Account/Logout
+    public IActionResult Logout()
+    {
+        HttpContext.Session.Clear(); // Clear session data
+        return RedirectToAction("Login");
     }
 }
+

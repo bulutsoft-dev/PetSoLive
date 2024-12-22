@@ -31,32 +31,35 @@ public class AdoptionController : Controller
         return View(pets);  // Pass the list of pets to the view
     }
   // GET: /Adoption/Adopt/{id}
-        [HttpGet]
-        public async Task<IActionResult> Adopt(int petId)
-        {
-            // Check if user session exists
-            var username = HttpContext.Session.GetString("Username");
-            if (username == null)
-            {
-                return RedirectToAction("Login", "Account"); // Redirect to login if the user is not logged in
-            }
+  public async Task<IActionResult> Adopt(int petId)
+  {
+      var username = HttpContext.Session.GetString("Username");
+      if (username == null)
+      {
+          return RedirectToAction("Login", "Account");
+      }
 
-            // Fetch the pet details
-            var pet = await _petService.GetPetByIdAsync(petId);
-            if (pet == null)
-            {
-                return NotFound();
-            }
+      // Kullanıcıyı çek
+      var user = await _userService.GetUserByUsernameAsync(username);
+      if (user == null)
+      {
+          return BadRequest("User not found.");
+      }
 
-            // Get the logged-in user from session
-            var user = await _userService.GetUserByUsernameAsync(username);
-            if (user == null)
-            {
-                return BadRequest("User not found.");
-            }
+      // Pet bilgisi
+      var pet = await _petService.GetPetByIdAsync(petId);
+      if (pet == null)
+      {
+          return NotFound();
+      }
 
-            return View(pet);  // Pass pet and user details to the view
-        }
+      // ViewData ile pet bilgisi gönder
+      ViewData["PetName"] = pet.Name;
+      ViewData["PetId"] = pet.Id;
+
+      return View(user); // Model olarak kullanıcıyı gönder
+  }
+
 
         // POST: /Adoption/Adopt
         [HttpPost]
@@ -104,18 +107,54 @@ public class AdoptionController : Controller
             return RedirectToAction("Details", "Pet", new { id = petId });
         }
 
-        // This method sends an email to the pet owner regarding the new adoption request
-        public async Task SendAdoptionRequestNotificationAsync(AdoptionRequest adoptionRequest)
-        {
-            var petOwner = await _petOwnerService.GetPetOwnerByPetIdAsync(adoptionRequest.PetId);
-            var petOwnerUser = await _userService.GetUserByIdAsync(petOwner.UserId);
+// This method sends an email to the pet owner regarding the new adoption request
+// This method sends an email to the pet owner regarding the new adoption request
+public async Task SendAdoptionRequestNotificationAsync(AdoptionRequest adoptionRequest)
+{
+    var petOwner = await _petOwnerService.GetPetOwnerByPetIdAsync(adoptionRequest.PetId);
+    var petOwnerUser = await _userService.GetUserByIdAsync(petOwner.UserId);
 
-            var subject = "New Adoption Request for Your Pet";
-            var body = $"You have a new adoption request for your pet {adoptionRequest.Pet.Name}.\n\n" +
-                       $"Requested by: {adoptionRequest.User.Username}\n" +
-                       $"Request Message: {adoptionRequest.Message}\n" +
-                       $"Status: {adoptionRequest.Status}\n";
+    // Fetching detailed user and pet information
+    var user = adoptionRequest.User;
+    var pet = adoptionRequest.Pet;
 
-            await _emailService.SendEmailAsync(petOwnerUser.Email, subject, body);
-        }
+    var subject = "New Adoption Request for Your Pet";
+    var body = $@"
+    <h2>New Adoption Request for Your Pet: {pet.Name}</h2>
+    <p><strong>Requested by:</strong> {user.Username}</p>
+    <p><strong>Message from the adopter:</strong> {adoptionRequest.Message}</p>
+    <p><strong>Status:</strong> {adoptionRequest.Status}</p>
+
+    <h3>Pet Details:</h3>
+    <ul>
+        <li><strong>Name:</strong> {pet.Name}</li>
+        <li><strong>Species:</strong> {pet.Species}</li>
+        <li><strong>Breed:</strong> {pet.Breed}</li>
+        <li><strong>Age:</strong> {pet.Age} years old</li>
+        <li><strong>Gender:</strong> {pet.Gender}</li>
+        <li><strong>Weight:</strong> {pet.Weight} kg</li>
+        <li><strong>Color:</strong> {pet.Color}</li>
+        <li><strong>Vaccination Status:</strong> {pet.VaccinationStatus}</li>
+        <li><strong>Microchip ID:</strong> {pet.MicrochipId}</li>
+        <li><strong>Is Neutered:</strong> {(pet.IsNeutered.HasValue ? (pet.IsNeutered.Value ? "Yes" : "No") : "Not specified")}</li>
+    </ul>
+
+    <h3>User Details:</h3>
+    <ul>
+        <li><strong>Name:</strong> {user.Username}</li>
+        <li><strong>Email:</strong> {user.Email}</li>
+        <li><strong>Phone:</strong> {user.PhoneNumber}</li>
+        <li><strong>Address:</strong> {user.Address}</li>
+        <li><strong>Date of Birth:</strong> {user.DateOfBirth.ToString("yyyy-MM-dd")}</li>
+        <li><strong>Account Created:</strong> {user.CreatedDate.ToString("yyyy-MM-dd")}</li>
+    </ul>
+
+    <p>Best regards,</p>
+    <p>The PetSoLive Team</p>";
+
+    // Sending the email
+    await _emailService.SendEmailAsync(petOwnerUser.Email, subject, body);
+}
+
+
 }

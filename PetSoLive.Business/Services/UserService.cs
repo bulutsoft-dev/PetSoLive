@@ -16,13 +16,14 @@ public class UserService : IUserService
     {
         var user = (await _userRepository.GetAllAsync()).FirstOrDefault(u => u.Username == username);
 
-        // If user exists and password is correct, return the user
         if (user != null && BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
         {
-            return user; // Successful authentication
+            user.LastLoginDate = DateTime.UtcNow;
+            await _userRepository.UpdateAsync(user);  // Update last login date
+            return user;  // Successful authentication
         }
 
-        return null; // Invalid credentials
+        return null;  // Invalid credentials
     }
 
     // Register a new user with hashed password and full details
@@ -31,6 +32,15 @@ public class UserService : IUserService
         if (string.IsNullOrWhiteSpace(user.PasswordHash))
         {
             throw new ArgumentException("Password cannot be empty.");
+        }
+
+        // Check if username or email already exists
+        var existingUser = (await _userRepository.GetAllAsync())
+                           .FirstOrDefault(u => u.Username == user.Username || u.Email == user.Email);
+
+        if (existingUser != null)
+        {
+            throw new ArgumentException("Username or email already exists.");
         }
 
         if (user.Roles == null || !user.Roles.Any())
@@ -54,7 +64,6 @@ public class UserService : IUserService
             throw new ArgumentException("Username cannot be null or empty.", nameof(username));
         }
 
-        // Retrieve the user by username
         return await _userRepository.GetAllAsync()
             .ContinueWith(task => task.Result.FirstOrDefault(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase)));
     }

@@ -33,5 +33,12 @@ namespace PetSoLive.Data.Repositories
             return await _context.Users.FindAsync(id);  // Example with EF Core
         }
         
+        // Implement UpdateAsync method
+        public async Task UpdateAsync(User entity)
+        {
+            _context.Users.Update(entity);  // This will mark the user entity as modified
+            await _context.SaveChangesAsync();  // Save changes to the database
+        }
+        
     }
 }
