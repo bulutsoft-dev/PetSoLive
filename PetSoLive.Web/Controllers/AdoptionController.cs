@@ -62,51 +62,82 @@ public class AdoptionController : Controller
   }
 
 
-        // POST: /Adoption/Adopt
-        [HttpPost]
-        public async Task<IActionResult> Adopt(int petId, string name, string email, string phone, string message)
-        {
-            // Check if user session exists
-            var username = HttpContext.Session.GetString("Username");
-            if (username == null)
-            {
-                return RedirectToAction("Login", "Account"); // Redirect to login if the user is not logged in
-            }
+[HttpPost]
+public async Task<IActionResult> Adopt(int petId, string name, string email, string phone, string address, DateTime dateOfBirth, string message)
+{
+    // Kullanıcı oturumunun olup olmadığını kontrol et
+    var username = HttpContext.Session.GetString("Username");
+    if (username == null)
+    {
+        return RedirectToAction("Login", "Account"); // Kullanıcı oturum açmamışsa giriş sayfasına yönlendir
+    }
 
-            // Fetch the pet details
-            var pet = await _petService.GetPetByIdAsync(petId);
-            if (pet == null)
-            {
-                return NotFound();
-            }
+    // Pet bilgisi al
+    var pet = await _petService.GetPetByIdAsync(petId);
+    if (pet == null)
+    {
+        return NotFound();
+    }
 
-            // Get the logged-in user from session
-            var user = await _userService.GetUserByUsernameAsync(username);
-            if (user == null)
-            {
-                return BadRequest("User not found.");
-            }
+    // Oturum açan kullanıcıyı al
+    var user = await _userService.GetUserByUsernameAsync(username);
+    if (user == null)
+    {
+        return BadRequest("User not found.");
+    }
 
-            // Create adoption request
-            var adoptionRequest = new AdoptionRequest
-            {
-                PetId = petId,
-                Message = message,
-                Status = AdoptionStatus.Pending,
-                RequestDate = DateTime.Now,
-                UserId = user.Id,  // Automatically set user from the session
-                User = user         // Set the navigation property for the user
-            };
+    // Kullanıcı bilgilerini güncelle
+    bool isUpdated = false;
 
-            // Save the adoption request
-            await _adoptionService.CreateAdoptionRequestAsync(adoptionRequest);
+    // Telefon numarası değişmişse güncelle
+    if (user.PhoneNumber != phone)
+    {
+        user.PhoneNumber = phone;
+        isUpdated = true;
+    }
+    
+    // Adres değişmişse güncelle
+    if (user.Address != address)
+    {
+        user.Address = address;
+        isUpdated = true;
+    }
 
-            // Send notification to the pet owner
-            await SendAdoptionRequestNotificationAsync(adoptionRequest);
+    // Doğum tarihi değişmişse güncelle
+    if (user.DateOfBirth != dateOfBirth)
+    {
+        user.DateOfBirth = dateOfBirth;
+        isUpdated = true;
+    }
 
-            // Redirect to the pet details page after adoption request
-            return RedirectToAction("Details", "Pet", new { id = petId });
-        }
+    // Kullanıcı bilgileri güncellenmişse kaydet
+    if (isUpdated)
+    {
+        await _userService.UpdateUserAsync(user); // Kullanıcıyı güncelle
+    }
+
+    // Evcil hayvan sahiplenme isteği oluştur
+    var adoptionRequest = new AdoptionRequest
+    {
+        PetId = petId,
+        Message = message,
+        Status = AdoptionStatus.Pending,
+        RequestDate = DateTime.Now,
+        UserId = user.Id,  // Oturumdaki kullanıcıyı otomatik olarak atıyoruz
+        User = user         // Kullanıcı ilişkisini ayarlıyoruz
+    };
+
+    // Evcil hayvan sahiplenme isteğini kaydet
+    await _adoptionService.CreateAdoptionRequestAsync(adoptionRequest);
+
+    // Pet sahibiyle bildirim göndermek
+    await SendAdoptionRequestNotificationAsync(adoptionRequest);
+
+    // Evcil hayvanın detaylarına yönlendir
+    return RedirectToAction("Details", "Pet", new { id = petId });
+}
+
+
 
 // This method sends an email to the pet owner regarding the new adoption request
     public async Task SendAdoptionRequestNotificationAsync(AdoptionRequest adoptionRequest)

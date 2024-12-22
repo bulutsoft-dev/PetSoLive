@@ -10,5 +10,6 @@ namespace PetSoLive.Core.Interfaces
         Task RegisterAsync(User user);
         Task<User?> GetUserByUsernameAsync(string username);
         Task<User> GetUserByIdAsync(int userId);  // Change to accept an int
+        Task UpdateUserAsync(User user);
     }
 }

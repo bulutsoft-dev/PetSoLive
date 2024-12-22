@@ -73,4 +73,49 @@ public class UserService : IUserService
     {
         return await _userRepository.GetByIdAsync(userId);
     }
+    
+    public async Task UpdateUserAsync(User user)
+    {
+        if (user == null)
+        {
+            throw new ArgumentNullException(nameof(user), "User cannot be null.");
+        }
+
+        // Ensure that the user exists in the database before updating
+        var existingUser = await _userRepository.GetByIdAsync(user.Id);
+        if (existingUser == null)
+        {
+            throw new KeyNotFoundException("User not found.");
+        }
+
+        // You can also add additional validation or logic to check for specific fields that must be updated
+
+        // Update the user properties
+        existingUser.Username = user.Username ?? existingUser.Username;
+        existingUser.Email = user.Email ?? existingUser.Email;
+        existingUser.PhoneNumber = user.PhoneNumber ?? existingUser.PhoneNumber;
+        existingUser.Address = user.Address ?? existingUser.Address;
+        existingUser.DateOfBirth = user.DateOfBirth != default ? user.DateOfBirth : existingUser.DateOfBirth;
+
+        // If the password is being updated, hash it
+        if (!string.IsNullOrWhiteSpace(user.PasswordHash))
+        {
+            existingUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
+        }
+
+        // Update the last login date if it's set
+        if (user.LastLoginDate.HasValue)
+        {
+            existingUser.LastLoginDate = user.LastLoginDate.Value;
+        }
+
+        // Optionally, update the profile image URL
+        existingUser.ProfileImageUrl = user.ProfileImageUrl ?? existingUser.ProfileImageUrl;
+
+        // Update the user in the repository
+        await _userRepository.UpdateAsync(existingUser);
+    }
+
+    
+    
 }
