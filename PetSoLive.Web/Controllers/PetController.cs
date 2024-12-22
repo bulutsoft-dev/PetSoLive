@@ -213,20 +213,51 @@ namespace PetSoLive.Web.Controllers
             // Update the pet
             await _petService.UpdatePetAsync(id, updatedPet, user.Id);
 
-            // Fetch adoption requests for the updated pet
+// Fetch adoption requests for the updated pet
             var adoptionRequests = await _adoptionRequestRepository.GetAdoptionRequestsByPetIdAsync(id);
             foreach (var request in adoptionRequests)
             {
                 var recipientEmail = request.User.Email;
-                var subject = "Pet Information Updated";
-                var message = $"The details of the pet '{pet.Name}' have been updated. Please check the updated details.";
-                await _emailService.SendEmailAsync(recipientEmail, subject, message);
+                await SendPetUpdateEmailAsync(request.User, pet); // Call the method to send the email
             }
 
             // Redirect to the pet details page
             return RedirectToAction("Details", new { id = pet.Id });
         }
 
+        // GET: /Pet/Delete/{id}
+        public async Task<IActionResult> Delete(int id)
+        {
+            var username = HttpContext.Session.GetString("Username");
+            if (username == null)
+            {
+                ViewBag.ErrorMessage = "You must be logged in to delete a pet.";
+                return View("Error");
+            }
+
+            var pet = await _petService.GetPetByIdAsync(id);
+            if (pet == null)
+            {
+                ViewBag.ErrorMessage = "The pet you're trying to delete does not exist.";
+                return View("Error");
+            }
+
+            var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
+            if (adoption != null)
+            {
+                ViewBag.ErrorMessage = "This pet has already been adopted and cannot be deleted.";
+                return View("Error");
+            }
+
+            var user = await _userService.GetUserByUsernameAsync(username);
+            if (!await _petService.IsUserOwnerOfPetAsync(id, user.Id))
+            {
+                ViewBag.ErrorMessage = "You are not authorized to delete this pet.";
+                return View("Error");
+            }
+
+            return View(pet); // Show confirmation page
+        }
         // POST: /Pet/Delete/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -263,13 +294,13 @@ namespace PetSoLive.Web.Controllers
                 await _petService.DeletePetAsync(id, user.Id);
 
                 // Send email notifications to users who requested adoption for this pet
+// Send email notifications to users who requested adoption for this pet
                 foreach (var request in adoptionRequests)
                 {
                     var recipientEmail = request.User.Email;
-                    var subject = "Pet Deleted";
-                    var message = $"The pet you were interested in, '{request.Pet.Name}', has been removed from the adoption list.";
-                    await _emailService.SendEmailAsync(recipientEmail, subject, message);
+                    await SendPetDeletionEmailAsync(request.User, pet); // Call the method to send the email
                 }
+
 
                 // Redirect to the adoption index page after deletion
                 return RedirectToAction("Index", "Adoption");
@@ -285,5 +316,26 @@ namespace PetSoLive.Web.Controllers
                 return View("Error");
             }
         }
+        
+        
+        
+        
+// Method to send email notifications about pet updates
+        private async Task SendPetUpdateEmailAsync(User user, Pet pet)
+        {
+            var subject = "The pet you requested adoption for has been updated";
+            var body = new EmailHelper().GeneratePetUpdateEmailBody(user, pet);  // Use EmailHelper to generate body
+            await _emailService.SendEmailAsync(user.Email, subject, body);  // Send email with generated body
+        }
+
+// Method to send email notifications about pet deletions
+        private async Task SendPetDeletionEmailAsync(User user, Pet pet)
+        {
+            var subject = "The pet you requested adoption for has been deleted";
+            var body = new EmailHelper().GeneratePetDeletionEmailBody(user, pet);  // Use EmailHelper to generate body
+            await _emailService.SendEmailAsync(user.Email, subject, body);  // Send email with generated body
+        }
+
+
     }
 }
