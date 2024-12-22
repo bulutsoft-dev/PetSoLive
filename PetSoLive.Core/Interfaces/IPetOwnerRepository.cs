@@ -6,8 +6,7 @@ namespace PetSoLive.Core.Interfaces
     public interface IPetOwnerRepository
     {
         Task AddAsync(PetOwner petOwner);
-        Task SaveChangesAsync();  // If you need to commit changes, depending on the repository pattern used
+        Task SaveChangesAsync();
         Task<PetOwner> GetPetOwnerByPetIdAsync(int petId);
-        
     }
 }

@@ -9,12 +9,12 @@ namespace PetSoLive.Core.Entities
         public int Id { get; set; }
         public int PetId { get; set; }
         public int UserId { get; set; }
-        public string Message { get; set; } // Talep mesajı
-        public AdoptionStatus Status { get; set; } // Durum bilgisi
-        public DateTime RequestDate { get; set; } // Talep tarihi
+        public string Message { get; set; }
+        public AdoptionStatus Status { get; set; }
+        public DateTime RequestDate { get; set; }
 
-        // Navigation Properties
+      
         public Pet Pet { get; set; }
-        public User User { get; set; } // Kullanıcı bilgisi (Phone, Email, Name buradan alınabilir)
+        public User User { get; set; }
     }
 }

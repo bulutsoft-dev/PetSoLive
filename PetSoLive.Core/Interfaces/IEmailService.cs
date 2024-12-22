@@ -1,6 +1,7 @@
-namespace PetSoLive.Core.Interfaces;
-
-public interface IEmailService
+namespace PetSoLive.Core.Interfaces
 {
-    Task SendEmailAsync(string to, string subject, string body);
+    public interface IEmailService
+    {
+        Task SendEmailAsync(string to, string subject, string body);
+    }
 }

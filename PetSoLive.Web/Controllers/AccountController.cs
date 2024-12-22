@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
-using System.Threading.Tasks;
+
 public class AccountController : Controller
 {
     private readonly IUserService _userService;
@@ -12,13 +11,11 @@ public class AccountController : Controller
         _userService = userService;
     }
 
-    // GET: /Account/Login
     public IActionResult Login()
     {
         return View();
     }
 
-    // POST: /Account/Login
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(string username, string password)
@@ -34,9 +31,9 @@ public class AccountController : Controller
             var user = await _userService.AuthenticateAsync(username, password);
             if (user != null)
             {
-                HttpContext.Session.SetString("Username", user.Username); // Store in session
-                HttpContext.Session.SetInt32("UserId", user.Id); // Store user ID in session
-                return RedirectToAction("Index", "Home"); // Redirect to home or dashboard
+                HttpContext.Session.SetString("Username", user.Username);
+                HttpContext.Session.SetInt32("UserId", user.Id);
+                return RedirectToAction("Index", "Home");
             }
 
             ModelState.AddModelError("", "Invalid username or password.");
@@ -49,13 +46,11 @@ public class AccountController : Controller
         return View();
     }
 
-    // GET: /Account/Register
     public IActionResult Register()
     {
         return View();
     }
 
-    // POST: /Account/Register
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(string username, string email, string password, string phoneNumber, string address, DateTime dateOfBirth, string profileImageUrl)
@@ -87,11 +82,9 @@ public class AccountController : Controller
         return View();
     }
 
-    // GET: /Account/Logout
     public IActionResult Logout()
     {
-        HttpContext.Session.Clear(); // Clear session data
+        HttpContext.Session.Clear();
         return RedirectToAction("Login");
     }
 }
-

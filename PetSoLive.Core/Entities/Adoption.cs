@@ -1,8 +1,5 @@
 using System;
-using PetSoLive.Core.Enums; // Enum için gerekli namespace
-
-using System;
-using PetSoLive.Core.Enums; // Enum için gerekli namespace
+using PetSoLive.Core.Enums;
 
 namespace PetSoLive.Core.Entities
 {
@@ -14,7 +11,6 @@ namespace PetSoLive.Core.Entities
         public DateTime AdoptionDate { get; set; }
         public AdoptionStatus Status { get; set; }
 
-        // Navigation Properties
         public Pet Pet { get; set; }
         public User User { get; set; }
     }

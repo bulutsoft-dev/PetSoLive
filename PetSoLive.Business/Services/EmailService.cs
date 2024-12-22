@@ -1,7 +1,5 @@
-// /PetSoLive.Business/Services/EmailService.cs
 using System.Net;
 using System.Net.Mail;
-using System.Threading.Tasks;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
 

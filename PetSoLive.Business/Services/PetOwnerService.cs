@@ -1,8 +1,6 @@
-// IPetOwnerService.cs
-
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
-// PetOwnerService.cs
+
 public class PetOwnerService : IPetOwnerService
 {
     private readonly IPetOwnerRepository _petOwnerRepository;
@@ -20,8 +18,9 @@ public class PetOwnerService : IPetOwnerService
             throw new Exception("Pet owner not found.");
         }
 
-        return petOwner; // Ensure that petOwner includes the User navigation property
+        return petOwner;
     }
+
     public async Task<PetOwner> GetPetOwnerByPetIdAsync(int petId)
     {
         var petOwner = await _petOwnerRepository.GetPetOwnerByPetIdAsync(petId);

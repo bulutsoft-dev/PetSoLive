@@ -1,5 +1,3 @@
-// PetOwnerRepository.cs
-
 using Microsoft.EntityFrameworkCore;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
@@ -24,14 +22,10 @@ public class PetOwnerRepository : IPetOwnerRepository
         await _context.SaveChangesAsync();
     }
 
-// PetOwnerRepository.cs
     public async Task<PetOwner> GetPetOwnerByPetIdAsync(int petId)
     {
         return await _context.PetOwners
-            .Include(po => po.User)  // Include the User navigation property
+            .Include(po => po.User)
             .FirstOrDefaultAsync(po => po.PetId == petId);
     }
-    
-    
-
 }

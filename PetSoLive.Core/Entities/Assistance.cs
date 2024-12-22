@@ -1,6 +1,3 @@
-// /PetSoLive.Core/Entities/Assistance.cs
-using System;
-
 namespace PetSoLive.Core.Entities
 {
     public class Assistance

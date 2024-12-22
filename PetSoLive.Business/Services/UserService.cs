@@ -1,8 +1,5 @@
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 public class UserService : IUserService
 {
@@ -13,7 +10,6 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
-    // Authenticate user by verifying username and password
     public async Task<User> AuthenticateAsync(string username, string password)
     {
         var user = await _userRepository.GetAllAsync()
@@ -22,14 +18,13 @@ public class UserService : IUserService
         if (user != null && BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
         {
             user.LastLoginDate = DateTime.UtcNow;
-            await _userRepository.UpdateAsync(user);  // Update last login date
-            return user;  // Successful authentication
+            await _userRepository.UpdateAsync(user);
+            return user;
         }
 
-        return null;  // Invalid credentials
+        return null;
     }
 
-    // Register a new user with hashed password and full details
     public async Task RegisterAsync(User user)
     {
         if (string.IsNullOrWhiteSpace(user.PasswordHash))
@@ -37,7 +32,6 @@ public class UserService : IUserService
             throw new ArgumentException("Password cannot be empty.");
         }
 
-        // Check if username or email already exists
         var existingUser = await _userRepository.GetAllAsync()
                                                  .ContinueWith(task => task.Result.FirstOrDefault(u => u.Username == user.Username || u.Email == user.Email));
 
@@ -48,10 +42,9 @@ public class UserService : IUserService
 
         if (user.Roles == null || !user.Roles.Any())
         {
-            user.Roles = new List<string> { "User" }; // Default role
+            user.Roles = new List<string> { "User" };
         }
 
-        // Hash the user's password before saving to the database
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
         user.CreatedDate = DateTime.UtcNow;
         user.IsActive = true;
@@ -59,7 +52,6 @@ public class UserService : IUserService
         await _userRepository.AddAsync(user);
     }
 
-    // Get user by username
     public async Task<User?> GetUserByUsernameAsync(string username)
     {
         if (string.IsNullOrEmpty(username))
@@ -71,13 +63,11 @@ public class UserService : IUserService
             .ContinueWith(task => task.Result.FirstOrDefault(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase)));
     }
 
-    // Get user by ID
     public async Task<User> GetUserByIdAsync(int userId)
     {
         return await _userRepository.GetByIdAsync(userId);
     }
 
-    // Update user details (optimized to only update changed fields)
     public async Task UpdateUserAsync(User user)
     {
         if (user == null)
@@ -85,7 +75,6 @@ public class UserService : IUserService
             throw new ArgumentNullException(nameof(user), "User cannot be null.");
         }
 
-        // Ensure that the user exists in the database before updating
         var existingUser = await _userRepository.GetByIdAsync(user.Id);
         if (existingUser == null)
         {
@@ -94,7 +83,6 @@ public class UserService : IUserService
 
         bool isUpdated = false;
 
-        // Update only the fields that have changed
         if (!string.IsNullOrEmpty(user.Username) && user.Username != existingUser.Username)
         {
             existingUser.Username = user.Username;
@@ -125,28 +113,24 @@ public class UserService : IUserService
             isUpdated = true;
         }
 
-        // Hash password only if it's provided (and changed)
         if (!string.IsNullOrWhiteSpace(user.PasswordHash) && user.PasswordHash != existingUser.PasswordHash)
         {
             existingUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
             isUpdated = true;
         }
 
-        // Update the last login date if it's provided
         if (user.LastLoginDate.HasValue && user.LastLoginDate != existingUser.LastLoginDate)
         {
             existingUser.LastLoginDate = user.LastLoginDate.Value;
             isUpdated = true;
         }
 
-        // Update the profile image URL if it's provided
         if (!string.IsNullOrEmpty(user.ProfileImageUrl) && user.ProfileImageUrl != existingUser.ProfileImageUrl)
         {
             existingUser.ProfileImageUrl = user.ProfileImageUrl;
             isUpdated = true;
         }
 
-        // If any updates were made, save to the repository
         if (isUpdated)
         {
             await _userRepository.UpdateAsync(existingUser);

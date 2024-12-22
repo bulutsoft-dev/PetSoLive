@@ -1,8 +1,6 @@
-// /PetSoLive.Web/Controllers/AssistanceController.cs
 using Microsoft.AspNetCore.Mvc;
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Core.Entities;
-using System.Threading.Tasks;
 
 namespace PetSoLive.Web.Controllers
 {
