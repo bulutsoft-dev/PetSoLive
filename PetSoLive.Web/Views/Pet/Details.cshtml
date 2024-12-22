@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using PetSoLive.Core.Enums
 @{
 ViewData["Title"] = "Details Pet";
 }
@@ -59,6 +61,29 @@ Layout = "_Layout";
         </div>
     </div>
 
+    <!-- Adoption Requests Section -->
+    @if (ViewBag.AdoptionRequests != null && ViewBag.AdoptionRequests.Count > 0)
+    {
+    <h5 class="mt-4 text-info">Adoption Requests:</h5>
+    <ul class="list-group">
+        @foreach (var request in ViewBag.AdoptionRequests)
+        {
+        <li class="list-group-item">
+            <strong>@request.User.Username</strong> - @request.Message
+            <br />
+            <small>Requested on: @request.RequestDate.ToString("MM/dd/yyyy")</small>
+            <p>Status: <span class="badge bg-@(request.Status == AdoptionStatus.Pending ? "warning" : "success")">
+                        @request.Status</span></p>
+        </li>
+        }
+    </ul>
+    }
+    else
+    {
+    <p class="text-muted">No adoption requests yet.</p>
+    }
+
+
     <!-- Buttons Section -->
     <div class="text-end mt-4">
         <a asp-controller="Adoption" asp-action="Index" class="btn btn-secondary me-2">Back to Adoption List</a>
@@ -71,7 +96,7 @@ Layout = "_Layout";
         {
         @if (ViewBag.Adoption == null && !ViewBag.IsOwner)
         {
-            <a asp-controller="Adoption" asp-action="Adopt" asp-route-petId="@Model.Id" class="btn btn-primary">Adopt</a>
+        <a asp-controller="Adoption" asp-action="Adopt" asp-route-petId="@Model.Id" class="btn btn-primary">Adopt</a>
         }
 
         @if (ViewBag.IsOwner)

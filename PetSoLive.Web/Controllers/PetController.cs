@@ -12,12 +12,14 @@ namespace PetSoLive.Web.Controllers
         private readonly IPetService _petService;
         private readonly IUserService _userService; // Add IUserService to access user data
         private readonly IAdoptionService _adoptionService;
+        private readonly IAdoptionRequestRepository _adoptionRequestRepository;
 
-        public PetController(IPetService petService, IUserService userService, IAdoptionService adoptionService)
+        public PetController(IPetService petService, IUserService userService, IAdoptionService adoptionService, IAdoptionRequestRepository adoptionRequestRepository)
         {
             _petService = petService;
             _userService = userService;
             _adoptionService = adoptionService;
+            _adoptionRequestRepository = adoptionRequestRepository;
         }
 
         // GET: /Pet/Create
@@ -87,6 +89,9 @@ namespace PetSoLive.Web.Controllers
                 return NotFound();
             }
 
+            // Get adoption requests for the pet
+            var adoptionRequests = await _adoptionRequestRepository.GetAdoptionRequestsByPetIdAsync(id);
+
             // Check if the pet has been adopted
             var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
 
@@ -97,20 +102,20 @@ namespace PetSoLive.Web.Controllers
 
             if (isUserLoggedIn)
             {
-                // Get the logged-in user
                 var user = await _userService.GetUserByUsernameAsync(username);
-        
-                // Check if the user is the owner of this pet
                 isOwner = await _petService.IsUserOwnerOfPetAsync(id, user.Id);
             }
 
-            // Pass the necessary information to the view
+            // Pass necessary information to the view
             ViewBag.IsUserLoggedIn = isUserLoggedIn;
             ViewBag.Adoption = adoption;
-            ViewBag.IsOwner = isOwner;  // Indicate whether the logged-in user is the pet's owner
-    
+            ViewBag.IsOwner = isOwner;
+            ViewBag.AdoptionRequests = adoptionRequests;  // Pass adoption requests to the view
+
             return View(pet);
         }
+
+
 
 
    // GET: /Pet/Edit/{id}

@@ -5,6 +5,7 @@ using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Data;
 using PetSoLive.Data.Repositories;
+using PetSoLive.Infrastructure.Repositories;
 using SmtpSettings = PetSoLive.Core.Entities.SmtpSettings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -69,6 +70,7 @@ builder.Services.AddScoped<IPetOwnerRepository, PetOwnerRepository>();
 //added for mail
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPetOwnerService, PetOwnerService>();
+builder.Services.AddScoped<IAdoptionRequestRepository, AdoptionRequestRepository>();
 
 
 
