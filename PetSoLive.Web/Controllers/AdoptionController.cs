@@ -98,9 +98,11 @@ public class AdoptionController : Controller
 
         await _adoptionService.CreateAdoptionRequestAsync(adoptionRequest);
         await SendAdoptionRequestNotificationAsync(adoptionRequest);
+        await SendAdoptionConfirmationEmailAsync(user, pet);  // Send confirmation to user
 
         return RedirectToAction("Details", "Pet", new { id = petId });
     }
+
 
     public async Task SendAdoptionRequestNotificationAsync(AdoptionRequest adoptionRequest)
     {
@@ -116,4 +118,15 @@ public class AdoptionController : Controller
 
         await _emailService.SendEmailAsync(petOwnerUser.Email, subject, body);
     }
+    public async Task SendAdoptionConfirmationEmailAsync(User user, Pet pet)
+    {
+        var subject = "Adoption Request Submitted Successfully";
+        var emailHelper = new EmailHelper();
+    
+        // Email body generation logic (you can customize this as needed)
+        var body = emailHelper.GenerateAdoptionConfirmationEmailBody(user, pet);
+
+        await _emailService.SendEmailAsync(user.Email, subject, body);
+    }
+
 }
