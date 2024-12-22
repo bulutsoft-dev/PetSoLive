@@ -1,118 +1,176 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using PetSoLive.Core.Enums
 @{
-ViewData["Title"] = "Details Pet";
+ViewData["Title"] = "Pet Details";
 }
 
 @{
 Layout = "_Layout";
 }
 
-<div class="container">
-    <h2 class="my-4 text-center text-primary">@Model.Name's Details</h2>
+<div class="container my-5">
+    <!-- Pet Details Section -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="row g-0">
+                    <!-- Pet Image -->
+                    <div class="col-md-5">
+                        <img src="@Model.ImageUrl" class="img-fluid rounded-start" alt="@Model.Name" style="object-fit: cover; height: 100%;">
+                    </div>
+                    <!-- Pet Info -->
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <h3 class="card-title text-primary">@Model.Name</h3>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <strong>Species:</strong> <span class="badge bg-secondary">@Model.Species</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <strong>Breed:</strong> @Model.Breed
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <strong>Age:</strong> @Model.Age years
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <strong>Gender:</strong> @Model.Gender
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <strong>Weight:</strong> @Model.Weight kg
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <strong>Color:</strong> <span class="badge bg-light text-dark">@Model.Color</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <strong>Date of Birth:</strong> @Model.DateOfBirth?.ToString("MM/dd/yyyy")
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Description:</strong> <p>@Model.Description</p>
+                                </li>
+                                @if (!string.IsNullOrEmpty(Model.VaccinationStatus))
+                                {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <strong>Vaccination Status:</strong> <span class="badge bg-success">@Model.VaccinationStatus</span>
+                                </li>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.MicrochipId))
+                                {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <strong>Microchip ID:</strong> @Model.MicrochipId
+                                </li>
+                                }
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <strong>Neutered:</strong> <span class="badge bg-@(Model.IsNeutered ? "success" : "danger")">@(Model.IsNeutered ? "Yes" : "No")</span>
+                                </li>
+                            </ul>
 
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <!-- Pet Image -->
-            <div class="text-center">
-                <img src="@Model.ImageUrl" class="img-fluid rounded shadow" alt="@Model.Name" style="max-height: 400px; object-fit: cover;" />
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h3 class="text-info">@Model.Name</h3>
-                    <p><strong>Species:</strong> <span class="badge bg-secondary">@Model.Species</span></p>
-                    <p><strong>Breed:</strong> @Model.Breed</p>
-                    <p><strong>Age:</strong> @Model.Age years</p>
-                    <p><strong>Gender:</strong> @Model.Gender</p>
-                    <p><strong>Weight:</strong> @Model.Weight kg</p>
-                    <p><strong>Color:</strong> <span class="badge bg-light text-dark">@Model.Color</span></p>
-                    <p><strong>Date of Birth:</strong> @Model.DateOfBirth?.ToString("MM/dd/yyyy")</p>
-                    <p><strong>Description:</strong> @Model.Description</p>
-
-                    @if (!string.IsNullOrEmpty(Model.VaccinationStatus))
-                    {
-                    <p><strong>Vaccination Status:</strong> <span class="badge bg-success">@Model.VaccinationStatus</span></p>
-                    }
-
-                    @if (!string.IsNullOrEmpty(Model.MicrochipId))
-                    {
-                    <p><strong>Microchip ID:</strong> @Model.MicrochipId</p>
-                    }
-
-                    <p><strong>Neutered:</strong> <span class="badge bg-@(Model.IsNeutered ? "success" : "danger")">@(Model.IsNeutered ? "Yes" : "No")</span></p>
-
-                    @if (ViewBag.Adoption != null)
-                    {
-                    <hr>
-                    <h5 class="text-success">Adoption Details:</h5>
-                    <p><strong>Adopted:</strong> Yes</p>
-                    <p><strong>Adopted by:</strong> @ViewBag.Adoption.User.Username</p>
-                    <p><strong>Adoption Date:</strong> @ViewBag.Adoption.AdoptionDate.ToString("MM/dd/yyyy")</p>
-                    }
-                    else
-                    {
-                    <p><strong>Adopted:</strong> <span class="badge bg-danger">No</span></p>
-                    }
+                            @if (ViewBag.Adoption != null)
+                            {
+                            <hr>
+                            <h5 class="text-success">Adoption Details:</h5>
+                            <p><strong>Adopted:</strong> Yes</p>
+                            <p><strong>Adopted by:</strong> @ViewBag.Adoption.User.Username</p>
+                            <p><strong>Adoption Date:</strong> @ViewBag.Adoption.AdoptionDate.ToString("MM/dd/yyyy")</p>
+                            }
+                            else
+                            {
+                            <p><strong>Adopted:</strong> <span class="badge bg-danger">No</span></p>
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Adoption Requests Section -->
-    @if (ViewBag.AdoptionRequests != null && ViewBag.AdoptionRequests.Count > 0)
-    {
-    <h5 class="mt-4 text-info">Adoption Requests:</h5>
-    <ul class="list-group">
-        @foreach (var request in ViewBag.AdoptionRequests)
-        {
-        <li class="list-group-item">
-            <strong>@request.User.Username</strong> - @request.Message
-            <br />
-            <small>Requested on: @request.RequestDate.ToString("MM/dd/yyyy")</small>
-            <p>Status: <span class="badge bg-@(request.Status == AdoptionStatus.Pending ? "warning" : "success")">
-                        @request.Status</span></p>
-        </li>
-        }
-    </ul>
-    }
-    else
-    {
-    <p class="text-muted">No adoption requests yet.</p>
-    }
-
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Adoption Requests</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.AdoptionRequests != null && ViewBag.AdoptionRequests.Count > 0)
+                    {
+                    <ul class="list-group">
+                        @foreach (var request in ViewBag.AdoptionRequests)
+                        {
+                        <li class="list-group-item mb-3 p-3 shadow-sm">
+                            <div class="d-flex justify-content-between">
+                                <strong>@request.User.Username</strong>
+                                <span class="badge bg-@(request.Status == AdoptionStatus.Pending ? "warning" : "success")">@request.Status</span>
+                            </div>
+                            <p class="mt-2 text-muted">@request.Message</p>
+                            <small class="text-secondary">Requested on: @request.RequestDate.ToString("MM/dd/yyyy")</small>
+                        </li>
+                        }
+                    </ul>
+                    }
+                    else
+                    {
+                    <p class="text-muted">No adoption requests yet.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Buttons Section -->
-    <div class="text-end mt-4">
-        <a asp-controller="Adoption" asp-action="Index" class="btn btn-secondary me-2">Back to Adoption List</a>
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-8">
+            <div class="card-deck">
+                <!-- Back to Adoption List Button -->
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <a asp-controller="Adoption" asp-action="Index" class="btn btn-secondary btn-block">Back to Adoption List</a>
+                    </div>
+                </div>
 
-        @if (!ViewBag.IsUserLoggedIn)
-        {
-        <p class="text-danger mt-2">You need to log in to adopt a pet.</p>
-        }
-        else
-        {
-        @if (ViewBag.Adoption == null && !ViewBag.IsOwner)
-        {
-        <a asp-controller="Adoption" asp-action="Adopt" asp-route-petId="@Model.Id" class="btn btn-primary">Adopt</a>
-        }
+                <!-- Conditional Buttons -->
+                @if (!ViewBag.IsUserLoggedIn)
+                {
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-danger btn-block">You need to log in to adopt a pet</a>
+                    </div>
+                </div>
+                }
+                else
+                {
+                @if (ViewBag.Adoption == null && !ViewBag.IsOwner)
+                {
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <a asp-controller="Adoption" asp-action="Adopt" asp-route-petId="@Model.Id" class="btn btn-primary btn-block">Adopt</a>
+                    </div>
+                </div>
+                }
 
-        @if (ViewBag.IsOwner)
-        {
-        @if (ViewBag.Adoption == null)
-        {
-        <a asp-controller="Pet" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">Edit</a>
-        <form asp-controller="Pet" asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
-            <button type="submit" class="btn btn-danger">Delete</button>
-        </form>
-        }
-        else
-        {
-        <p class="text-warning mt-2">This pet has already been adopted and cannot be deleted.</p>
-        }
-        }
-        }
+                @if (ViewBag.IsOwner)
+                {
+                @if (ViewBag.Adoption == null)
+                {
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <a asp-controller="Pet" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-block">Edit</a>
+                        <form asp-controller="Pet" asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-danger btn-block mt-2">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                }
+                else
+                {
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <a href="#" class="btn btn-warning btn-block disabled" tabindex="-1" aria-disabled="true">This pet has already been adopted</a>
+                    </div>
+                </div>
+                }
+                }
+                }
+            </div>
+        </div>
     </div>
 </div>
