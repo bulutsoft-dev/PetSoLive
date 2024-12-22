@@ -8,5 +8,8 @@ public interface IAdoptionRepository
 
     Task<bool> IsPetAlreadyAdoptedAsync(int petId);
     
+    Task<bool> HasUserAlreadyRequestedAdoptionAsync(int userId, int petId);
+    Task<AdoptionRequest?> GetAdoptionRequestByUserAndPetAsync(int userId, int petId);
+    
     
 }

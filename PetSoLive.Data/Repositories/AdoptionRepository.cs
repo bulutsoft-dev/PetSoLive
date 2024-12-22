@@ -59,4 +59,17 @@ public class AdoptionRepository : IAdoptionRepository
         return await _context.Adoptions
             .AnyAsync(a => a.PetId == petId && a.Status == AdoptionStatus.Approved);
     }
+    
+    public async Task<bool> HasUserAlreadyRequestedAdoptionAsync(int userId, int petId)
+    {
+        return await _context.AdoptionRequests
+            .AnyAsync(ar => ar.UserId == userId && ar.PetId == petId);
+    }
+    
+    
+    public async Task<AdoptionRequest?> GetAdoptionRequestByUserAndPetAsync(int userId, int petId)
+    {
+        return await _context.AdoptionRequests
+            .FirstOrDefaultAsync(ar => ar.UserId == userId && ar.PetId == petId);
+    }
 }

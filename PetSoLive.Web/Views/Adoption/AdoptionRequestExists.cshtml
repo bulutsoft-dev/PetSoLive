@@ -1,0 +1,8 @@
+@{
+ViewBag.Title = "Adoption Request Exists";
+}
+
+<div class="alert alert-warning">
+    <h4>You have already submitted an adoption request for this pet!</h4>
+</div>
+<a href="@Url.Action("Details", "Pet", new { id = ViewBag.PetId })" class="btn btn-primary">Go to Pet Details</a>
