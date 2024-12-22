@@ -42,11 +42,6 @@ namespace PetSoLive.Data.Repositories
         }
 
         // Delete an Assistance (if required)
-        public async Task DeleteAsync(Assistance entity)
-        {
-            _context.Assistances.Remove(entity);
-            await _context.SaveChangesAsync();
-        }
 
         // Implementing IAsyncDisposable to clean up resources
         public async ValueTask DisposeAsync()

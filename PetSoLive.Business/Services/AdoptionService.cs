@@ -48,26 +48,8 @@ namespace PetSoLive.Business.Services
             // Save adoption request
             await _adoptionRepository.AddAsync(adoptionRequest);
         }
-
-
-        // Get adoption request by pet ID
-        public async Task<AdoptionRequest?> GetAdoptionRequestByPetIdAsync(int petId)
-        {
-            return await _adoptionRepository.GetAdoptionRequestByPetIdAsync(petId);
-        }
-
-        // Mark adoption as approved or rejected
-        public async Task UpdateAdoptionStatusAsync(int adoptionRequestId, AdoptionStatus status)
-        {
-            var adoptionRequest = await _adoptionRepository.GetAdoptionRequestByIdAsync(adoptionRequestId);
-            if (adoptionRequest == null)
-            {
-                throw new InvalidOperationException("Adoption request not found.");
-            }
-
-            adoptionRequest.Status = status;  // Update status of the adoption request
-            await _adoptionRepository.UpdateAsync(adoptionRequest);  // Save changes
-        }
+        
+        
 
 
     }
