@@ -89,28 +89,28 @@ namespace PetSoLive.Web.Controllers
                 return NotFound();
             }
 
-            // Get adoption requests for the pet
             var adoptionRequests = await _adoptionRequestRepository.GetAdoptionRequestsByPetIdAsync(id);
-
-            // Check if the pet has been adopted
             var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
 
-            // Retrieve the username from session
             var username = HttpContext.Session.GetString("Username");
             var isUserLoggedIn = username != null;
             var isOwner = false;
+            bool hasAdoptionRequest = false;
 
             if (isUserLoggedIn)
             {
                 var user = await _userService.GetUserByUsernameAsync(username);
                 isOwner = await _petService.IsUserOwnerOfPetAsync(id, user.Id);
+
+                // Check if the user has already submitted an adoption request for this pet
+                hasAdoptionRequest = await _adoptionService.GetAdoptionRequestByUserAndPetAsync(user.Id, id) != null;
             }
 
-            // Pass necessary information to the view
             ViewBag.IsUserLoggedIn = isUserLoggedIn;
             ViewBag.Adoption = adoption;
             ViewBag.IsOwner = isOwner;
-            ViewBag.AdoptionRequests = adoptionRequests;  // Pass adoption requests to the view
+            ViewBag.AdoptionRequests = adoptionRequests;
+            ViewBag.HasAdoptionRequest = hasAdoptionRequest; // Pass the flag to the view
 
             return View(pet);
         }

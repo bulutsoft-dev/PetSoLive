@@ -107,13 +107,26 @@ Layout = "_Layout";
                 {
                 @if (ViewBag.Adoption == null && !ViewBag.IsOwner)
                 {
+                <!-- Check if the user has already submitted an adoption request -->
+                @if (ViewBag.HasAdoptionRequest == true)
+                {
+                <div class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <a href="#" class="btn btn-secondary btn-block disabled" tabindex="-1" aria-disabled="true">
+                            You have already submitted an adoption request for this pet
+                        </a>
+                    </div>
+                </div>
+                }
+                else
+                {
                 <div class="card text-center shadow-sm">
                     <div class="card-body">
                         <a asp-controller="Adoption" asp-action="Adopt" asp-route-petId="@Model.Id" class="btn btn-primary btn-block">Adopt</a>
                     </div>
                 </div>
                 }
-
+                }
                 @if (ViewBag.IsOwner)
                 {
                 @if (ViewBag.Adoption == null)
@@ -137,6 +150,7 @@ Layout = "_Layout";
                 }
                 }
                 }
+
             </div>
         </div>
     </div>
