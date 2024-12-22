@@ -49,15 +49,15 @@ Layout = "_Layout";
                                 </li>
                                 @if (!string.IsNullOrEmpty(Model.VaccinationStatus))
                                 {
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>Vaccination Status:</strong> <span class="badge bg-success">@Model.VaccinationStatus</span>
-                                </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <strong>Vaccination Status:</strong> <span class="badge bg-success">@Model.VaccinationStatus</span>
+                                    </li>
                                 }
                                 @if (!string.IsNullOrEmpty(Model.MicrochipId))
                                 {
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>Microchip ID:</strong> @Model.MicrochipId
-                                </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <strong>Microchip ID:</strong> @Model.MicrochipId
+                                    </li>
                                 }
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <strong>Neutered:</strong> <span class="badge bg-@(Model.IsNeutered ? "success" : "danger")">@(Model.IsNeutered ? "Yes" : "No")</span>
@@ -66,51 +66,18 @@ Layout = "_Layout";
 
                             @if (ViewBag.Adoption != null)
                             {
-                            <hr>
-                            <h5 class="text-success">Adoption Details:</h5>
-                            <p><strong>Adopted:</strong> Yes</p>
-                            <p><strong>Adopted by:</strong> @ViewBag.Adoption.User.Username</p>
-                            <p><strong>Adoption Date:</strong> @ViewBag.Adoption.AdoptionDate.ToString("MM/dd/yyyy")</p>
+                                <hr>
+                                <h5 class="text-success">Adoption Details:</h5>
+                                <p><strong>Adopted:</strong> Yes</p>
+                                <p><strong>Adopted by:</strong> @ViewBag.Adoption.User.Username</p>
+                                <p><strong>Adoption Date:</strong> @ViewBag.Adoption.AdoptionDate.ToString("MM/dd/yyyy")</p>
                             }
                             else
                             {
-                            <p><strong>Adopted:</strong> <span class="badge bg-danger">No</span></p>
+                                <p><strong>Adopted:</strong> <span class="badge bg-danger">No</span></p>
                             }
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Adoption Requests Section -->
-    <div class="row justify-content-center mt-4">
-        <div class="col-lg-8">
-            <div class="card shadow-lg">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0">Adoption Requests</h5>
-                </div>
-                <div class="card-body">
-                    @if (ViewBag.AdoptionRequests != null && ViewBag.AdoptionRequests.Count > 0)
-                    {
-                    <ul class="list-group">
-                        @foreach (var request in ViewBag.AdoptionRequests)
-                        {
-                        <li class="list-group-item mb-3 p-3 shadow-sm">
-                            <div class="d-flex justify-content-between">
-                                <strong>@request.User.Username</strong>
-                                <span class="badge bg-@(request.Status == AdoptionStatus.Pending ? "warning" : "success")">@request.Status</span>
-                            </div>
-                            <p class="mt-2 text-muted">@request.Message</p>
-                            <small class="text-secondary">Requested on: @request.RequestDate.ToString("MM/dd/yyyy")</small>
-                        </li>
-                        }
-                    </ul>
-                    }
-                    else
-                    {
-                    <p class="text-muted">No adoption requests yet.</p>
-                    }
                 </div>
             </div>
         </div>
@@ -173,4 +140,39 @@ Layout = "_Layout";
             </div>
         </div>
     </div>
+
+    <!-- Adoption Requests Section -->
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Adoption Requests</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.AdoptionRequests != null && ViewBag.AdoptionRequests.Count > 0)
+                    {
+                    <ul class="list-group">
+                        @foreach (var request in ViewBag.AdoptionRequests)
+                        {
+                        <li class="list-group-item mb-3 p-3 shadow-sm">
+                            <div class="d-flex justify-content-between">
+                                <strong>@request.User.Username</strong>
+                                <span class="badge bg-@(request.Status == AdoptionStatus.Pending ? "warning" : "success")">@request.Status</span>
+                            </div>
+                            <p class="mt-2 text-muted">@request.Message</p>
+                            <small class="text-secondary">Requested on: @request.RequestDate.ToString("MM/dd/yyyy")</small>
+                        </li>
+                        }
+                    </ul>
+                    }
+                    else
+                    {
+                    <p class="text-muted">No adoption requests yet.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
