@@ -14,9 +14,11 @@ public class AdoptionController : Controller
     private readonly IEmailService _emailService;
     private readonly IPetOwnerService _petOwnerService;
     private readonly IAdoptionRequestRepository _adoptionRequestRepository; // Injected repository
+    private readonly IAdoptionRequestService _adoptionRequestService;
 
     public AdoptionController(
         IAdoptionService adoptionService, 
+        IAdoptionRequestService adoptionRequestService,
         IPetService petService, 
         IUserService userService, 
         IEmailService emailService, 
@@ -29,6 +31,7 @@ public class AdoptionController : Controller
         _emailService = emailService;
         _petOwnerService = petOwnerService;
         _adoptionRequestRepository = adoptionRequestRepository;  // Set injected repository
+        _adoptionRequestService = adoptionRequestService;
     }
 
     
@@ -163,60 +166,70 @@ public async Task<IActionResult> Adopt(int petId, string name, string email, str
     
     
     
-    [HttpPost]
-    public async Task<IActionResult> ApproveRequest(int adoptionRequestId, int petId)
+// Method to approve an adoption request
+public async Task<IActionResult> ApproveRequest(int adoptionRequestId, int petId)
+{
+    var adoptionRequest = await _adoptionRequestService.GetAdoptionRequestByIdAsync(adoptionRequestId);
+    if (adoptionRequest == null || adoptionRequest.PetId != petId)
     {
-        // Get the logged-in user (owner of the pet)
-        var username = HttpContext.Session.GetString("Username");
-        if (username == null)
-        {
-            return RedirectToAction("Login", "Account");
-        }
-
-        var user = await _userService.GetUserByUsernameAsync(username);
-        var pet = await _petService.GetPetByIdAsync(petId);
-
-        if (pet == null || !await _petService.IsUserOwnerOfPetAsync(petId, user.Id))
-        {
-            // If the pet doesn't exist or the user is not the owner, show error
-            return View("Error");
-        }
-
-        // Get the adoption request to approve
-        var adoptionRequest = await _adoptionRequestRepository.GetByIdAsync(adoptionRequestId);
-
-        if (adoptionRequest == null || adoptionRequest.PetId != petId)
-        {
-            // If adoption request doesn't exist or doesn't match the pet, show error
-            return View("Error");
-        }
-
-        // Update the status of the adoption request to "Approved"
-        adoptionRequest.Status = AdoptionStatus.Approved;
-        await _adoptionRequestRepository.UpdateAsync(adoptionRequest);
-
-        // Reject all other pending requests for this pet and send rejection emails
-        var pendingRequests = await _adoptionRequestRepository.GetPendingRequestsByPetIdAsync(petId);
-        foreach (var request in pendingRequests)
-        {
-            if (request.Id != adoptionRequestId)
-            {
-                request.Status = AdoptionStatus.Rejected;
-                await _adoptionRequestRepository.UpdateAsync(request);
-
-                // Send a rejection email to other users
-                await SendRejectionEmailAsync(request.User, pet);
-            }
-        }
-
-        // Send a confirmation email to the approved user
-        await SendApprovalEmailAsync(adoptionRequest.User, pet);
-
-        // After approval, redirect to the pet details page (or adoption list)
-        return RedirectToAction("Details", "Pet", new { id = petId });
+        return NotFound();
     }
 
-    
+    // Check if the pet is owned by the current user
+    var pet = await _petService.GetPetByIdAsync(petId);
+    var petOwner = pet.PetOwners.FirstOrDefault();  // Get pet owner from PetOwner
+
+    // Ensure that the current user is the pet owner
+    if (petOwner?.UserId.ToString() != User.Identity.Name)
+    {
+        return Unauthorized();
+    }
+
+    // Approve the adoption request and change its status
+    adoptionRequest.Status = AdoptionStatus.Approved;
+    await _adoptionRequestService.UpdateAdoptionRequestAsync(adoptionRequest);
+
+    // Send approval email
+    var approvedUser = adoptionRequest.User;
+    if (approvedUser != null)
+    {
+        await SendApprovalEmailAsync(approvedUser, pet);
+    }
+
+    // Reject all other pending requests for this pet
+    var pendingRequests = await _adoptionRequestRepository.GetPendingRequestsByPetIdAsync(petId);
+    foreach (var request in pendingRequests)
+    {
+        if (request.Id != adoptionRequestId)
+        {
+            request.Status = AdoptionStatus.Rejected;
+            await _adoptionRequestService.UpdateAdoptionRequestAsync(request);
+
+            // Send rejection email
+            var rejectedUser = request.User;
+            if (rejectedUser != null)
+            {
+                await SendRejectionEmailAsync(rejectedUser, pet);
+            }
+        }
+    }
+
+    // Create an adoption record and set the status to approved
+    var adoption = new Adoption
+    {
+        PetId = petId,
+        UserId = adoptionRequest.UserId,
+        AdoptionDate = DateTime.Now,
+        Status = AdoptionStatus.Approved,
+        Pet = pet,
+        User = adoptionRequest.User
+    };
+
+    // Save the adoption record
+    await _adoptionService.CreateAdoptionAsync(adoption);
+
+    return RedirectToAction("Index");
+}
     // Method to send approval email to the approved user
     private async Task SendApprovalEmailAsync(User user, Pet pet)
     {
@@ -233,6 +246,7 @@ public async Task<IActionResult> Adopt(int petId, string name, string email, str
         await _emailService.SendEmailAsync(user.Email, subject, body);
     }
 
+    
 
 
 }

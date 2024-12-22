@@ -38,11 +38,7 @@ public class AdoptionService : IAdoptionService
 
         await _adoptionRepository.AddAsync(adoptionRequest);
     }
-
-    public async Task<bool> HasUserAlreadyRequestedAdoptionAsync(int userId, int petId)
-    {
-        return await _adoptionRepository.HasUserAlreadyRequestedAdoptionAsync(userId, petId);
-    }
+    
 
     public async Task<AdoptionRequest?> GetAdoptionRequestByUserAndPetAsync(int userId, int petId)
     {
