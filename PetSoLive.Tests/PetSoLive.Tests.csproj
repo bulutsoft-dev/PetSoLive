@@ -22,4 +22,9 @@
       <ProjectReference Include="..\PetSoLive.Web\PetSoLive.Web.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="UnitTests\BusinessTests\" />
+      <Folder Include="UnitTests\CoreTests\" />
+    </ItemGroup>
+
 </Project>
