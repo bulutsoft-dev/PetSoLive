@@ -30,30 +30,7 @@ public class AdoptionRepository : IAdoptionRepository
             .FirstOrDefaultAsync(a => a.PetId == petId);
     }
 
-    public async Task<AdoptionRequest?> GetAdoptionRequestByPetIdAsync(int petId)
-    {
-        return await _context.AdoptionRequests
-            .FirstOrDefaultAsync(ar => ar.PetId == petId);
-    }
-
-    public async Task<AdoptionRequest?> GetAdoptionRequestByIdAsync(int id)
-    {
-        return await _context.AdoptionRequests
-            .FirstOrDefaultAsync(ar => ar.Id == id);
-    }
-
-    public async Task UpdateAsync(AdoptionRequest adoptionRequest)
-    {
-        _context.AdoptionRequests.Update(adoptionRequest);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task UpdateAsync(Adoption adoption)
-    {
-        _context.Adoptions.Update(adoption);
-        await _context.SaveChangesAsync();
-    }
-
+    
     public async Task<bool> IsPetAlreadyAdoptedAsync(int petId)
     {
         return await _context.Adoptions
