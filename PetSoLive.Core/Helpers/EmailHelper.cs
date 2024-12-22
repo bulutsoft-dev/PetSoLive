@@ -124,7 +124,7 @@ public class EmailHelper
         </html>";
     }
 
-    public string GenerateAdoptionConfirmationEmailBody(User user, Pet pet)
+    public string GenerateAdoptionRequestConfirmationEmailBody(User user, Pet pet)
     {
         return $@"
         <html>
@@ -196,4 +196,128 @@ public class EmailHelper
         </body>
         </html>";
     }
+    
+
+    public string GenerateRejectionEmailBody(User user, Pet pet)
+    {
+        return $@"
+    <html>
+    <head>
+        <style>
+            body {{
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f6f6f6;
+                margin: 0;
+                padding: 0;
+                color: #333;
+            }}
+            .container {{
+                width: 100%;
+                max-width: 600px;
+                margin: 30px auto;
+                padding: 20px;
+                background-color: #ffffff;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }}
+            h2 {{
+                color: #2C3E50;
+                font-size: 28px;
+                margin-bottom: 20px;
+            }}
+            p {{
+                font-size: 16px;
+                line-height: 1.6;
+                margin-bottom: 10px;
+            }}
+            .highlight {{
+                font-weight: bold;
+                color: #2980B9;
+            }}
+            .footer {{
+                margin-top: 30px;
+                text-align: center;
+                font-size: 14px;
+                color: #7f8c8d;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <h2>Your Adoption Request for {pet.Name} Has Been Rejected</h2>
+            <p>Dear {user.Username},</p>
+            <p>We regret to inform you that your adoption request for {pet.Name} has been rejected. Unfortunately, another user’s request for this pet has been approved.</p>
+
+            <div class='footer'>
+                <p>Best regards,</p>
+                <p>The PetSoLive Team</p>
+            </div>
+        </div>
+    </body>
+    </html>";
+    }
+    
+    public string GenerateAdoptionConfirmationEmailBody(User user, Pet pet)
+    {
+        return $@"
+    <html>
+    <head>
+        <style>
+            body {{
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f6f6f6;
+                margin: 0;
+                padding: 0;
+                color: #333;
+            }}
+            .container {{
+                width: 100%;
+                max-width: 600px;
+                margin: 30px auto;
+                padding: 20px;
+                background-color: #ffffff;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }}
+            h2 {{
+                color: #2C3E50;
+                font-size: 28px;
+                margin-bottom: 20px;
+            }}
+            p {{
+                font-size: 16px;
+                line-height: 1.6;
+                margin-bottom: 10px;
+            }}
+            .highlight {{
+                font-weight: bold;
+                color: #2980B9;
+            }}
+            .footer {{
+                margin-top: 30px;
+                text-align: center;
+                font-size: 14px;
+                color: #7f8c8d;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class='container'>
+            <h2>Your Adoption Request for {pet.Name} Has Been Approved</h2>
+            <p>Dear {user.Username},</p>
+            <p>We are pleased to inform you that your adoption request for <span class='highlight'>{pet.Name}</span> has been approved!</p>
+            <p>Thank you for choosing to adopt, and we hope you and {pet.Name} will have a wonderful time together.</p>
+
+            <div class='footer'>
+                <p>Best regards,</p>
+                <p>The PetSoLive Team</p>
+            </div>
+        </div>
+    </body>
+    </html>";
+    }
+
+
+    
+
 }

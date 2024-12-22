@@ -155,10 +155,14 @@ public async Task<IActionResult> Adopt(int petId, string name, string email, str
         var emailHelper = new EmailHelper();
     
         // Email body generation logic (you can customize this as needed)
-        var body = emailHelper.GenerateAdoptionConfirmationEmailBody(user, pet);
+        var body = emailHelper.GenerateAdoptionRequestConfirmationEmailBody(user, pet);
 
         await _emailService.SendEmailAsync(user.Email, subject, body);
     }
+
+    
+    
+    
     [HttpPost]
     public async Task<IActionResult> ApproveRequest(int adoptionRequestId, int petId)
     {
@@ -191,7 +195,7 @@ public async Task<IActionResult> Adopt(int petId, string name, string email, str
         adoptionRequest.Status = AdoptionStatus.Approved;
         await _adoptionRequestRepository.UpdateAsync(adoptionRequest);
 
-        // Reject all other pending requests for this pet
+        // Reject all other pending requests for this pet and send rejection emails
         var pendingRequests = await _adoptionRequestRepository.GetPendingRequestsByPetIdAsync(petId);
         foreach (var request in pendingRequests)
         {
@@ -199,12 +203,36 @@ public async Task<IActionResult> Adopt(int petId, string name, string email, str
             {
                 request.Status = AdoptionStatus.Rejected;
                 await _adoptionRequestRepository.UpdateAsync(request);
+
+                // Send a rejection email to other users
+                await SendRejectionEmailAsync(request.User, pet);
             }
         }
+
+        // Send a confirmation email to the approved user
+        await SendApprovalEmailAsync(adoptionRequest.User, pet);
 
         // After approval, redirect to the pet details page (or adoption list)
         return RedirectToAction("Details", "Pet", new { id = petId });
     }
+
+    
+    // Method to send approval email to the approved user
+    private async Task SendApprovalEmailAsync(User user, Pet pet)
+    {
+        var subject = "Your Adoption Request Has Been Approved";
+        var body = new EmailHelper().GenerateAdoptionConfirmationEmailBody(user, pet);
+        await _emailService.SendEmailAsync(user.Email, subject, body);
+    }
+
+    // Method to send rejection email to a user whose adoption request is rejected
+    private async Task SendRejectionEmailAsync(User user, Pet pet)
+    {
+        var subject = "Adoption Request Rejected";
+        var body = new EmailHelper().GenerateRejectionEmailBody(user, pet);
+        await _emailService.SendEmailAsync(user.Email, subject, body);
+    }
+
 
 
 }
