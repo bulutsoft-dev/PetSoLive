@@ -4,6 +4,7 @@ using PetSoLive.Core.Interfaces;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Enums;
 using Microsoft.AspNetCore.Identity;
+using PetSoLive.Core.Helpers;
 
 public class AdoptionController : Controller
 {
@@ -108,53 +109,25 @@ public class AdoptionController : Controller
         }
 
 // This method sends an email to the pet owner regarding the new adoption request
-// This method sends an email to the pet owner regarding the new adoption request
-public async Task SendAdoptionRequestNotificationAsync(AdoptionRequest adoptionRequest)
-{
-    var petOwner = await _petOwnerService.GetPetOwnerByPetIdAsync(adoptionRequest.PetId);
-    var petOwnerUser = await _userService.GetUserByIdAsync(petOwner.UserId);
+    public async Task SendAdoptionRequestNotificationAsync(AdoptionRequest adoptionRequest)
+    {
+        var petOwner = await _petOwnerService.GetPetOwnerByPetIdAsync(adoptionRequest.PetId);
+        var petOwnerUser = await _userService.GetUserByIdAsync(petOwner.UserId);
 
-    // Fetching detailed user and pet information
-    var user = adoptionRequest.User;
-    var pet = adoptionRequest.Pet;
+        // Fetching detailed user and pet information
+        var user = adoptionRequest.User;
+        var pet = adoptionRequest.Pet;
 
-    var subject = "New Adoption Request for Your Pet";
-    var body = $@"
-    <h2>New Adoption Request for Your Pet: {pet.Name}</h2>
-    <p><strong>Requested by:</strong> {user.Username}</p>
-    <p><strong>Message from the adopter:</strong> {adoptionRequest.Message}</p>
-    <p><strong>Status:</strong> {adoptionRequest.Status}</p>
+        var subject = "New Adoption Request for Your Pet";
 
-    <h3>Pet Details:</h3>
-    <ul>
-        <li><strong>Name:</strong> {pet.Name}</li>
-        <li><strong>Species:</strong> {pet.Species}</li>
-        <li><strong>Breed:</strong> {pet.Breed}</li>
-        <li><strong>Age:</strong> {pet.Age} years old</li>
-        <li><strong>Gender:</strong> {pet.Gender}</li>
-        <li><strong>Weight:</strong> {pet.Weight} kg</li>
-        <li><strong>Color:</strong> {pet.Color}</li>
-        <li><strong>Vaccination Status:</strong> {pet.VaccinationStatus}</li>
-        <li><strong>Microchip ID:</strong> {pet.MicrochipId}</li>
-        <li><strong>Is Neutered:</strong> {(pet.IsNeutered.HasValue ? (pet.IsNeutered.Value ? "Yes" : "No") : "Not specified")}</li>
-    </ul>
+        // Use the helper to generate the email body
+        var emailHelper = new EmailHelper();
+        var body = emailHelper.GenerateAdoptionRequestEmailBody(user, pet, adoptionRequest);
 
-    <h3>User Details:</h3>
-    <ul>
-        <li><strong>Name:</strong> {user.Username}</li>
-        <li><strong>Email:</strong> {user.Email}</li>
-        <li><strong>Phone:</strong> {user.PhoneNumber}</li>
-        <li><strong>Address:</strong> {user.Address}</li>
-        <li><strong>Date of Birth:</strong> {user.DateOfBirth.ToString("yyyy-MM-dd")}</li>
-        <li><strong>Account Created:</strong> {user.CreatedDate.ToString("yyyy-MM-dd")}</li>
-    </ul>
+        // Sending the email
+        await _emailService.SendEmailAsync(petOwnerUser.Email, subject, body);
+    }
 
-    <p>Best regards,</p>
-    <p>The PetSoLive Team</p>";
-
-    // Sending the email
-    await _emailService.SendEmailAsync(petOwnerUser.Email, subject, body);
-}
 
 
 }
