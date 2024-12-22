@@ -1,11 +1,11 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using PetSoLive.Core.Enums
 @{
-ViewData["Title"] = "Pet Details";
+    ViewData["Title"] = "Pet Details";
 }
 
 @{
-Layout = "_Layout";
+    Layout = "_Layout";
 }
 
 <div class="container my-5">
@@ -172,7 +172,7 @@ Layout = "_Layout";
                         <li class="list-group-item mb-3 p-3 shadow-sm">
                             <div class="d-flex justify-content-between">
                                 <strong>@request.User.Username</strong>
-                                <span class="badge bg-@(request.Status == AdoptionStatus.Pending ? "warning" : "success")">@request.Status</span>
+                                <span class="badge bg-@(request.Status == AdoptionStatus.Pending ? "warning" : (request.Status == AdoptionStatus.Rejected ? "danger" : "success"))">@request.Status</span>
                             </div>
                             <p class="mt-2 text-muted">@request.Message</p>
                             <small class="text-secondary">Requested on: @request.RequestDate.ToString("MM/dd/yyyy")</small>
@@ -199,6 +199,4 @@ Layout = "_Layout";
             </div>
         </div>
     </div>
-
-
 </div>
