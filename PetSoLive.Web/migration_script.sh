@@ -1,2 +1,2 @@
-dotnet ef migrations add messagecanbenull --project ../PetSoLive.Data --startup-project .
+dotnet ef migrations add s --project ../PetSoLive.Data --startup-project .
 dotnet ef database update

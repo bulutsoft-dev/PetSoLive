@@ -47,23 +47,13 @@ namespace PetSoLive.Data
 
             modelBuilder.Entity<AdoptionRequest>()
                 .HasOne(ar => ar.Pet)
-                .WithMany()
+                .WithMany(p => p.AdoptionRequests)
                 .HasForeignKey(ar => ar.PetId);
-
-            modelBuilder.Entity<AdoptionRequest>()
-                .HasOne(ar => ar.User)
-                .WithMany()
-                .HasForeignKey(ar => ar.UserId);
 
             modelBuilder.Entity<AdoptionRequest>()
                 .HasOne(ar => ar.User)
                 .WithMany(u => u.AdoptionRequests)
                 .HasForeignKey(ar => ar.UserId);
-
-            modelBuilder.Entity<AdoptionRequest>()
-                .HasOne(ar => ar.Pet)
-                .WithMany(p => p.AdoptionRequests)
-                .HasForeignKey(ar => ar.PetId);
 
             modelBuilder.Entity<PetOwner>().ToTable("PetOwners");
             modelBuilder.Entity<Adoption>().ToTable("Adoptions");

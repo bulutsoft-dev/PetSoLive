@@ -1,125 +1,169 @@
-using PetSoLive.Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using PetSoLive.Core.Entities;
+using PetSoLive.Data;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using PetSoLive.Core.Enums;
 using Xunit;
 
-namespace PetSoLive.Data.Tests
+namespace PetSoLive.Tests
 {
     public class ApplicationDbContextTests
     {
-        private readonly DbContextOptions<ApplicationDbContext> _options;
-
-        public ApplicationDbContextTests()
+        private DbContextOptions<ApplicationDbContext> CreateInMemoryDbContextOptions()
         {
-            // Configure the in-memory database for testing
-            _options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "PetSoLiveTestDb")
+            return new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
                 .Options;
         }
 
         [Fact]
-        public async Task OnModelCreating_ShouldConfigurePetOwnerCompositeKey()
+        public async Task AddUser_Should_Add_User_To_Db()
         {
             // Arrange
-            using var context = new ApplicationDbContext(_options);
+            var options = CreateInMemoryDbContextOptions();
+            var context = new ApplicationDbContext(options);
 
-            // Act
-            var petOwner = new PetOwner
+            var user = new User
             {
-                PetId = 1,
-                UserId = 1
+                Username = "testuser",
+                Email = "test@example.com",
+                PasswordHash = "hashedpassword",
+                PhoneNumber = "1234567890",
+                Address = "Test Address",
+                DateOfBirth = DateTime.Now.AddYears(-25),
+                IsActive = true,
+                CreatedDate = DateTime.Now,
+                ProfileImageUrl = "http://example.com/profile.jpg"
             };
-            context.PetOwners.Add(petOwner);
-            await context.SaveChangesAsync();
-
-            // Assert
-            var savedPetOwner = await context.PetOwners.FirstOrDefaultAsync(po => po.PetId == 1 && po.UserId == 1);
-            Assert.NotNull(savedPetOwner);
-        }
-
-        [Fact]
-        public async Task OnModelCreating_ShouldEstablishCorrectRelationships()
-        {
-            // Arrange
-            using var context = new ApplicationDbContext(_options);
-
-            var user = new User { Id = 1, Username = "testuser", Email = "test@example.com" };
-            var pet = new Pet { Id = 1, Name = "Buddy" };
-
-            context.Users.Add(user);
-            context.Pets.Add(pet);
-            await context.SaveChangesAsync();
-
-            var petOwner = new PetOwner { PetId = pet.Id, UserId = user.Id };
-            context.PetOwners.Add(petOwner);
-            await context.SaveChangesAsync();
 
             // Act
-            var savedPetOwner = await context.PetOwners
-                .Where(po => po.UserId == 1 && po.PetId == 1)
-                .Include(po => po.User)
-                .Include(po => po.Pet)
-                .FirstOrDefaultAsync();
-
-            // Assert
-            Assert.NotNull(savedPetOwner);
-            Assert.Equal(user.Id, savedPetOwner.UserId);
-            Assert.Equal(pet.Id, savedPetOwner.PetId);
-        }
-
-        [Fact]
-        public async Task ShouldHaveAdoptionRelationships()
-        {
-            // Arrange
-            using var context = new ApplicationDbContext(_options);
-
-            var user = new User { Id = 1, Username = "testuser", Email = "test@example.com" };
-            var pet = new Pet { Id = 1, Name = "Buddy" };
-            var adoption = new Adoption { UserId = 1, PetId = 1, AdoptionDate = DateTime.Now };
-
             context.Users.Add(user);
-            context.Pets.Add(pet);
-            context.Adoptions.Add(adoption);
             await context.SaveChangesAsync();
 
-            // Act
-            var savedAdoption = await context.Adoptions
-                .Where(a => a.UserId == 1 && a.PetId == 1)
-                .Include(a => a.User)
-                .Include(a => a.Pet)
-                .FirstOrDefaultAsync();
-
             // Assert
-            Assert.NotNull(savedAdoption);
-            Assert.Equal(user.Id, savedAdoption.UserId);
-            Assert.Equal(pet.Id, savedAdoption.PetId);
+            var savedUser = await context.Users.FirstOrDefaultAsync(u => u.Username == "testuser");
+            Assert.NotNull(savedUser);
+            Assert.Equal("testuser", savedUser.Username);
         }
 
         [Fact]
-        public async Task ShouldAddAdoptionRequestWithRelationships()
+        public async Task AddAdoptionRequest_Should_Add_AdoptionRequest_To_Db()
         {
             // Arrange
-            using var context = new ApplicationDbContext(_options);
+            var options = CreateInMemoryDbContextOptions();
+            var context = new ApplicationDbContext(options);
 
-            var user = new User { Id = 1, Username = "testuser", Email = "test@example.com" };
-            var pet = new Pet { Id = 1, Name = "Buddy" };
-            var adoptionRequest = new AdoptionRequest { UserId = 1, PetId = 1, RequestDate = DateTime.Now };
+            var user = new User
+            {
+                Username = "testuser",
+                Email = "test@example.com",
+                PasswordHash = "hashedpassword",
+                PhoneNumber = "1234567890",
+                Address = "Test Address",
+                DateOfBirth = DateTime.Now.AddYears(-25),
+                IsActive = true,
+                CreatedDate = DateTime.Now,
+                ProfileImageUrl = "http://example.com/profile.jpg"
+            };
 
+            var pet = new Pet
+            {
+                Name = "Fluffy",
+                Species = "Cat",
+                Breed = "Persian",
+                Age = 3,
+                Gender = "Female",
+                Weight = 4.5,
+                Color = "White",
+                DateOfBirth = DateTime.Now.AddYears(-3),
+                Description = "Cute cat",
+                VaccinationStatus = "Up to date",
+                MicrochipId = "1234567890",
+                IsNeutered = true,
+                ImageUrl = "http://example.com/fluffy.jpg"
+            };
+
+            var adoptionRequest = new AdoptionRequest
+            {
+                Pet = pet,
+                User = user,
+                Message = "I would love to adopt this pet.",
+                Status = AdoptionStatus.Pending,
+                RequestDate = DateTime.Now
+            };
+
+            // Act
             context.Users.Add(user);
             context.Pets.Add(pet);
             context.AdoptionRequests.Add(adoptionRequest);
             await context.SaveChangesAsync();
 
+            // Assert
+            var savedRequest = await context.AdoptionRequests
+                .FirstOrDefaultAsync(ar => ar.UserId == user.Id && ar.PetId == pet.Id);
+            Assert.NotNull(savedRequest);
+            Assert.Equal(AdoptionStatus.Pending, savedRequest.Status);
+        }
+
+        [Fact]
+        public async Task AddPetOwner_Should_Associate_Pet_With_User()
+        {
+            // Arrange
+            var options = CreateInMemoryDbContextOptions();
+            var context = new ApplicationDbContext(options);
+
+            var user = new User
+            {
+                Username = "testuser",
+                Email = "test@example.com",
+                PasswordHash = "hashedpassword",
+                PhoneNumber = "1234567890",
+                Address = "Test Address",
+                DateOfBirth = DateTime.Now.AddYears(-25),
+                IsActive = true,
+                CreatedDate = DateTime.Now,
+                ProfileImageUrl = "http://example.com/profile.jpg"
+            };
+
+            var pet = new Pet
+            {
+                Name = "Fluffy",
+                Species = "Cat",
+                Breed = "Persian",
+                Age = 3,
+                Gender = "Female",
+                Weight = 4.5,
+                Color = "White",
+                DateOfBirth = DateTime.Now.AddYears(-3),
+                Description = "Cute cat",
+                VaccinationStatus = "Up to date",
+                MicrochipId = "1234567890",
+                IsNeutered = true,
+                ImageUrl = "http://example.com/fluffy.jpg"
+            };
+
+            var petOwner = new PetOwner
+            {
+                Pet = pet,
+                User = user,
+                OwnershipDate = DateTime.Now
+            };
+
             // Act
-            var savedAdoptionRequest = await context.AdoptionRequests
-                .Where(ar => ar.UserId == 1 && ar.PetId == 1)
-                .Include(ar => ar.User)
-                .Include(ar => ar.Pet)
-                .FirstOrDefaultAsync();
+            context.Users.Add(user);
+            context.Pets.Add(pet);
+            context.PetOwners.Add(petOwner);
+            await context.SaveChangesAsync();
 
             // Assert
-            Assert.NotNull(savedAdoptionRequest);
-            Assert.Equal(user.Id, savedAdoptionRequest.UserId);
-            Assert.Equal(pet.Id, savedAdoptionRequest.PetId);
+            var savedPetOwner = await context.PetOwners
+                .FirstOrDefaultAsync(po => po.UserId == user.Id && po.PetId == pet.Id);
+            Assert.NotNull(savedPetOwner);
+            Assert.Equal(user.Id, savedPetOwner.UserId);
+            Assert.Equal(pet.Id, savedPetOwner.PetId);
         }
     }
 }

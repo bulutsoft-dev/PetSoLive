@@ -20,4 +20,5 @@ namespace PetSoLive.Core.Entities
 
         public ICollection<AdoptionRequest> AdoptionRequests { get; set; } = new List<AdoptionRequest>();
     }
+
 }
