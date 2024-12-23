@@ -14,12 +14,6 @@ namespace PetSoLive.Business.Services
             _context = context;
         }
 
-        public async Task<Pet> GetPetByIdAsync(int petId)
-        {
-            return await _context.Pets
-                .FirstOrDefaultAsync(p => p.Id == petId);
-        }
-
         public async Task<AdoptionRequest> GetAdoptionRequestByIdAsync(int requestId)
         {
             return await _context.AdoptionRequests

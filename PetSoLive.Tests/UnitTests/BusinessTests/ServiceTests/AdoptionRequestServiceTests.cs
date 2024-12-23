@@ -1,3 +1,4 @@
+
 using Microsoft.EntityFrameworkCore;
 using PetSoLive.Business.Services;
 using PetSoLive.Core.Entities;
@@ -18,9 +19,8 @@ namespace PetSoLive.Tests.UnitTests
 
         public AdoptionRequestServiceTests()
         {
-            // Create a unique In-Memory database
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString()) // Unique database for each test
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
 
             _context = new ApplicationDbContext(options);
@@ -29,7 +29,6 @@ namespace PetSoLive.Tests.UnitTests
 
         public void Dispose()
         {
-            // Clean up the database between tests
             _context.Database.EnsureDeleted();
             _context.Dispose();
         }
@@ -37,47 +36,41 @@ namespace PetSoLive.Tests.UnitTests
         [Fact]
         public async Task GetAdoptionRequestByIdAsync_ShouldReturnAdoptionRequest_WhenRequestExists()
         {
-            // Arrange
+            var user = new User
+            {
+                Username = "testuser",
+                Email = "test@example.com",
+                PasswordHash = "hashedpassword",
+                PhoneNumber = "1234567890",
+                Address = "123 Test St",
+                DateOfBirth = DateTime.Now.AddYears(-30),
+                IsActive = true,
+                CreatedDate = DateTime.Now,
+                ProfileImageUrl = "https://example.com/profile.jpg"
+            };
+            _context.Users.Add(user);
+
             var adoptionRequest = new AdoptionRequest
             {
                 PetId = 1,
-                UserId = 1,
+                UserId = user.Id,
                 Message = "I want to adopt this pet.",
                 Status = AdoptionStatus.Pending,
                 RequestDate = DateTime.Now
             };
 
-            // Add the adoption request to the in-memory database and save changes
             _context.AdoptionRequests.Add(adoptionRequest);
             await _context.SaveChangesAsync();
 
-            // Ensure that the AdoptionRequest has been added to the database and the ID is correctly set
-            var savedRequest = await _context.AdoptionRequests
-                .FirstOrDefaultAsync(ar => ar.UserId == adoptionRequest.UserId && ar.PetId == adoptionRequest.PetId);
+            var result = await _service.GetAdoptionRequestByIdAsync(adoptionRequest.Id);
 
-            Assert.NotNull(savedRequest);  // Verify the request was saved correctly
-            Assert.NotEqual(0, savedRequest.Id);  // Verify that the ID is set (not zero)
-
-            // Act: Retrieve the adoption request by its generated ID
-            var result = await _service.GetAdoptionRequestByIdAsync(savedRequest.Id);
-
-            // Debug log (Optional): Verify the result
-            if (result == null)
-            {
-                Console.WriteLine("No adoption request found with ID: " + savedRequest.Id);
-            }
-
-            // Assert: Ensure the result is not null and the ID matches
-            Assert.NotNull(result);  
-            Assert.Equal(savedRequest.Id, result.Id);  
-            Assert.Equal(savedRequest.Status, result.Status);  
+            Assert.NotNull(result);
+            Assert.Equal(adoptionRequest.Id, result.Id);
         }
-
 
         [Fact]
         public async Task GetAdoptionRequestsByPetIdAsync_ShouldReturnRequests_WhenRequestsExist()
         {
-            // Arrange
             var adoptionRequests = new List<AdoptionRequest>
             {
                 new AdoptionRequest
@@ -101,18 +94,15 @@ namespace PetSoLive.Tests.UnitTests
             _context.AdoptionRequests.AddRange(adoptionRequests);
             await _context.SaveChangesAsync();
 
-            // Act
             var result = await _service.GetAdoptionRequestsByPetIdAsync(1);
 
-            // Assert
-            Assert.NotNull(result);  // Ensure the result is not null
-            Assert.Equal(2, result.Count);  // Verify that two requests were returned
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count);
         }
 
         [Fact]
         public async Task UpdateAdoptionRequestAsync_ShouldUpdateRequest_WhenValid()
         {
-            // Arrange
             var adoptionRequest = new AdoptionRequest
             {
                 PetId = 1,
@@ -127,19 +117,16 @@ namespace PetSoLive.Tests.UnitTests
 
             adoptionRequest.Status = AdoptionStatus.Approved;
 
-            // Act
             await _service.UpdateAdoptionRequestAsync(adoptionRequest);
 
-            // Assert
             var updatedRequest = await _context.AdoptionRequests.FindAsync(adoptionRequest.Id);
-            Assert.NotNull(updatedRequest);  // Ensure the request was updated
-            Assert.Equal(AdoptionStatus.Approved, updatedRequest.Status);  // Verify the status was updated
+            Assert.NotNull(updatedRequest);
+            Assert.Equal(AdoptionStatus.Approved, updatedRequest.Status);
         }
 
         [Fact]
         public async Task UpdatePetAsync_ShouldUpdatePet_WhenValid()
         {
-            // Arrange
             var pet = new Pet
             {
                 Name = "Fluffy",
@@ -162,13 +149,11 @@ namespace PetSoLive.Tests.UnitTests
 
             pet.Name = "Fluffy Updated";
 
-            // Act
             await _service.UpdatePetAsync(pet);
 
-            // Assert
             var updatedPet = await _context.Pets.FindAsync(pet.Id);
-            Assert.NotNull(updatedPet);  // Ensure the pet was updated
-            Assert.Equal("Fluffy Updated", updatedPet.Name);  // Verify the name was updated
+            Assert.NotNull(updatedPet);
+            Assert.Equal("Fluffy Updated", updatedPet.Name);
         }
     }
 }
