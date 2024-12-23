@@ -16,6 +16,10 @@ namespace PetSoLive.Business.Services
 
         public async Task SendEmailAsync(string to, string subject, string body)
         {
+            if (string.IsNullOrEmpty(to)) throw new ArgumentNullException(nameof(to));
+            if (string.IsNullOrEmpty(subject)) throw new ArgumentNullException(nameof(subject));
+            if (string.IsNullOrEmpty(body)) throw new ArgumentNullException(nameof(body));
+
             var client = new SmtpClient(_smtpSettings.Host, _smtpSettings.Port)
             {
                 Credentials = new NetworkCredential(_smtpSettings.Username, _smtpSettings.Password),
