@@ -9,12 +9,12 @@ using Xunit;
 
 namespace PetSoLive.Tests
 {
-    public class UserRepositoryTests
+    public class UserRepositoryTests : IDisposable
     {
         private DbContextOptions<ApplicationDbContext> CreateInMemoryDbContextOptions()
         {
             return new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .UseInMemoryDatabase(databaseName: "TestDatabase") // Use a unique in-memory database for each test
                 .Options;
         }
 
@@ -24,6 +24,13 @@ namespace PetSoLive.Tests
             var context = new ApplicationDbContext(options);
             await context.Database.EnsureCreatedAsync();
             return context;
+        }
+
+        public void Dispose()
+        {
+            // Clean up the database after each test
+            using var context = new ApplicationDbContext(CreateInMemoryDbContextOptions());
+            context.Database.EnsureDeleted();
         }
 
         [Fact]
