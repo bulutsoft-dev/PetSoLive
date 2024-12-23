@@ -1,149 +1,220 @@
-using Moq;
-using Microsoft.EntityFrameworkCore;
-using PetSoLive.Core.Entities;
-using PetSoLive.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PetSoLive.Core.Entities;
+using PetSoLive.Data;
 using Xunit;
 
-namespace PetSoLive.Infrastructure.Repositories.Tests
+public class PetRepositoryTests
 {
-    public class PetRepositoryTests
+    private ApplicationDbContext CreateInMemoryDbContext()
     {
-        private readonly Mock<ApplicationDbContext> _dbContextMock;
-        private readonly Mock<DbSet<Pet>> _mockPetSet;
-        private readonly Mock<DbSet<PetOwner>> _mockPetOwnerSet;
-        private readonly PetRepository _petRepository;
+        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .Options;
+        return new ApplicationDbContext(options);
+    }
 
-        public PetRepositoryTests()
+    [Fact]
+    public async Task AddAsync_Should_Add_Pet_To_Database()
+    {
+        // Arrange
+        var context = CreateInMemoryDbContext();
+        var repository = new PetRepository(context);
+        var pet = new Pet
         {
-            _dbContextMock = new Mock<ApplicationDbContext>();
-            _mockPetSet = new Mock<DbSet<Pet>>();
-            _mockPetOwnerSet = new Mock<DbSet<PetOwner>>();
-            _petRepository = new PetRepository(_dbContextMock.Object);
+            Id = 1,
+            Name = "Fluffy",
+            Age = 2,
+            Breed = "Golden Retriever",
+            Color = "Golden",
+            Description = "Friendly dog",
+            Gender = "Male",
+            ImageUrl = "https://example.com/fluffy.jpg",
+            MicrochipId = "123456789",
+            Species = "Dog",
+            VaccinationStatus = "Up-to-date",
+            DateOfBirth = DateTime.UtcNow.AddYears(-2),
+            IsNeutered = true
+        };
 
-            // Setup DbSets in DbContext mock
-            _dbContextMock.Setup(db => db.Pets).Returns(_mockPetSet.Object);
-            _dbContextMock.Setup(db => db.PetOwners).Returns(_mockPetOwnerSet.Object);
-        }
+        // Act
+        await repository.AddAsync(pet);
+        var petsInDb = await context.Pets.ToListAsync();
 
-        [Fact]
-        public async Task AddAsync_ShouldAddPet_WhenPetIsNotNull()
-        {
-            // Arrange
-            var pet = new Pet { Id = 1, Name = "Buddy" };
+        // Assert
+        Assert.Single(petsInDb);
+        Assert.Equal("Fluffy", petsInDb[0].Name);
+    }
 
-            // Mock the AddAsync method
-            var mockSet = new Mock<DbSet<Pet>>();
-            _dbContextMock.Setup(m => m.Pets).Returns(mockSet.Object);
-
-            // Mock AddAsync to ensure it behaves like the real method
-            mockSet.Setup(m => m.AddAsync(It.IsAny<Pet>(), default))
-                .ReturnsAsync((Pet pet, CancellationToken token) => null); // Returning null to match the signature
-
-            // Act
-            await _petRepository.AddAsync(pet);
-
-            // Assert
-            mockSet.Verify(m => m.AddAsync(It.IsAny<Pet>(), default), Times.Once);
-            _dbContextMock.Verify(m => m.SaveChangesAsync(default), Times.Once);
-        }
-
-
-        [Fact]
-        public async Task GetAllAsync_ShouldReturnAllPets()
-        {
-            // Arrange
-            var pets = new List<Pet>
+    [Fact]
+    public async Task GetAllAsync_Should_Return_All_Pets()
+    {
+        // Arrange
+        var context = CreateInMemoryDbContext();
+        var repository = new PetRepository(context);
+        context.Pets.AddRange(
+            new Pet
             {
-                new Pet { Id = 1, Name = "Buddy" },
-                new Pet { Id = 2, Name = "Max" }
-            }.AsQueryable();
-
-            _mockPetSet.As<IQueryable<Pet>>().Setup(m => m.Provider).Returns(pets.Provider);
-            _mockPetSet.As<IQueryable<Pet>>().Setup(m => m.Expression).Returns(pets.Expression);
-            _mockPetSet.As<IQueryable<Pet>>().Setup(m => m.ElementType).Returns(pets.ElementType);
-            _mockPetSet.As<IQueryable<Pet>>().Setup(m => m.GetEnumerator()).Returns(pets.GetEnumerator());
-
-            // Act
-            var result = await _petRepository.GetAllAsync();
-
-            // Assert
-            Assert.Equal(2, result.Count);
-        }
-
-        [Fact]
-        public async Task GetByIdAsync_ShouldReturnPet_WhenPetExists()
-        {
-            // Arrange
-            int petId = 1;
-            var pet = new Pet { Id = petId, Name = "Buddy" };
-
-            _mockPetSet.Setup(m => m.FirstOrDefaultAsync(It.IsAny<System.Linq.Expressions.Expression<System.Func<Pet, bool>>>(), default))
-                .ReturnsAsync(pet);
-
-            // Act
-            var result = await _petRepository.GetByIdAsync(petId);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(petId, result.Id);
-        }
-
-        [Fact]
-        public async Task GetPetOwnersAsync_ShouldReturnPetOwners_WhenPetHasOwners()
-        {
-            // Arrange
-            int petId = 1;
-            var petOwners = new List<PetOwner>
+                Id = 1,
+                Name = "Fluffy",
+                Age = 2,
+                Breed = "Golden Retriever",
+                Color = "Golden",
+                Description = "Friendly dog",
+                Gender = "Male",
+                ImageUrl = "https://example.com/fluffy.jpg",
+                MicrochipId = "123456789",
+                Species = "Dog",
+                VaccinationStatus = "Up-to-date",
+                DateOfBirth = DateTime.UtcNow.AddYears(-2),
+                IsNeutered = true
+            },
+            new Pet
             {
-                new PetOwner { PetId = petId, UserId = 2 },
-                new PetOwner { PetId = petId, UserId = 3 }
-            };
+                Id = 2,
+                Name = "Buddy",
+                Age = 3,
+                Breed = "Labrador",
+                Color = "Black",
+                Description = "Energetic dog",
+                Gender = "Male",
+                ImageUrl = "https://example.com/buddy.jpg",
+                MicrochipId = "987654321",
+                Species = "Dog",
+                VaccinationStatus = "Up-to-date",
+                DateOfBirth = DateTime.UtcNow.AddYears(-3),
+                IsNeutered = false
+            }
+        );
+        await context.SaveChangesAsync();
 
-            _mockPetOwnerSet.Setup(m => m.Where(It.IsAny<System.Linq.Expressions.Expression<System.Func<PetOwner, bool>>>()))
-                .Returns(petOwners.AsQueryable());
+        // Act
+        var pets = await repository.GetAllAsync();
 
-            // Act
-            var result = await _petRepository.GetPetOwnersAsync(petId);
+        // Assert
+        Assert.Equal(2, pets.Count);
+    }
 
-            // Assert
-            Assert.Equal(2, result.Count);
-        }
-        [Fact]
-        public async Task UpdateAsync_ShouldUpdatePet_WhenPetExists()
+    [Fact]
+    public async Task GetByIdAsync_Should_Return_Correct_Pet()
+    {
+        // Arrange
+        var context = CreateInMemoryDbContext();
+        var repository = new PetRepository(context);
+        var pet = new Pet
         {
-            // Arrange
-            var pet = new Pet { Id = 1, Name = "Buddy" };
+            Id = 1,
+            Name = "Fluffy",
+            Age = 2,
+            Breed = "Golden Retriever",
+            Color = "Golden",
+            Description = "Friendly dog",
+            Gender = "Male",
+            ImageUrl = "https://example.com/fluffy.jpg",
+            MicrochipId = "123456789",
+            Species = "Dog",
+            VaccinationStatus = "Up-to-date",
+            DateOfBirth = DateTime.UtcNow.AddYears(-2),
+            IsNeutered = true
+        };
+        context.Pets.Add(pet);
+        await context.SaveChangesAsync();
 
-            // Mock DbSet Update
-            _mockPetSet.Setup(m => m.Update(It.IsAny<Pet>()));
+        // Act
+        var result = await repository.GetByIdAsync(1);
 
-            // Act
-            await _petRepository.UpdateAsync(pet);
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal("Fluffy", result.Name);
+    }
 
-            // Assert
-            _mockPetSet.Verify(m => m.Update(It.IsAny<Pet>()), Times.Once);
-            _dbContextMock.Verify(m => m.SaveChangesAsync(default), Times.Once);
-        }
+    [Fact]
+    public async Task GetPetOwnersAsync_Should_Return_PetOwners_For_Given_PetId()
+    {
+        // Arrange
+        var context = CreateInMemoryDbContext();
+        var repository = new PetRepository(context);
+        context.PetOwners.AddRange(
+            new PetOwner { PetId = 1, UserId = 1, OwnershipDate = DateTime.UtcNow },
+            new PetOwner { PetId = 2, UserId = 2, OwnershipDate = DateTime.UtcNow }
+        );
+        await context.SaveChangesAsync();
 
-        [Fact]
-        public async Task DeleteAsync_ShouldRemovePet_WhenPetExists()
+        // Act
+        var petOwners = await repository.GetPetOwnersAsync(1);
+
+        // Assert
+        Assert.Single(petOwners);
+        Assert.Equal(1, petOwners[0].UserId);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_Should_Update_Existing_Pet()
+    {
+        // Arrange
+        var context = CreateInMemoryDbContext();
+        var repository = new PetRepository(context);
+        var pet = new Pet
         {
-            // Arrange
-            var pet = new Pet { Id = 1, Name = "Buddy" };
+            Id = 1,
+            Name = "Fluffy",
+            Age = 2,
+            Breed = "Golden Retriever",
+            Color = "Golden",
+            Description = "Friendly dog",
+            Gender = "Male",
+            ImageUrl = "https://example.com/fluffy.jpg",
+            MicrochipId = "123456789",
+            Species = "Dog",
+            VaccinationStatus = "Up-to-date",
+            DateOfBirth = DateTime.UtcNow.AddYears(-2),
+            IsNeutered = true
+        };
+        context.Pets.Add(pet);
+        await context.SaveChangesAsync();
 
-            // Mock DbSet Remove
-            _mockPetSet.Setup(m => m.Remove(It.IsAny<Pet>()));
+        // Act
+        pet.Name = "FluffyUpdated";
+        await repository.UpdateAsync(pet);
+        var updatedPet = await context.Pets.FindAsync(1);
 
-            // Act
-            await _petRepository.DeleteAsync(pet);
+        // Assert
+        Assert.Equal("FluffyUpdated", updatedPet.Name);
+    }
 
-            // Assert
-            _mockPetSet.Verify(m => m.Remove(It.IsAny<Pet>()), Times.Once);
-            _dbContextMock.Verify(m => m.SaveChangesAsync(default), Times.Once);
-        }
+    [Fact]
+    public async Task DeleteAsync_Should_Remove_Pet_From_Database()
+    {
+        // Arrange
+        var context = CreateInMemoryDbContext();
+        var repository = new PetRepository(context);
+        var pet = new Pet
+        {
+            Id = 1,
+            Name = "Fluffy",
+            Age = 2,
+            Breed = "Golden Retriever",
+            Color = "Golden",
+            Description = "Friendly dog",
+            Gender = "Male",
+            ImageUrl = "https://example.com/fluffy.jpg",
+            MicrochipId = "123456789",
+            Species = "Dog",
+            VaccinationStatus = "Up-to-date",
+            DateOfBirth = DateTime.UtcNow.AddYears(-2),
+            IsNeutered = true
+        };
+        context.Pets.Add(pet);
+        await context.SaveChangesAsync();
 
+        // Act
+        await repository.DeleteAsync(pet);
+        var petsInDb = await context.Pets.ToListAsync();
+
+        // Assert
+        Assert.Empty(petsInDb);
     }
 }
