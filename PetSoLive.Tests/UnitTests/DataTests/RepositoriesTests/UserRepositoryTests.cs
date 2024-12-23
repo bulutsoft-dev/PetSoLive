@@ -11,34 +11,31 @@ namespace PetSoLive.Tests
 {
     public class UserRepositoryTests : IDisposable
     {
-        private DbContextOptions<ApplicationDbContext> CreateInMemoryDbContextOptions()
-        {
-            return new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase") // Use a unique in-memory database for each test
-                .Options;
-        }
+        private readonly ApplicationDbContext _context;
 
-        private async Task<ApplicationDbContext> GetInMemoryDbContextAsync()
+        public UserRepositoryTests()
         {
-            var options = CreateInMemoryDbContextOptions();
-            var context = new ApplicationDbContext(options);
-            await context.Database.EnsureCreatedAsync();
-            return context;
+            // Use a unique name for the in-memory database for each test class run
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Ensures a new in-memory DB for each test
+                .Options;
+
+            _context = new ApplicationDbContext(options);
+            _context.Database.EnsureCreated();
         }
 
         public void Dispose()
         {
-            // Clean up the database after each test
-            using var context = new ApplicationDbContext(CreateInMemoryDbContextOptions());
-            context.Database.EnsureDeleted();
+            // Ensure the database is deleted after each test
+            _context.Database.EnsureDeleted();
+            _context.Dispose();
         }
 
         [Fact]
         public async Task AddAsync_Should_Add_User_To_Db()
         {
             // Arrange
-            var context = await GetInMemoryDbContextAsync();
-            var repository = new UserRepository(context);
+            var repository = new UserRepository(_context);
             var user = new User
             {
                 Username = "testuser",
@@ -56,7 +53,7 @@ namespace PetSoLive.Tests
             await repository.AddAsync(user);
 
             // Assert
-            var savedUser = await context.Users.FirstOrDefaultAsync(u => u.Username == "testuser");
+            var savedUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == "testuser");
             Assert.NotNull(savedUser);
             Assert.Equal("testuser", savedUser.Username);
         }
@@ -65,8 +62,7 @@ namespace PetSoLive.Tests
         public async Task GetAllAsync_Should_Return_All_Users()
         {
             // Arrange
-            var context = await GetInMemoryDbContextAsync();
-            var repository = new UserRepository(context);
+            var repository = new UserRepository(_context);
 
             // Test verilerini oluştur
             var user1 = new User
@@ -111,8 +107,7 @@ namespace PetSoLive.Tests
         public async Task GetByIdAsync_Should_Return_User_When_Found()
         {
             // Arrange
-            var context = await GetInMemoryDbContextAsync();
-            var repository = new UserRepository(context);
+            var repository = new UserRepository(_context);
             var user = new User
             {
                 Username = "testuser",
@@ -141,8 +136,7 @@ namespace PetSoLive.Tests
         public async Task GetByIdAsync_Should_Return_Null_When_User_Not_Found()
         {
             // Arrange
-            var context = await GetInMemoryDbContextAsync();
-            var repository = new UserRepository(context);
+            var repository = new UserRepository(_context);
 
             // Act
             var foundUser = await repository.GetByIdAsync(999); // Non-existent ID
@@ -155,8 +149,7 @@ namespace PetSoLive.Tests
         public async Task UpdateAsync_Should_Update_User_In_Db()
         {
             // Arrange
-            var context = await GetInMemoryDbContextAsync();
-            var repository = new UserRepository(context);
+            var repository = new UserRepository(_context);
             var user = new User
             {
                 Username = "testuser",
@@ -177,7 +170,7 @@ namespace PetSoLive.Tests
             await repository.UpdateAsync(user);
 
             // Assert
-            var updatedUser = await context.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
+            var updatedUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
             Assert.NotNull(updatedUser);
             Assert.Equal("updateduser", updatedUser.Username);
         }
