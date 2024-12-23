@@ -6,6 +6,7 @@ using PetSoLive.Web.Controllers;
 using System;
 using System.Threading.Tasks;
 using Xunit;
+using Microsoft.AspNetCore.Http;
 
 namespace PetSoLive.Web.Tests
 {
@@ -18,6 +19,16 @@ namespace PetSoLive.Web.Tests
         {
             _mockUserService = new Mock<IUserService>();
             _controller = new AccountController(_mockUserService.Object);
+
+            // Mocking HttpContext and Session
+            var httpContext = new DefaultHttpContext();
+            var sessionMock = new Mock<ISession>();
+            httpContext.Session = sessionMock.Object;
+            
+            _controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = httpContext
+            };
         }
 
         [Fact]
@@ -59,8 +70,8 @@ namespace PetSoLive.Web.Tests
             var result = await _controller.Login(username, password);
 
             // Assert
-            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
-            Assert.Equal("Index", redirectResult.ActionName);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result); // RedirectToActionResult bekliyoruz
+            Assert.Equal("Index", redirectResult.ActionName); // Home/Index'e yönlendirme yapılmalı
             Assert.Equal("Home", redirectResult.ControllerName);
         }
 
@@ -130,8 +141,8 @@ namespace PetSoLive.Web.Tests
             var result = _controller.Logout();
 
             // Assert
-            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
-            Assert.Equal("Login", redirectResult.ActionName);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result); // Redirect bekliyoruz
+            Assert.Equal("Login", redirectResult.ActionName); // Login sayfasına yönlendirme
         }
     }
 }

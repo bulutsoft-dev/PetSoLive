@@ -1,112 +1,178 @@
-using Moq;
+using Microsoft.EntityFrameworkCore;
 using PetSoLive.Core.Entities;
 using PetSoLive.Data.Repositories;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using PetSoLive.Data;
 using Xunit;
 
-namespace PetSoLive.Data.Tests
+namespace PetSoLive.Tests
 {
     public class UserRepositoryTests
     {
-        private readonly Mock<ApplicationDbContext> _dbContextMock;
-        private readonly Mock<DbSet<User>> _mockUserSet;
-        private readonly UserRepository _userRepository;
-
-        public UserRepositoryTests()
+        private DbContextOptions<ApplicationDbContext> CreateInMemoryDbContextOptions()
         {
-            // Mock the DbSet<User> and ApplicationDbContext
-            _mockUserSet = new Mock<DbSet<User>>();
-            _dbContextMock = new Mock<ApplicationDbContext>();
-            _dbContextMock.Setup(c => c.Users).Returns(_mockUserSet.Object);
+            return new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .Options;
+        }
 
-            _userRepository = new UserRepository(_dbContextMock.Object);
+        private async Task<ApplicationDbContext> GetInMemoryDbContextAsync()
+        {
+            var options = CreateInMemoryDbContextOptions();
+            var context = new ApplicationDbContext(options);
+            await context.Database.EnsureCreatedAsync();
+            return context;
         }
 
         [Fact]
-        public async Task AddAsync_ShouldAddUser_WhenUserIsValid()
+        public async Task AddAsync_Should_Add_User_To_Db()
         {
             // Arrange
-            var user = new User { Id = 1, Username = "johndoe", Email = "johndoe@example.com" };
-
-            // Act
-            await _userRepository.AddAsync(user);
-
-            // Assert
-            _mockUserSet.Verify(m => m.AddAsync(It.IsAny<User>(), default), Times.Once);
-            _dbContextMock.Verify(m => m.SaveChangesAsync(default), Times.Once);
-        }
-
-        [Fact]
-        public async Task GetAllAsync_ShouldReturnAllUsers_WhenUsersExist()
-        {
-            // Arrange
-            var users = new List<User>
+            var context = await GetInMemoryDbContextAsync();
+            var repository = new UserRepository(context);
+            var user = new User
             {
-                new User { Id = 1, Username = "johndoe", Email = "johndoe@example.com" },
-                new User { Id = 2, Username = "janedoe", Email = "janedoe@example.com" }
-            }.AsQueryable();
-
-            var mockSet = new Mock<DbSet<User>>();
-            mockSet.As<IQueryable<User>>().Setup(m => m.Provider).Returns(users.Provider);
-            mockSet.As<IQueryable<User>>().Setup(m => m.Expression).Returns(users.Expression);
-            mockSet.As<IQueryable<User>>().Setup(m => m.ElementType).Returns(users.ElementType);
-            mockSet.As<IQueryable<User>>().Setup(m => m.GetEnumerator()).Returns(users.GetEnumerator());
-
-            _dbContextMock.Setup(m => m.Users).Returns(mockSet.Object);
+                Username = "testuser",
+                Email = "test@example.com",
+                PasswordHash = "hashedpassword",
+                PhoneNumber = "1234567890",
+                Address = "Test Address",
+                DateOfBirth = DateTime.Now.AddYears(-25),
+                IsActive = true,
+                CreatedDate = DateTime.Now,
+                ProfileImageUrl = "http://example.com/profile.jpg"
+            };
 
             // Act
-            var result = await _userRepository.GetAllAsync();
+            await repository.AddAsync(user);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(2, result.Count());
+            var savedUser = await context.Users.FirstOrDefaultAsync(u => u.Username == "testuser");
+            Assert.NotNull(savedUser);
+            Assert.Equal("testuser", savedUser.Username);
         }
 
         [Fact]
-        public async Task GetByIdAsync_ShouldReturnUser_WhenUserExists()
+        public async Task GetAllAsync_Should_Return_All_Users()
         {
             // Arrange
-            var user = new User { Id = 1, Username = "johndoe", Email = "johndoe@example.com" };
-            _dbContextMock.Setup(m => m.Users.FindAsync(1)).ReturnsAsync(user);
+            var context = await GetInMemoryDbContextAsync();
+            var repository = new UserRepository(context);
+
+            // Test verilerini oluştur
+            var user1 = new User
+            {
+                Username = "user1",
+                Email = "user1@example.com",
+                PasswordHash = "hashedpassword1",
+                PhoneNumber = "1234567891",
+                Address = "Address 1",
+                DateOfBirth = DateTime.Now.AddYears(-30),
+                IsActive = true,
+                CreatedDate = DateTime.Now,
+                ProfileImageUrl = "http://example.com/user1.jpg"
+            };
+
+            var user2 = new User
+            {
+                Username = "user2",
+                Email = "user2@example.com",
+                PasswordHash = "hashedpassword2",
+                PhoneNumber = "1234567892",
+                Address = "Address 2",
+                DateOfBirth = DateTime.Now.AddYears(-28),
+                IsActive = true,
+                CreatedDate = DateTime.Now,
+                ProfileImageUrl = "http://example.com/user2.jpg"
+            };
+
+            // Kullanıcıları ekleyin
+            await repository.AddAsync(user1);
+            await repository.AddAsync(user2);
 
             // Act
-            var result = await _userRepository.GetByIdAsync(1);
+            var users = await repository.GetAllAsync();
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(1, result.Id);
-            Assert.Equal("johndoe", result.Username);
+            Assert.NotNull(users);
+            Assert.Equal(2, users.Count());  // Beklenen değer 2
         }
 
         [Fact]
-        public async Task GetByIdAsync_ShouldReturnNull_WhenUserDoesNotExist()
+        public async Task GetByIdAsync_Should_Return_User_When_Found()
         {
             // Arrange
-            _dbContextMock.Setup(m => m.Users.FindAsync(999)).ReturnsAsync((User)null);
+            var context = await GetInMemoryDbContextAsync();
+            var repository = new UserRepository(context);
+            var user = new User
+            {
+                Username = "testuser",
+                Email = "test@example.com",
+                PasswordHash = "hashedpassword",
+                PhoneNumber = "1234567890",
+                Address = "Test Address",
+                DateOfBirth = DateTime.Now.AddYears(-25),
+                IsActive = true,
+                CreatedDate = DateTime.Now,
+                ProfileImageUrl = "http://example.com/profile.jpg"
+            };
+
+            await repository.AddAsync(user);
 
             // Act
-            var result = await _userRepository.GetByIdAsync(999);
+            var foundUser = await repository.GetByIdAsync(user.Id);
 
             // Assert
-            Assert.Null(result);
+            Assert.NotNull(foundUser);
+            Assert.Equal(user.Id, foundUser.Id);
+            Assert.Equal("testuser", foundUser.Username);
         }
 
         [Fact]
-        public async Task UpdateAsync_ShouldUpdateUser_WhenUserExists()
+        public async Task GetByIdAsync_Should_Return_Null_When_User_Not_Found()
         {
             // Arrange
-            var user = new User { Id = 1, Username = "johndoe", Email = "johndoe@example.com" };
-            _dbContextMock.Setup(m => m.Users.Update(It.IsAny<User>())).Returns(Mock.Of<EntityEntry<User>>());
+            var context = await GetInMemoryDbContextAsync();
+            var repository = new UserRepository(context);
 
             // Act
-            await _userRepository.UpdateAsync(user);
+            var foundUser = await repository.GetByIdAsync(999); // Non-existent ID
 
             // Assert
-            _dbContextMock.Verify(m => m.SaveChangesAsync(default), Times.Once);
+            Assert.Null(foundUser);
+        }
+
+        [Fact]
+        public async Task UpdateAsync_Should_Update_User_In_Db()
+        {
+            // Arrange
+            var context = await GetInMemoryDbContextAsync();
+            var repository = new UserRepository(context);
+            var user = new User
+            {
+                Username = "testuser",
+                Email = "test@example.com",
+                PasswordHash = "hashedpassword",
+                PhoneNumber = "1234567890",
+                Address = "Test Address",
+                DateOfBirth = DateTime.Now.AddYears(-25),
+                IsActive = true,
+                CreatedDate = DateTime.Now,
+                ProfileImageUrl = "http://example.com/profile.jpg"
+            };
+
+            await repository.AddAsync(user);
+
+            // Act
+            user.Username = "updateduser";
+            await repository.UpdateAsync(user);
+
+            // Assert
+            var updatedUser = await context.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
+            Assert.NotNull(updatedUser);
+            Assert.Equal("updateduser", updatedUser.Username);
         }
     }
 }
