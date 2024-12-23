@@ -1,127 +1,141 @@
-using Moq;
+using Microsoft.EntityFrameworkCore;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Enums;
 using PetSoLive.Data;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using PetSoLive.Infrastructure.Repositories;
 using Xunit;
-using System.Linq.Expressions;
-using System.Threading;
 
-namespace PetSoLive.Infrastructure.Repositories.Tests
+namespace PetSoLive.Tests.Repositories
 {
-    public class AdoptionRequestRepositoryTests
+    public class AdoptionRequestRepositoryTests : IDisposable
     {
-        private readonly Mock<ApplicationDbContext> _dbContextMock;
-        private readonly AdoptionRequestRepository _adoptionRequestRepository;
+        private readonly AdoptionRequestRepository _repository;
+        private readonly ApplicationDbContext _context;
 
         public AdoptionRequestRepositoryTests()
         {
-            _dbContextMock = new Mock<ApplicationDbContext>();
-            _adoptionRequestRepository = new AdoptionRequestRepository(_dbContextMock.Object);
+            // Her test için yeni bir GUID tabanlı veritabanı ismi kullanarak in-memory veritabanı oluşturuluyor.
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Her test için benzersiz veritabanı adı
+                .Options;
+
+            _context = new ApplicationDbContext(options);
+            _repository = new AdoptionRequestRepository(_context);
+
+            // Veritabanını temizleyerek her testten önce başlatıyoruz.
+            _context.Database.EnsureCreated();
+        }
+
+        // Testler bitiminde veritabanını temizliyoruz.
+        public void Dispose()
+        {
+            _context.Database.EnsureDeleted();
         }
 
         [Fact]
-        public async Task GetAdoptionRequestsByPetIdAsync_ShouldReturnRequests_WhenPetIdIsValid()
+        public async Task GetAdoptionRequestsByPetIdAsync_ShouldReturnCorrectRequests()
         {
             // Arrange
-            int petId = 100;
+            var petId = 1;
+            var userId = 1;
             var adoptionRequests = new List<AdoptionRequest>
             {
-                new AdoptionRequest { Id = 1, PetId = petId, UserId = 200, Status = AdoptionStatus.Pending },
-                new AdoptionRequest { Id = 2, PetId = petId, UserId = 201, Status = AdoptionStatus.Approved }
+                new AdoptionRequest { Id = 1, PetId = petId, UserId = userId, Status = AdoptionStatus.Pending, RequestDate = DateTime.Now },
+                new AdoptionRequest { Id = 2, PetId = petId, UserId = userId, Status = AdoptionStatus.Approved, RequestDate = DateTime.Now }
             };
 
-            var mockSet = new Mock<DbSet<AdoptionRequest>>();
-            mockSet.Setup(m => m.Where(It.IsAny<Expression<Func<AdoptionRequest, bool>>>()))
-                   .Returns(adoptionRequests.AsQueryable());
-            _dbContextMock.Setup(m => m.AdoptionRequests).Returns(mockSet.Object);
+            // In-memory veritabanına veri ekliyoruz
+            _context.AdoptionRequests.AddRange(adoptionRequests);
+            await _context.SaveChangesAsync();
 
             // Act
-            var result = await _adoptionRequestRepository.GetAdoptionRequestsByPetIdAsync(petId);
+            var result = await _repository.GetAdoptionRequestsByPetIdAsync(petId);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(2, result.Count);
-            Assert.All(result, r => Assert.Equal(petId, r.PetId));
+            Assert.Equal(2, result.Count); // Beklenen 2 kayıt sayısını doğrula
         }
 
         [Fact]
-        public async Task GetPendingRequestsByPetIdAsync_ShouldReturnPendingRequests_WhenPetIdIsValid()
+        public async Task GetPendingRequestsByPetIdAsync_ShouldReturnOnlyPendingRequests()
         {
             // Arrange
-            int petId = 100;
+            var petId = 1;
+            var userId = 1;
             var adoptionRequests = new List<AdoptionRequest>
             {
-                new AdoptionRequest { Id = 1, PetId = petId, UserId = 200, Status = AdoptionStatus.Pending },
-                new AdoptionRequest { Id = 2, PetId = petId, UserId = 201, Status = AdoptionStatus.Approved }
+                new AdoptionRequest { Id = 1, PetId = petId, UserId = userId, Status = AdoptionStatus.Pending, RequestDate = DateTime.Now },
+                new AdoptionRequest { Id = 2, PetId = petId, UserId = userId, Status = AdoptionStatus.Approved, RequestDate = DateTime.Now }
             };
 
-            var mockSet = new Mock<DbSet<AdoptionRequest>>();
-            mockSet.Setup(m => m.Where(It.IsAny<Expression<Func<AdoptionRequest, bool>>>()))
-                   .Returns(adoptionRequests.Where(r => r.PetId == petId && r.Status == AdoptionStatus.Pending).AsQueryable());
-            _dbContextMock.Setup(m => m.AdoptionRequests).Returns(mockSet.Object);
+            // In-memory veritabanına veri ekliyoruz
+            _context.AdoptionRequests.AddRange(adoptionRequests);
+            await _context.SaveChangesAsync();
 
             // Act
-            var result = await _adoptionRequestRepository.GetPendingRequestsByPetIdAsync(petId);
+            var result = await _repository.GetPendingRequestsByPetIdAsync(petId);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Single(result);
+            Assert.Single(result); // Yalnızca bir adet "Pending" durumunda istek olmalı
             Assert.Equal(AdoptionStatus.Pending, result.First().Status);
         }
 
         [Fact]
-        public async Task GetByIdAsync_ShouldReturnAdoptionRequest_WhenIdIsValid()
+        public async Task UpdateAsync_ShouldUpdateRequestStatus()
         {
             // Arrange
-            int adoptionRequestId = 1;
-            var adoptionRequest = new AdoptionRequest
-            {
-                Id = adoptionRequestId,
-                PetId = 100,
-                UserId = 200,
-                Status = AdoptionStatus.Pending
-            };
-
-            var mockSet = new Mock<DbSet<AdoptionRequest>>();
-            mockSet.Setup(m => m.FirstOrDefaultAsync(It.IsAny<Expression<Func<AdoptionRequest, bool>>>(), It.IsAny<CancellationToken>()))
-                   .ReturnsAsync(adoptionRequest);
-            _dbContextMock.Setup(m => m.AdoptionRequests).Returns(mockSet.Object);
-
-            // Act
-            var result = await _adoptionRequestRepository.GetByIdAsync(adoptionRequestId);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(adoptionRequestId, result.Id);
-        }
-
-        [Fact]
-        public async Task UpdateAsync_ShouldUpdateAdoptionRequest_WhenValidRequestIsPassed()
-        {
-            // Arrange
+            var petId = 1;
+            var userId = 1;
             var adoptionRequest = new AdoptionRequest
             {
                 Id = 1,
-                PetId = 100,
-                UserId = 200,
-                Status = AdoptionStatus.Pending
+                PetId = petId,
+                UserId = userId,
+                Status = AdoptionStatus.Pending,
+                RequestDate = DateTime.Now
             };
 
-            var mockSet = new Mock<DbSet<AdoptionRequest>>();
-            _dbContextMock.Setup(m => m.AdoptionRequests).Returns(mockSet.Object);
-            _dbContextMock.Setup(m => m.SaveChangesAsync(default)).ReturnsAsync(1);
+            _context.AdoptionRequests.Add(adoptionRequest);
+            await _context.SaveChangesAsync();
 
             // Act
-            await _adoptionRequestRepository.UpdateAsync(adoptionRequest);
+            adoptionRequest.Status = AdoptionStatus.Approved;
+            await _repository.UpdateAsync(adoptionRequest);
 
             // Assert
-            mockSet.Verify(m => m.Update(It.IsAny<AdoptionRequest>()), Times.Once);
-            _dbContextMock.Verify(m => m.SaveChangesAsync(default), Times.Once);
+            var updatedRequest = await _context.AdoptionRequests.FindAsync(1);
+            Assert.Equal(AdoptionStatus.Approved, updatedRequest.Status);
+        }
+
+        [Fact]
+        public async Task GetByIdAsync_ShouldReturnCorrectRequest()
+        {
+            // Arrange
+            var petId = 1;
+            var userId = 1;
+            var adoptionRequest = new AdoptionRequest
+            {
+                Id = 1,
+                PetId = petId,
+                UserId = userId,
+                Status = AdoptionStatus.Pending,
+                RequestDate = DateTime.Now
+            };
+
+            // Veritabanına ekliyoruz
+            _context.AdoptionRequests.Add(adoptionRequest);
+            await _context.SaveChangesAsync();
+
+            // Veritabanında gerçekten kayıt var mı kontrol edelim
+            var dbRequest = await _context.AdoptionRequests.FindAsync(1);
+            Assert.NotNull(dbRequest); // Veritabanında kayıt var mı?
+
+            // Act
+            var result = await _repository.GetByIdAsync(1);
+
+            // Debug: Sonuç null mı kontrol et
+            Assert.NotNull(result); // Yine de metodun doğru sonuç döndürüp döndürmediğini kontrol et
+            Assert.Equal(adoptionRequest.Id, result.Id);
+            Assert.Equal(AdoptionStatus.Pending, result.Status);
         }
     }
 }
