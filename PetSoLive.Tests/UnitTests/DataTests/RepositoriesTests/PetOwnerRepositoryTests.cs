@@ -1,121 +1,144 @@
-using Moq;
-using PetSoLive.Core.Entities;
-using PetSoLive.Core.Interfaces;
-using PetSoLive.Data;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore;
+using PetSoLive.Core.Entities;
+using PetSoLive.Data;
 using Xunit;
-using System.Linq.Expressions;
 
-namespace PetSoLive.Infrastructure.Repositories.Tests
+public class PetOwnerRepositoryTests
 {
-    public class PetOwnerRepositoryTests
+    private ApplicationDbContext CreateInMemoryDbContext()
     {
-        private readonly Mock<ApplicationDbContext> _dbContextMock;
-        private readonly PetOwnerRepository _petOwnerRepository;
+        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .Options;
+        return new ApplicationDbContext(options);
+    }
 
-        public PetOwnerRepositoryTests()
+    [Fact]
+    public async Task AddAsync_Should_Add_PetOwner_To_Database()
+    {
+        // Arrange
+        var context = CreateInMemoryDbContext();
+        var repository = new PetOwnerRepository(context);
+        var petOwner = new PetOwner
         {
-            _dbContextMock = new Mock<ApplicationDbContext>();
-            _petOwnerRepository = new PetOwnerRepository(_dbContextMock.Object);
-        }
+            PetId = 1,
+            UserId = 1,
+            OwnershipDate = DateTime.UtcNow
+        };
 
-        [Fact]
-        public async Task AddAsync_ShouldAddPetOwner_WhenPetOwnerIsValid()
+        // Act
+        await repository.AddAsync(petOwner);
+        await repository.SaveChangesAsync();
+        var petOwnersInDb = await context.PetOwners.ToListAsync();
+
+        // Assert
+        Assert.Single(petOwnersInDb);
+        Assert.Equal(1, petOwnersInDb[0].PetId);
+        Assert.Equal(1, petOwnersInDb[0].UserId);
+    }
+
+    [Fact]
+    public async Task SaveChangesAsync_Should_Persist_Changes()
+    {
+        // Arrange
+        var context = CreateInMemoryDbContext();
+        var repository = new PetOwnerRepository(context);
+        var petOwner = new PetOwner
         {
-            // Arrange
-            var petOwner = new PetOwner
-            {
-                PetId = 1,
-                UserId = 2,
-                OwnershipDate = DateTime.Now
-            };
+            PetId = 2,
+            UserId = 3,
+            OwnershipDate = DateTime.UtcNow
+        };
+        await repository.AddAsync(petOwner);
 
-            var mockSet = new Mock<DbSet<PetOwner>>();
-            _dbContextMock.Setup(m => m.PetOwners).Returns(mockSet.Object);
+        // Act
+        await repository.SaveChangesAsync();
+        var petOwnersInDb = await context.PetOwners.ToListAsync();
 
-            // Act
-            await _petOwnerRepository.AddAsync(petOwner);
+        // Assert
+        Assert.Single(petOwnersInDb);
+        Assert.Equal(2, petOwnersInDb[0].PetId);
+        Assert.Equal(3, petOwnersInDb[0].UserId);
+    }
 
-            // Assert
-            mockSet.Verify(m => m.AddAsync(It.IsAny<PetOwner>(), default), Times.Once);
-        }
+    [Fact]
+public async Task GetPetOwnerByPetIdAsync_Should_Return_Correct_PetOwner()
+{
+    // Arrange
+    var context = CreateInMemoryDbContext();
+    var repository = new PetOwnerRepository(context);
 
-        [Fact]
-        public async Task SaveChangesAsync_ShouldSaveChanges_WhenCalled()
-        {
-            // Arrange
-            var petOwner = new PetOwner
-            {
-                PetId = 1,
-                UserId = 2,
-                OwnershipDate = DateTime.Now
-            };
+    // Create and add a User with required properties
+    var user = new User
+    {
+        Id = 1,
+        Username = "TestUser",
+        Email = "testuser@example.com",
+        PasswordHash = "hashedpassword",  // Add missing required properties
+        PhoneNumber = "1234567890",       // Add missing required properties
+        Address = "Test Address",         // Add missing required properties
+        IsActive = true,
+        CreatedDate = DateTime.UtcNow,
+        ProfileImageUrl = "http://example.com/profile.jpg" // Add missing required properties
+    };
+    context.Users.Add(user);
+    await context.SaveChangesAsync(); // Save the user to the database
 
-            var mockSet = new Mock<DbSet<PetOwner>>();
-            _dbContextMock.Setup(m => m.PetOwners).Returns(mockSet.Object);
-            _dbContextMock.Setup(m => m.SaveChangesAsync(default)).ReturnsAsync(1);
+    // Create and add a Pet with required properties
+    var pet = new Pet
+    {
+        Id = 1,
+        Name = "Buddy",
+        Species = "Dog",
+        Breed = "Golden Retriever",
+        Age = 3,
+        Gender = "Male",
+        Weight = 30.5,
+        Color = "Golden", // Add missing required property
+        Description = "Friendly dog", // Add missing required property
+        DateOfBirth = DateTime.UtcNow.AddYears(-3),
+        VaccinationStatus = "Up-to-date",
+        MicrochipId = "12345",
+        IsNeutered = true,
+        ImageUrl = "http://example.com/pet.jpg"
+    };
+    context.Pets.Add(pet);
+    await context.SaveChangesAsync(); // Save the pet to the database
 
-            // Act
-            await _petOwnerRepository.SaveChangesAsync();
+    // Create and add a PetOwner
+    var petOwner = new PetOwner
+    {
+        PetId = 1,
+        UserId = 1,
+        OwnershipDate = DateTime.UtcNow
+    };
+    context.PetOwners.Add(petOwner);
+    await context.SaveChangesAsync(); // Save the petOwner to the database
 
-            // Assert
-            _dbContextMock.Verify(m => m.SaveChangesAsync(default), Times.Once);
-        }
+    // Act
+    var result = await repository.GetPetOwnerByPetIdAsync(1);
 
-        [Fact]
-        public async Task GetPetOwnerByPetIdAsync_ShouldReturnPetOwner_WhenPetIdIsValid()
-        {
-            // Arrange
-            int petId = 1;
-            var petOwner = new PetOwner
-            {
-                PetId = petId,
-                UserId = 2,
-                OwnershipDate = DateTime.Now,
-                Pet = new Pet { Id = petId, Name = "Buddy" },
-                User = new User { Id = 2, Username = "john_doe" }
-            };
+    // Assert
+    Assert.NotNull(result);
+    Assert.Equal(1, result.PetId);
+    Assert.Equal(1, result.UserId);
+}
 
-            var petOwners = new List<PetOwner> { petOwner }.AsQueryable();
-            var mockSet = new Mock<DbSet<PetOwner>>();
 
-            // Mock the FirstOrDefaultAsync to return the petOwner
-            mockSet.Setup(m => m.FirstOrDefaultAsync(It.IsAny<Expression<Func<PetOwner, bool>>>(), default))
-                   .ReturnsAsync(petOwner);
 
-            // Ensure the PetOwners DbSet is set up correctly
-            _dbContextMock.Setup(m => m.PetOwners).Returns(mockSet.Object);
+    [Fact]
+    public async Task GetPetOwnerByPetIdAsync_Should_Return_Null_If_Not_Found()
+    {
+        // Arrange
+        var context = CreateInMemoryDbContext();
+        var repository = new PetOwnerRepository(context);
 
-            // Act
-            var result = await _petOwnerRepository.GetPetOwnerByPetIdAsync(petId);
+        // Act
+        var result = await repository.GetPetOwnerByPetIdAsync(99);
 
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(petId, result.PetId);
-        }
-
-        [Fact]
-        public async Task GetPetOwnerByPetIdAsync_ShouldReturnNull_WhenPetIdIsInvalid()
-        {
-            // Arrange
-            int petId = 999;
-            var mockSet = new Mock<DbSet<PetOwner>>();
-
-            // Mock FirstOrDefaultAsync to return null when the petId is invalid
-            mockSet.Setup(m => m.FirstOrDefaultAsync(It.IsAny<Expression<Func<PetOwner, bool>>>(), default))
-                   .ReturnsAsync((PetOwner)null);
-
-            _dbContextMock.Setup(m => m.PetOwners).Returns(mockSet.Object);
-
-            // Act
-            var result = await _petOwnerRepository.GetPetOwnerByPetIdAsync(petId);
-
-            // Assert
-            Assert.Null(result);
-        }
+        // Assert
+        Assert.Null(result);
     }
 }
