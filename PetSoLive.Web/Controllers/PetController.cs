@@ -12,7 +12,12 @@ namespace PetSoLive.Web.Controllers
         private readonly IAdoptionRequestRepository _adoptionRequestRepository;
         private readonly IEmailService _emailService;
 
-        public PetController(IPetService petService, IUserService userService, IAdoptionService adoptionService, IAdoptionRequestRepository adoptionRequestRepository, IEmailService emailService)
+        public PetController(
+            IPetService petService, 
+            IUserService userService, 
+            IAdoptionService adoptionService, 
+            IAdoptionRequestRepository adoptionRequestRepository, 
+            IEmailService emailService)
         {
             _petService = petService;
             _userService = userService;
@@ -21,12 +26,26 @@ namespace PetSoLive.Web.Controllers
             _emailService = emailService;
         }
 
-        public IActionResult Create()
+        private async Task<User> GetLoggedInUserAsync()
+        {
+            var username = HttpContext.Session.GetString("Username");
+            if (username == null) return null;
+            return await _userService.GetUserByUsernameAsync(username);
+        }
+
+        private IActionResult RedirectToLoginIfNotLoggedIn()
         {
             if (HttpContext.Session.GetString("Username") == null)
             {
                 return RedirectToAction("Login", "Account");
             }
+            return null;
+        }
+
+        public IActionResult Create()
+        {
+            var loginRedirect = RedirectToLoginIfNotLoggedIn();
+            if (loginRedirect != null) return loginRedirect;
 
             return View();
         }
@@ -35,13 +54,10 @@ namespace PetSoLive.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Pet pet)
         {
-            var username = HttpContext.Session.GetString("Username");
-            if (username == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
+            var loginRedirect = RedirectToLoginIfNotLoggedIn();
+            if (loginRedirect != null) return loginRedirect;
 
-            var user = await _userService.GetUserByUsernameAsync(username);
+            var user = await GetLoggedInUserAsync();
 
             if (pet.IsNeutered == null)
             {
@@ -72,33 +88,21 @@ namespace PetSoLive.Web.Controllers
             var pet = await _petService.GetPetByIdAsync(id);
             if (pet == null)
             {
-                return NotFound();
+                ViewBag.ErrorMessage = "Pet not found.";
+                return View("Error");
             }
 
             var adoptionRequests = await _adoptionRequestRepository.GetAdoptionRequestsByPetIdAsync(id);
             var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
 
-            var username = HttpContext.Session.GetString("Username");
-            var isUserLoggedIn = username != null;
-            var isOwner = false;
-            bool hasAdoptionRequest = false;
+            var user = await GetLoggedInUserAsync();
+            var isUserLoggedIn = user != null;
+            var isOwner = user != null && await _petService.IsUserOwnerOfPetAsync(id, user.Id);
+            var hasAdoptionRequest = user != null && await _adoptionService.GetAdoptionRequestByUserAndPetAsync(user.Id, id) != null;
 
-            if (isUserLoggedIn)
-            {
-                var user = await _userService.GetUserByUsernameAsync(username);
-
-                isOwner = await _petService.IsUserOwnerOfPetAsync(id, user.Id);
-                hasAdoptionRequest = await _adoptionService.GetAdoptionRequestByUserAndPetAsync(user.Id, id) != null;
-            }
-
-            if (adoption != null)
-            {
-                ViewBag.AdoptionStatus = "This pet has already been adopted.";
-            }
-            else
-            {
-                ViewBag.AdoptionStatus = "This pet is available for adoption.";
-            }
+            ViewBag.AdoptionStatus = adoption != null 
+                ? "This pet has already been adopted." 
+                : "This pet is available for adoption.";
 
             ViewBag.IsUserLoggedIn = isUserLoggedIn;
             ViewBag.Adoption = adoption;
@@ -111,17 +115,13 @@ namespace PetSoLive.Web.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var username = HttpContext.Session.GetString("Username");
-            if (username == null)
-            {
-                ViewBag.ErrorMessage = "You must be logged in to edit a pet.";
-                return View("Error");
-            }
+            var loginRedirect = RedirectToLoginIfNotLoggedIn();
+            if (loginRedirect != null) return loginRedirect;
 
             var pet = await _petService.GetPetByIdAsync(id);
             if (pet == null)
             {
-                ViewBag.ErrorMessage = "The pet you're trying to edit does not exist.";
+                ViewBag.ErrorMessage = "Pet not found.";
                 return View("Error");
             }
 
@@ -132,7 +132,7 @@ namespace PetSoLive.Web.Controllers
                 return View("Error");
             }
 
-            var user = await _userService.GetUserByUsernameAsync(username);
+            var user = await GetLoggedInUserAsync();
             if (!await _petService.IsUserOwnerOfPetAsync(id, user.Id))
             {
                 ViewBag.ErrorMessage = "You are not authorized to edit this pet.";
@@ -146,19 +146,14 @@ namespace PetSoLive.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Pet updatedPet)
         {
-            var username = HttpContext.Session.GetString("Username");
-            if (username == null)
-            {
-                ViewBag.ErrorMessage = "You must be logged in to edit a pet.";
-                return View("Error");
-            }
+            var loginRedirect = RedirectToLoginIfNotLoggedIn();
+            if (loginRedirect != null) return loginRedirect;
 
-            var user = await _userService.GetUserByUsernameAsync(username);
+            var user = await GetLoggedInUserAsync();
             var pet = await _petService.GetPetByIdAsync(id);
-
             if (pet == null)
             {
-                ViewBag.ErrorMessage = "The pet you're trying to edit does not exist.";
+                ViewBag.ErrorMessage = "Pet not found.";
                 return View("Error");
             }
 
@@ -186,17 +181,13 @@ namespace PetSoLive.Web.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var username = HttpContext.Session.GetString("Username");
-            if (username == null)
-            {
-                ViewBag.ErrorMessage = "You must be logged in to delete a pet.";
-                return View("Error");
-            }
+            var loginRedirect = RedirectToLoginIfNotLoggedIn();
+            if (loginRedirect != null) return loginRedirect;
 
             var pet = await _petService.GetPetByIdAsync(id);
             if (pet == null)
             {
-                ViewBag.ErrorMessage = "The pet you're trying to delete does not exist.";
+                ViewBag.ErrorMessage = "Pet not found.";
                 return View("Error");
             }
 
@@ -207,7 +198,7 @@ namespace PetSoLive.Web.Controllers
                 return View("Error");
             }
 
-            var user = await _userService.GetUserByUsernameAsync(username);
+            var user = await GetLoggedInUserAsync();
             if (!await _petService.IsUserOwnerOfPetAsync(id, user.Id))
             {
                 ViewBag.ErrorMessage = "You are not authorized to delete this pet.";
@@ -221,23 +212,18 @@ namespace PetSoLive.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var username = HttpContext.Session.GetString("Username");
-            if (username == null)
-            {
-                ViewBag.ErrorMessage = "You must be logged in to delete a pet.";
-                return View("Error");
-            }
+            var loginRedirect = RedirectToLoginIfNotLoggedIn();
+            if (loginRedirect != null) return loginRedirect;
 
-            var user = await _userService.GetUserByUsernameAsync(username);
+            var user = await GetLoggedInUserAsync();
             var pet = await _petService.GetPetByIdAsync(id);
-            var adoptionRequests = await _adoptionRequestRepository.GetAdoptionRequestsByPetIdAsync(id);
-
             if (pet == null)
             {
-                ViewBag.ErrorMessage = "The pet you're trying to delete does not exist.";
+                ViewBag.ErrorMessage = "Pet not found.";
                 return View("Error");
             }
 
+            var adoptionRequests = await _adoptionRequestRepository.GetAdoptionRequestsByPetIdAsync(id);
             var adoption = await _adoptionService.GetAdoptionByPetIdAsync(id);
             if (adoption != null)
             {

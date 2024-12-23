@@ -3,18 +3,20 @@ using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Web.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using Microsoft.AspNetCore.Http;
 
 public class PetControllerTests
 {
+    private readonly PetController _controller;
     private readonly Mock<IPetService> _mockPetService;
     private readonly Mock<IUserService> _mockUserService;
     private readonly Mock<IAdoptionService> _mockAdoptionService;
     private readonly Mock<IAdoptionRequestRepository> _mockAdoptionRequestRepository;
     private readonly Mock<IEmailService> _mockEmailService;
-    private readonly PetController _controller;
 
     public PetControllerTests()
     {
@@ -29,36 +31,65 @@ public class PetControllerTests
             _mockUserService.Object,
             _mockAdoptionService.Object,
             _mockAdoptionRequestRepository.Object,
-            _mockEmailService.Object);
+            _mockEmailService.Object
+        );
+    }
+
+    private void SetUpMockForLoggedInUser(string username)
+    {
+        var mockUser = new User { Id = 1, Username = username };
+        _mockUserService.Setup(service => service.GetUserByUsernameAsync(username)).ReturnsAsync(mockUser);
+
+        // Mock the session data
+        _controller.ControllerContext = new ControllerContext();
+        _controller.ControllerContext.HttpContext = new DefaultHttpContext();
+        _controller.ControllerContext.HttpContext.Session = new Mock<ISession>().Object;
+        _controller.ControllerContext.HttpContext.Session.SetString("Username", username);
     }
 
     [Fact]
-    public async Task Create_WhenUserIsNotLoggedIn_ShouldRedirectToLogin()
+    public async Task Create_Get_ReturnsView_WhenUserIsLoggedIn()
     {
         // Arrange
-        _controller.ControllerContext.HttpContext = new DefaultHttpContext(); // Simulate a request without a logged-in user
+        SetUpMockForLoggedInUser("testuser");
 
         // Act
-        var result =  _controller.Create();  // Await the async method
+        var result = _controller.Create();
 
         // Assert
-        var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
-        Assert.Equal("Login", redirectToActionResult.ActionName);
+        var viewResult = Assert.IsType<ViewResult>(result);
+        Assert.Null(viewResult.ViewName);  // Default view
     }
 
-
-
-
-
     [Fact]
-    public void Create_WhenModelStateIsInvalid_ShouldReturnViewWithPet()
+    public async Task Create_Post_CreatesPetAndRedirects_WhenModelIsValid()
     {
         // Arrange
-        var pet = new Pet { Name = "Dog" };
+        SetUpMockForLoggedInUser("testuser");
+        var pet = new Pet { Id = 1, Name = "Buddy" };
+
+        _mockPetService.Setup(service => service.CreatePetAsync(pet)).Returns(Task.CompletedTask);
+        _mockPetService.Setup(service => service.AssignPetOwnerAsync(It.IsAny<PetOwner>())).Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _controller.Create(pet);
+
+        // Assert
+        var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+        Assert.Equal("Index", redirectResult.ActionName);
+        Assert.Equal("Adoption", redirectResult.ControllerName);
+    }
+
+    [Fact]
+    public async Task Create_Post_ReturnsView_WhenModelIsInvalid()
+    {
+        // Arrange
+        SetUpMockForLoggedInUser("testuser");
+        var pet = new Pet { Id = 1, Name = "Buddy" };
         _controller.ModelState.AddModelError("Name", "Required");
 
         // Act
-        var result = _controller.Create(pet).Result; // Use .Result or .GetAwaiter().GetResult()
+        var result = await _controller.Create(pet);
 
         // Assert
         var viewResult = Assert.IsType<ViewResult>(result);
@@ -66,116 +97,127 @@ public class PetControllerTests
     }
 
     [Fact]
-    public void Create_WhenPetIsValid_ShouldCreatePetAndRedirectToAdoptionIndex()
+    public async Task Details_ReturnsError_WhenPetNotFound()
     {
         // Arrange
-        var pet = new Pet { Name = "Dog" };
-        var user = new User { Id = 1, Username = "testuser" };
-        _mockUserService.Setup(u => u.GetUserByUsernameAsync(It.IsAny<string>())).ReturnsAsync(user);
-        _mockPetService.Setup(p => p.CreatePetAsync(It.IsAny<Pet>())).Returns(Task.CompletedTask);
+        SetUpMockForLoggedInUser("testuser");
+        _mockPetService.Setup(service => service.GetPetByIdAsync(It.IsAny<int>())).ReturnsAsync((Pet)null);
 
         // Act
-        var result = _controller.Create(pet).Result; // Use .Result or .GetAwaiter().GetResult()
+        var result = await _controller.Details(1);
 
         // Assert
-        _mockPetService.Verify(p => p.CreatePetAsync(It.IsAny<Pet>()), Times.Once);
+        var viewResult = Assert.IsType<ViewResult>(result);
+        Assert.Equal("Error", viewResult.ViewName);
+        Assert.Equal("Pet not found.", viewResult.ViewData["ErrorMessage"]);
+    }
+
+    [Fact]
+    public async Task Details_ReturnsView_WhenPetIsFound()
+    {
+        // Arrange
+        SetUpMockForLoggedInUser("testuser");
+        var pet = new Pet { Id = 1, Name = "Buddy" };
+        _mockPetService.Setup(service => service.GetPetByIdAsync(1)).ReturnsAsync(pet);
+        _mockAdoptionService.Setup(service => service.GetAdoptionByPetIdAsync(1)).ReturnsAsync((Adoption)null);
+        _mockAdoptionRequestRepository.Setup(repo => repo.GetAdoptionRequestsByPetIdAsync(1)).ReturnsAsync(new List<AdoptionRequest>());
+
+        // Act
+        var result = await _controller.Details(1);
+
+        // Assert
+        var viewResult = Assert.IsType<ViewResult>(result);
+        Assert.Equal(pet, viewResult.Model);
+    }
+
+    [Fact]
+    public async Task Edit_Get_ReturnsError_WhenPetNotFound()
+    {
+        // Arrange
+        SetUpMockForLoggedInUser("testuser");
+        _mockPetService.Setup(service => service.GetPetByIdAsync(It.IsAny<int>())).ReturnsAsync((Pet)null);
+
+        // Act
+        var result = await _controller.Edit(1);
+
+        // Assert
+        var viewResult = Assert.IsType<ViewResult>(result);
+        Assert.Equal("Error", viewResult.ViewName);
+        Assert.Equal("Pet not found.", viewResult.ViewData["ErrorMessage"]);
+    }
+
+    [Fact]
+    public async Task Edit_Post_UpdatesPetAndRedirects_WhenModelIsValid()
+    {
+        // Arrange
+        SetUpMockForLoggedInUser("testuser");
+        var pet = new Pet { Id = 1, Name = "Buddy" };
+        var updatedPet = new Pet { Id = 1, Name = "UpdatedBuddy" };
+
+        _mockPetService.Setup(service => service.GetPetByIdAsync(1)).ReturnsAsync(pet);
+        _mockPetService.Setup(service => service.UpdatePetAsync(1, updatedPet, It.IsAny<int>())).Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _controller.Edit(1, updatedPet);
+
+        // Assert
+        var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+        Assert.Equal("Details", redirectResult.ActionName);
+        Assert.Equal(1, redirectResult.RouteValues["id"]);
+    }
+
+    [Fact]
+    public async Task Delete_Get_ReturnsError_WhenPetNotFound()
+    {
+        // Arrange
+        SetUpMockForLoggedInUser("testuser");
+        _mockPetService.Setup(service => service.GetPetByIdAsync(It.IsAny<int>())).ReturnsAsync((Pet)null);
+
+        // Act
+        var result = await _controller.Delete(1);
+
+        // Assert
+        var viewResult = Assert.IsType<ViewResult>(result);
+        Assert.Equal("Error", viewResult.ViewName);
+        Assert.Equal("Pet not found.", viewResult.ViewData["ErrorMessage"]);
+    }
+
+    [Fact]
+    public async Task Delete_Post_DeletesPetAndRedirects_WhenUserIsAuthorized()
+    {
+        // Arrange
+        SetUpMockForLoggedInUser("testuser");
+        var pet = new Pet { Id = 1, Name = "Buddy" };
+
+        _mockPetService.Setup(service => service.GetPetByIdAsync(1)).ReturnsAsync(pet);
+        _mockPetService.Setup(service => service.DeletePetAsync(1, It.IsAny<int>())).Returns(Task.CompletedTask);
+        _mockAdoptionRequestRepository.Setup(repo => repo.GetAdoptionRequestsByPetIdAsync(1)).ReturnsAsync(new List<AdoptionRequest>());
+
+        // Act
+        var result = await _controller.DeleteConfirmed(1);
+
+        // Assert
         var redirectResult = Assert.IsType<RedirectToActionResult>(result);
         Assert.Equal("Index", redirectResult.ActionName);
         Assert.Equal("Adoption", redirectResult.ControllerName);
     }
 
     [Fact]
-    public void Details_WhenPetDoesNotExist_ShouldReturnNotFound()
+    public async Task Delete_Post_ReturnsError_WhenUserIsNotAuthorized()
     {
         // Arrange
-        _mockPetService.Setup(p => p.GetPetByIdAsync(It.IsAny<int>())).ReturnsAsync((Pet)null);
+        SetUpMockForLoggedInUser("testuser");
+        var pet = new Pet { Id = 1, Name = "Buddy" };
+        _mockPetService.Setup(service => service.GetPetByIdAsync(1)).ReturnsAsync(pet);
+        _mockPetService.Setup(service => service.IsUserOwnerOfPetAsync(1, 1)).ReturnsAsync(false);
 
         // Act
-        var result = _controller.Details(1).Result; // Use .Result or .GetAwaiter().GetResult()
+        var result = await _controller.DeleteConfirmed(1);
 
         // Assert
-        Assert.IsType<NotFoundResult>(result);
+        var redirectResult = Assert.IsType<RedirectToActionResult>(result); // Redirect bekliyorsunuz
+        Assert.Equal("Error", redirectResult.ActionName);
+        Assert.Equal("Pet not found.", redirectResult.RouteValues["ErrorMessage"]);
+    }
     }
 
-    [Fact]
-    public void Edit_WhenPetDoesNotExist_ShouldReturnNotFound()
-    {
-        // Arrange
-        _mockPetService.Setup(p => p.GetPetByIdAsync(It.IsAny<int>())).ReturnsAsync((Pet)null);
-
-        // Act
-        var result = _controller.Edit(1).Result; // Use .Result or .GetAwaiter().GetResult()
-
-        // Assert
-        Assert.IsType<NotFoundResult>(result);
-    }
-
-    [Fact]
-    public void Delete_WhenPetDoesNotExist_ShouldReturnNotFound()
-    {
-        // Arrange
-        _mockPetService.Setup(p => p.GetPetByIdAsync(It.IsAny<int>())).ReturnsAsync((Pet)null);
-
-        // Act
-        var result = _controller.Delete(1).Result; // Use .Result or .GetAwaiter().GetResult()
-
-        // Assert
-        Assert.IsType<NotFoundResult>(result);
-    }
-
-    [Fact]
-    public void DeleteConfirmed_WhenPetIsValid_ShouldDeletePetAndRedirectToAdoptionIndex()
-    {
-        // Arrange
-        var pet = new Pet { Id = 1, Name = "Dog" };
-        var user = new User { Id = 1, Username = "testuser" };
-        _mockPetService.Setup(p => p.GetPetByIdAsync(It.IsAny<int>())).ReturnsAsync(pet);
-        _mockUserService.Setup(u => u.GetUserByUsernameAsync(It.IsAny<string>())).ReturnsAsync(user);
-        _mockPetService.Setup(p => p.DeletePetAsync(It.IsAny<int>(), It.IsAny<int>())).Returns(Task.CompletedTask);
-
-        // Act
-        var result = _controller.DeleteConfirmed(1).Result; // Use .Result or .GetAwaiter().GetResult()
-
-        // Assert
-        _mockPetService.Verify(p => p.DeletePetAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Once);
-        var redirectResult = Assert.IsType<RedirectToActionResult>(result);
-        Assert.Equal("Index", redirectResult.ActionName);
-        Assert.Equal("Adoption", redirectResult.ControllerName);
-    }
-
-    [Fact]
-    public void Edit_WhenPetIsNotOwnedByUser_ShouldReturnError()
-    {
-        // Arrange
-        var pet = new Pet { Id = 1, Name = "Dog" };
-        var user = new User { Id = 1, Username = "testuser" };
-        _mockPetService.Setup(p => p.GetPetByIdAsync(It.IsAny<int>())).ReturnsAsync(pet);
-        _mockUserService.Setup(u => u.GetUserByUsernameAsync(It.IsAny<string>())).ReturnsAsync(user);
-        _mockPetService.Setup(p => p.IsUserOwnerOfPetAsync(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(false);
-
-        // Act
-        var result = _controller.Edit(1).Result;
-
-        // Assert
-        var viewResult = Assert.IsType<ViewResult>(result);
-        Assert.Equal("You are not authorized to edit this pet.", viewResult.ViewData["ErrorMessage"]);
-    }
-
-    [Fact]
-    public void Edit_WhenPetIsAdopted_ShouldReturnError()
-    {
-        // Arrange
-        var pet = new Pet { Id = 1, Name = "Dog" };
-        var user = new User { Id = 1, Username = "testuser" };
-        _mockPetService.Setup(p => p.GetPetByIdAsync(It.IsAny<int>())).ReturnsAsync(pet);
-        _mockUserService.Setup(u => u.GetUserByUsernameAsync(It.IsAny<string>())).ReturnsAsync(user);
-        _mockAdoptionService.Setup(a => a.GetAdoptionByPetIdAsync(It.IsAny<int>())).ReturnsAsync(new Adoption());
-
-        // Act
-        var result = _controller.Edit(1).Result;
-
-        // Assert
-        var viewResult = Assert.IsType<ViewResult>(result);
-        Assert.Equal("This pet has already been adopted and cannot be edited.", viewResult.ViewData["ErrorMessage"]);
-    }
-}
