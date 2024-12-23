@@ -22,7 +22,8 @@ namespace PetSoLive.Infrastructure.Repositories
         {
             return await _context.AdoptionRequests
                 .Where(ar => ar.PetId == petId)
-                .Include(ar => ar.User)
+                .Include(ar => ar.User)  // User ilişkisi dahil edildi
+                .Include(ar => ar.Pet)   // Pet ilişkisi dahil edildi
                 .ToListAsync();
         }
 
@@ -36,7 +37,8 @@ namespace PetSoLive.Infrastructure.Repositories
         public async Task<AdoptionRequest> GetByIdAsync(int adoptionRequestId)
         {
             return await _context.AdoptionRequests
-                .Include(r => r.Pet)
+                .Include(r => r.Pet)  // Pet ilişkisini dahil et
+                .Include(r => r.User) // User ilişkisini dahil et
                 .FirstOrDefaultAsync(r => r.Id == adoptionRequestId);
         }
 
