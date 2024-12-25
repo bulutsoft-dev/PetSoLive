@@ -128,6 +128,11 @@ public class AdoptionController : Controller
     public async Task SendAdoptionRequestNotificationAsync(AdoptionRequest adoptionRequest)
     {
         var petOwner = await _petOwnerService.GetPetOwnerByPetIdAsync(adoptionRequest.PetId);
+        if (petOwner == null)
+        {
+            return;
+        }
+        
         var petOwnerUser = await _userService.GetUserByIdAsync(petOwner.UserId);
 
         var user = adoptionRequest.User;
@@ -160,7 +165,7 @@ public class AdoptionController : Controller
         var pet = await _petService.GetPetByIdAsync(petId);
         var petOwner = pet.PetOwners.FirstOrDefault();
 
-        if (petOwner?.UserId.ToString() != User.Identity.Name)
+        if (petOwner?.UserId.ToString() != User?.Identity?.Name)
         {
             return Unauthorized();
         }
@@ -175,6 +180,7 @@ public class AdoptionController : Controller
         }
 
         var pendingRequests = await _adoptionRequestRepository.GetPendingRequestsByPetIdAsync(petId);
+        if (pendingRequests != null ) {
         foreach (var request in pendingRequests)
         {
             if (request.Id != adoptionRequestId)
@@ -188,6 +194,7 @@ public class AdoptionController : Controller
                     await SendRejectionEmailAsync(rejectedUser, pet);
                 }
             }
+        }
         }
 
         var adoption = new Adoption
