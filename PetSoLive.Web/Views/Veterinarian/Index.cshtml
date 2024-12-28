@@ -21,12 +21,18 @@ ViewData["Title"] = "Veterinarians List";
     @foreach (var veterinarian in Model)
     {
     <tr>
-        <td>@veterinarian.User?.Username</td> <!-- Assuming there's a Name property in User entity -->
+        <!-- Displaying the username -->
+        <td>@veterinarian.User?.Username</td>
         <td>@veterinarian.Qualifications</td>
         <td>@veterinarian.ClinicAddress</td>
         <td>@veterinarian.ClinicPhoneNumber</td>
         <td>@veterinarian.Status.ToString()</td>
         <td>
+            @{
+            var username = Context.Session.GetString("Username");
+            }
+            @if (!string.IsNullOrEmpty(username))
+            {
             @if (veterinarian.Status == PetSoLive.Core.Enums.VeterinarianStatus.Pending)
             {
             <a href="@Url.Action("Approve", "Veterinarian", new { veterinarianId = veterinarian.Id })" class="btn btn-success">Approve</a>
@@ -36,6 +42,13 @@ ViewData["Title"] = "Veterinarians List";
             {
             <span class="badge bg-secondary">@veterinarian.Status.ToString()</span>
             }
+            }
+            else
+            {
+            <span class="badge bg-warning">Login to manage approvals</span>
+            }
+
+
         </td>
     </tr>
     }

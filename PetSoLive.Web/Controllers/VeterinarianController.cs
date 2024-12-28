@@ -71,7 +71,7 @@ namespace PetSoLive.Web.Controllers
             if (ModelState.IsValid)
             {
                 // Register veterinarian with Pending status
-                await _veterinarianService.RegisterVeterinarianAsync(userId, qualifications, clinicAddress, clinicPhoneNumber);
+                await _veterinarianService.RegisterVeterinarianAsync(user.Id, qualifications, clinicAddress, clinicPhoneNumber);
                 return RedirectToAction(nameof(Index)); // Redirect to list of veterinarians after registering
             }
             return View(); // Return the form in case of validation failure
