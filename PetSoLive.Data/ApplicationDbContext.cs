@@ -18,6 +18,10 @@ namespace PetSoLive.Data
         public DbSet<PetOwner> PetOwners { get; set; }
         public DbSet<AdoptionRequest> AdoptionRequests { get; set; }
 
+        // Yeni eklemeler
+        public DbSet<LostPetAd> LostPetAds { get; set; }
+        public DbSet<HelpRequest> HelpRequests { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -54,6 +58,20 @@ namespace PetSoLive.Data
                 .HasOne(ar => ar.User)
                 .WithMany(u => u.AdoptionRequests)
                 .HasForeignKey(ar => ar.UserId);
+
+            // Yeni ilişkiler
+
+            // Kayıp Hayvan İlanı İlişkisi
+            modelBuilder.Entity<LostPetAd>()
+                .HasOne(l => l.User)
+                .WithMany()
+                .HasForeignKey(l => l.UserId);
+
+            // Yardım Duyurusu İlişkisi
+            modelBuilder.Entity<HelpRequest>()
+                .HasOne(h => h.User)
+                .WithMany()
+                .HasForeignKey(h => h.UserId);
 
             modelBuilder.Entity<PetOwner>().ToTable("PetOwners");
             modelBuilder.Entity<Adoption>().ToTable("Adoptions");

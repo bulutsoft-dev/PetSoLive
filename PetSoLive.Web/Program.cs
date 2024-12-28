@@ -67,6 +67,7 @@ builder.Services.AddScoped<ILostPetAdService, LostPetAdService>();
 builder.Services.AddScoped<IHelpRequestRepository, HelpRequestRepository>();
 builder.Services.AddScoped<IHelpRequestService, HelpRequestService>();
 
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 
 
