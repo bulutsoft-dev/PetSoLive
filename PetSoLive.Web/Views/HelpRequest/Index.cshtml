@@ -12,39 +12,41 @@ ViewData["Title"] = "Help Requests";
     </div>
 </div>
 
-<div class="list-group">
+<div class="row">
     @foreach (var helpRequest in Model)
     {
-    <div class="list-group-item">
-        <div class="d-flex justify-content-between align-items-center">
-            <h5><a href="@Url.Action("Details", "HelpRequest", new { id = helpRequest.Id })">@helpRequest.Description</a></h5>
-            <span class="badge badge-pill badge-info">@helpRequest.EmergencyLevel</span>
-        </div>
-        <div class="mt-2">
-            <p><strong>Created At:</strong> @helpRequest.CreatedAt.ToString("g")</p>
-            <p><strong>Location:</strong> @helpRequest.Location</p>
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5><a href="@Url.Action("Details", "HelpRequest", new { id = helpRequest.Id })" class="card-title text-dark">@helpRequest.Title</a></h5>
+                    <span class="badge badge-pill badge-info">@helpRequest.EmergencyLevel</span>
+                </div>
+                <p class="card-text"><strong>Created At:</strong> @helpRequest.CreatedAt.ToString("g")</p>
+                <p class="card-text"><strong>Location:</strong> @helpRequest.Location</p>
 
-            @if (!string.IsNullOrEmpty(helpRequest.ContactName))
-            {
-            <p><strong>Contact Name:</strong> @helpRequest.ContactName</p>
-            }
+                @if (!string.IsNullOrEmpty(helpRequest.ContactName))
+                {
+                <p class="card-text"><strong>Contact Name:</strong> @helpRequest.ContactName</p>
+                }
 
-            @if (!string.IsNullOrEmpty(helpRequest.ContactPhone))
-            {
-            <p><strong>Contact Phone:</strong> @helpRequest.ContactPhone</p>
-            }
+                @if (!string.IsNullOrEmpty(helpRequest.ContactPhone))
+                {
+                <p class="card-text"><strong>Contact Phone:</strong> @helpRequest.ContactPhone</p>
+                }
 
-            @if (!string.IsNullOrEmpty(helpRequest.ContactEmail))
-            {
-            <p><strong>Contact Email:</strong> @helpRequest.ContactEmail</p>
-            }
+                @if (!string.IsNullOrEmpty(helpRequest.ContactEmail))
+                {
+                <p class="card-text"><strong>Contact Email:</strong> @helpRequest.ContactEmail</p>
+                }
 
-            @if (!string.IsNullOrEmpty(helpRequest.ImageUrl))
-            {
-            <div class="mt-2">
-                <img src="@helpRequest.ImageUrl" alt="Help Request Image" class="img-fluid" />
+                @if (!string.IsNullOrEmpty(helpRequest.ImageUrl))
+                {
+                <div class="mt-2">
+                    <img src="@helpRequest.ImageUrl" alt="Help Request Image" class="img-fluid rounded" />
+                </div>
+                }
             </div>
-            }
         </div>
     </div>
     }

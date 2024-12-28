@@ -1,26 +1,49 @@
 @model PetSoLive.Core.Entities.HelpRequest
 
 @{
-    ViewData["Title"] = "Help Request Details";
+ViewData["Title"] = "Help Request Details";
 }
 
-<h1>@Model.Description</h1>
+<h1 class="mb-4">@Model.Title</h1>  <!-- Display the Title -->
 
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">Emergency Level: @Model.EmergencyLevel</h5>
+        <!-- Emergency Level and Description -->
+        <h5 class="card-title">Emergency Level: <span class="badge badge-pill badge-info">@Model.EmergencyLevel</span></h5>
+
         <p class="card-text"><strong>Created At:</strong> @Model.CreatedAt.ToString("g")</p>
+
+        <!-- Location -->
         <p class="card-text"><strong>Location:</strong> @Model.Location</p>
+
+        <!-- Contact Details (conditionally displayed) -->
+        @if (!string.IsNullOrEmpty(Model.ContactName))
+        {
         <p class="card-text"><strong>Contact Name:</strong> @Model.ContactName</p>
+        }
+        @if (!string.IsNullOrEmpty(Model.ContactPhone))
+        {
         <p class="card-text"><strong>Contact Phone:</strong> @Model.ContactPhone</p>
+        }
+        @if (!string.IsNullOrEmpty(Model.ContactEmail))
+        {
         <p class="card-text"><strong>Contact Email:</strong> @Model.ContactEmail</p>
+        }
+
+        <!-- Image (conditionally displayed) -->
         @if (!string.IsNullOrEmpty(Model.ImageUrl))
         {
-            <p><img src="@Model.ImageUrl" alt="Help Request Image" class="img-fluid" /></p>
+        <div class="mt-3">
+            <img src="@Model.ImageUrl" alt="Help Request Image" class="img-fluid rounded" />
+        </div>
         }
+
+        <!-- Description Text -->
+        <p class="card-text mt-3"><strong>Description:</strong> @Model.Description</p>
     </div>
 </div>
 
+<!-- Back Button -->
 <div class="mt-3">
     <a href="@Url.Action("Index", "HelpRequest")" class="btn btn-secondary">Back to Help Requests</a>
 </div>

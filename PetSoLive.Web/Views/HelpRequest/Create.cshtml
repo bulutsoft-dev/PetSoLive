@@ -1,7 +1,7 @@
 @model PetSoLive.Core.Entities.HelpRequest
 
 @{
-    ViewData["Title"] = "Create Help Request";
+ViewData["Title"] = "Create Help Request";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -9,68 +9,103 @@
 <!-- Display validation errors at the top of the form -->
 @if (!ViewData.ModelState.IsValid)
 {
-    <div class="alert alert-danger">
-        <ul>
-            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-            {
-                <li>@error.ErrorMessage</li>
-            }
-        </ul>
-    </div>
+<div class="alert alert-danger">
+    <ul>
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+        <li>@error.ErrorMessage</li>
+        }
+    </ul>
+</div>
 }
 
 <form asp-action="Create" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="Description">Description</label>
-        <textarea asp-for="Description" class="form-control" id="Description" rows="3" required></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
+    <div class="row">
+        <!-- Title -->
+        <div class="col-md-6 mb-3">
+            <div class="form-group">
+                <label for="Title">Title</label>
+                <input asp-for="Title" class="form-control" id="Title" required />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+        </div>
 
-    <div class="form-group">
-        <label for="EmergencyLevel">Emergency Level</label>
-        <select asp-for="EmergencyLevel" class="form-control" id="EmergencyLevel" required>
-            <option value="">Select Emergency Level</option>
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-        </select>
-        <span asp-validation-for="EmergencyLevel" class="text-danger"></span>
-    </div>
+        <!-- Description -->
+        <div class="col-md-12 mb-3">
+            <div class="form-group">
+                <label for="Description">Description</label>
+                <textarea asp-for="Description" class="form-control" id="Description" rows="4" required></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
 
-    <div class="form-group">
-        <label for="Location">Location</label>
-        <input asp-for="Location" class="form-control" id="Location" required />
-        <span asp-validation-for="Location" class="text-danger"></span>
-    </div>
+        <!-- Emergency Level -->
+        <div class="col-md-6 mb-3">
+            <div class="form-group">
+                <label for="EmergencyLevel">Emergency Level</label>
+                <select asp-for="EmergencyLevel" class="form-control" id="EmergencyLevel" required>
+                    <option value="">Select Emergency Level</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+                <span asp-validation-for="EmergencyLevel" class="text-danger"></span>
+            </div>
+        </div>
 
-    <div class="form-group">
-        <label for="ContactName">Contact Name</label>
-        <input asp-for="ContactName" class="form-control" id="ContactName" />
-        <span asp-validation-for="ContactName" class="text-danger"></span>
-    </div>
+        <!-- Location -->
+        <div class="col-md-6 mb-3">
+            <div class="form-group">
+                <label for="Location">Location</label>
+                <input asp-for="Location" class="form-control" id="Location" required />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+        </div>
 
-    <div class="form-group">
-        <label for="ContactPhone">Contact Phone</label>
-        <input asp-for="ContactPhone" class="form-control" id="ContactPhone" type="tel" />
-        <span asp-validation-for="ContactPhone" class="text-danger"></span>
-    </div>
+        <!-- Contact Name -->
+        <div class="col-md-6 mb-3">
+            <div class="form-group">
+                <label for="ContactName">Contact Name</label>
+                <input asp-for="ContactName" class="form-control" id="ContactName" />
+                <span asp-validation-for="ContactName" class="text-danger"></span>
+            </div>
+        </div>
 
-    <div class="form-group">
-        <label for="ContactEmail">Contact Email</label>
-        <input asp-for="ContactEmail" class="form-control" id="ContactEmail" type="email" />
-        <span asp-validation-for="ContactEmail" class="text-danger"></span>
-    </div>
+        <!-- Contact Phone -->
+        <div class="col-md-6 mb-3">
+            <div class="form-group">
+                <label for="ContactPhone">Contact Phone</label>
+                <input asp-for="ContactPhone" class="form-control" id="ContactPhone" type="tel" />
+                <span asp-validation-for="ContactPhone" class="text-danger"></span>
+            </div>
+        </div>
 
-    <div class="form-group">
-        <label for="ImageUrl">Image URL</label>
-        <input asp-for="ImageUrl" class="form-control" id="ImageUrl" type="url" />
-        <span asp-validation-for="ImageUrl" class="text-danger"></span>
-    </div>
+        <!-- Contact Email -->
+        <div class="col-md-6 mb-3">
+            <div class="form-group">
+                <label for="ContactEmail">Contact Email</label>
+                <input asp-for="ContactEmail" class="form-control" id="ContactEmail" type="email" />
+                <span asp-validation-for="ContactEmail" class="text-danger"></span>
+            </div>
+        </div>
 
-    <button type="submit" class="btn btn-primary">Create</button>
+        <!-- Image URL -->
+        <div class="col-md-6 mb-3">
+            <div class="form-group">
+                <label for="ImageUrl">Image URL</label>
+                <input asp-for="ImageUrl" class="form-control" id="ImageUrl" type="url" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </div>
 </form>
 
 <!-- Validation Scripts -->
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

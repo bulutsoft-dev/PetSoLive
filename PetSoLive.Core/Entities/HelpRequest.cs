@@ -7,6 +7,10 @@ namespace PetSoLive.Core.Entities
     {
         public int Id { get; set; }
 
+        [Required(ErrorMessage = "Title is required.")]
+        [StringLength(100, ErrorMessage = "Title can't be longer than 100 characters.")]
+        public string Title { get; set; }  // New Title field
+
         [Required(ErrorMessage = "Description is required.")]
         [StringLength(500, ErrorMessage = "Description can't be longer than 500 characters.")]
         public string Description { get; set; }
