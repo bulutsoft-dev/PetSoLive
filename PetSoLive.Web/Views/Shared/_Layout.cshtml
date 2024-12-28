@@ -37,18 +37,23 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Assistance" asp-action="List">Assistance</a>
                     </li>
-                    
+
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="LostPetAd" asp-action="Index">Lost Pet Ads</a>
                     </li>
-                    
+
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="HelpRequest" asp-action="Index">Help Requests</a>
                     </li>
-                    
+
+                    <!-- Link to Veterinarian Section -->
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Veterinarian" asp-action="Index">Veterinarians</a>
+                    </li>
+
                 </ul>
 
-                <!-- Right-aligned user authentication links -->
+                <!-- Inside the navbar section of your layout -->
                 <ul class="navbar-nav">
                     @* Session check for login/logout *@
                     @{
@@ -73,10 +78,10 @@
                     </li>
                     }
                 </ul>
+
             </div>
         </div>
     </nav>
-
 </header>
 
 <div class="container">

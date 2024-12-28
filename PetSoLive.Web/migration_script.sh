@@ -1,2 +1,2 @@
-dotnet ef migrations add title --project ../PetSoLive.Data --startup-project .
+dotnet ef migrations add vetere --project ../PetSoLive.Data --startup-project .
 dotnet ef database update

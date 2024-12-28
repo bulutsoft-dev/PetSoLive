@@ -22,6 +22,9 @@ namespace PetSoLive.Data
         public DbSet<LostPetAd> LostPetAds { get; set; }
         public DbSet<HelpRequest> HelpRequests { get; set; }
 
+        // Veterinarian DbSet
+        public DbSet<Veterinarian> Veterinarians { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -69,12 +72,18 @@ namespace PetSoLive.Data
                 .HasForeignKey(l => l.UserId);
 
             // HelpRequest - User ilişkisi
-
             modelBuilder.Entity<HelpRequest>()
                 .HasOne(h => h.User)
                 .WithMany(u => u.HelpRequests)
                 .HasForeignKey(h => h.UserId)
                 .OnDelete(DeleteBehavior.Cascade); // Silme davranışını belirleyin, isteğe bağlı
+
+            // Veterinarian - User ilişkisi
+            modelBuilder.Entity<Veterinarian>()
+                .HasOne(v => v.User)
+                .WithMany()
+                .HasForeignKey(v => v.UserId)
+                .OnDelete(DeleteBehavior.Cascade); // Silme davranışını belirleyebilirsiniz
 
             // PetOwner ve Adoption gibi tabloların isimlerini özelleştiriyoruz
             modelBuilder.Entity<PetOwner>().ToTable("PetOwners");
@@ -82,6 +91,11 @@ namespace PetSoLive.Data
             modelBuilder.Entity<AdoptionRequest>().ToTable("AdoptionRequests");
             modelBuilder.Entity<LostPetAd>().ToTable("LostPetAds");
             modelBuilder.Entity<HelpRequest>().ToTable("HelpRequests");
+
+            // Enum tipi olan VeterinarianStatus'ın string olarak kaydedilmesini sağlıyoruz
+            modelBuilder.Entity<Veterinarian>()
+                .Property(v => v.Status)
+                .HasConversion<string>();  // Enum değerlerini string olarak sakla
         }
     }
 }

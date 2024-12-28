@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using PetSoLive.Business.Services;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
+using PetSoLive.Core;
+using PetSoLive.Core.Services;
 using PetSoLive.Data;
 using PetSoLive.Data.Repositories;
 using PetSoLive.Infrastructure.Repositories;
@@ -68,6 +70,9 @@ builder.Services.AddScoped<IHelpRequestRepository, HelpRequestRepository>();
 builder.Services.AddScoped<IHelpRequestService, HelpRequestService>();
 
 builder.Services.AddScoped<INotificationService, NotificationService>();
+
+builder.Services.AddScoped<IVeterinarianService, VeterinarianService>();
+builder.Services.AddScoped<IVeterinarianRepository, VeterinarianRepository>();
 
 
 

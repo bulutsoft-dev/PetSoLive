@@ -1,0 +1,45 @@
+@model IEnumerable<PetSoLive.Core.Entities.Veterinarian>
+
+@{
+ViewData["Title"] = "Veterinarians List";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Qualifications</th>
+        <th>Clinic Address</th>
+        <th>Clinic Phone Number</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var veterinarian in Model)
+    {
+    <tr>
+        <td>@veterinarian.User?.Username</td> <!-- Assuming there's a Name property in User entity -->
+        <td>@veterinarian.Qualifications</td>
+        <td>@veterinarian.ClinicAddress</td>
+        <td>@veterinarian.ClinicPhoneNumber</td>
+        <td>@veterinarian.Status.ToString()</td>
+        <td>
+            @if (veterinarian.Status == PetSoLive.Core.Enums.VeterinarianStatus.Pending)
+            {
+            <a href="@Url.Action("Approve", "Veterinarian", new { veterinarianId = veterinarian.Id })" class="btn btn-success">Approve</a>
+            <a href="@Url.Action("Reject", "Veterinarian", new { veterinarianId = veterinarian.Id })" class="btn btn-danger">Reject</a>
+            }
+            else
+            {
+            <span class="badge bg-secondary">@veterinarian.Status.ToString()</span>
+            }
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
+
+<a href="@Url.Action("Register", "Veterinarian")" class="btn btn-primary">Register New Veterinarian</a>
