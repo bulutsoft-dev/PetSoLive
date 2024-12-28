@@ -61,6 +61,15 @@ builder.Services.AddScoped<IPetOwnerService, PetOwnerService>();
 builder.Services.AddScoped<IAdoptionRequestRepository, AdoptionRequestRepository>();
 builder.Services.AddScoped<IAdoptionRequestService, AdoptionRequestService>();
 
+builder.Services.AddScoped<ILostPetAdRepository, LostPetAdRepository>();
+builder.Services.AddScoped<ILostPetAdService, LostPetAdService>();
+
+builder.Services.AddScoped<IHelpRequestRepository, HelpRequestRepository>();
+builder.Services.AddScoped<IHelpRequestService, HelpRequestService>();
+
+
+
+
 builder.Services.AddAuthentication("Cookies")
     .AddCookie(options =>
     {

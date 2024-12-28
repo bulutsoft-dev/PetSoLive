@@ -1,0 +1,31 @@
+@{
+    ViewData["Title"] = "Lost Pet Ads";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="get" class="form-inline">
+    <div class="form-group">
+        <label for="Location" class="mr-2">Search by Location:</label>
+        <input type="text" id="Location" name="location" class="form-control" placeholder="Enter location" />
+        <button type="submit" class="btn btn-primary ml-2">Search</button>
+    </div>
+</form>
+
+@if (Model != null && Model.Any())
+{
+    <ul class="list-group mt-3">
+        @foreach (var ad in Model)
+        {
+            <li class="list-group-item">
+                <h4>@ad.Description</h4>
+                <p><strong>Last Seen Location:</strong> @ad.LastSeenLocation</p>
+                <p><strong>Date Lost:</strong> @ad.DateLost.ToShortDateString()</p>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No lost pet ads found.</p>
+}
