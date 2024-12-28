@@ -1,11 +1,13 @@
+@model IEnumerable<PetSoLive.Core.Entities.HelpRequest>
+
 @{
 ViewData["Title"] = "Help Requests";
 }
 
-<h1>Help Requests</h1>
+<h1>@ViewData["Title"]</h1>
 
-<div class="row">
-    <div class="col-12 mb-3">
+<div class="row mb-3">
+    <div class="col-12">
         <a class="btn btn-primary" href="@Url.Action("Create", "HelpRequest")">Create New Help Request</a>
     </div>
 </div>
@@ -14,9 +16,36 @@ ViewData["Title"] = "Help Requests";
     @foreach (var helpRequest in Model)
     {
     <div class="list-group-item">
-        <h5><a href="@Url.Action("Details", "HelpRequest", new { id = helpRequest.Id })">@helpRequest.Description</a></h5>
-        <p><strong>Emergency Level:</strong> @helpRequest.EmergencyLevel</p>
-        <p><strong>Created At:</strong> @helpRequest.CreatedAt.ToString("g")</p>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5><a href="@Url.Action("Details", "HelpRequest", new { id = helpRequest.Id })">@helpRequest.Description</a></h5>
+            <span class="badge badge-pill badge-info">@helpRequest.EmergencyLevel</span>
+        </div>
+        <div class="mt-2">
+            <p><strong>Created At:</strong> @helpRequest.CreatedAt.ToString("g")</p>
+            <p><strong>Location:</strong> @helpRequest.Location</p>
+
+            @if (!string.IsNullOrEmpty(helpRequest.ContactName))
+            {
+            <p><strong>Contact Name:</strong> @helpRequest.ContactName</p>
+            }
+
+            @if (!string.IsNullOrEmpty(helpRequest.ContactPhone))
+            {
+            <p><strong>Contact Phone:</strong> @helpRequest.ContactPhone</p>
+            }
+
+            @if (!string.IsNullOrEmpty(helpRequest.ContactEmail))
+            {
+            <p><strong>Contact Email:</strong> @helpRequest.ContactEmail</p>
+            }
+
+            @if (!string.IsNullOrEmpty(helpRequest.ImageUrl))
+            {
+            <div class="mt-2">
+                <img src="@helpRequest.ImageUrl" alt="Help Request Image" class="img-fluid" />
+            </div>
+            }
+        </div>
     </div>
     }
 </div>

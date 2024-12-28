@@ -1,5 +1,7 @@
+@model PetSoLive.Core.Entities.HelpRequest
+
 @{
-ViewData["Title"] = "Help Request Details";
+    ViewData["Title"] = "Help Request Details";
 }
 
 <h1>@Model.Description</h1>
@@ -8,8 +10,14 @@ ViewData["Title"] = "Help Request Details";
     <div class="card-body">
         <h5 class="card-title">Emergency Level: @Model.EmergencyLevel</h5>
         <p class="card-text"><strong>Created At:</strong> @Model.CreatedAt.ToString("g")</p>
-        <p class="card-text"><strong>Description:</strong></p>
-        <p>@Model.Description</p>
+        <p class="card-text"><strong>Location:</strong> @Model.Location</p>
+        <p class="card-text"><strong>Contact Name:</strong> @Model.ContactName</p>
+        <p class="card-text"><strong>Contact Phone:</strong> @Model.ContactPhone</p>
+        <p class="card-text"><strong>Contact Email:</strong> @Model.ContactEmail</p>
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <p><img src="@Model.ImageUrl" alt="Help Request Image" class="img-fluid" /></p>
+        }
     </div>
 </div>
 
