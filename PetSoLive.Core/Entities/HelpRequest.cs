@@ -15,9 +15,26 @@ namespace PetSoLive.Core.Entities
         public EmergencyLevel EmergencyLevel { get; set; }
 
         public DateTime CreatedAt { get; set; }
-        
+
         public int UserId { get; set; }  // Foreign Key
 
-        public User? User { get; set; }    // Make this property nullable
+        public User? User { get; set; }  // Nullable navigation property for User
+
+        // Yeni Alanlar:
+        
+        [Required(ErrorMessage = "Location is required.")]
+        [StringLength(200, ErrorMessage = "Location can't be longer than 200 characters.")]
+        public string Location { get; set; }  // Bulunduğu yer bilgisi
+
+        [StringLength(100, ErrorMessage = "Contact Name can't be longer than 100 characters.")]
+        public string? ContactName { get; set; }  // İlgili kişinin adı (isteğe bağlı)
+
+        [Phone(ErrorMessage = "Invalid phone number.")]
+        public string? ContactPhone { get; set; }  // İlgili kişinin telefon numarası (isteğe bağlı)
+
+        [EmailAddress(ErrorMessage = "Invalid email address.")]
+        public string? ContactEmail { get; set; }  // İlgili kişinin e-posta adresi (isteğe bağlı)
+
+        public string? ImageUrl { get; set; }  // Hayvanın resmi için URL
     }
 }
