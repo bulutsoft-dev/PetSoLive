@@ -74,6 +74,9 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IVeterinarianService, VeterinarianService>();
 builder.Services.AddScoped<IVeterinarianRepository, VeterinarianRepository>();
 
+builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+
 
 
 builder.Services.AddAuthentication("Cookies")

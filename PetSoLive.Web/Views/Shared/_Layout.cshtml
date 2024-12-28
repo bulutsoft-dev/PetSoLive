@@ -37,20 +37,16 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Assistance" asp-action="List">Assistance</a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="LostPetAd" asp-action="Index">Lost Pet Ads</a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="HelpRequest" asp-action="Index">Help Requests</a>
                     </li>
 
-                    <!-- Link to Veterinarian Section -->
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Veterinarian" asp-action="Index">Veterinarians</a>
                     </li>
-
                 </ul>
 
                 <!-- Inside the navbar section of your layout -->
@@ -76,6 +72,10 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Logout</a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="Veterinarian" asp-action="Register">Veterinarian Register</a>
+                    </li>
                     }
                 </ul>
 
@@ -83,6 +83,10 @@
         </div>
     </nav>
 </header>
+
+
+
+
 
 <div class="container">
     <main role="main" class="pb-3">

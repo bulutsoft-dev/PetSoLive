@@ -8,36 +8,37 @@ namespace PetSoLive.Web.Controllers
     public class VeterinarianController : Controller
     {
         private readonly IVeterinarianService _veterinarianService;
-        private readonly IUserService _userService;  // Assuming you have a UserService for retrieving user data
+        private readonly IUserService _userService;
+        private readonly IAdminService _adminService;
 
-        public VeterinarianController(IVeterinarianService veterinarianService, IUserService userService)
+        public VeterinarianController(IVeterinarianService veterinarianService, IUserService userService, IAdminService adminService)
         {
             _veterinarianService = veterinarianService;
             _userService = userService;
+            _adminService = adminService;
         }
 
-        // Register a new veterinarian - GET
+        // Register a new veterinarian - GET (Normal kullanıcılar sadece bu sayfayı görebilir)
         public async Task<IActionResult> Register()
         {
             var username = HttpContext.Session.GetString("Username");
             if (string.IsNullOrEmpty(username))
             {
-                return RedirectToAction("Login", "Account"); // Redirect to login page if user is not logged in
+                return RedirectToAction("Login", "Account"); // Kullanıcı giriş yapmamışsa, giriş sayfasına yönlendir
             }
 
-            // Get user details
             var user = await _userService.GetUserByUsernameAsync(username);
             if (user == null)
             {
                 return NotFound();
             }
 
-            // Check if the user has already submitted an application
+            // Kullanıcı daha önce başvuru yapmışsa formu gösterme
             var existingApplication = await _veterinarianService.GetByUserIdAsync(user.Id);
             if (existingApplication != null)
             {
-                // If the user already applied, display message and disable form
-                ViewBag.ApplicationSubmitted = true;
+                ViewBag.ApplicationSubmitted = true; // Başvuru yapılmış, formu gösterme
+                return View();
             }
 
             return View();
@@ -50,7 +51,7 @@ namespace PetSoLive.Web.Controllers
             var username = HttpContext.Session.GetString("Username");
             if (string.IsNullOrEmpty(username))
             {
-                return RedirectToAction("Login", "Account"); // Redirect to login page if user is not logged in
+                return RedirectToAction("Login", "Account");
             }
 
             var user = await _userService.GetUserByUsernameAsync(username);
@@ -59,38 +60,73 @@ namespace PetSoLive.Web.Controllers
                 return NotFound();
             }
 
-            // Check if the user has already applied
             var existingApplication = await _veterinarianService.GetByUserIdAsync(user.Id);
             if (existingApplication != null)
             {
-                // If application exists, do not allow another submission
                 ModelState.AddModelError("", "You have already submitted an application for veterinarian registration.");
                 return View();
             }
 
             if (ModelState.IsValid)
             {
-                // Register veterinarian with Pending status
                 await _veterinarianService.RegisterVeterinarianAsync(user.Id, qualifications, clinicAddress, clinicPhoneNumber);
-                return RedirectToAction(nameof(Index)); // Redirect to list of veterinarians after registering
+                return RedirectToAction(nameof(Register)); 
             }
-            return View(); // Return the form in case of validation failure
+
+            return View();
         }
 
-        // List all veterinarians (if needed)
+        // List all veterinarians (Only admins can see this)
         public async Task<IActionResult> Index()
         {
+            var username = HttpContext.Session.GetString("Username");
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _userService.GetUserByUsernameAsync(username);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the user is an admin
+            var isAdmin = await _adminService.IsUserAdminAsync(user.Id);
+            if (!isAdmin)
+            {
+                return Forbid(); // Admin olmayan kullanıcıları engelle
+            }
+
             var veterinarians = await _veterinarianService.GetAllVeterinariansAsync();
-            return View(veterinarians);
+            return View(veterinarians); // Admin olanlar için veteriner listesini göster
         }
 
-        // Approve veterinarian
+        // Approve veterinarian (Only admins can approve)
         public async Task<IActionResult> Approve(int veterinarianId)
         {
+            var username = HttpContext.Session.GetString("Username");
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _userService.GetUserByUsernameAsync(username);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var isAdmin = await _adminService.IsUserAdminAsync(user.Id);
+            if (!isAdmin)
+            {
+                return Forbid(); 
+            }
+
             var veterinarian = await _veterinarianService.GetByIdAsync(veterinarianId);
             if (veterinarian == null)
             {
-                return NotFound(); // If the veterinarian doesn't exist
+                return NotFound();
             }
 
             if (veterinarian.Status == VeterinarianStatus.Pending)
@@ -101,13 +137,31 @@ namespace PetSoLive.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Reject veterinarian
+        // Reject veterinarian (Only admins can reject)
         public async Task<IActionResult> Reject(int veterinarianId)
         {
+            var username = HttpContext.Session.GetString("Username");
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _userService.GetUserByUsernameAsync(username);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var isAdmin = await _adminService.IsUserAdminAsync(user.Id);
+            if (!isAdmin)
+            {
+                return Forbid(); 
+            }
+
             var veterinarian = await _veterinarianService.GetByIdAsync(veterinarianId);
             if (veterinarian == null)
             {
-                return NotFound(); // If the veterinarian doesn't exist
+                return NotFound();
             }
 
             if (veterinarian.Status == VeterinarianStatus.Pending)

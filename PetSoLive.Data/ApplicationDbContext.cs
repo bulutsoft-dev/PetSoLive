@@ -10,6 +10,7 @@ namespace PetSoLive.Data
         {
         }
 
+        // DbSet'ler
         public DbSet<User> Users { get; set; }
         public DbSet<Pet> Pets { get; set; }
         public DbSet<Announcement> Announcements { get; set; }
@@ -24,6 +25,9 @@ namespace PetSoLive.Data
 
         // Veterinarian DbSet
         public DbSet<Veterinarian> Veterinarians { get; set; }
+        
+        // Admin DbSet
+        public DbSet<Admin> Admins { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -84,6 +88,13 @@ namespace PetSoLive.Data
                 .WithMany()
                 .HasForeignKey(v => v.UserId)
                 .OnDelete(DeleteBehavior.Cascade); // Silme davranışını belirleyebilirsiniz
+
+            // Admin - User ilişkisi
+            modelBuilder.Entity<Admin>()
+                .HasOne(a => a.User)  // Her admin bir kullanıcıya sahip
+                .WithOne()  // Admin ile User arasındaki ilişkiyi tek bir kullanıcı ile sınırlandırıyoruz
+                .HasForeignKey<Admin>(a => a.UserId) // Admin tablosunda UserId
+                .OnDelete(DeleteBehavior.Cascade); // Kullanıcı silindiğinde admin de silinir
 
             // PetOwner ve Adoption gibi tabloların isimlerini özelleştiriyoruz
             modelBuilder.Entity<PetOwner>().ToTable("PetOwners");
