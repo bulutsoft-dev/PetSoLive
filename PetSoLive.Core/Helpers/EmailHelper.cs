@@ -202,4 +202,36 @@ public class EmailHelper
         </body>
         </html>";
     }
+    
+    
+    public string GenerateVeterinarianNotificationEmailBody(HelpRequest helpRequest, User requester)
+    {
+        return $@"
+        <html>
+        <head>
+            {CssLink}
+        </head>
+        <body>
+            <div class='email-container'>
+                <h2 class='header'>New Help Request for an Animal in Need!</h2>
+                <p>Dear Veterinarian,</p>
+                <p>A new help request has been created for an animal requiring immediate attention:</p>
+                <ul class='details-list'>
+                    <li><strong>Description:</strong> {helpRequest.Description}</li>
+                    <li><strong>Emergency Level:</strong> {helpRequest.EmergencyLevel}</li>
+                    <li><strong>Created At:</strong> {helpRequest.CreatedAt.ToString("yyyy-MM-dd HH:mm")}</li>
+                    <li><strong>Requested By:</strong> {requester.Username} ({requester.Email})</li>
+                </ul>
+
+                <p>Please log in to the system to review this request in detail and provide assistance.</p>
+                <a href='https://yourdomain.com/HelpRequest/Details/{helpRequest.Id}' class='btn-primary'>View Help Request</a>
+
+                <div class='footer'>
+                    <p>Best regards,</p>
+                    <p>The PetSoLive Team</p>
+                </div>
+            </div>
+        </body>
+        </html>";
+    }
 }

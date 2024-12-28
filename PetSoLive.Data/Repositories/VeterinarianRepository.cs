@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PetSoLive.Core.Enums;
 using PetSoLive.Data;
 
 namespace PetSoLive.Infrastructure.Repositories
@@ -46,6 +47,13 @@ namespace PetSoLive.Infrastructure.Repositories
         public async Task<Veterinarian> GetByIdAsync(int id)  // Add this method
         {
             return await _context.Veterinarians.FindAsync(id); // Retrieve veterinarian by Id
+        }
+        
+        public async Task<List<Veterinarian>> GetAllVeterinariansAsync()
+        {
+            return await _context.Veterinarians
+                .Where(v => v.Status == VeterinarianStatus.Approved) // Onaylı veterinerleri filtrele
+                .ToListAsync();
         }
     }
 }
