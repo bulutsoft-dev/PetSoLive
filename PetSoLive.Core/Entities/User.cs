@@ -19,6 +19,7 @@ namespace PetSoLive.Core.Entities
         public ICollection<PetOwner> PetOwners { get; set; } = new List<PetOwner>();
 
         public ICollection<AdoptionRequest> AdoptionRequests { get; set; } = new List<AdoptionRequest>();
+        public ICollection<HelpRequest> HelpRequests { get; set; }  // Navigation property for HelpRequest
     }
 
 }

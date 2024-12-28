@@ -1,0 +1,46 @@
+@using PetSoLive.Core.Enums
+@{
+ViewData["Title"] = "Create Help Request";
+}
+
+<h2>Create Help Request</h2>
+
+@if (ViewBag.User != null)
+{
+<p>Welcome, @ViewBag.User.Username!</p>
+}
+
+<form method="post" asp-action="Create">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <textarea class="form-control" id="Description" name="Description" rows="4" required>@Model?.Description</textarea>
+    </div>
+
+    <!-- Emergency Level (Radio Buttons) -->
+    <div class="form-group">
+        <label>Emergency Level</label>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" id="Low" name="EmergencyLevel" value="Low" @(Model?.EmergencyLevel == EmergencyLevel.Low ? "checked" : "") required />
+            <label class="form-check-label" for="Low">Low</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" id="Medium" name="EmergencyLevel" value="Medium" @(Model?.EmergencyLevel == EmergencyLevel.Medium ? "checked" : "") required />
+            <label class="form-check-label" for="Medium">Medium</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" id="High" name="EmergencyLevel" value="High" @(Model?.EmergencyLevel == EmergencyLevel.High ? "checked" : "") required />
+            <label class="form-check-label" for="High">High</label>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Request</button>
+</form>
+
+
+<div>
+    <p>
+        <a href="@Url.Action("Index", "HelpRequest")">Back to Help Requests List</a>
+    </p>
+</div>

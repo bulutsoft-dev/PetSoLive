@@ -1,18 +1,27 @@
-
 @{
 ViewData["Title"] = "Help Requests";
 }
 
 <h1>Help Requests</h1>
 
-@foreach (var helpRequest in Model)
-{
-<div class="help-request-item">
-    <h3><a href="@Url.Action("Details", "HelpRequest", new { id = helpRequest.Id })">@helpRequest.Description</a></h3>
-    <p><strong>Emergency Level:</strong> @helpRequest.EmergencyLevel</p>
-    <p><strong>Created At:</strong> @helpRequest.CreatedAt.ToString("g")</p>
-    <hr />
+<div class="row">
+    <div class="col-12 mb-3">
+        <a class="btn btn-primary" href="@Url.Action("Create", "HelpRequest")">Create New Help Request</a>
+    </div>
 </div>
-}
 
-<a href="@Url.Action("Create", "HelpRequest")">Create New Help Request</a>
+<div class="list-group">
+    @foreach (var helpRequest in Model)
+    {
+    <div class="list-group-item">
+        <h5><a href="@Url.Action("Details", "HelpRequest", new { id = helpRequest.Id })">@helpRequest.Description</a></h5>
+        <p><strong>Emergency Level:</strong> @helpRequest.EmergencyLevel</p>
+        <p><strong>Created At:</strong> @helpRequest.CreatedAt.ToString("g")</p>
+    </div>
+    }
+</div>
+
+<!-- Pagination controls (optional) -->
+<div class="pagination-container mt-3">
+    @* Add your pagination links here (e.g., @Html.PagedListPager(Model)) *@
+</div>

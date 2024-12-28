@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetSoLive.Data;
 
@@ -11,9 +12,11 @@ using PetSoLive.Data;
 namespace PetSoLive.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241228135720_addhelper")]
+    partial class addhelper
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,7 +50,7 @@ namespace PetSoLive.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("HelpRequests", (string)null);
+                    b.ToTable("HelpRequests");
                 });
 
             modelBuilder.Entity("LostPetAd", b =>
@@ -84,7 +87,7 @@ namespace PetSoLive.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("LostPetAds", (string)null);
+                    b.ToTable("LostPetAds");
                 });
 
             modelBuilder.Entity("PetSoLive.Core.Entities.Adoption", b =>
@@ -335,7 +338,7 @@ namespace PetSoLive.Data.Migrations
             modelBuilder.Entity("HelpRequest", b =>
                 {
                     b.HasOne("PetSoLive.Core.Entities.User", "User")
-                        .WithMany("HelpRequests")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -421,8 +424,6 @@ namespace PetSoLive.Data.Migrations
             modelBuilder.Entity("PetSoLive.Core.Entities.User", b =>
                 {
                     b.Navigation("AdoptionRequests");
-
-                    b.Navigation("HelpRequests");
 
                     b.Navigation("PetOwners");
                 });

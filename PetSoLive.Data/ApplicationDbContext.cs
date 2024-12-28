@@ -26,6 +26,7 @@ namespace PetSoLive.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // Adoption - Pet ilişkisi
             modelBuilder.Entity<Adoption>()
                 .HasOne(a => a.Pet)
                 .WithMany()
@@ -36,6 +37,7 @@ namespace PetSoLive.Data
                 .WithMany()
                 .HasForeignKey(a => a.UserId);
 
+            // PetOwner - Pet ve User ilişkisi (Many-to-Many)
             modelBuilder.Entity<PetOwner>()
                 .HasKey(po => new { po.PetId, po.UserId });
 
@@ -49,6 +51,7 @@ namespace PetSoLive.Data
                 .WithMany(u => u.PetOwners)
                 .HasForeignKey(po => po.UserId);
 
+            // AdoptionRequest - Pet ve User ilişkisi
             modelBuilder.Entity<AdoptionRequest>()
                 .HasOne(ar => ar.Pet)
                 .WithMany(p => p.AdoptionRequests)
@@ -59,23 +62,26 @@ namespace PetSoLive.Data
                 .WithMany(u => u.AdoptionRequests)
                 .HasForeignKey(ar => ar.UserId);
 
-            // Yeni ilişkiler
-
-            // Kayıp Hayvan İlanı İlişkisi
+            // LostPetAd - User ilişkisi
             modelBuilder.Entity<LostPetAd>()
                 .HasOne(l => l.User)
                 .WithMany()
                 .HasForeignKey(l => l.UserId);
 
-            // Yardım Duyurusu İlişkisi
+            // HelpRequest - User ilişkisi
+
             modelBuilder.Entity<HelpRequest>()
                 .HasOne(h => h.User)
-                .WithMany()
-                .HasForeignKey(h => h.UserId);
+                .WithMany(u => u.HelpRequests)
+                .HasForeignKey(h => h.UserId)
+                .OnDelete(DeleteBehavior.Cascade); // Silme davranışını belirleyin, isteğe bağlı
 
+            // PetOwner ve Adoption gibi tabloların isimlerini özelleştiriyoruz
             modelBuilder.Entity<PetOwner>().ToTable("PetOwners");
             modelBuilder.Entity<Adoption>().ToTable("Adoptions");
             modelBuilder.Entity<AdoptionRequest>().ToTable("AdoptionRequests");
+            modelBuilder.Entity<LostPetAd>().ToTable("LostPetAds");
+            modelBuilder.Entity<HelpRequest>().ToTable("HelpRequests");
         }
     }
 }

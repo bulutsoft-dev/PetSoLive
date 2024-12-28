@@ -23,6 +23,7 @@ namespace PetSoLive.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
+
         // Get all help requests
         public async Task<List<HelpRequest>> GetHelpRequestsAsync()
         {

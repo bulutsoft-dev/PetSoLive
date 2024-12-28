@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetSoLive.Data;
 
@@ -11,9 +12,11 @@ using PetSoLive.Data;
 namespace PetSoLive.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241228140219_usermodelheprequest")]
+    partial class usermodelheprequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,9 +46,14 @@ namespace PetSoLive.Data.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UserId1")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("HelpRequests", (string)null);
                 });
@@ -335,10 +343,14 @@ namespace PetSoLive.Data.Migrations
             modelBuilder.Entity("HelpRequest", b =>
                 {
                     b.HasOne("PetSoLive.Core.Entities.User", "User")
-                        .WithMany("HelpRequests")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("PetSoLive.Core.Entities.User", null)
+                        .WithMany("HelpRequests")
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("User");
                 });

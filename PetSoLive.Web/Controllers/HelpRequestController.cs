@@ -7,38 +7,90 @@ using PetSoLive.Core.Entities;
 public class HelpRequestController : Controller
 {
     private readonly IHelpRequestService _helpRequestService;
+    private readonly IUserService _userService;
     private readonly INotificationService _notificationService;
 
     public HelpRequestController(IHelpRequestService helpRequestService, 
+        IUserService userService, 
         INotificationService notificationService)
     {
         _helpRequestService = helpRequestService;
+        _userService = userService;
         _notificationService = notificationService;
     }
 
-    // Create a new Help Request
-    [HttpPost]
-    public async Task<IActionResult> Create(HelpRequest helpRequest)
+  // Create a new Help Request (Only for logged-in users)
+    [HttpGet]
+    public async Task<IActionResult> Create()
     {
-        // Oturumda kullanıcı ID'sini kontrol et
-        var userId = HttpContext.Session.GetString("UserId");
-        if (string.IsNullOrEmpty(userId))
+        var username = HttpContext.Session.GetString("Username");  // Use "Username" session key
+        if (string.IsNullOrEmpty(username))
         {
             return RedirectToAction("Login", "Account");
         }
 
-        helpRequest.UserId = int.Parse(userId);  // Kullanıcı ID'sini kaydet
-        helpRequest.CreatedAt = DateTime.Now; // Set the creation time
-        await _helpRequestService.CreateHelpRequestAsync(helpRequest);
-
-        // Send notification if emergency level is high
-        if (helpRequest.EmergencyLevel == EmergencyLevel.High)
+        // Fetch user details to show on form
+        var user = await _userService.GetUserByUsernameAsync(username);  // Fetch user by username
+        if (user == null)
         {
-            await _notificationService.SendEmergencyNotificationAsync("High urgency help request", helpRequest.Description);
+            return RedirectToAction("Login", "Account");
         }
 
-        return RedirectToAction("Index");
+        // Create a new instance of HelpRequest to pass to the view
+        var helpRequest = new HelpRequest();
+
+        ViewBag.User = user;  // Pass the user details to the view
+
+        return View(helpRequest);  // Pass the new instance of HelpRequest to the view
     }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(HelpRequest helpRequest)
+    {
+        var username = HttpContext.Session.GetString("Username");
+        if (string.IsNullOrEmpty(username))
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var user = await _userService.GetUserByUsernameAsync(username);
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        // Set UserId and CreatedAt before saving
+        helpRequest.User = user;
+        helpRequest.UserId = user.Id;
+        helpRequest.CreatedAt = DateTime.Now; // Ensure CreatedAt is assigned here
+
+        // Check if ModelState is valid before proceeding
+        if (ModelState.IsValid)
+        {
+            // Debugging to ensure values are correct
+            Console.WriteLine($"Description: {helpRequest.Description}");
+            Console.WriteLine($"Emergency Level: {helpRequest.EmergencyLevel}");
+            Console.WriteLine($"Created At: {helpRequest.CreatedAt}");
+
+            // Call service to save the help request
+            await _helpRequestService.CreateHelpRequestAsync(helpRequest);
+
+            // Send notifications if the emergency level is high
+            if (helpRequest.EmergencyLevel == EmergencyLevel.High)
+            {
+                await _notificationService.SendEmergencyNotificationAsync("High urgency help request", helpRequest.Description);
+            }
+
+            // Redirect after successful submission
+            return RedirectToAction("Index");
+        }
+
+        // If the model is not valid, return the form with validation errors
+        return View(helpRequest);
+    }
+
+
 
     // Show all help requests (Blog-like list view)
     [HttpGet]
