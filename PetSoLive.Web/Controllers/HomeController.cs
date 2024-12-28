@@ -6,5 +6,10 @@ namespace PetSoLive.Web.Controllers
     {
         public IActionResult Index() => View();
         public IActionResult About() => View();
+        public IActionResult Error()
+        {
+            ViewBag.ErrorMessage = TempData["ErrorMessage"];
+            return View();
+        }
     }
 }

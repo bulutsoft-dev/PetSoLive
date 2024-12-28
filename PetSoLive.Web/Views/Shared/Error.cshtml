@@ -1,14 +1,54 @@
 ﻿@{
 ViewData["Title"] = "Error";
 }
-
-<h2>@ViewData["Title"]</h2>
-
-@if (ViewBag.ErrorMessage != null)
-{
-<div class="alert alert-danger">
-    <strong>Error:</strong> @ViewBag.ErrorMessage
+<!-- Error Page Navbar as List -->
+<div class="container mt-4">
+    <h3>Navigation</h3>
+    <ul class="list-unstyled">
+        <li><a href="@Url.Action("Index", "Home")" class="text-dark">Home</a></li>
+        <li><a href="@Url.Action("About", "Home")" class="text-dark">About</a></li>
+        <li><a href="@Url.Action("Index", "Adoption")" class="text-dark">Adoption</a></li>
+        <li><a href="@Url.Action("List", "Assistance")" class="text-dark">Assistance</a></li>
+        <li><a href="@Url.Action("Index", "LostPetAd")" class="text-dark">Lost Pet Ads</a></li>
+        <li><a href="@Url.Action("Index", "HelpRequest")" class="text-dark">Help Requests</a></li>
+        <li><a href="@Url.Action("Index", "Veterinarian")" class="text-dark">Veterinarians</a></li>
+    </ul>
 </div>
-}
 
-<p><a href="@Url.Action("Index", "Home")">Go back to homepage</a></p>
+<!-- Error Message Section -->
+<div class="container mt-4">
+    <h2>Error Page</h2>
+
+    <!-- General Error Message -->
+    @if (ViewBag.ErrorMessage != null)
+    {
+    <div class="alert alert-danger">
+        <strong>Error:</strong> @ViewBag.ErrorMessage
+    </div>
+    }
+
+    <!-- ModelState Errors Listing -->
+    @if (!ViewData.ModelState.IsValid)
+    {
+    <div class="alert alert-danger">
+        <strong>Validation Errors:</strong>
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+            <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+    }
+
+    <!-- Alternative Error Message (if any) -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+    <div class="alert alert-danger">
+        <strong>Error:</strong> @TempData["ErrorMessage"]
+    </div>
+    }
+
+    <p>Please contact support if the issue persists.</p>
+</div>
+
