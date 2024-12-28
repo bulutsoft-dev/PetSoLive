@@ -1,7 +1,21 @@
-namespace PetSoLive.Core.Interfaces;
+using PetSoLive.Core.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-public interface IHelpRequestService
+namespace PetSoLive.Core.Interfaces
 {
-    Task CreateHelpRequestAsync(HelpRequest helpRequest);
-    Task<List<HelpRequest>> GetHelpRequestsByUserAsync(int userId);
+    public interface IHelpRequestService
+    {
+        // Create a new help request
+        Task CreateHelpRequestAsync(HelpRequest helpRequest);
+
+        // Get all help requests
+        Task<List<HelpRequest>> GetHelpRequestsAsync();
+
+        // Get a specific help request by ID
+        Task<HelpRequest> GetHelpRequestByIdAsync(int id);
+
+        // Get help requests for a specific user
+        Task<List<HelpRequest>> GetHelpRequestsByUserAsync(int userId);
+    }
 }

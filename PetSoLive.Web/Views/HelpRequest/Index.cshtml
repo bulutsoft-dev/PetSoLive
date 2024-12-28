@@ -1,24 +1,18 @@
+
 @{
-    ViewData["Title"] = "My Help Requests";
+ViewData["Title"] = "Help Requests";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h1>Help Requests</h1>
 
-@if (Model != null && Model.Any())
+@foreach (var helpRequest in Model)
 {
-    <ul class="list-group">
-        @foreach (var request in Model)
-        {
-            <li class="list-group-item">
-                <h4>@request.Description</h4>
-                <p><strong>Emergency Level:</strong> @request.EmergencyLevel</p>
-                <p><strong>Location:</strong> @request.Location</p>
-                <p><strong>Status:</strong> @(request.IsResolved ? "Resolved" : "Pending")</p>
-            </li>
-        }
-    </ul>
+<div class="help-request-item">
+    <h3><a href="@Url.Action("Details", "HelpRequest", new { id = helpRequest.Id })">@helpRequest.Description</a></h3>
+    <p><strong>Emergency Level:</strong> @helpRequest.EmergencyLevel</p>
+    <p><strong>Created At:</strong> @helpRequest.CreatedAt.ToString("g")</p>
+    <hr />
+</div>
 }
-else
-{
-    <p>No help requests found.</p>
-}
+
+<a href="@Url.Action("Create", "HelpRequest")">Create New Help Request</a>

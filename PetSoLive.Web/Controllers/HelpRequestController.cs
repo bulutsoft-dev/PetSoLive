@@ -16,6 +16,7 @@ public class HelpRequestController : Controller
         _notificationService = notificationService;
     }
 
+    // Create a new Help Request
     [HttpPost]
     public async Task<IActionResult> Create(HelpRequest helpRequest)
     {
@@ -27,8 +28,10 @@ public class HelpRequestController : Controller
         }
 
         helpRequest.UserId = int.Parse(userId);  // Kullanıcı ID'sini kaydet
+        helpRequest.CreatedAt = DateTime.Now; // Set the creation time
         await _helpRequestService.CreateHelpRequestAsync(helpRequest);
 
+        // Send notification if emergency level is high
         if (helpRequest.EmergencyLevel == EmergencyLevel.High)
         {
             await _notificationService.SendEmergencyNotificationAsync("High urgency help request", helpRequest.Description);
@@ -37,17 +40,23 @@ public class HelpRequestController : Controller
         return RedirectToAction("Index");
     }
 
+    // Show all help requests (Blog-like list view)
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        // Oturumda kullanıcı ID'sini kontrol et
-        var userId = HttpContext.Session.GetString("UserId");
-        if (string.IsNullOrEmpty(userId))
-        {
-            return RedirectToAction("Login", "Account");
-        }
-
-        var helpRequests = await _helpRequestService.GetHelpRequestsByUserAsync(int.Parse(userId));
+        var helpRequests = await _helpRequestService.GetHelpRequestsAsync();
         return View(helpRequests);
+    }
+
+    // Show a single help request in detail
+    [HttpGet]
+    public async Task<IActionResult> Details(int id)
+    {
+        var helpRequest = await _helpRequestService.GetHelpRequestByIdAsync(id);
+        if (helpRequest == null)
+        {
+            return NotFound();
+        }
+        return View(helpRequest);
     }
 }
