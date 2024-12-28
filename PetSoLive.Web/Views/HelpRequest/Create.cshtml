@@ -29,32 +29,26 @@ ViewData["Title"] = "Create Help Request";
     <div class="form-group">
         <label>Emergency Level</label><br>
 
-        <!-- Checkboxes for each emergency level -->
+        <!-- Radio buttons for Emergency Level -->
         <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="Low" name="EmergencyLevel" value="Low">
+            <input type="radio" class="form-check-input" id="Low" name="EmergencyLevel" value="Low">
             <label class="form-check-label" for="Low">Low</label>
         </div>
 
         <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="Medium" name="EmergencyLevel" value="Medium">
+            <input type="radio" class="form-check-input" id="Medium" name="EmergencyLevel" value="Medium">
             <label class="form-check-label" for="Medium">Medium</label>
         </div>
 
         <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="High" name="EmergencyLevel" value="High">
+            <input type="radio" class="form-check-input" id="High" name="EmergencyLevel" value="High">
             <label class="form-check-label" for="High">High</label>
         </div>
         <span asp-validation-for="EmergencyLevel" class="text-danger"></span>
     </div>
 
     <!-- Hidden field for UserId -->
-    <input asp-for="UserId" value="@ViewBag.User?.Id" disabled/>
-
-    <!-- Optional: Displaying User details (example) -->
-    <div class="form-group">
-        <label>User:</label>
-        <input type="text" class="form-control" value="@ViewBag.User?.Username" disabled />
-    </div>
+    <input type="hidden" asp-for="UserId" value="@ViewBag.User?.Id" />
 
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
