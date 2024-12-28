@@ -1,7 +1,18 @@
 @{
     ViewData["Title"] = "Register";
 }
-
+    <!-- Display validation errors at the top of the form -->
+@if (!ViewData.ModelState.IsValid)
+{
+<div class="alert alert-danger">
+    <ul>
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+        <li>@error.ErrorMessage</li>
+        }
+    </ul>
+</div>
+}
 <h2>Register</h2>
 
 <form method="post">
