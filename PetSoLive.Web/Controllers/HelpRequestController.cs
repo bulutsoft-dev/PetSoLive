@@ -19,7 +19,6 @@ public class HelpRequestController : Controller
         _notificationService = notificationService;
     }
 
-  // Create a new Help Request (Only for logged-in users)
     [HttpGet]
     public async Task<IActionResult> Create()
     {
@@ -61,18 +60,11 @@ public class HelpRequestController : Controller
         }
 
         // Set UserId and CreatedAt before saving
-        helpRequest.User = user;
         helpRequest.UserId = user.Id;
         helpRequest.CreatedAt = DateTime.Now; // Ensure CreatedAt is assigned here
 
-        // Check if ModelState is valid before proceeding
         if (ModelState.IsValid)
         {
-            // Debugging to ensure values are correct
-            Console.WriteLine($"Description: {helpRequest.Description}");
-            Console.WriteLine($"Emergency Level: {helpRequest.EmergencyLevel}");
-            Console.WriteLine($"Created At: {helpRequest.CreatedAt}");
-
             // Call service to save the help request
             await _helpRequestService.CreateHelpRequestAsync(helpRequest);
 

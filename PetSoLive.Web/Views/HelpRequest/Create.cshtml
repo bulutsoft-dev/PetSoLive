@@ -1,46 +1,65 @@
-@using PetSoLive.Core.Enums
+@model PetSoLive.Core.Entities.HelpRequest
+
 @{
 ViewData["Title"] = "Create Help Request";
 }
 
-<h2>Create Help Request</h2>
+<h1>@ViewData["Title"]</h1>
 
-@if (ViewBag.User != null)
+<!-- Display validation errors at the top of the form -->
+@if (!ViewData.ModelState.IsValid)
 {
-<p>Welcome, @ViewBag.User.Username!</p>
+<div class="alert alert-danger">
+    <ul>
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+        <li>@error.ErrorMessage</li>
+        }
+    </ul>
+</div>
 }
 
-<form method="post" asp-action="Create">
-    @Html.AntiForgeryToken()
-
+<form asp-action="Create" method="post">
     <div class="form-group">
         <label for="Description">Description</label>
-        <textarea class="form-control" id="Description" name="Description" rows="4" required>@Model?.Description</textarea>
+        <textarea asp-for="Description" class="form-control" id="Description" rows="3" required></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
-    <!-- Emergency Level (Radio Buttons) -->
     <div class="form-group">
-        <label>Emergency Level</label>
+        <label>Emergency Level</label><br>
+
+        <!-- Checkboxes for each emergency level -->
         <div class="form-check">
-            <input class="form-check-input" type="radio" id="Low" name="EmergencyLevel" value="Low" @(Model?.EmergencyLevel == EmergencyLevel.Low ? "checked" : "") required />
+            <input type="checkbox" class="form-check-input" id="Low" name="EmergencyLevel" value="Low">
             <label class="form-check-label" for="Low">Low</label>
         </div>
+
         <div class="form-check">
-            <input class="form-check-input" type="radio" id="Medium" name="EmergencyLevel" value="Medium" @(Model?.EmergencyLevel == EmergencyLevel.Medium ? "checked" : "") required />
+            <input type="checkbox" class="form-check-input" id="Medium" name="EmergencyLevel" value="Medium">
             <label class="form-check-label" for="Medium">Medium</label>
         </div>
+
         <div class="form-check">
-            <input class="form-check-input" type="radio" id="High" name="EmergencyLevel" value="High" @(Model?.EmergencyLevel == EmergencyLevel.High ? "checked" : "") required />
+            <input type="checkbox" class="form-check-input" id="High" name="EmergencyLevel" value="High">
             <label class="form-check-label" for="High">High</label>
         </div>
+        <span asp-validation-for="EmergencyLevel" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit Request</button>
+    <!-- Hidden field for UserId -->
+    <input asp-for="UserId" value="@ViewBag.User?.Id" disabled/>
+
+    <!-- Optional: Displaying User details (example) -->
+    <div class="form-group">
+        <label>User:</label>
+        <input type="text" class="form-control" value="@ViewBag.User?.Username" disabled />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
 </form>
 
-
-<div>
-    <p>
-        <a href="@Url.Action("Index", "HelpRequest")">Back to Help Requests List</a>
-    </p>
-</div>
+<!-- Validation Scripts -->
+@section Scripts {
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
