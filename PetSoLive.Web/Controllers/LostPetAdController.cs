@@ -59,7 +59,7 @@ public class LostPetAdController : Controller
     {
         // Kayıp ilanı ID'sine göre veritabanından alınır
         var lostPetAd = await _lostPetAdService.GetLostPetAdByIdAsync(id);
-        
+
         if (lostPetAd == null)
         {
             // Eğer ilan bulunmazsa, hata mesajı gösterilir ve Index sayfasına dönülür
@@ -70,6 +70,7 @@ public class LostPetAdController : Controller
         // Detay sayfasına ilan verisi gönderilir
         return View(lostPetAd);
     }
+
     
 
     [HttpPost]

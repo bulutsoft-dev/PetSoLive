@@ -20,9 +20,15 @@
         <p class="card-text"><strong>Location:</strong> @Model.LastSeenLocation</p>
         <p class="card-text"><strong>Last Seen Date:</strong> @Model.LastSeenDate.ToString("dd/MM/yyyy")</p>
         <p class="card-text"><strong>Posted on:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy")</p>
-        
+
         <!-- İlan sahibinin bilgisi -->
-        <p class="card-text"><strong>Owner:</strong> @Model.User?.Username</p>
+        <h5>Owner Information:</h5>
+        <p class="card-text"><strong>Username:</strong> @Model.User?.Username</p>
+        <p class="card-text"><strong>Email:</strong> @Model.User?.Email</p>
+        <p class="card-text"><strong>Phone Number:</strong> @Model.User?.PhoneNumber</p>
+        <p class="card-text"><strong>Address:</strong> @Model.User?.Address</p>
+        <p class="card-text"><strong>City:</strong> @Model.User?.City</p>
+        <p class="card-text"><strong>District:</strong> @Model.User?.District</p>
 
         <a href="@Url.Action("Index", "LostPetAd")" class="btn btn-secondary">Back to List</a>
     </div>

@@ -49,5 +49,6 @@ namespace PetSoLive.Data.Repositories
                 .Where(u => u.City == city && u.District == district)
                 .ToListAsync();
         }
+        
     }
 }
