@@ -80,7 +80,7 @@ public class HelpRequestController : Controller
             var veterinarians = await _veterinarianService.GetAllVeterinariansAsync();
             foreach (var veterinarian in veterinarians)
             {
-                await SendVeterinarianHelpRequestEmailAsync(veterinarian.User, helpRequest, user);
+                await SendNewHelpRequestEmailAsync(veterinarian.User, helpRequest, user);
             }
 
             return RedirectToAction("Index");
@@ -105,16 +105,13 @@ public class HelpRequestController : Controller
             return NotFound();
         }
 
-        // Get the logged-in user
         var username = HttpContext.Session.GetString("Username");
         var user = username != null ? await _userService.GetUserByUsernameAsync(username) : null;
 
-        // Pass the flag to the view if the user can edit or delete
         ViewBag.CanEditOrDelete = user != null && helpRequest.UserId == user.Id;
 
         return View(helpRequest);
     }
-
 
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
@@ -137,7 +134,6 @@ public class HelpRequestController : Controller
             return Unauthorized();
         }
 
-        // No need to manually cast, just pass as is
         return View(helpRequest);
     }
 
@@ -180,7 +176,7 @@ public class HelpRequestController : Controller
             var veterinarians = await _veterinarianService.GetAllVeterinariansAsync();
             foreach (var vet in veterinarians)
             {
-                await SendVeterinarianHelpRequestEmailAsync(vet.User, existingRequest, user);
+                await SendUpdatedHelpRequestEmailAsync(vet.User, existingRequest, user);
             }
 
             return RedirectToAction("Index");
@@ -188,8 +184,6 @@ public class HelpRequestController : Controller
 
         return View(helpRequest);
     }
-
-
 
     [HttpPost]
     public async Task<IActionResult> Delete(int id)
@@ -213,14 +207,43 @@ public class HelpRequestController : Controller
         }
 
         await _helpRequestService.DeleteHelpRequestAsync(id);
+
+        var veterinarians = await _veterinarianService.GetAllVeterinariansAsync();
+        foreach (var veterinarian in veterinarians)
+        {
+            await SendDeletedHelpRequestEmailAsync(veterinarian.User, helpRequest, user);
+        }
+
         return RedirectToAction("Index");
     }
 
-    private async Task SendVeterinarianHelpRequestEmailAsync(User veterinarian, HelpRequest helpRequest, User requester)
+    // Method to send email for new help request
+    private async Task SendNewHelpRequestEmailAsync(User veterinarian, HelpRequest helpRequest, User requester)
     {
-        var subject = "New Help Request: Animal in Need!";
+        string subject = "New Help Request: Animal in Need!";
         var emailHelper = new EmailHelper();
-        var body = emailHelper.GenerateVeterinarianNotificationEmailBody(helpRequest, requester);
+        string body = emailHelper.GenerateVeterinarianNotificationEmailBody(helpRequest, requester);
+
+        await _emailService.SendEmailAsync(veterinarian.Email, subject, body);
+    }
+
+    // Method to send email for updated help request
+    private async Task SendUpdatedHelpRequestEmailAsync(User veterinarian, HelpRequest helpRequest, User requester)
+    {
+        string subject = "Help Request Updated: Animal in Need!";
+        var emailHelper = new EmailHelper();
+        string body = emailHelper.GenerateEditHelpRequestEmailBody(helpRequest, requester);
+
+        await _emailService.SendEmailAsync(veterinarian.Email, subject, body);
+    }
+
+    // Method to send email for deleted help request
+    private async Task SendDeletedHelpRequestEmailAsync(User veterinarian, HelpRequest helpRequest, User requester)
+    {
+        string subject = "Help Request Deleted: Animal in Need!";
+        var emailHelper = new EmailHelper();
+        string body = emailHelper.GenerateDeleteHelpRequestEmailBody(helpRequest, requester);
+
         await _emailService.SendEmailAsync(veterinarian.Email, subject, body);
     }
 }

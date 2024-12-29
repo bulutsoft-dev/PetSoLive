@@ -234,4 +234,99 @@ public class EmailHelper
         </body>
         </html>";
     }
+    
+       // Create HelpRequest Email Body
+    public string GenerateCreateHelpRequestEmailBody(HelpRequest helpRequest, User requester)
+    {
+        return $@"
+        <html>
+        <head>
+            {CssLink}
+        </head>
+        <body>
+            <div class='email-container'>
+                <h2 class='header'>New Help Request Created for an Animal in Need!</h2>
+                <p>Dear Veterinarian,</p>
+                <p>A new help request has been created for an animal requiring immediate attention:</p>
+                <ul class='details-list'>
+                    <li><strong>Description:</strong> {helpRequest.Description}</li>
+                    <li><strong>Emergency Level:</strong> {helpRequest.EmergencyLevel}</li>
+                    <li><strong>Created At:</strong> {helpRequest.CreatedAt.ToString("yyyy-MM-dd HH:mm")}</li>
+                    <li><strong>Requested By:</strong> {requester.Username} ({requester.Email})</li>
+                </ul>
+
+                <p>Please log in to the system to review this request in detail and provide assistance.</p>
+                <a href='https://yourdomain.com/HelpRequest/Details/{helpRequest.Id}' class='btn-primary'>View Help Request</a>
+
+                <div class='footer'>
+                    <p>Best regards,</p>
+                    <p>The PetSoLive Team</p>
+                </div>
+            </div>
+        </body>
+        </html>";
+    }
+
+    // Edit HelpRequest Email Body
+    public string GenerateEditHelpRequestEmailBody(HelpRequest helpRequest, User requester)
+    {
+        return $@"
+        <html>
+        <head>
+            {CssLink}
+        </head>
+        <body>
+            <div class='email-container'>
+                <h2 class='header'>Help Request Updated for an Animal in Need!</h2>
+                <p>Dear Veterinarian,</p>
+                <p>The following help request has been updated:</p>
+                <ul class='details-list'>
+                    <li><strong>Description:</strong> {helpRequest.Description}</li>
+                    <li><strong>Emergency Level:</strong> {helpRequest.EmergencyLevel}</li>
+                    <li><strong>Updated At:</strong> {helpRequest.CreatedAt.ToString("yyyy-MM-dd HH:mm")}</li>
+                    <li><strong>Requested By:</strong> {requester.Username} ({requester.Email})</li>
+                </ul>
+
+                <p>Please log in to the system to review the updated request in detail.</p>
+                <a href='https://yourdomain.com/HelpRequest/Details/{helpRequest.Id}' class='btn-primary'>View Updated Help Request</a>
+
+                <div class='footer'>
+                    <p>Best regards,</p>
+                    <p>The PetSoLive Team</p>
+                </div>
+            </div>
+        </body>
+        </html>";
+    }
+
+    // Delete HelpRequest Email Body
+    public string GenerateDeleteHelpRequestEmailBody(HelpRequest helpRequest, User requester)
+    {
+        return $@"
+        <html>
+        <head>
+            {CssLink}
+        </head>
+        <body>
+            <div class='email-container'>
+                <h2 class='header'>Help Request Deleted for an Animal in Need!</h2>
+                <p>Dear Veterinarian,</p>
+                <p>The following help request has been deleted:</p>
+                <ul class='details-list'>
+                    <li><strong>Description:</strong> {helpRequest.Description}</li>
+                    <li><strong>Emergency Level:</strong> {helpRequest.EmergencyLevel}</li>
+                    <li><strong>Deleted At:</strong> {helpRequest.CreatedAt.ToString("yyyy-MM-dd HH:mm")}</li>
+                    <li><strong>Requested By:</strong> {requester.Username} ({requester.Email})</li>
+                </ul>
+
+                <p>Please note that this request is no longer available for review.</p>
+
+                <div class='footer'>
+                    <p>Best regards,</p>
+                    <p>The PetSoLive Team</p>
+                </div>
+            </div>
+        </body>
+        </html>";
+    }
 }
