@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Core.Enums;
 
