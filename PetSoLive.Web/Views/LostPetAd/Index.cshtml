@@ -25,33 +25,27 @@ ViewData["Title"] = "Lost Pet Ads";
 </div>
 }
 
-<!-- Display Lost Pet Ads -->
-@if (Model != null && Model.Count > 0)
-{
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        <th>Pet Name</th>
-        <th>Description</th>
-        <th>Location</th>
-        <th>Created At</th>
-    </tr>
-    </thead>
-    <tbody>
+<!-- Display Lost Pet Ads in Card Layout -->
+<div class="row">
     @foreach (var ad in Model)
     {
-    <tr>
-        <td>@ad.PetName</td>
-        <td>@ad.Description</td>
-        <td>@ad.LastSeenCity, @ad.LastSeenDistrict</td>
-        <td>@ad.CreatedAt.ToString("dd/MM/yyyy")</td>
-    </tr>
+    <div class="col-md-4">
+        <div class="card">
+            @if (!string.IsNullOrEmpty(ad.ImageUrl))
+            {
+            <img src="@ad.ImageUrl" class="card-img-top" alt="Pet Image">
+            }
+            else
+            {
+            <img src="https://via.placeholder.com/150" class="card-img-top" alt="No Image Available">
+            }
+            <div class="card-body">
+                <h5 class="card-title">@ad.PetName</h5>
+                <p class="card-text">@ad.Description</p>
+                <p class="card-text"><small class="text-muted">@ad.LastSeenLocation</small></p>
+                <a href="@Url.Action("Details", "LostPetAd", new { id = ad.Id })" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+    </div>
     }
-    </tbody>
-</table>
-}
-else
-{
-<p>No lost pet ads found.</p>
-}
-
+</div>

@@ -17,7 +17,6 @@ public class LostPetAdController : Controller
     {
         _lostPetAdService = lostPetAdService;
         _userService = userService;
-        
         _emailService = emailService;
     }
 
@@ -30,72 +29,57 @@ public class LostPetAdController : Controller
         }
         return null;
     }
+
     // GET: /LostPetAd/Create
     public IActionResult Create()
     {
-        // Oturum kontrolü, giriş yapmamış kullanıcıyı yönlendir
         var redirectResult = RedirectToLoginIfNotLoggedIn();
         if (redirectResult != null) return redirectResult;
 
-        // Şehir listesini ViewData ile view'a gönderiyoruz
         ViewData["Cities"] = CityList.Cities;
-
-        // Başlangıçta district listesi boş olacak
         ViewData["Districts"] = new List<string>(); 
-
         return View();
     }
     
     // GET: /LostPetAd/Index
     public async Task<IActionResult> Index()
     {
-        // Get all lost pet ads using service
         var lostPetAds = await _lostPetAdService.GetAllLostPetAdsAsync();
-
         if (lostPetAds == null)
         {
-            // Log or handle the error as needed (optional)
             TempData["ErrorMessage"] = "Could not retrieve lost pet ads. Please try again later.";
-        
-            // Return an empty list if null
             lostPetAds = new List<LostPetAd>();
         }
 
-        return View(lostPetAds); // Pass the list of ads (empty or retrieved) to the view
-    
+        return View(lostPetAds); 
     }
+    
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(LostPetAd lostPetAd, string city, string district)
     {
-        // Oturum kontrolü, giriş yapmamış kullanıcıyı yönlendir
         var redirectResult = RedirectToLoginIfNotLoggedIn();
         if (redirectResult != null) return redirectResult;
 
-        // City ve District bilgilerini LostPetAd nesnesine ekleyin
         if (string.IsNullOrEmpty(city) || string.IsNullOrEmpty(district))
         {
             TempData["ErrorMessage"] = "City and District are required.";
             ViewData["Cities"] = CityList.Cities;
-            ViewData["Districts"] = new List<string>();  // Boş district listesi
-            return View(lostPetAd);  // Hata mesajı ve boş district listesiyle view'a dön
+            ViewData["Districts"] = new List<string>();  
+            return View(lostPetAd);  
         }
 
         lostPetAd.LastSeenCity = city;
         lostPetAd.LastSeenDistrict = district;
 
-        // Kullanıcının ID'sini kaydedin (oturumda mevcut olan kullanıcıyı varsayarak)
         var username = HttpContext.Session.GetString("Username");
         var user = await _userService.GetUserByUsernameAsync(username);
         lostPetAd.UserId = user.Id;
 
-        // LostPetAd nesnesini veritabanına kaydedin
         await _lostPetAdService.CreateLostPetAdAsync(lostPetAd, city, district);
 
-        // E-posta gönderme: yalnızca şehir ve ilçesi eşleşen kullanıcılara
         var usersInLocation = await _userService.GetUsersByLocationAsync(city, district);
-
-        // Her bir kullanıcıya e-posta gönder
         foreach (var targetUser in usersInLocation)
         {
             var subject = "New Lost Pet Ad Created";
@@ -103,15 +87,8 @@ public class LostPetAdController : Controller
             await _emailService.SendEmailAsync(targetUser.Email, subject, body);
         }
 
-        // Başarılı bir işlem mesajı gösterin
         TempData["SuccessMessage"] = "The lost pet ad has been created successfully, and notifications have been sent.";
-
-        // Yönlendirme işlemi
         return RedirectToAction("Index");
     }
-
-
-    
-
-    
 }
+
