@@ -1,5 +1,9 @@
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class UserService : IUserService
 {
@@ -10,6 +14,7 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
+    // Kullanıcıyı kimlik ve şifre ile doğrulama
     public async Task<User> AuthenticateAsync(string username, string password)
     {
         var user = await _userRepository.GetAllAsync()
@@ -25,6 +30,7 @@ public class UserService : IUserService
         return null;
     }
 
+    // Yeni bir kullanıcı kaydetme
     public async Task RegisterAsync(User user)
     {
         if (string.IsNullOrWhiteSpace(user.PasswordHash))
@@ -52,6 +58,7 @@ public class UserService : IUserService
         await _userRepository.AddAsync(user);
     }
 
+    // Kullanıcıyı kullanıcı adı ile almak
     public async Task<User?> GetUserByUsernameAsync(string username)
     {
         if (string.IsNullOrEmpty(username))
@@ -63,6 +70,7 @@ public class UserService : IUserService
             .ContinueWith(task => task.Result.FirstOrDefault(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase)));
     }
 
+    // Kullanıcıyı ID ile almak
     public async Task<User> GetUserByIdAsync(int userId)
     {
         var user = await _userRepository.GetByIdAsync(userId);
@@ -75,6 +83,7 @@ public class UserService : IUserService
         return user;
     }
 
+    // Kullanıcı bilgilerini güncelleme
     public async Task UpdateUserAsync(User user)
     {
         if (user == null)
@@ -142,5 +151,16 @@ public class UserService : IUserService
         {
             await _userRepository.UpdateAsync(existingUser);
         }
+    }
+
+    // Kullanıcıları şehir ve ilçe bazında filtreleme
+    public async Task<List<User>> GetUsersByLocationAsync(string city, string district)
+    {
+        // _userRepository.GetAllAsync() asenkron bir şekilde dönecek, fakat sonrasında IQueryable işlemi yapılabilir
+        var usersInLocation = (await _userRepository.GetAllAsync()) // Verileri asenkron olarak al
+            .Where(u => u.City == city && u.District == district) // Filtreleme işlemi burada yapılır
+            .ToList(); // Sonuçları listeye çevir
+
+        return usersInLocation;
     }
 }

@@ -9,5 +9,6 @@ namespace PetSoLive.Core.Interfaces
         Task<User?> GetUserByUsernameAsync(string username);
         Task<User> GetUserByIdAsync(int userId);
         Task UpdateUserAsync(User user);
+        Task<List<User>> GetUsersByLocationAsync(string city, string district);
     }
 }
