@@ -23,8 +23,11 @@ public class LostPetAdRepository : ILostPetAdRepository
         return await _context.LostPetAds.ToListAsync();
     }
 
-    public Task<LostPetAd> GetByIdAsync(int id)
+    // Kayıp ilanını ID'ye göre almak için metod
+    public async Task<LostPetAd> GetByIdAsync(int id)
     {
-        return _lostPetAdRepositoryImplementation.GetByIdAsync(id);
+        return await _context.LostPetAds
+            .FirstOrDefaultAsync(ad => ad.Id == id);
     }
+    
 }

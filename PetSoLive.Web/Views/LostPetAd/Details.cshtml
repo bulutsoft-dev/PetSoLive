@@ -1,0 +1,29 @@
+@{
+    ViewData["Title"] = "Lost Pet Details";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="card">
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <img src="@Model.ImageUrl" class="card-img-top" alt="Pet Image">
+    }
+    else
+    {
+        <img src="https://via.placeholder.com/300" class="card-img-top" alt="No Image Available">
+    }
+
+    <div class="card-body">
+        <h5 class="card-title">@Model.PetName</h5>
+        <p class="card-text">@Model.Description</p>
+        <p class="card-text"><strong>Location:</strong> @Model.LastSeenLocation</p>
+        <p class="card-text"><strong>Last Seen Date:</strong> @Model.LastSeenDate.ToString("dd/MM/yyyy")</p>
+        <p class="card-text"><strong>Posted on:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy")</p>
+        
+        <!-- İlan sahibinin bilgisi -->
+        <p class="card-text"><strong>Owner:</strong> @Model.User?.Username</p>
+
+        <a href="@Url.Action("Index", "LostPetAd")" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>

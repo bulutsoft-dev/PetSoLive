@@ -54,6 +54,23 @@ public class LostPetAdController : Controller
         return View(lostPetAds); 
     }
     
+    // GET: /LostPetAd/Details/5
+    public async Task<IActionResult> Details(int id)
+    {
+        // Kayıp ilanı ID'sine göre veritabanından alınır
+        var lostPetAd = await _lostPetAdService.GetLostPetAdByIdAsync(id);
+        
+        if (lostPetAd == null)
+        {
+            // Eğer ilan bulunmazsa, hata mesajı gösterilir ve Index sayfasına dönülür
+            TempData["ErrorMessage"] = "Lost Pet Ad not found.";
+            return RedirectToAction("Index");
+        }
+
+        // Detay sayfasına ilan verisi gönderilir
+        return View(lostPetAd);
+    }
+    
 
     [HttpPost]
     [ValidateAntiForgeryToken]

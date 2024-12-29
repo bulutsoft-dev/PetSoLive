@@ -38,4 +38,10 @@ public class LostPetAdService : ILostPetAdService
     {
         return await _lostPetAdRepository.GetAllAsync();
     }
+    
+    // Kayıp ilanını ID'ye göre almak için metod
+    public async Task<LostPetAd> GetLostPetAdByIdAsync(int id)
+    {
+        return await _lostPetAdRepository.GetByIdAsync(id);
+    }
 }
