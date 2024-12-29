@@ -1,0 +1,33 @@
+@model PetSoLive.Core.Entities.Comment
+
+<h2>Edit Comment</h2>
+
+<!-- Genel hata mesajlarını listelemek için -->
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <h4>Errors:</h4>
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<form asp-action="EditComment" method="post">
+    <!-- Gizli alanlar: Id ve HelpRequestId -->
+    <input type="hidden" name="id" value="@Model.Id" />
+    <input type="hidden" name="helpRequestId" value="@Model.HelpRequestId" />
+
+    <!-- İçerik Alanı -->
+    <div class="form-group">
+        <label for="content">Comment</label>
+        <textarea id="content" name="content" class="form-control">@Model.Content</textarea>
+        <!-- Alan bazlı hata mesajları -->
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>

@@ -117,7 +117,12 @@ public class HelpRequestController : Controller
         var user = username != null ? await _userService.GetUserByUsernameAsync(username) : null;
 
         ViewBag.CanEditOrDelete = user != null && helpRequest.UserId == user.Id;
-
+        ViewBag.isVeterinarian = user != null && await _veterinarianService.GetByUserIdAsync(user.Id) != null;
+        // Pass whether the current user can edit or delete specific comments
+        if (user != null)
+        {
+            ViewBag.CanEditOrDeleteComment = comments.Where(c => c.UserId == user.Id).Select(c => c.Id).ToList();
+        }
         return View(helpRequest);
     }
 
@@ -265,98 +270,101 @@ public class HelpRequestController : Controller
 
         return RedirectToAction("Details", "HelpRequest", new { id = helpRequest.Id });
     }
-
-// Edit Comment
-[HttpGet]
-public async Task<IActionResult> EditComment(int commentId)
-{
-    var username = HttpContext.Session.GetString("Username");
-    if (string.IsNullOrEmpty(username))
+    
+    [HttpGet]
+    public async Task<IActionResult> EditComment(int id)
     {
-        return RedirectToAction("Login", "Account");
+        var comment = await _commentService.GetCommentByIdAsync(id);
+        if (comment == null)
+        {
+            return NotFound();
+        }
+
+        var username = HttpContext.Session.GetString("Username");
+        if (string.IsNullOrEmpty(username))
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var user = await _userService.GetUserByUsernameAsync(username);
+        if (user == null || comment.UserId != user.Id)
+        {
+            return Unauthorized();
+        }
+
+        return View(comment); // Yorumu doğrudan View'a gönderiyoruz.
     }
 
-    var user = await _userService.GetUserByUsernameAsync(username);
-    if (user == null)
+    
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditComment(int id, int helpRequestId, string content)
     {
-        return RedirectToAction("Login", "Account");
-    }
+        var username = HttpContext.Session.GetString("Username");
+        if (string.IsNullOrEmpty(username))
+        {
+            return RedirectToAction("Login", "Account");
+        }
 
-    var comment = await _commentService.GetCommentByIdAsync(commentId);
-    if (comment == null || comment.UserId != user.Id)
-    {
-        return Unauthorized();
-    }
+        var user = await _userService.GetUserByUsernameAsync(username);
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
 
-    return View(comment);
-}
+        var existingComment = await _commentService.GetCommentByIdAsync(id);
+        if (existingComment == null || existingComment.UserId != user.Id)
+        {
+            return Unauthorized();
+        }
 
-[HttpPost]
-[ValidateAntiForgeryToken]
-public async Task<IActionResult> EditComment(Comment comment)
-{
-    var username = HttpContext.Session.GetString("Username");
-    if (string.IsNullOrEmpty(username))
-    {
-        return RedirectToAction("Login", "Account");
-    }
+        if (string.IsNullOrWhiteSpace(content))
+        {
+            ModelState.AddModelError(nameof(content), "Content cannot be empty.");
+            return View(existingComment); // Hatalı durumlarda eski yorumu yeniden yükler.
+        }
 
-    var user = await _userService.GetUserByUsernameAsync(username);
-    if (user == null)
-    {
-        return RedirectToAction("Login", "Account");
-    }
-
-    var existingComment = await _commentService.GetCommentByIdAsync(comment.Id);
-    if (existingComment == null || existingComment.UserId != user.Id)
-    {
-        return Unauthorized();
-    }
-
-    if (ModelState.IsValid)
-    {
-        existingComment.Content = comment.Content;
+        existingComment.Content = content;
         existingComment.CreatedAt = DateTime.Now;
 
-        // Update the VeterinarianId if the user is a veterinarian
         var veterinarian = await _veterinarianService.GetByUserIdAsync(user.Id);
         existingComment.VeterinarianId = veterinarian?.Id;
 
         await _commentService.UpdateCommentAsync(existingComment);
 
-        return RedirectToAction("Details", new { id = existingComment.HelpRequestId });
+        return RedirectToAction("Details", new { id = helpRequestId });
     }
 
-    return View(comment);
-}
 
-// Delete Comment
-[HttpPost]
-[ValidateAntiForgeryToken]
-public async Task<IActionResult> DeleteComment(int commentId)
-{
-    var username = HttpContext.Session.GetString("Username");
-    if (string.IsNullOrEmpty(username))
+
+
+// Delete Comment Action
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteComment(int commentId)
     {
-        return RedirectToAction("Login", "Account");
+        var username = HttpContext.Session.GetString("Username");
+        if (string.IsNullOrEmpty(username))
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var user = await _userService.GetUserByUsernameAsync(username);
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var comment = await _commentService.GetCommentByIdAsync(commentId);
+        if (comment == null || comment.UserId != user.Id)
+        {
+            return Unauthorized();
+        }
+
+        await _commentService.DeleteCommentAsync(commentId);
+
+        return RedirectToAction("Details", new { id = comment.HelpRequestId });
     }
-
-    var user = await _userService.GetUserByUsernameAsync(username);
-    if (user == null)
-    {
-        return RedirectToAction("Login", "Account");
-    }
-
-    var comment = await _commentService.GetCommentByIdAsync(commentId);
-    if (comment == null || comment.UserId != user.Id)
-    {
-        return Unauthorized();
-    }
-
-    await _commentService.DeleteCommentAsync(commentId);
-
-    return RedirectToAction("Details", new { id = comment.HelpRequestId });
-}
 
     // Method to send email for new help request
     private async Task SendNewHelpRequestEmailAsync(User veterinarian, HelpRequest helpRequest, User requester)
