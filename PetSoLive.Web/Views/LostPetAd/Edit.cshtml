@@ -4,36 +4,44 @@ ViewData["Title"] = "Edit Lost Pet Ad";
 
 <h2>Edit Lost Pet Ad</h2>
 
-<form asp-action="Edit" method="post">
-    @if (TempData["SuccessMessage"] != null)
-    {
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
-    </div>
-    }
+<!-- Error message display -->
+@if (TempData["ErrorMessage"] != null)
+{
+<div class="alert alert-danger">
+    @TempData["ErrorMessage"]
+</div>
+}
 
-    @if (TempData["ErrorMessage"] != null)
-    {
-    <div class="alert alert-danger">
-        @TempData["ErrorMessage"]
-    </div>
-    }
+<!-- Success message display -->
+@if (TempData["SuccessMessage"] != null)
+{
+<div class="alert alert-success">
+    @TempData["SuccessMessage"]
+</div>
+}
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
 
     <div class="form-group">
         <label for="PetName">Pet Name</label>
-        <input type="text" class="form-control" id="PetName" name="PetName" value="@Model.PetName" required />
+        <input type="text" id="PetName" name="PetName" class="form-control" value="@Model.PetName" required />
     </div>
 
     <div class="form-group">
         <label for="Description">Description</label>
-        <textarea class="form-control" id="Description" name="Description" rows="4" required>@Model.Description</textarea>
+        <textarea id="Description" name="Description" class="form-control" required>@Model.Description</textarea>
     </div>
 
     <div class="form-group">
         <label for="LastSeenDate">Last Seen Date</label>
-        <input type="date" class="form-control" id="LastSeenDate" name="LastSeenDate" value="@Model.LastSeenDate.ToString("yyyy-MM-dd")" required />
+        <input type="date" id="LastSeenDate" name="LastSeenDate" class="form-control" value="@Model.LastSeenDate.ToString("yyyy-MM-dd")" required />
     </div>
 
+    <div class="form-group">
+        <label for="ImageUrl">Pet Image (URL)</label>
+        <input type="url" id="ImageUrl" name="ImageUrl" class="form-control" value="@Model.ImageUrl" />
+    </div>
 
     <div class="form-group">
         <label for="city">City</label>
@@ -52,18 +60,16 @@ ViewData["Title"] = "Edit Lost Pet Ad";
         </select>
     </div>
 
-
-    <div class="form-group">
-        <label for="ImageUrl">Image URL (Required)</label>
-        <input type="url" class="form-control" id="ImageUrl" name="ImageUrl" value="@Model.ImageUrl" placeholder="Enter Image URL" required />
-    </div>
-
     <button type="submit" class="btn btn-primary">Update Lost Pet Ad</button>
 </form>
 
+<!-- Redirect to cancel button -->
+<a href="@Url.Action("Details", new { id = Model.Id })" class="btn btn-secondary mt-3">Cancel</a>
+
+
 @section Scripts
 {
-<script>
+    <script>
     // Update districts based on selected city
     $('#city').change(function () {
         var city = $(this).val();
@@ -75,21 +81,6 @@ ViewData["Title"] = "Edit Lost Pet Ad";
                 districtSelect.append('<option value="' + district + '">' + district + '</option>');
             });
         });
-    });
-
-    // Initialize districts if a city is already selected (on page load)
-    $(document).ready(function () {
-        var selectedCity = $('#city').val();
-        if (selectedCity) {
-            $.get('/Account/GetDistricts?city=' + selectedCity, function (data) {
-                var districtSelect = $('#district');
-                districtSelect.empty();
-                districtSelect.append('<option value="">Select a district</option>');
-                data.forEach(function (district) {
-                    districtSelect.append('<option value="' + district + '">' + district + '</option>');
-                });
-            });
-        }
     });
 </script>
 }
