@@ -17,5 +17,8 @@ namespace PetSoLive.Core.Interfaces
 
         // Get help requests for a specific user
         Task<List<HelpRequest>> GetHelpRequestsByUserAsync(int userId);
+        
+        Task UpdateHelpRequestAsync(HelpRequest helpRequest); // Yeni metot
+        Task DeleteHelpRequestAsync(int id); // Yeni metot
     }
 }

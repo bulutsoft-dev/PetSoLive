@@ -66,6 +66,7 @@ public class HelpRequestController : Controller
 
         helpRequest.UserId = user.Id;
         helpRequest.CreatedAt = DateTime.Now;
+        helpRequest.Status = HelpRequestStatus.Active;
 
         if (ModelState.IsValid)
         {
@@ -76,11 +77,7 @@ public class HelpRequestController : Controller
                 await _notificationService.SendEmergencyNotificationAsync("High urgency help request", helpRequest.Description);
             }
 
-            // Get all veterinarians and send emails
             var veterinarians = await _veterinarianService.GetAllVeterinariansAsync();
-            var emailSubject = "New Help Request: Animal in Need!";
-
-            // Send email to each veterinarian
             foreach (var veterinarian in veterinarians)
             {
                 await SendVeterinarianHelpRequestEmailAsync(veterinarian.User, helpRequest, user);
@@ -107,10 +104,118 @@ public class HelpRequestController : Controller
         {
             return NotFound();
         }
+
+        // Get the logged-in user
+        var username = HttpContext.Session.GetString("Username");
+        var user = username != null ? await _userService.GetUserByUsernameAsync(username) : null;
+
+        // Pass the flag to the view if the user can edit or delete
+        ViewBag.CanEditOrDelete = user != null && helpRequest.UserId == user.Id;
+
         return View(helpRequest);
     }
-    
-    // Method to send email to veterinarians
+
+
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var username = HttpContext.Session.GetString("Username");
+        if (string.IsNullOrEmpty(username))
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var user = await _userService.GetUserByUsernameAsync(username);
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var helpRequest = await _helpRequestService.GetHelpRequestByIdAsync(id);
+        if (helpRequest == null || helpRequest.UserId != user.Id)
+        {
+            return Unauthorized();
+        }
+
+        // No need to manually cast, just pass as is
+        return View(helpRequest);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(HelpRequest helpRequest)
+    {
+        var username = HttpContext.Session.GetString("Username");
+        if (string.IsNullOrEmpty(username))
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var user = await _userService.GetUserByUsernameAsync(username);
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var existingRequest = await _helpRequestService.GetHelpRequestByIdAsync(helpRequest.Id);
+        if (existingRequest == null || existingRequest.UserId != user.Id)
+        {
+            return Unauthorized();
+        }
+
+        if (ModelState.IsValid)
+        {
+            existingRequest.Title = helpRequest.Title;
+            existingRequest.Description = helpRequest.Description;
+            existingRequest.EmergencyLevel = helpRequest.EmergencyLevel;
+            existingRequest.Status = helpRequest.Status;
+            existingRequest.Location = helpRequest.Location;
+            existingRequest.ContactName = helpRequest.ContactName;
+            existingRequest.ContactPhone = helpRequest.ContactPhone;
+            existingRequest.ContactEmail = helpRequest.ContactEmail;
+            existingRequest.ImageUrl = helpRequest.ImageUrl;
+
+            await _helpRequestService.UpdateHelpRequestAsync(existingRequest);
+
+            var veterinarians = await _veterinarianService.GetAllVeterinariansAsync();
+            foreach (var vet in veterinarians)
+            {
+                await SendVeterinarianHelpRequestEmailAsync(vet.User, existingRequest, user);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        return View(helpRequest);
+    }
+
+
+
+    [HttpPost]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var username = HttpContext.Session.GetString("Username");
+        if (string.IsNullOrEmpty(username))
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var user = await _userService.GetUserByUsernameAsync(username);
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var helpRequest = await _helpRequestService.GetHelpRequestByIdAsync(id);
+        if (helpRequest == null || helpRequest.UserId != user.Id)
+        {
+            return Unauthorized();
+        }
+
+        await _helpRequestService.DeleteHelpRequestAsync(id);
+        return RedirectToAction("Index");
+    }
+
     private async Task SendVeterinarianHelpRequestEmailAsync(User veterinarian, HelpRequest helpRequest, User requester)
     {
         var subject = "New Help Request: Animal in Need!";

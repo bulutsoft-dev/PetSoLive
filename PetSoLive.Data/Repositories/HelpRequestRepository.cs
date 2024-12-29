@@ -23,7 +23,6 @@ namespace PetSoLive.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-
         // Get all help requests
         public async Task<List<HelpRequest>> GetHelpRequestsAsync()
         {
@@ -49,6 +48,28 @@ namespace PetSoLive.Data.Repositories
                 .Include(hr => hr.User)  // Include related user data if necessary
                 .OrderByDescending(hr => hr.CreatedAt)  // Order by creation time, descending
                 .ToListAsync();
+        }
+
+        // Update an existing help request
+        public async Task UpdateHelpRequestAsync(HelpRequest helpRequest)
+        {
+            var existingRequest = await _context.HelpRequests.FindAsync(helpRequest.Id);
+            if (existingRequest != null)
+            {
+                _context.Entry(existingRequest).CurrentValues.SetValues(helpRequest);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        // Delete a help request by ID
+        public async Task DeleteHelpRequestAsync(int id)
+        {
+            var helpRequest = await _context.HelpRequests.FindAsync(id);
+            if (helpRequest != null)
+            {
+                _context.HelpRequests.Remove(helpRequest);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

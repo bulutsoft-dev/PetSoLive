@@ -2,6 +2,7 @@ using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using PetSoLive.Core.Enums;
 
 namespace PetSoLive.Business.Services
 {
@@ -17,6 +18,7 @@ namespace PetSoLive.Business.Services
         // Create a new help request
         public async Task CreateHelpRequestAsync(HelpRequest helpRequest)
         {
+            helpRequest.Status = HelpRequestStatus.Active; // Status otomatik olarak Active yapılıyor
             await _helpRequestRepository.CreateHelpRequestAsync(helpRequest);
         }
 
@@ -36,6 +38,18 @@ namespace PetSoLive.Business.Services
         public async Task<List<HelpRequest>> GetHelpRequestsByUserAsync(int userId)
         {
             return await _helpRequestRepository.GetHelpRequestsByUserAsync(userId);
+        }
+
+        // Update an existing help request
+        public async Task UpdateHelpRequestAsync(HelpRequest helpRequest)
+        {
+            await _helpRequestRepository.UpdateHelpRequestAsync(helpRequest);
+        }
+
+        // Delete a help request by ID
+        public async Task DeleteHelpRequestAsync(int id)
+        {
+            await _helpRequestRepository.DeleteHelpRequestAsync(id);
         }
     }
 }
