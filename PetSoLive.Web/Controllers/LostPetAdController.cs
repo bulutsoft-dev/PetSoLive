@@ -34,7 +34,6 @@ public class LostPetAdController : Controller
         lostPetAd.UserId = int.Parse(userId);
 
         // Şehir ve ilçeyi birleştirerek LastSeenLocation'a ekleyelim
-        lostPetAd.LastSeenLocation = $"{city}, {district}";
 
         // Kayıp ilanı kaydedilir
         await _lostPetAdService.CreateLostPetAdAsync(lostPetAd);

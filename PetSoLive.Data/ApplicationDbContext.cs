@@ -131,6 +131,22 @@ namespace PetSoLive.Data
                 .WithMany(v => v.Comments)
                 .HasForeignKey(c => c.VeterinarianId)
                 .OnDelete(DeleteBehavior.Restrict); // Veteriner silindiğinde yorumlar silinmesin
+            
+            
+            // LostPetAd - User ilişkisi
+            modelBuilder.Entity<LostPetAd>()
+                .HasOne(l => l.User)
+                .WithMany()
+                .HasForeignKey(l => l.UserId)
+                .OnDelete(DeleteBehavior.Cascade); // User silindiğinde LostPetAd da silinir
+
+            // LostPetAd - LastSeenCity ve LastSeenDistrict için optional özellikler ekliyoruz
+            modelBuilder.Entity<LostPetAd>()
+                .Property(l => l.LastSeenCity)
+                .IsRequired(false); // Bu özellik isteğe bağlı
+            modelBuilder.Entity<LostPetAd>()
+                .Property(l => l.LastSeenDistrict)
+                .IsRequired(false); // Bu özellik de isteğe bağlı
         }
     }
 }
