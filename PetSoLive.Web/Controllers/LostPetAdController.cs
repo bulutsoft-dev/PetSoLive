@@ -55,49 +55,34 @@ public class LostPetAdController : Controller
 
         return View();
     }
-     [HttpPost]
+    // Kayıp ilanı oluşturma işlemi
+    [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(LostPetAd lostPetAd, string city, string district)
     {
-        // Oturum kontrolü, giriş yapmamış kullanıcıyı yönlendir
         var redirectResult = RedirectToLoginIfNotLoggedIn();
         if (redirectResult != null) return redirectResult;
 
-        // City ve District bilgilerini LostPetAd nesnesine ekleyin
         if (string.IsNullOrEmpty(city) || string.IsNullOrEmpty(district))
         {
             TempData["ErrorMessage"] = "City and District are required.";
             ViewData["Cities"] = CityList.Cities;
-            ViewData["Districts"] = new List<string>();  // Boş district listesi
-            return View(lostPetAd);  // Hata mesajı ve boş district listesiyle view'a dön
+            ViewData["Districts"] = new List<string>();
+            return View(lostPetAd);
         }
 
         lostPetAd.LastSeenCity = city;
         lostPetAd.LastSeenDistrict = district;
 
-        // Kullanıcının ID'sini kaydedin (oturumda mevcut olan kullanıcıyı varsayarak)
         var username = HttpContext.Session.GetString("Username");
         var user = await _userService.GetUserByUsernameAsync(username);
         lostPetAd.UserId = user.Id;
 
-        // LostPetAd nesnesini veritabanına kaydedin
+        // Kaybolan ilanı kaydedelim
         await _lostPetAdService.CreateLostPetAdAsync(lostPetAd, city, district);
 
-        // E-posta gönderme: yalnızca şehir ve ilçesi eşleşen kullanıcılara
-        var usersInLocation = await _userService.GetUsersByLocationAsync(city, district);
-
-        // Her bir kullanıcıya e-posta gönder
-        foreach (var targetUser in usersInLocation)
-        {
-            var subject = "New Lost Pet Ad Created";
-            var body = $"A new lost pet ad has been posted. Pet name: {lostPetAd.PetName}, Location: {lostPetAd.LastSeenLocation}. Description: {lostPetAd.Description}.";
-            await _emailService.SendEmailAsync(targetUser.Email, subject, body);
-        }
-
-        // Başarılı bir işlem mesajı gösterin
         TempData["SuccessMessage"] = "The lost pet ad has been created successfully, and notifications have been sent.";
 
-        // Yönlendirme işlemi
         return RedirectToAction("Index");
     }
 

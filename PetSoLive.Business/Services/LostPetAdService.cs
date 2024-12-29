@@ -8,12 +8,14 @@ public class LostPetAdService : ILostPetAdService
     private readonly ILostPetAdRepository _lostPetAdRepository;
     private readonly IUserRepository _userRepository;
     private readonly IEmailService _emailService;
+    private readonly EmailHelper _emailHelper;
 
     public LostPetAdService(ILostPetAdRepository lostPetAdRepository, IUserRepository userRepository, IEmailService emailService)
     {
         _lostPetAdRepository = lostPetAdRepository;
         _userRepository = userRepository;
         _emailService = emailService;
+        _emailHelper = new EmailHelper(); // Initialize EmailHelper
     }
 
     // Yeni kayıp ilanı oluşturmak için metod
@@ -35,14 +37,7 @@ public class LostPetAdService : ILostPetAdService
         foreach (var targetUser in usersInLocation)
         {
             var subject = "New Lost Pet Ad Created";
-            var body = $@"
-                A new lost pet ad has been posted.
-                Pet Name: {lostPetAd.PetName}
-                Location: {lostPetAd.LastSeenLocation}
-                Description: {lostPetAd.Description}
-                Posted by: {user.Username} ({user.Email})
-                Contact: {user.PhoneNumber}
-            ";
+            var body = _emailHelper.GenerateNewLostPetAdEmailBody(lostPetAd, user);
             await _emailService.SendEmailAsync(targetUser.Email, subject, body);
         }
     }
@@ -76,3 +71,4 @@ public class LostPetAdService : ILostPetAdService
         await _lostPetAdRepository.DeleteLostPetAdAsync(lostPetAd);
     }
 }
+

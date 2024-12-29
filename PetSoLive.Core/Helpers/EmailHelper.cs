@@ -345,4 +345,43 @@ public class EmailHelper
                "<br>" +
                "<p>Thank you for your attention.</p>";
     }
+    
+    // Kayıp ilanı için yeni e-posta içeriği oluşturuluyor
+    public string GenerateNewLostPetAdEmailBody(LostPetAd lostPetAd, User user)
+    {
+        return $@"
+            A new lost pet ad has been posted.
+            Pet Name: {lostPetAd.PetName}
+            Location: {lostPetAd.LastSeenCity}, {lostPetAd.LastSeenDistrict}
+            Description: {lostPetAd.Description}
+            Posted by: {user.Username} ({user.Email})
+            Contact: {user.PhoneNumber}
+        ";
+    }
+
+    // Kayıp ilanı güncellenince gönderilecek e-posta içeriği
+    public string GenerateUpdatedLostPetAdEmailBody(LostPetAd lostPetAd, User user)
+    {
+        return $@"
+            The lost pet ad has been updated.
+            Pet Name: {lostPetAd.PetName}
+            Location: {lostPetAd.LastSeenCity}, {lostPetAd.LastSeenDistrict}
+            Description: {lostPetAd.Description}
+            Posted by: {user.Username} ({user.Email})
+            Contact: {user.PhoneNumber}
+        ";
+    }
+
+    // Kayıp ilanı silindiğinde gönderilecek e-posta içeriği
+    public string GenerateDeletedLostPetAdEmailBody(LostPetAd lostPetAd, User user)
+    {
+        return $@"
+            A lost pet ad has been deleted.
+            Pet Name: {lostPetAd.PetName}
+            Location: {lostPetAd.LastSeenCity}, {lostPetAd.LastSeenDistrict}
+            Description: {lostPetAd.Description}
+            Posted by: {user.Username} ({user.Email})
+            Contact: {user.PhoneNumber}
+        ";
+    }
 }
