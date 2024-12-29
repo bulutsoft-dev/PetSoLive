@@ -42,6 +42,6 @@ namespace PetSoLive.Core.Entities
         public HelpRequestStatus Status { get; set; }  // Enum field for status
 
         // Comments associated with the HelpRequest (One-to-many relationship)
-        public ICollection<Comment> Comments { get; set; } // Navigation property for comments
+        public virtual ICollection<Comment>? Comments { get; set; } // Navigation property for comments
     }
 }

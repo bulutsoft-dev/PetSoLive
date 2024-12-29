@@ -329,4 +329,20 @@ public class EmailHelper
         </body>
         </html>";
     }
+    // Yeni yorum için e-posta gövdesi oluşturma
+    public string GenerateNewCommentEmailBody(HelpRequest helpRequest, Comment comment, User commenter)
+    {
+        return "<h2>New Comment on Help Request: Animal in Need!</h2>" +
+               "<p><strong>Help Request Title:</strong> " + helpRequest.Title + "</p>" +
+               "<p><strong>Description:</strong> " + helpRequest.Description + "</p>" +
+               "<p><strong>Comment by:</strong> " + commenter.Username + "</p>" +
+               "<p><strong>Comment Content:</strong> " + comment.Content + "</p>" +
+               "<p><strong>Comment Date:</strong> " + comment.CreatedAt.ToString("dd MMM yyyy, hh:mm tt") + "</p>" +
+               "<p><strong>Location:</strong> " + helpRequest.Location + "</p>" +
+               "<br>" +
+               "<p>Please check the help request and the comment left by the user.</p>" +
+               "<p><a href='"+ "/HelpRequest/Details/" + helpRequest.Id + "'>Click here to view the help request</a></p>" +
+               "<br>" +
+               "<p>Thank you for your attention.</p>";
+    }
 }

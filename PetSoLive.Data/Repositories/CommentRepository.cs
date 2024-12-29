@@ -28,5 +28,31 @@ namespace PetSoLive.Data.Repositories
                 .OrderByDescending(c => c.CreatedAt)
                 .ToListAsync();
         }
+        
+        
+        public async Task<Comment> GetCommentByIdAsync(int id)
+        {
+            return await _context.Comments
+                .Include(c => c.User)
+                .Include(c => c.Veterinarian)
+                .FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task UpdateCommentAsync(Comment comment)
+        {
+            _context.Comments.Update(comment);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteCommentAsync(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+            if (comment != null)
+            {
+                _context.Comments.Remove(comment);
+                await _context.SaveChangesAsync();
+            }
+        }
+
     }
 }

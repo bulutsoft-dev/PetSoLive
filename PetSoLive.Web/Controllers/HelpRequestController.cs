@@ -13,21 +13,21 @@ public class HelpRequestController : Controller
     private readonly IVeterinarianService _veterinarianService;
     private readonly INotificationService _notificationService;
     private readonly IEmailService _emailService;
-    private readonly ICommentService _commentService;
+    private readonly ICommentService _commentService; // Add comment service
 
     public HelpRequestController(IHelpRequestService helpRequestService, 
         IUserService userService, 
         INotificationService notificationService,
         IEmailService emailService,
         IVeterinarianService veterinarianService,
-        ICommentService commentService)
+        ICommentService commentService) // Inject comment service
     {
         _helpRequestService = helpRequestService;
         _userService = userService;
         _notificationService = notificationService;
         _emailService = emailService;
         _veterinarianService = veterinarianService;
-        _commentService = commentService;
+        _commentService = commentService; // Assign comment service
     }
 
     [HttpGet]
@@ -98,50 +98,30 @@ public class HelpRequestController : Controller
         var helpRequests = await _helpRequestService.GetHelpRequestsAsync();
         return View(helpRequests);
     }
+
     [HttpGet]
     public async Task<IActionResult> Details(int id)
     {
         var helpRequest = await _helpRequestService.GetHelpRequestByIdAsync(id);
+
         if (helpRequest == null)
         {
             return NotFound();
         }
 
-        // Yorumları al
+        // Yorumları dahil et (Include Comments)
         var comments = await _commentService.GetCommentsByHelpRequestIdAsync(id);
-        ViewBag.Comments = comments;
+        helpRequest.Comments = comments;
+
+        var username = HttpContext.Session.GetString("Username");
+        var user = username != null ? await _userService.GetUserByUsernameAsync(username) : null;
+
+        ViewBag.CanEditOrDelete = user != null && helpRequest.UserId == user.Id;
 
         return View(helpRequest);
     }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> AddComment(int helpRequestId, string content)
-    {
-        var username = HttpContext.Session.GetString("Username");
-        if (string.IsNullOrEmpty(username))
-        {
-            return RedirectToAction("Login", "Account");
-        }
 
-        var user = await _userService.GetUserByUsernameAsync(username);
-        if (user == null)
-        {
-            return RedirectToAction("Login", "Account");
-        }
-
-        var comment = new Comment
-        {
-            HelpRequestId = helpRequestId,
-            UserId = user.Id,
-            Content = content,
-            CreatedAt = DateTime.Now
-        };
-
-        await _commentService.AddCommentAsync(comment);
-
-        return RedirectToAction("Details", new { id = helpRequestId });
-    }
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
@@ -245,6 +225,129 @@ public class HelpRequestController : Controller
 
         return RedirectToAction("Index");
     }
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> AddComment(int id, string content)
+{
+    var username = HttpContext.Session.GetString("Username");
+    if (string.IsNullOrEmpty(username))
+    {
+        return RedirectToAction("Login", "Account");
+    }
+
+    var user = await _userService.GetUserByUsernameAsync(username);
+    if (user == null)
+    {
+        return RedirectToAction("Login", "Account");
+    }
+
+    var helpRequest = await _helpRequestService.GetHelpRequestByIdAsync(id);
+    if (helpRequest == null)
+    {
+        return NotFound();
+    }
+
+    var comment = new Comment
+    {
+        Content = content,
+        CreatedAt = DateTime.Now,
+        HelpRequestId = helpRequest.Id,
+        UserId = user.Id
+    };
+
+    // Yorum e-posta gönderimini kaldırdık
+    await _commentService.AddCommentAsync(comment);
+
+    return RedirectToAction("Details", "HelpRequest", new { id = helpRequest.Id });
+}
+
+// Edit Comment
+[HttpGet]
+public async Task<IActionResult> EditComment(int commentId)
+{
+    var username = HttpContext.Session.GetString("Username");
+    if (string.IsNullOrEmpty(username))
+    {
+        return RedirectToAction("Login", "Account");
+    }
+
+    var user = await _userService.GetUserByUsernameAsync(username);
+    if (user == null)
+    {
+        return RedirectToAction("Login", "Account");
+    }
+
+    var comment = await _commentService.GetCommentByIdAsync(commentId);
+    if (comment == null || comment.UserId != user.Id)
+    {
+        return Unauthorized();
+    }
+
+    return View(comment);
+}
+
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> EditComment(Comment comment)
+{
+    var username = HttpContext.Session.GetString("Username");
+    if (string.IsNullOrEmpty(username))
+    {
+        return RedirectToAction("Login", "Account");
+    }
+
+    var user = await _userService.GetUserByUsernameAsync(username);
+    if (user == null)
+    {
+        return RedirectToAction("Login", "Account");
+    }
+
+    var existingComment = await _commentService.GetCommentByIdAsync(comment.Id);
+    if (existingComment == null || existingComment.UserId != user.Id)
+    {
+        return Unauthorized();
+    }
+
+    if (ModelState.IsValid)
+    {
+        existingComment.Content = comment.Content;
+        existingComment.CreatedAt = DateTime.Now; // Optionally update the timestamp
+
+        await _commentService.UpdateCommentAsync(existingComment);
+
+        return RedirectToAction("Details", new { id = existingComment.HelpRequestId });
+    }
+
+    return View(comment);
+}
+
+// Delete Comment
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> DeleteComment(int commentId)
+{
+    var username = HttpContext.Session.GetString("Username");
+    if (string.IsNullOrEmpty(username))
+    {
+        return RedirectToAction("Login", "Account");
+    }
+
+    var user = await _userService.GetUserByUsernameAsync(username);
+    if (user == null)
+    {
+        return RedirectToAction("Login", "Account");
+    }
+
+    var comment = await _commentService.GetCommentByIdAsync(commentId);
+    if (comment == null || comment.UserId != user.Id)
+    {
+        return Unauthorized();
+    }
+
+    await _commentService.DeleteCommentAsync(commentId);
+
+    return RedirectToAction("Details", new { id = comment.HelpRequestId });
+}
 
     // Method to send email for new help request
     private async Task SendNewHelpRequestEmailAsync(User veterinarian, HelpRequest helpRequest, User requester)
