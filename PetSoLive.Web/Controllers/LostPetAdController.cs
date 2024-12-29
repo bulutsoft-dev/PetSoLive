@@ -19,6 +19,16 @@ public class LostPetAdController : Controller
         _emailService = emailService;
     }
 
+    // Oturum kontrolü metodu
+    private IActionResult RedirectToLoginIfNotLoggedIn()
+    {
+        if (HttpContext.Session.GetString("Username") == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+        return null;
+    }
+
     // GET: /LostPetAd/Index
     public async Task<IActionResult> Index()
     {
@@ -37,11 +47,14 @@ public class LostPetAdController : Controller
         return View(lostPetAds); // Pass the list of ads (empty or retrieved) to the view
     }
 
-
     // GET: /LostPetAd/Create
     [HttpGet]
     public IActionResult Create()
     {
+        // Oturum kontrolü
+        var loginRedirect = RedirectToLoginIfNotLoggedIn();
+        if (loginRedirect != null) return loginRedirect;
+
         // Pass the list of cities to the view
         ViewBag.Cities = CityList.Cities;
         return View();
@@ -55,9 +68,14 @@ public class LostPetAdController : Controller
         return Json(districts);
     }
 
+    // POST: /LostPetAd/Create
     [HttpPost]
     public async Task<IActionResult> Create(LostPetAd lostPetAd, string city, string district)
     {
+        // Oturum kontrolü
+        var loginRedirect = RedirectToLoginIfNotLoggedIn();
+        if (loginRedirect != null) return loginRedirect;
+
         if (ModelState.IsValid)
         {
             // Set the location details
@@ -77,5 +95,4 @@ public class LostPetAdController : Controller
         // If the model is invalid, return the view with the model
         return View(lostPetAd);
     }
-
 }
