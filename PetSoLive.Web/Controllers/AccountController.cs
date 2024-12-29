@@ -45,41 +45,46 @@ public class AccountController : Controller
 
         return View();
     }
-
     public IActionResult Register()
     {
+        ViewData["Cities"] = CityList.Cities;
+        ViewData["Districts"] = new List<string>();  // Initial empty list for districts
+    
         return View();
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Register(string username, string email, string password, string phoneNumber, string address, DateTime dateOfBirth, string profileImageUrl)
+    public async Task<IActionResult> Register(string username, string email, string password, string phoneNumber, string address, DateTime dateOfBirth, string profileImageUrl, string city, string district)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            var user = new User
-            {
-                Username = username,
-                Email = email,
-                PasswordHash = password,
-                PhoneNumber = phoneNumber,
-                Address = address,
-                DateOfBirth = dateOfBirth,
-                ProfileImageUrl = profileImageUrl
-            };
-
-            try
-            {
-                await _userService.RegisterAsync(user);
-                return RedirectToAction("Login");
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", ex.Message);
-            }
+            ViewData["Cities"] = CityList.Cities;
+            ViewData["Districts"] = CityList.GetDistrictsByCity(city);  // Populate districts based on selected city
+            return View();
         }
 
-        return View();
+        var user = new User
+        {
+            Username = username,
+            Email = email,
+            PasswordHash = password,
+            PhoneNumber = phoneNumber,
+            Address = address,
+            DateOfBirth = dateOfBirth,
+            ProfileImageUrl = profileImageUrl,
+            City = city,
+            District = district
+        };
+
+        await _userService.RegisterAsync(user);
+        return RedirectToAction("Login");
+    }
+
+    [HttpGet]
+    public JsonResult GetDistricts(string city)
+    {
+        var districts = CityList.GetDistrictsByCity(city);
+        return Json(districts);
     }
 
     public IActionResult Logout()
