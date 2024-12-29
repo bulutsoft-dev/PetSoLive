@@ -225,41 +225,46 @@ public class HelpRequestController : Controller
 
         return RedirectToAction("Index");
     }
-[HttpPost]
-[ValidateAntiForgeryToken]
-public async Task<IActionResult> AddComment(int id, string content)
-{
-    var username = HttpContext.Session.GetString("Username");
-    if (string.IsNullOrEmpty(username))
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddComment(int id, string content)
     {
-        return RedirectToAction("Login", "Account");
+        var username = HttpContext.Session.GetString("Username");
+        if (string.IsNullOrEmpty(username))
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var user = await _userService.GetUserByUsernameAsync(username);
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var helpRequest = await _helpRequestService.GetHelpRequestByIdAsync(id);
+        if (helpRequest == null)
+        {
+            return NotFound();
+        }
+
+        // Check if the user is a veterinarian
+        var veterinarian = await _veterinarianService.GetByUserIdAsync(user.Id);
+        int? veterinarianId = veterinarian?.Id; // If user is a veterinarian, get their ID, otherwise set to null
+
+        var comment = new Comment
+        {
+            Content = content,
+            CreatedAt = DateTime.Now,
+            HelpRequestId = helpRequest.Id,
+            UserId = user.Id,
+            VeterinarianId = veterinarianId // Store VeterinarianId if the user is a veterinarian
+        };
+
+        // Add the comment to the database
+        await _commentService.AddCommentAsync(comment);
+
+        return RedirectToAction("Details", "HelpRequest", new { id = helpRequest.Id });
     }
-
-    var user = await _userService.GetUserByUsernameAsync(username);
-    if (user == null)
-    {
-        return RedirectToAction("Login", "Account");
-    }
-
-    var helpRequest = await _helpRequestService.GetHelpRequestByIdAsync(id);
-    if (helpRequest == null)
-    {
-        return NotFound();
-    }
-
-    var comment = new Comment
-    {
-        Content = content,
-        CreatedAt = DateTime.Now,
-        HelpRequestId = helpRequest.Id,
-        UserId = user.Id
-    };
-
-    // Yorum e-posta gönderimini kaldırdık
-    await _commentService.AddCommentAsync(comment);
-
-    return RedirectToAction("Details", "HelpRequest", new { id = helpRequest.Id });
-}
 
 // Edit Comment
 [HttpGet]
@@ -311,7 +316,11 @@ public async Task<IActionResult> EditComment(Comment comment)
     if (ModelState.IsValid)
     {
         existingComment.Content = comment.Content;
-        existingComment.CreatedAt = DateTime.Now; // Optionally update the timestamp
+        existingComment.CreatedAt = DateTime.Now;
+
+        // Update the VeterinarianId if the user is a veterinarian
+        var veterinarian = await _veterinarianService.GetByUserIdAsync(user.Id);
+        existingComment.VeterinarianId = veterinarian?.Id;
 
         await _commentService.UpdateCommentAsync(existingComment);
 
