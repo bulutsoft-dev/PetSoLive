@@ -1,76 +1,81 @@
 using Microsoft.AspNetCore.Mvc;
-using PetSoLive.Business.Services;
-using PetSoLive.Core.Interfaces;
 using PetSoLive.Core.Entities;
-using Microsoft.AspNetCore.Http;
+using PetSoLive.Core.Interfaces;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 public class LostPetAdController : Controller
 {
     private readonly ILostPetAdService _lostPetAdService;
-    private readonly INotificationService _notificationService;
+    private readonly IUserRepository _userRepository;
+    private readonly IEmailService _emailService;
 
+    // Constructor Dependency Injection
     public LostPetAdController(ILostPetAdService lostPetAdService, 
-        INotificationService notificationService)
+        IUserRepository userRepository, 
+        IEmailService emailService)
     {
         _lostPetAdService = lostPetAdService;
-        _notificationService = notificationService;
+        _userRepository = userRepository;
+        _emailService = emailService;
     }
 
-    // Kayıp ilanı oluşturulması için gerekli olan POST metodu
+    // GET: /LostPetAd/Index
+    public async Task<IActionResult> Index()
+    {
+        // Get all lost pet ads using service
+        var lostPetAds = await _lostPetAdService.GetAllLostPetAdsAsync();
+
+        if (lostPetAds == null)
+        {
+            // Log or handle the error as needed (optional)
+            TempData["ErrorMessage"] = "Could not retrieve lost pet ads. Please try again later.";
+        
+            // Return an empty list if null
+            lostPetAds = new List<LostPetAd>();
+        }
+
+        return View(lostPetAds); // Pass the list of ads (empty or retrieved) to the view
+    }
+
+
+    // GET: /LostPetAd/Create
+    [HttpGet]
+    public IActionResult Create()
+    {
+        // Pass the list of cities to the view
+        ViewBag.Cities = CityList.Cities;
+        return View();
+    }
+
+    // GET: /LostPetAd/GetDistricts
+    [HttpGet]
+    public JsonResult GetDistricts(string city)
+    {
+        var districts = CityList.GetDistrictsByCity(city);
+        return Json(districts);
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create(LostPetAd lostPetAd, string city, string district)
     {
-        // Kullanıcı kimliği oturumda kontrol edilir
-        var userId = HttpContext.Session.GetString("UserId");
-        if (string.IsNullOrEmpty(userId))
+        if (ModelState.IsValid)
         {
-            // Kullanıcı oturum açmamışsa login sayfasına yönlendirilir
-            return RedirectToAction("Login", "Account");
+            // Set the location details
+            lostPetAd.LastSeenCity = city;
+            lostPetAd.LastSeenDistrict = district;
+
+            // Create the lost pet ad using the service
+            await _lostPetAdService.CreateLostPetAdAsync(lostPetAd, city, district);
+
+            // Set success message
+            TempData["SuccessMessage"] = "Lost Pet Ad created successfully!";
+
+            // Redirect to the Index page after successful ad creation
+            return RedirectToAction("Index");
         }
 
-        // Kullanıcı ID'si, kayıp ilanı ile ilişkilendirilir
-        lostPetAd.UserId = int.Parse(userId);
-
-        // Şehir ve ilçeyi birleştirerek LastSeenLocation'a ekleyelim
-
-        // Kayıp ilanı kaydedilir
-        await _lostPetAdService.CreateLostPetAdAsync(lostPetAd);
-
-        // Yeni ilan oluşturulması bildirilir
-        await _notificationService.SendNotificationAsync("New Lost Pet Ad Created", 
-            lostPetAd.Description, lostPetAd.LastSeenLocation);
-
-        // Ana sayfaya yönlendirilir
-        return RedirectToAction("Index");
-    }
-
-    // Kayıp ilanları listeleme için GET metodu
-    [HttpGet]
-    public async Task<IActionResult> Index(string location)
-    {
-        // Şehir/bölgeye göre ilanlar getirilir
-        var lostPetAds = await _lostPetAdService.GetLostPetAdsByLocationAsync(location);
-
-        // Elde edilen ilanlar View'a gönderilir
-        return View(lostPetAds);
-    }
-
-    // Kayıp ilanı detaylarını görüntülemek için gerekli GET metodu
-    [HttpGet]
-    public async Task<IActionResult> Details(int id)
-    {
-        // İlan ID'sine göre ilan detayları getirilir
-        var lostPetAd = await _lostPetAdService.GetLostPetAdByIdAsync(id);
-
-        // Eğer ilan bulunamazsa hata sayfasına yönlendirilir
-        if (lostPetAd == null)
-        {
-            return NotFound();
-        }
-
-        // Detaylar sayfasına yönlendirilir
+        // If the model is invalid, return the view with the model
         return View(lostPetAd);
     }
+
 }

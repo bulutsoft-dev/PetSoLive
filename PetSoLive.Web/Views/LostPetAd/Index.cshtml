@@ -1,0 +1,54 @@
+@{
+ViewData["Title"] = "Lost Pet Ads";
+}
+
+<h2>Lost Pet Ads</h2>
+
+<div>
+    <a href="@Url.Action("Create", "LostPetAd")" class="btn btn-success">Create New Lost Pet Ad</a>
+</div>
+
+<hr />
+
+@if (TempData["SuccessMessage"] != null)
+{
+<div class="alert alert-success">
+    @TempData["SuccessMessage"]
+</div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+<div class="alert alert-danger">
+    @TempData["ErrorMessage"]
+</div>
+}
+
+@if (Model != null)
+{
+<table class="table">
+    <thead>
+    <tr>
+        <th>Pet Name</th>
+        <th>Description</th>
+        <th>Location</th>
+        <th>Created At</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var ad in Model)
+    {
+    <tr>
+        <td>@ad.PetName</td>
+        <td>@ad.Description</td>
+        <td>@ad.LastSeenCity, @ad.LastSeenDistrict</td>
+        <td>@ad.CreatedAt.ToString("dd/MM/yyyy")</td>
+    </tr>
+    }
+    </tbody>
+</table>
+}
+else
+{
+<p>No lost pet ads found.</p>
+}

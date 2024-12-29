@@ -1,9 +1,13 @@
-namespace PetSoLive.Core.Interfaces;
+using PetSoLive.Core.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-public interface ILostPetAdRepository
+namespace PetSoLive.Core.Interfaces
 {
-    Task CreateLostPetAdAsync(LostPetAd lostPetAd);
-    Task<List<LostPetAd>> GetLostPetAdsByLocationAsync(string location);
-    Task<LostPetAd> GetLostPetAdByIdAsync(int id);
-    Task<List<LostPetAd>> GetLostPetAdsNearbyAsync(string location, double radius);
+    public interface ILostPetAdRepository
+    {
+        Task CreateLostPetAdAsync(LostPetAd lostPetAd);  // Kayıp ilanı oluşturma
+        Task<IEnumerable<LostPetAd>> GetAllAsync();      // Bütün kayıp ilanlarını getirme
+        Task<LostPetAd> GetByIdAsync(int id);            // Kayıp ilanını ID ile getirme (İhtiyaca göre eklenebilir)
+    }
 }

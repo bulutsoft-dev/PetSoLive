@@ -79,6 +79,8 @@ builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 
 
 builder.Services.AddAuthentication("Cookies")

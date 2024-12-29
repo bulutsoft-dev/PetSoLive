@@ -1,9 +1,12 @@
 using PetSoLive.Core.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-public interface ILostPetAdService
+namespace PetSoLive.Core.Interfaces
 {
-    Task CreateLostPetAdAsync(LostPetAd lostPetAd);
-    Task<List<LostPetAd>> GetLostPetAdsByLocationAsync(string location);
-    Task<LostPetAd> GetLostPetAdByIdAsync(int id);  // Detayları almak için yeni metod
-    Task<List<LostPetAd>> GetLostPetAdsNearbyAsync(string location, double radius);  // Coğrafi bildirimler için yeni metod
+    public interface ILostPetAdService
+    {
+        Task CreateLostPetAdAsync(LostPetAd lostPetAd, string city, string district);  // Kayıp ilanı oluşturma
+        Task<IEnumerable<LostPetAd>> GetAllLostPetAdsAsync();                         // Tüm kayıp ilanlarını alma
+    }
 }

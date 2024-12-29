@@ -13,6 +13,9 @@ public class LostPetAd
     // Separate properties for City and District where the pet was last seen
     public string LastSeenCity { get; set; }
     public string LastSeenDistrict { get; set; }
+    
+    //create at 
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     // Optional: Combine both into a single LastSeenLocation for display purposes
     public string LastSeenLocation => $"{LastSeenCity}, {LastSeenDistrict}";

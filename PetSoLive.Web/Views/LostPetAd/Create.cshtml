@@ -1,0 +1,60 @@
+@{
+ViewData["Title"] = "Create Lost Pet Ad";
+}
+
+<h1>Create Lost Pet Ad</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="PetName">Pet Name</label>
+        <input type="text" class="form-control" id="PetName" name="PetName" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <textarea class="form-control" id="Description" name="Description" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="City">City</label>
+        <select class="form-control" id="city" name="city" required>
+            <option value="">Select a City</option>
+            @foreach (var city in ViewBag.Cities as List<string>)
+            {
+            <option value="@city">@city</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="District">District</label>
+        <select class="form-control" id="district" name="district" required>
+            <option value="">Select a District</option>
+        </select>
+    </div>
+
+    <!-- Image URL input instead of file upload -->
+    <div class="form-group">
+        <label for="ImageUrl">Image URL</label>
+        <input type="text" class="form-control" id="ImageUrl" name="ImageUrl" placeholder="Enter image URL" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Lost Pet Ad</button>
+</form>
+
+@section Scripts {
+<script>
+    // Update districts based on selected city
+    $('#city').change(function () {
+        var city = $(this).val();
+        $.get('/LostPetAd/GetDistricts?city=' + city, function (data) {
+            var districtSelect = $('#district');
+            districtSelect.empty();
+            districtSelect.append('<option value="">Select a district</option>');
+            data.forEach(function (district) {
+                districtSelect.append('<option value="' + district + '">' + district + '</option>');
+            });
+        });
+    });
+</script>
+}
