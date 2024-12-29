@@ -15,8 +15,6 @@
       <AdditionalFiles Include="Views\Account\Login.cshtml" />
       <AdditionalFiles Include="Views\Account\Register.cshtml" />
       <AdditionalFiles Include="Views\Adoption\Index.cshtml" />
-      <AdditionalFiles Include="Views\Assistance\Create.cshtml" />
-      <AdditionalFiles Include="Views\Assistance\List.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
@@ -24,6 +22,8 @@
       <_ContentIncludedByDefault Remove="Pages\Adoption\Index.cshtml" />
       <_ContentIncludedByDefault Remove="Pages\Assistance\Create.cshtml" />
       <_ContentIncludedByDefault Remove="Pages\Assistance\List.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Assistance\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Assistance\List.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
