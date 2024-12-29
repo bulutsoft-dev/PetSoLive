@@ -2,7 +2,7 @@
 ViewData["Title"] = "Lost Pet Ads";
 }
 
-<h2>Lost Pet Ads</h2>
+<h2>@ViewData["Title"]</h2>
 
 <div>
     <a href="@Url.Action("Create", "LostPetAd")" class="btn btn-success">Create New Lost Pet Ad</a>
@@ -10,6 +10,7 @@ ViewData["Title"] = "Lost Pet Ads";
 
 <hr />
 
+<!-- Success and Error Messages -->
 @if (TempData["SuccessMessage"] != null)
 {
 <div class="alert alert-success">
@@ -24,9 +25,10 @@ ViewData["Title"] = "Lost Pet Ads";
 </div>
 }
 
-@if (Model != null)
+<!-- Display Lost Pet Ads -->
+@if (Model != null && Model.Count > 0)
 {
-<table class="table">
+<table class="table table-bordered">
     <thead>
     <tr>
         <th>Pet Name</th>
@@ -52,3 +54,4 @@ else
 {
 <p>No lost pet ads found.</p>
 }
+

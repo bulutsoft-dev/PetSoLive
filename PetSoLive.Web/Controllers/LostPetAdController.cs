@@ -1,21 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 public class LostPetAdController : Controller
 {
     private readonly ILostPetAdService _lostPetAdService;
-    private readonly IUserRepository _userRepository;
     private readonly IEmailService _emailService;
+    private readonly IUserService _userService;
 
     // Constructor Dependency Injection
     public LostPetAdController(ILostPetAdService lostPetAdService, 
-        IUserRepository userRepository, 
+        IUserService userService,
         IEmailService emailService)
     {
         _lostPetAdService = lostPetAdService;
-        _userRepository = userRepository;
+        _userService = userService;
+        
         _emailService = emailService;
     }
 
@@ -27,6 +29,30 @@ public class LostPetAdController : Controller
             return RedirectToAction("Login", "Account");
         }
         return null;
+    }
+    // GET: /LostPetAd/Create
+    public IActionResult Create()
+    {
+        // Oturum kontrolü, giriş yapmamış kullanıcıyı yönlendir
+        var redirectResult = RedirectToLoginIfNotLoggedIn();
+        if (redirectResult != null) return redirectResult;
+
+        // Şehir listesini ViewData ile view'a gönderiyoruz
+        ViewData["Cities"] = CityList.Cities;
+
+        // Başlangıçta district listesi boş olacak
+        ViewData["Districts"] = new List<string>(); 
+
+        return View();
+    }
+    
+
+    // GET: /LostPetAd/GetDistricts
+    [HttpGet]
+    public JsonResult GetDistricts(string city)
+    {
+        var districts = CityList.GetDistrictsByCity(city);
+        return Json(districts);
     }
 
     // GET: /LostPetAd/Index
@@ -45,54 +71,36 @@ public class LostPetAdController : Controller
         }
 
         return View(lostPetAds); // Pass the list of ads (empty or retrieved) to the view
+    
     }
-
-    // GET: /LostPetAd/Create
-    [HttpGet]
-    public IActionResult Create()
-    {
-        // Oturum kontrolü
-        var loginRedirect = RedirectToLoginIfNotLoggedIn();
-        if (loginRedirect != null) return loginRedirect;
-
-        // Pass the list of cities to the view
-        ViewBag.Cities = CityList.Cities;
-        return View();
-    }
-
-    // GET: /LostPetAd/GetDistricts
-    [HttpGet]
-    public JsonResult GetDistricts(string city)
-    {
-        var districts = CityList.GetDistrictsByCity(city);
-        return Json(districts);
-    }
-
     // POST: /LostPetAd/Create
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(LostPetAd lostPetAd, string city, string district)
     {
-        // Oturum kontrolü
-        var loginRedirect = RedirectToLoginIfNotLoggedIn();
-        if (loginRedirect != null) return loginRedirect;
+        // Oturum kontrolü, giriş yapmamış kullanıcıyı yönlendir
+        var redirectResult = RedirectToLoginIfNotLoggedIn();
+        if (redirectResult != null) return redirectResult;
 
-        if (ModelState.IsValid)
-        {
-            // Set the location details
-            lostPetAd.LastSeenCity = city;
-            lostPetAd.LastSeenDistrict = district;
+        // City ve District bilgilerini LostPetAd nesnesine ekleyin
+        lostPetAd.LastSeenCity = city;
+        lostPetAd.LastSeenDistrict = district;
+    
+        // Kullanıcının ID'sini kaydedin (oturumda mevcut olan kullanıcıyı varsayarak)
+        var username = HttpContext.Session.GetString("Username");
+        var user = await _userService.GetUserByUsernameAsync(username);
+        lostPetAd.UserId = user.Id;
 
-            // Create the lost pet ad using the service
-            await _lostPetAdService.CreateLostPetAdAsync(lostPetAd, city, district);
+        // LostPetAd nesnesini veritabanına kaydedin
+        await _lostPetAdService.CreateLostPetAdAsync(lostPetAd, city, district);
 
-            // Set success message
-            TempData["SuccessMessage"] = "Lost Pet Ad created successfully!";
-
-            // Redirect to the Index page after successful ad creation
-            return RedirectToAction("Index");
-        }
-
-        // If the model is invalid, return the view with the model
-        return View(lostPetAd);
+        // Başarılı bir işlem mesajı gösterin
+        TempData["SuccessMessage"] = "The lost pet ad has been created successfully.";
+    
+        // Yönlendirme işlemi
+        return RedirectToAction("Index");
     }
+    
+
+    
 }
