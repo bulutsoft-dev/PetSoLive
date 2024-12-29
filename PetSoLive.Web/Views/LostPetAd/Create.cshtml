@@ -35,22 +35,22 @@ ViewData["Title"] = "Create Lost Pet Ad";
     </div>
 
     <div class="form-group">
-        <label for="LastSeenCity">City</label>
-        <select class="form-control" id="LastSeenCity" name="LastSeenCity" required>
-            <option value="">Select City</option>
+        <label for="city">City</label>
+        <select id="city" name="city" class="form-control" required>
+            <option value="">Select a city</option>
             @foreach (var city in ViewData["Cities"] as List<string>)
             {
             <option value="@city">@city</option>
             }
         </select>
     </div>
-
     <div class="form-group">
-        <label for="LastSeenDistrict">District</label>
-        <select class="form-control" id="LastSeenDistrict" name="LastSeenDistrict" required>
-            <option value="">Select District</option>
+        <label for="district">District</label>
+        <select id="district" name="district" class="form-control" required>
+            <option value="">Select a district</option>
         </select>
     </div>
+
 
     <div class="form-group">
         <label for="ImageUrl">Image URL (Required)</label>
@@ -60,13 +60,14 @@ ViewData["Title"] = "Create Lost Pet Ad";
     <button type="submit" class="btn btn-primary">Create Lost Pet Ad</button>
 </form>
 
-@section Scripts {
-<script>
+@section Scripts
+{
+    <script>
     // Update districts based on selected city
-    $('#LastSeenCity').change(function () {
+    $('#city').change(function () {
         var city = $(this).val();
-        $.get('/LostPetAd/GetDistricts?city=' + city, function (data) {
-            var districtSelect = $('#LastSeenDistrict');
+        $.get('/Account/GetDistricts?city=' + city, function (data) {
+            var districtSelect = $('#district');
             districtSelect.empty();
             districtSelect.append('<option value="">Select a district</option>');
             data.forEach(function (district) {

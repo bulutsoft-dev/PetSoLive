@@ -46,15 +46,6 @@ public class LostPetAdController : Controller
         return View();
     }
     
-
-    // GET: /LostPetAd/GetDistricts
-    [HttpGet]
-    public JsonResult GetDistricts(string city)
-    {
-        var districts = CityList.GetDistrictsByCity(city);
-        return Json(districts);
-    }
-
     // GET: /LostPetAd/Index
     public async Task<IActionResult> Index()
     {
@@ -73,7 +64,6 @@ public class LostPetAdController : Controller
         return View(lostPetAds); // Pass the list of ads (empty or retrieved) to the view
     
     }
-    // POST: /LostPetAd/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(LostPetAd lostPetAd, string city, string district)
@@ -83,9 +73,17 @@ public class LostPetAdController : Controller
         if (redirectResult != null) return redirectResult;
 
         // City ve District bilgilerini LostPetAd nesnesine ekleyin
+        if (string.IsNullOrEmpty(city) || string.IsNullOrEmpty(district))
+        {
+            TempData["ErrorMessage"] = "City and District are required.";
+            ViewData["Cities"] = CityList.Cities;
+            ViewData["Districts"] = new List<string>();  // Boş district listesi
+            return View(lostPetAd);  // Hata mesajı ve boş district listesiyle view'a dön
+        }
+    
         lostPetAd.LastSeenCity = city;
         lostPetAd.LastSeenDistrict = district;
-    
+
         // Kullanıcının ID'sini kaydedin (oturumda mevcut olan kullanıcıyı varsayarak)
         var username = HttpContext.Session.GetString("Username");
         var user = await _userService.GetUserByUsernameAsync(username);
@@ -96,10 +94,12 @@ public class LostPetAdController : Controller
 
         // Başarılı bir işlem mesajı gösterin
         TempData["SuccessMessage"] = "The lost pet ad has been created successfully.";
-    
+
         // Yönlendirme işlemi
         return RedirectToAction("Index");
     }
+
+
     
 
     
