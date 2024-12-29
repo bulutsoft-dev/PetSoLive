@@ -11,20 +11,17 @@ public class HelpRequestController : Controller
     private readonly IHelpRequestService _helpRequestService;
     private readonly IUserService _userService;
     private readonly IVeterinarianService _veterinarianService;
-    private readonly INotificationService _notificationService;
     private readonly IEmailService _emailService;
     private readonly ICommentService _commentService; // Add comment service
 
     public HelpRequestController(IHelpRequestService helpRequestService, 
         IUserService userService, 
-        INotificationService notificationService,
         IEmailService emailService,
         IVeterinarianService veterinarianService,
         ICommentService commentService) // Inject comment service
     {
         _helpRequestService = helpRequestService;
         _userService = userService;
-        _notificationService = notificationService;
         _emailService = emailService;
         _veterinarianService = veterinarianService;
         _commentService = commentService; // Assign comment service
@@ -74,11 +71,6 @@ public class HelpRequestController : Controller
         if (ModelState.IsValid)
         {
             await _helpRequestService.CreateHelpRequestAsync(helpRequest);
-
-            if (helpRequest.EmergencyLevel == EmergencyLevel.High)
-            {
-                await _notificationService.SendEmergencyNotificationAsync("High urgency help request", helpRequest.Description);
-            }
 
             var veterinarians = await _veterinarianService.GetAllVeterinariansAsync();
             foreach (var veterinarian in veterinarians)

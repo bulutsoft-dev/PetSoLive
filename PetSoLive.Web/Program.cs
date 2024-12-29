@@ -68,7 +68,6 @@ builder.Services.AddScoped<ILostPetAdService, LostPetAdService>();
 builder.Services.AddScoped<IHelpRequestRepository, HelpRequestRepository>();
 builder.Services.AddScoped<IHelpRequestService, HelpRequestService>();
 
-builder.Services.AddScoped<INotificationService, NotificationService>();
 
 builder.Services.AddScoped<IVeterinarianService, VeterinarianService>();
 builder.Services.AddScoped<IVeterinarianRepository, VeterinarianRepository>();
