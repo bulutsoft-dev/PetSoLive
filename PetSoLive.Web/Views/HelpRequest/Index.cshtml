@@ -1,14 +1,15 @@
+@using PetSoLive.Core.Enums
 @model IEnumerable<PetSoLive.Core.Entities.HelpRequest>
 
 @{
 ViewData["Title"] = "Help Requests";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="text-primary">@ViewData["Title"]</h1>
 
 <div class="row mb-3">
     <div class="col-12">
-        <a class="btn btn-primary" href="@Url.Action("Create", "HelpRequest")">Create New Help Request</a>
+        <a class="btn btn-success btn-lg" href="@Url.Action("Create", "HelpRequest")">Create New Help Request</a>
     </div>
 </div>
 
@@ -16,12 +17,22 @@ ViewData["Title"] = "Help Requests";
     @foreach (var helpRequest in Model)
     {
     <div class="col-md-4 mb-4">
-        <div class="card">
+        <div class="card shadow-lg">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5><a href="@Url.Action("Details", "HelpRequest", new { id = helpRequest.Id })" class="card-title text-dark">@helpRequest.Title</a></h5>
-                    <span class="badge badge-pill badge-info">@helpRequest.EmergencyLevel</span>
+                    <span class="badge badge-pill badge-warning">@helpRequest.EmergencyLevel</span>
                 </div>
+
+                <!-- Status Display with Custom Style -->
+                <p class="card-text">
+                    <strong>Status:</strong>
+                    <span class="status-label 
+                            @(helpRequest.Status == HelpRequestStatus.Active ? "status-active" : "status-passive")">
+                            @helpRequest.Status
+                        </span>
+                </p>
+
                 <p class="card-text"><strong>Created At:</strong> @helpRequest.CreatedAt.ToString("g")</p>
                 <p class="card-text"><strong>Location:</strong> @helpRequest.Location</p>
 
@@ -50,9 +61,4 @@ ViewData["Title"] = "Help Requests";
         </div>
     </div>
     }
-</div>
-
-<!-- Pagination controls (optional) -->
-<div class="pagination-container mt-3">
-    @* Add your pagination links here (e.g., @Html.PagedListPager(Model)) *@
 </div>
