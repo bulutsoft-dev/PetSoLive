@@ -67,11 +67,14 @@ public class LostPetAdController : Controller
             return RedirectToAction("Index");
         }
 
-        // Detay sayfasına ilan verisi gönderilir
+        // Kullanıcı adını ViewBag ile gönderiyoruz
+        var currentUser = HttpContext.Session.GetString("Username");
+        ViewBag.CurrentUser = currentUser;
+
+        // Detay sayfasına ilan verisi ve kullanıcı adı gönderilir
         return View(lostPetAd);
     }
 
-    
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -106,6 +109,112 @@ public class LostPetAdController : Controller
         }
 
         TempData["SuccessMessage"] = "The lost pet ad has been created successfully, and notifications have been sent.";
+        return RedirectToAction("Index");
+    }
+    
+    // GET: /LostPetAd/Edit/5
+    public async Task<IActionResult> Edit(int id)
+    {
+        var lostPetAd = await _lostPetAdService.GetLostPetAdByIdAsync(id);
+
+        if (lostPetAd == null)
+        {
+            TempData["ErrorMessage"] = "Lost Pet Ad not found.";
+            return RedirectToAction("Index");
+        }
+
+        // Check if the current user is the owner of the ad
+        var currentUser = HttpContext.Session.GetString("Username");
+        if (lostPetAd.User.Username != currentUser)
+        {
+            TempData["ErrorMessage"] = "You do not have permission to edit this ad.";
+            return RedirectToAction("Index");
+        }
+
+        ViewData["Cities"] = CityList.Cities;
+        ViewData["Districts"] = new List<string>();  // Can be updated based on selected city
+
+        return View(lostPetAd);
+    }
+
+    // POST: /LostPetAd/Edit/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(LostPetAd lostPetAd, string city, string district)
+    {
+        var redirectResult = RedirectToLoginIfNotLoggedIn();
+        if (redirectResult != null) return redirectResult;
+
+        if (string.IsNullOrEmpty(city) || string.IsNullOrEmpty(district))
+        {
+            TempData["ErrorMessage"] = "City and District are required.";
+            ViewData["Cities"] = CityList.Cities;
+            ViewData["Districts"] = new List<string>();  
+            return View(lostPetAd);  
+        }
+
+        // Check if the current user is the owner of the ad
+        var currentUser = HttpContext.Session.GetString("Username");
+        if (lostPetAd.User.Username != currentUser)
+        {
+            TempData["ErrorMessage"] = "You do not have permission to edit this ad.";
+            return RedirectToAction("Index");
+        }
+
+        lostPetAd.LastSeenCity = city;
+        lostPetAd.LastSeenDistrict = district;
+
+        await _lostPetAdService.UpdateLostPetAdAsync(lostPetAd);
+
+        TempData["SuccessMessage"] = "The lost pet ad has been updated successfully.";
+        return RedirectToAction("Details", new { id = lostPetAd.Id });
+    }
+
+    // GET: /LostPetAd/Delete/5
+    public async Task<IActionResult> Delete(int id)
+    {
+        var lostPetAd = await _lostPetAdService.GetLostPetAdByIdAsync(id);
+
+        if (lostPetAd == null)
+        {
+            TempData["ErrorMessage"] = "Lost Pet Ad not found.";
+            return RedirectToAction("Index");
+        }
+
+        // Check if the current user is the owner of the ad
+        var currentUser = HttpContext.Session.GetString("Username");
+        if (lostPetAd.User.Username != currentUser)
+        {
+            TempData["ErrorMessage"] = "You do not have permission to delete this ad.";
+            return RedirectToAction("Index");
+        }
+
+        return View(lostPetAd);
+    }
+
+    // POST: /LostPetAd/Delete/5
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var lostPetAd = await _lostPetAdService.GetLostPetAdByIdAsync(id);
+
+        if (lostPetAd == null)
+        {
+            TempData["ErrorMessage"] = "Lost Pet Ad not found.";
+            return RedirectToAction("Index");
+        }
+
+        // Check if the current user is the owner of the ad
+        var currentUser = HttpContext.Session.GetString("Username");
+        if (lostPetAd.User.Username != currentUser)
+        {
+            TempData["ErrorMessage"] = "You do not have permission to delete this ad.";
+            return RedirectToAction("Index");
+        }
+
+        await _lostPetAdService.DeleteLostPetAdAsync(lostPetAd);
+        TempData["SuccessMessage"] = "The lost pet ad has been deleted successfully.";
         return RedirectToAction("Index");
     }
 }

@@ -6,8 +6,19 @@ namespace PetSoLive.Core.Interfaces
 {
     public interface ILostPetAdService
     {
-        Task CreateLostPetAdAsync(LostPetAd lostPetAd, string city, string district);  // Kayıp ilanı oluşturma
-        Task<IEnumerable<LostPetAd>> GetAllLostPetAdsAsync();                         // Tüm kayıp ilanlarını alma
-        Task<LostPetAd> GetLostPetAdByIdAsync(int id);  // Ensure this matches with the implementation
+        // Yeni bir kayıp ilanı oluşturmak için metod
+        Task CreateLostPetAdAsync(LostPetAd lostPetAd, string city, string district);
+
+        // Tüm kayıp ilanlarını almak için metod
+        Task<IEnumerable<LostPetAd>> GetAllLostPetAdsAsync();
+
+        // ID'ye göre bir kayıp ilanını almak için metod
+        Task<LostPetAd> GetLostPetAdByIdAsync(int id);
+
+        // Kayıp ilanını güncellemek için metod
+        Task UpdateLostPetAdAsync(LostPetAd lostPetAd);
+
+        // Kayıp ilanını silmek için metod
+        Task DeleteLostPetAdAsync(LostPetAd lostPetAd);
     }
 }

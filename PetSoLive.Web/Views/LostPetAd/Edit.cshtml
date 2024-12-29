@@ -1,0 +1,95 @@
+@{
+ViewData["Title"] = "Edit Lost Pet Ad";
+}
+
+<h2>Edit Lost Pet Ad</h2>
+
+<form asp-action="Edit" method="post">
+    @if (TempData["SuccessMessage"] != null)
+    {
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+    }
+
+    <div class="form-group">
+        <label for="PetName">Pet Name</label>
+        <input type="text" class="form-control" id="PetName" name="PetName" value="@Model.PetName" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <textarea class="form-control" id="Description" name="Description" rows="4" required>@Model.Description</textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="LastSeenDate">Last Seen Date</label>
+        <input type="date" class="form-control" id="LastSeenDate" name="LastSeenDate" value="@Model.LastSeenDate.ToString("yyyy-MM-dd")" required />
+    </div>
+
+
+    <div class="form-group">
+        <label for="city">City</label>
+        <select id="city" name="city" class="form-control" required>
+            <option value="">Select a city</option>
+            @foreach (var city in ViewData["Cities"] as List<string>)
+            {
+            <option value="@city">@city</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="district">District</label>
+        <select id="district" name="district" class="form-control" required>
+            <option value="">Select a district</option>
+        </select>
+    </div>
+
+
+    <div class="form-group">
+        <label for="ImageUrl">Image URL (Required)</label>
+        <input type="url" class="form-control" id="ImageUrl" name="ImageUrl" value="@Model.ImageUrl" placeholder="Enter Image URL" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Lost Pet Ad</button>
+</form>
+
+@section Scripts
+{
+<script>
+    // Update districts based on selected city
+    $('#city').change(function () {
+        var city = $(this).val();
+        $.get('/Account/GetDistricts?city=' + city, function (data) {
+            var districtSelect = $('#district');
+            districtSelect.empty();
+            districtSelect.append('<option value="">Select a district</option>');
+            data.forEach(function (district) {
+                districtSelect.append('<option value="' + district + '">' + district + '</option>');
+            });
+        });
+    });
+
+    // Initialize districts if a city is already selected (on page load)
+    $(document).ready(function () {
+        var selectedCity = $('#city').val();
+        if (selectedCity) {
+            $.get('/Account/GetDistricts?city=' + selectedCity, function (data) {
+                var districtSelect = $('#district');
+                districtSelect.empty();
+                districtSelect.append('<option value="">Select a district</option>');
+                data.forEach(function (district) {
+                    districtSelect.append('<option value="' + district + '">' + district + '</option>');
+                });
+            });
+        }
+    });
+</script>
+}

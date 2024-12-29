@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Lost Pet Details";
+ViewData["Title"] = "Lost Pet Details";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -7,11 +7,11 @@
 <div class="card">
     @if (!string.IsNullOrEmpty(Model.ImageUrl))
     {
-        <img src="@Model.ImageUrl" class="card-img-top" alt="Pet Image">
+    <img src="@Model.ImageUrl" class="card-img-top" alt="Pet Image">
     }
     else
     {
-        <img src="https://via.placeholder.com/300" class="card-img-top" alt="No Image Available">
+    <img src="https://via.placeholder.com/300" class="card-img-top" alt="No Image Available">
     }
 
     <div class="card-body">
@@ -29,6 +29,15 @@
         <p class="card-text"><strong>Address:</strong> @Model.User?.Address</p>
         <p class="card-text"><strong>City:</strong> @Model.User?.City</p>
         <p class="card-text"><strong>District:</strong> @Model.User?.District</p>
+
+        <!-- Edit ve Delete işlemleri için butonlar, sadece ilan sahibine görünür -->
+        @if (ViewBag.CurrentUser == Model.User?.Username)
+        {
+        <div class="btn-group" role="group">
+            <a href="@Url.Action("Edit", "LostPetAd", new { id = Model.Id })" class="btn btn-warning">Edit</a>
+            <a href="@Url.Action("Delete", "LostPetAd", new { id = Model.Id })" class="btn btn-danger">Delete</a>
+        </div>
+        }
 
         <a href="@Url.Action("Index", "LostPetAd")" class="btn btn-secondary">Back to List</a>
     </div>

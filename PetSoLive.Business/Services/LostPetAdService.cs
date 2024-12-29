@@ -1,5 +1,5 @@
-using PetSoLive.Core.Interfaces;
 using PetSoLive.Core.Entities;
+using PetSoLive.Core.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,28 +16,22 @@ public class LostPetAdService : ILostPetAdService
         _emailService = emailService;
     }
 
+    // Yeni kayıp ilanı oluşturmak için metod
     public async Task CreateLostPetAdAsync(LostPetAd lostPetAd, string city, string district)
     {
-        // Set the location details
         lostPetAd.LastSeenCity = city;
         lostPetAd.LastSeenDistrict = district;
 
-        // Save the new lost pet ad in the database
         await _lostPetAdRepository.CreateLostPetAdAsync(lostPetAd);
 
-        // Get the user who posted the ad
         var user = await _userRepository.GetByIdAsync(lostPetAd.UserId);
-
-        // Ensure the user exists
         if (user == null)
         {
             throw new InvalidOperationException("User not found.");
         }
 
-        // Get users from the same location (city, district)
         var usersInLocation = await _userRepository.GetUsersByLocationAsync(city, district);
 
-        // Send email to each user in the location
         foreach (var targetUser in usersInLocation)
         {
             var subject = "New Lost Pet Ad Created";
@@ -53,22 +47,32 @@ public class LostPetAdService : ILostPetAdService
         }
     }
 
+    // Kayıp ilanlarını almak için metod
     public async Task<IEnumerable<LostPetAd>> GetAllLostPetAdsAsync()
     {
         return await _lostPetAdRepository.GetAllAsync();
     }
 
+    // Kayıp ilanını ID'ye göre almak için metod
     public async Task<LostPetAd> GetLostPetAdByIdAsync(int id)
     {
-        // Fetch the lost pet ad and include the associated user (eager loading)
         var lostPetAd = await _lostPetAdRepository.GetByIdAsync(id);
-
         if (lostPetAd != null)
         {
-            // Ensure the user information is loaded as well
             lostPetAd.User = await _userRepository.GetByIdAsync(lostPetAd.UserId);
         }
-
         return lostPetAd;
+    }
+
+    // Kayıp ilanını güncellemek için metod
+    public async Task UpdateLostPetAdAsync(LostPetAd lostPetAd)
+    {
+        await _lostPetAdRepository.UpdateLostPetAdAsync(lostPetAd);
+    }
+
+    // Kayıp ilanını silmek için metod
+    public async Task DeleteLostPetAdAsync(LostPetAd lostPetAd)
+    {
+        await _lostPetAdRepository.DeleteLostPetAdAsync(lostPetAd);
     }
 }
