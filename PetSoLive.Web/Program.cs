@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using PetSoLive.Business.Services;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
-using PetSoLive.Core;
 using PetSoLive.Core.Services;
 using PetSoLive.Data;
 using PetSoLive.Data.Repositories;
@@ -18,11 +17,11 @@ Env.Load();
 
 var smtpSettings = new SmtpSettings
 {
-    Host = Environment.GetEnvironmentVariable("SMTP_HOST"),
-    Port = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT")),
-    Username = Environment.GetEnvironmentVariable("SMTP_USERNAME"),
-    Password = Environment.GetEnvironmentVariable("SMTP_PASSWORD"),
-    FromEmail = Environment.GetEnvironmentVariable("SMTP_FROM_EMAIL"),
+    Host = Environment.GetEnvironmentVariable("SMTP_HOST")!,
+    Port = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT")!),
+    Username = Environment.GetEnvironmentVariable("SMTP_USERNAME")!,
+    Password = Environment.GetEnvironmentVariable("SMTP_PASSWORD")!,
+    FromEmail = Environment.GetEnvironmentVariable("SMTP_FROM_EMAIL")!,
     EnableSsl = bool.TryParse(Environment.GetEnvironmentVariable("SMTP_ENABLE_SSL"), out var enableSsl) && enableSsl
 };
 
@@ -76,6 +75,9 @@ builder.Services.AddScoped<IVeterinarianRepository, VeterinarianRepository>();
 
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+
+builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 
 

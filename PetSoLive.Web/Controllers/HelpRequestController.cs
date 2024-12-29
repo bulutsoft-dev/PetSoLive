@@ -13,18 +13,21 @@ public class HelpRequestController : Controller
     private readonly IVeterinarianService _veterinarianService;
     private readonly INotificationService _notificationService;
     private readonly IEmailService _emailService;
+    private readonly ICommentService _commentService;
 
     public HelpRequestController(IHelpRequestService helpRequestService, 
         IUserService userService, 
         INotificationService notificationService,
         IEmailService emailService,
-        IVeterinarianService veterinarianService)
+        IVeterinarianService veterinarianService,
+        ICommentService commentService)
     {
         _helpRequestService = helpRequestService;
         _userService = userService;
         _notificationService = notificationService;
         _emailService = emailService;
         _veterinarianService = veterinarianService;
+        _commentService = commentService;
     }
 
     [HttpGet]
@@ -95,7 +98,6 @@ public class HelpRequestController : Controller
         var helpRequests = await _helpRequestService.GetHelpRequestsAsync();
         return View(helpRequests);
     }
-
     [HttpGet]
     public async Task<IActionResult> Details(int id)
     {
@@ -105,14 +107,41 @@ public class HelpRequestController : Controller
             return NotFound();
         }
 
-        var username = HttpContext.Session.GetString("Username");
-        var user = username != null ? await _userService.GetUserByUsernameAsync(username) : null;
-
-        ViewBag.CanEditOrDelete = user != null && helpRequest.UserId == user.Id;
+        // Yorumları al
+        var comments = await _commentService.GetCommentsByHelpRequestIdAsync(id);
+        ViewBag.Comments = comments;
 
         return View(helpRequest);
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddComment(int helpRequestId, string content)
+    {
+        var username = HttpContext.Session.GetString("Username");
+        if (string.IsNullOrEmpty(username))
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var user = await _userService.GetUserByUsernameAsync(username);
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var comment = new Comment
+        {
+            HelpRequestId = helpRequestId,
+            UserId = user.Id,
+            Content = content,
+            CreatedAt = DateTime.Now
+        };
+
+        await _commentService.AddCommentAsync(comment);
+
+        return RedirectToAction("Details", new { id = helpRequestId });
+    }
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {

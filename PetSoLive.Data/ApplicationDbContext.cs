@@ -29,6 +29,9 @@ namespace PetSoLive.Data
         // Admin DbSet
         public DbSet<Admin> Admins { get; set; }
 
+        // Yorumlar DbSet'i
+        public DbSet<Comment> Comments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -107,6 +110,27 @@ namespace PetSoLive.Data
             modelBuilder.Entity<Veterinarian>()
                 .Property(v => v.Status)
                 .HasConversion<string>();  // Enum değerlerini string olarak sakla
+
+            // HelpRequest - Comment ilişkisi (Bir HelpRequest'in birden fazla yorumu olabilir)
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.HelpRequest)
+                .WithMany(h => h.Comments)
+                .HasForeignKey(c => c.HelpRequestId)
+                .OnDelete(DeleteBehavior.Cascade); // Yorum silindiğinde ilişkili HelpRequest etkilenmesin
+
+            // User - Comment ilişkisi
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.User)
+                .WithMany(u => u.Comments)
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict); // Kullanıcı silindiğinde yorumlar silinmesin
+
+            // Veterinarian - Comment ilişkisi
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.Veterinarian)
+                .WithMany(v => v.Comments)
+                .HasForeignKey(c => c.VeterinarianId)
+                .OnDelete(DeleteBehavior.Restrict); // Veteriner silindiğinde yorumlar silinmesin
         }
     }
 }

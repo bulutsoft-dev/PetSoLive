@@ -17,9 +17,8 @@ namespace PetSoLive.Core.Entities
         public List<string> Roles { get; set; } = new List<string>();
 
         public ICollection<PetOwner> PetOwners { get; set; } = new List<PetOwner>();
-
         public ICollection<AdoptionRequest> AdoptionRequests { get; set; } = new List<AdoptionRequest>();
-        public ICollection<HelpRequest> HelpRequests { get; set; }  // Navigation property for HelpRequest
+        public ICollection<HelpRequest> HelpRequests { get; set; } // Navigation property for HelpRequests
+        public ICollection<Comment> Comments { get; set; } // Navigation property for comments made by the user
     }
-
 }

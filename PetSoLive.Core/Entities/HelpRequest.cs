@@ -21,8 +21,7 @@ namespace PetSoLive.Core.Entities
         public DateTime CreatedAt { get; set; }
 
         public int UserId { get; set; }
-
-        public User? User { get; set; }
+        public User? User { get; set; } // Navigation property
 
         [Required(ErrorMessage = "Location is required.")]
         [StringLength(200, ErrorMessage = "Location can't be longer than 200 characters.")]
@@ -39,8 +38,10 @@ namespace PetSoLive.Core.Entities
 
         public string? ImageUrl { get; set; }
 
-        // Remove the StringLength attribute here
         [Required(ErrorMessage = "Status is required.")]
-        public HelpRequestStatus Status { get; set; }  // Correct enum usage without StringLength
+        public HelpRequestStatus Status { get; set; }  // Enum field for status
+
+        // Comments associated with the HelpRequest (One-to-many relationship)
+        public ICollection<Comment> Comments { get; set; } // Navigation property for comments
     }
 }
