@@ -8,39 +8,43 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PetSoLive.Business\PetSoLive.Business.csproj" />
-      <ProjectReference Include="..\PetSoLive.Core\PetSoLive.Core.csproj" />
+        <ProjectReference Include="..\PetSoLive.Business\PetSoLive.Business.csproj" />
+        <ProjectReference Include="..\PetSoLive.Core\PetSoLive.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Views\Account\Login.cshtml" />
-      <AdditionalFiles Include="Views\Account\Register.cshtml" />
-      <AdditionalFiles Include="Views\Adoption\Index.cshtml" />
+        <AdditionalFiles Include="Views\Account\Login.cshtml" />
+        <AdditionalFiles Include="Views\Account\Register.cshtml" />
+        <AdditionalFiles Include="Views\Adoption\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="Pages\Adoption\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Adoption\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Assistance\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Pages\Assistance\List.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Assistance\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Assistance\List.cshtml" />
+        <_ContentIncludedByDefault Remove="Pages\Adoption\Details.cshtml" />
+        <_ContentIncludedByDefault Remove="Pages\Adoption\Index.cshtml" />
+        <_ContentIncludedByDefault Remove="Pages\Assistance\Create.cshtml" />
+        <_ContentIncludedByDefault Remove="Pages\Assistance\List.cshtml" />
+        <_ContentIncludedByDefault Remove="Views\Assistance\Create.cshtml" />
+        <_ContentIncludedByDefault Remove="Views\Assistance\List.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="DotNetEnv" Version="3.1.1" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        <PrivateAssets>all</PrivateAssets>
-      </PackageReference>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+        <PackageReference Include="DotNetEnv" Version="3.1.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
+        <Content Include="app.db">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
 </Project>
+

@@ -11,8 +11,8 @@ using PetSoLive.Data;
 namespace PetSoLive.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241230115927_initial")]
-    partial class initial
+    [Migration("20241230154527_InitialDB")]
+    partial class InitialDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

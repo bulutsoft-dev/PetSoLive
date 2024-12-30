@@ -1,2 +1,2 @@
-dotnet ef migrations add initial --project ../PetSoLive.Data --startup-project .
+dotnet ef migrations add InitialDB --project ../PetSoLive.Data --startup-project .
 dotnet ef database update
