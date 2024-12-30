@@ -11,10 +11,13 @@ using SmtpSettings = PetSoLive.Core.Entities.SmtpSettings;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Load environment variables from the .env file
 Env.Load();
 
+// SMTP Settings
 var smtpSettings = new SmtpSettings
 {
     Host = Environment.GetEnvironmentVariable("SMTP_HOST")!,
@@ -27,17 +30,14 @@ var smtpSettings = new SmtpSettings
 
 builder.Services.AddSingleton(smtpSettings);
 
+// SQLite Database Connection String
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
-if (string.IsNullOrEmpty(connectionString))
-{
-    throw new InvalidOperationException("DATABASE_CONNECTION_STRING environment variable is not set.");
-}
-
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(connectionString, b => b.MigrationsAssembly("PetSoLive.Data"));
+    options.UseSqlite(connectionString);
 });
 
+// Add distributed memory cache and session
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -46,6 +46,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// Add services to the container
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<IAdoptionService, AdoptionService>();
@@ -59,27 +60,19 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPetOwnerService, PetOwnerService>();
 builder.Services.AddScoped<IAdoptionRequestRepository, AdoptionRequestRepository>();
 builder.Services.AddScoped<IAdoptionRequestService, AdoptionRequestService>();
-
 builder.Services.AddScoped<ILostPetAdRepository, LostPetAdRepository>();
 builder.Services.AddScoped<ILostPetAdService, LostPetAdService>();
-
 builder.Services.AddScoped<IHelpRequestRepository, HelpRequestRepository>();
 builder.Services.AddScoped<IHelpRequestService, HelpRequestService>();
-
-
 builder.Services.AddScoped<IVeterinarianService, VeterinarianService>();
 builder.Services.AddScoped<IVeterinarianRepository, VeterinarianRepository>();
-
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
-
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
-
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-
-
+// Authentication and Authorization
 builder.Services.AddAuthentication("Cookies")
     .AddCookie(options =>
     {
@@ -92,6 +85,7 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
