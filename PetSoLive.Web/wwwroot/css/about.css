@@ -1,0 +1,164 @@
+/* Base styles for the about-container */
+.about-container {
+    background-color: #ffffff; /* White background for clean design */
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect for smoother shadow and slight movement */
+.about-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Headings */
+.about-container h2, .about-container h3 {
+    font-weight: 700;
+    color: #2C3E50; /* Darker text for headings for contrast */
+    margin-bottom: 1.5rem;
+}
+
+/* Paragraphs styling for better readability */
+.about-container p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #34495E; /* Softer dark color for text */
+    margin-bottom: 1.8rem;
+}
+
+/* Unordered list styling */
+.about-container ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+}
+
+/* List item styling with custom bullets */
+.about-container ul li {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #34495E; /* Matching text color for consistency */
+    margin-bottom: 1rem;
+    padding-left: 1.8rem;
+    position: relative;
+}
+
+/* Custom bullet color */
+.about-container ul li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #2980B9; /* Bright blue for bullets to match the primary color */
+    font-weight: bold;
+}
+
+/* Button styling */
+.about-container .btn {
+    font-size: 1.1rem;
+    padding: 0.8rem 1.6rem;
+    background-color: #2980B9; /* Primary color for buttons */
+    color: #ffffff;
+    border-radius: 8px;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* Button hover effect */
+.about-container .btn:hover {
+    background-color: #1565C0; /* Slightly darker blue */
+    transform: translateY(-3px);
+}
+
+/* Card styles for content blocks */
+.about-container .card {
+    border-radius: 16px;
+    background-color: #f9f9f9; /* Light background for cards */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect for cards */
+.about-container .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Card content padding */
+.about-container .card-body {
+    padding: 2rem;
+}
+
+/* Card title styling */
+.about-container .card-title {
+    font-weight: 700;
+    color: #2C3E50; /* Dark color for the card title */
+    margin-bottom: 1.25rem;
+}
+
+/* Card text content */
+.about-container .card-text {
+    font-size: 1.1rem;
+    color: #34495E;
+    line-height: 1.7;
+}
+
+/* Badge styling */
+.about-container .badge {
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    color: #ffffff;
+    margin-right: 0.75rem;
+}
+
+/* Specific badge colors */
+.about-container .badge-success {
+    background-color: #27AE60; /* Green for success */
+}
+
+.about-container .badge-danger {
+    background-color: #E74C3C; /* Red for danger */
+}
+
+.about-container .badge-warning {
+    background-color: #F39C12; /* Yellow for warnings */
+}
+
+.about-container .badge-info {
+    background-color: #8E44AD; /* Purple for informational badges */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .about-container {
+        padding: 2rem;
+    }
+
+    .about-container h2 {
+        font-size: 1.75rem;
+    }
+
+    .about-container h3 {
+        font-size: 1.5rem;
+    }
+
+    .about-container p {
+        font-size: 1rem;
+    }
+
+    .about-container .btn {
+        font-size: 1rem;
+        padding: 0.75rem 1.4rem;
+    }
+
+    .about-container .card-body {
+        padding: 1.5rem;
+    }
+}
