@@ -1,4 +1,3 @@
-using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using PetSoLive.Business.Services;
 using PetSoLive.Core.Entities;
@@ -14,24 +13,21 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Load environment variables from the .env file
-Env.Load();
-
-// SMTP Settings
+// SMTP Settings (static values)
 var smtpSettings = new SmtpSettings
 {
-    Host = Environment.GetEnvironmentVariable("SMTP_HOST")!,
-    Port = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT")!),
-    Username = Environment.GetEnvironmentVariable("SMTP_USERNAME")!,
-    Password = Environment.GetEnvironmentVariable("SMTP_PASSWORD")!,
-    FromEmail = Environment.GetEnvironmentVariable("SMTP_FROM_EMAIL")!,
-    EnableSsl = bool.TryParse(Environment.GetEnvironmentVariable("SMTP_ENABLE_SSL"), out var enableSsl) && enableSsl
+    Host = "smtp.gmail.com",  // SMTP_HOST
+    Port = 587,               // SMTP_PORT
+    Username = "petsolivesoft@gmail.com",  // SMTP_USERNAME
+    Password = "lrgl khdo bnhf rqhj", // SMTP_PASSWORD
+    FromEmail = "petsolivesoft@gmail.com",  // SMTP_FROM_EMAIL
+    EnableSsl = true          // SMTP_ENABLE_SSL
 };
 
 builder.Services.AddSingleton(smtpSettings);
 
-// SQLite Database Connection String
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
+// SQLite Database Connection String (static value)
+var connectionString = "Data Source=app.db"; // DATABASE_CONNECTION_STRING
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlite(connectionString);
