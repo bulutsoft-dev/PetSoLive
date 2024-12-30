@@ -61,8 +61,7 @@ public class LostPetAdController : Controller
     public async Task<IActionResult> Create(LostPetAd lostPetAd, string city, string district)
     {
         var redirectResult = RedirectToLoginIfNotLoggedIn();
-        if (redirectResult != null) return redirectResult; 
-
+        if (redirectResult != null) return redirectResult;
 
         if (string.IsNullOrEmpty(city) || string.IsNullOrEmpty(district))
         {

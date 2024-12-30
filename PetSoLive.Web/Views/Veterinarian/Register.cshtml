@@ -1,21 +1,22 @@
+@model PetSoLive.Core.Entities.HelpRequest
 @{
     ViewData["Title"] = "Register as Veterinarian";
     Layout = "_Layout";
 }
 
 @section HeadSection {
-    <link rel="stylesheet" href="~/css/veterinarian.css" />
+        <link rel="stylesheet" href="~/css/veterinarian.css?v=1.1" />
 }
 
 <div class="veterinarian-page">
     <div class="veterinarian-container vet-form">
-        <h2>@ViewData["Title"]</h2>
+        <h2 class="veterinarian-title">@ViewData["Title"]</h2>
 
         @if (ViewBag.ApplicationSubmitted != null && ViewBag.ApplicationSubmitted)
         {
-            <div class="alert alert-info">
-                You have already submitted your application. You cannot apply again.
-            </div>
+                <div class="alert alert-info">
+                    You have already submitted your application. You cannot apply again.
+                </div>
         }
 
         <form method="post">
@@ -33,11 +34,15 @@
             </div>
 
             <button type="submit" class="btn-vet"
-                    @(ViewBag.ApplicationSubmitted != null && ViewBag.ApplicationSubmitted ? "disabled" : "")>
-                @(ViewBag.ApplicationSubmitted != null && ViewBag.ApplicationSubmitted 
-                    ? "Application Submitted" 
-                    : "Submit Application")
+            @(ViewBag.ApplicationSubmitted != null && ViewBag.ApplicationSubmitted ? "disabled" : "")>
+                @(ViewBag.ApplicationSubmitted != null && ViewBag.ApplicationSubmitted
+                        ? "Application Submitted"
+                        : "Submit Application")
             </button>
         </form>
     </div>
 </div>
+
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+}

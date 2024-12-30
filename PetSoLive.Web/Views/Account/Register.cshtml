@@ -4,13 +4,12 @@
 }
 
 @section HeadSection {
-    <!-- Yalnýzca Register sayfasýna özel CSS -->
     <link rel="stylesheet" href="~/css/register.css" />
 }
 
 <div class="register-page">
 
-    @* Hata mesajlarý *@
+    @* Hata mesajlarï¿½ *@
     @if (!ViewData.ModelState.IsValid)
     {
         <div class="alert alert-danger">
@@ -26,7 +25,6 @@
     <div class="register-container">
         <h2 class="register-title">Register</h2>
 
-        <!-- Baþarýlý kayýt vs. için TempData kullandýðýnýzý varsayabiliriz -->
         @if (TempData["SuccessMessage"] != null)
         {
             <div class="alert alert-success">
@@ -163,7 +161,6 @@
 @section Scripts
 {
     <script>
-        // District dropdown doldurma:
         $('#city').change(function () {
             var city = $(this).val();
             $.get('/Account/GetDistricts?city=' + city, function (data) {

@@ -1,86 +1,94 @@
 @{
-ViewData["Title"] = "Edit Lost Pet Ad";
+    ViewData["Title"] = "Edit Lost Pet Ad";
+    Layout = "_Layout";
 }
 
-<h2>Edit Lost Pet Ad</h2>
+@section HeadSection {
+    <link rel="stylesheet" href="~/css/lostPetAd.css?v=1.1" />
+}
 
-<!-- Error message display -->
-@if (TempData["ErrorMessage"] != null)
-{
-<div class="alert alert-danger">
-    @TempData["ErrorMessage"]
+<div class="lostpet-page">
+    <h2 class="lostpet-title">@ViewData["Title"]</h2>
+
+    <div class="lostpet-container">
+        <!-- Error message display -->
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <!-- Success message display -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label for="PetName">Pet Name</label>
+                <input type="text" id="PetName" name="PetName" class="form-control" value="@Model.PetName" required />
+            </div>
+
+            <div class="form-group">
+                <label for="Description">Description</label>
+                <textarea id="Description" name="Description" class="form-control" required>@Model.Description</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="LastSeenDate">Last Seen Date</label>
+                <input type="date" id="LastSeenDate" name="LastSeenDate" class="form-control" value="@Model.LastSeenDate.ToString("yyyy-MM-dd")" required />
+            </div>
+
+            <div class="form-group">
+                <label for="ImageUrl">Pet Image (URL)</label>
+                <input type="url" id="ImageUrl" name="ImageUrl" class="form-control" value="@Model.ImageUrl" />
+            </div>
+
+            <div class="form-group">
+                <label for="city">City</label>
+                <select id="city" name="city" class="form-control" required>
+                    <option value="">Select a city</option>
+                    @foreach (var city in ViewData["Cities"] as List<string>)
+                    {
+                            <option value="@city">@city.ToString()</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="district">District</label>
+                <select id="district" name="district" class="form-control" required>
+                    <option value="">Select a district</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn-lostpet">Update Lost Pet Ad</button>
+                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
 </div>
-}
 
-<!-- Success message display -->
-@if (TempData["SuccessMessage"] != null)
-{
-<div class="alert alert-success">
-    @TempData["SuccessMessage"]
-</div>
-}
-
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
-    @Html.AntiForgeryToken()
-
-    <div class="form-group">
-        <label for="PetName">Pet Name</label>
-        <input type="text" id="PetName" name="PetName" class="form-control" value="@Model.PetName" required />
-    </div>
-
-    <div class="form-group">
-        <label for="Description">Description</label>
-        <textarea id="Description" name="Description" class="form-control" required>@Model.Description</textarea>
-    </div>
-
-    <div class="form-group">
-        <label for="LastSeenDate">Last Seen Date</label>
-        <input type="date" id="LastSeenDate" name="LastSeenDate" class="form-control" value="@Model.LastSeenDate.ToString("yyyy-MM-dd")" required />
-    </div>
-
-    <div class="form-group">
-        <label for="ImageUrl">Pet Image (URL)</label>
-        <input type="url" id="ImageUrl" name="ImageUrl" class="form-control" value="@Model.ImageUrl" />
-    </div>
-
-    <div class="form-group">
-        <label for="city">City</label>
-        <select id="city" name="city" class="form-control" required>
-            <option value="">Select a city</option>
-            @foreach (var city in ViewData["Cities"] as List<string>)
-            {
-            <option value="@city">@city</option>
-            }
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="district">District</label>
-        <select id="district" name="district" class="form-control" required>
-            <option value="">Select a district</option>
-        </select>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Update Lost Pet Ad</button>
-</form>
-
-<!-- Redirect to cancel button -->
-<a href="@Url.Action("Details", new { id = Model.Id })" class="btn btn-secondary mt-3">Cancel</a>
-
-
-@section Scripts
-{
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
     <script>
-    // Update districts based on selected city
-    $('#city').change(function () {
-        var city = $(this).val();
-        $.get('/Account/GetDistricts?city=' + city, function (data) {
-            var districtSelect = $('#district');
-            districtSelect.empty();
-            districtSelect.append('<option value="">Select a district</option>');
-            data.forEach(function (district) {
-                districtSelect.append('<option value="' + district + '">' + district + '</option>');
+        // Update districts based on selected city
+        $('#city').change(function () {
+            var city = $(this).val();
+            $.get('/Account/GetDistricts?city=' + city, function (data) {
+                var districtSelect = $('#district');
+                districtSelect.empty();
+                districtSelect.append('<option value="">Select a district</option>');
+                data.forEach(function (district) {
+                    districtSelect.append('<option value="' + district + '">' + district + '</option>');
+                });
             });
         });
-    });
-</script>
+    </script>
 }

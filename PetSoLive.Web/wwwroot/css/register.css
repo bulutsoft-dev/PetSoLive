@@ -1,15 +1,8 @@
-﻿/*
-  register.css
-  --------------------
-  Sadece Register.cshtml için
-*/
-
-/* Arkaplan degrade animasyonu */
-.register-page {
+﻿.register-page {
     min-height: calc(100vh - 80px);
     margin-top: 20px;
     margin-bottom: 20px;
-    background: linear-gradient(-45deg, #7fffd4, #87cefa, #ffbc42, #ff6e7f);
+    background: linear-gradient(-45deg, var(--petsolive-primary), var(--petsolive-secondary), var(--petsolive-warning), var(--petsolive-danger));
     background-size: 400% 400%;
     animation: registerBgAnim 10s ease infinite;
     display: flex;
@@ -31,52 +24,60 @@
     }
 }
 
-/* Kutu */
 .register-container {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(8px);
     border-radius: 12px;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
     padding: 2rem;
     width: 90%;
     max-width: 450px;
-    margin: 0 auto; /* Ortalamak için */
+    margin: 0 auto;
     opacity: 1;
     transform: scale(1);
     transition: opacity 1s ease, transform 0.7s ease;
 }
 
-/* Başlık */
 .register-title {
     text-align: center;
     margin-bottom: 1rem;
-    color: #333;
+    color: var(--petsolive-dark);
     font-size: 1.5rem;
     font-weight: 600;
 }
 
-/* Hata / Başarı kutuları */
 .alert.alert-danger,
 .alert.alert-success {
     margin: 1rem auto;
     border-radius: 6px;
     font-size: 0.9rem;
     max-width: 450px;
+    padding: 1rem;
 }
 
-/* Form Grupları */
+.alert-success {
+    background-color: rgba(67, 160, 71, 0.1);
+    color: var(--petsolive-success);
+    border-left: 4px solid var(--petsolive-success);
+}
+
+.alert-danger {
+    background-color: rgba(229, 57, 53, 0.1);
+    color: var(--petsolive-danger);
+    border-left: 4px solid var(--petsolive-danger);
+}
+
 .form-group {
     margin-bottom: 1.2rem;
 }
 
     .form-group label {
-        font-weight: 500;
-        margin-bottom: 0.5rem;
         display: block;
-        color: #444;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--petsolive-dark);
     }
 
-/* Inputlar */
 .form-control {
     padding: 0.75rem;
     border-radius: 6px;
@@ -84,14 +85,14 @@
     transition: border 0.3s, box-shadow 0.3s;
     outline: none;
     font-size: 1rem;
+    width: 100%;
 }
 
     .form-control:focus {
-        border-color: #258cfb;
-        box-shadow: 0 0 0 0.1rem #ffffff, 0 0 0 0.25rem #258cfb;
+        border-color: var(--petsolive-primary);
+        box-shadow: 0 0 0 0.1rem rgba(30, 136, 229, 0.25);
     }
 
-/* Buton */
 .register-btn {
     display: block;
     margin: 1rem auto 0;
@@ -99,7 +100,7 @@
     border-radius: 6px;
     font-size: 1rem;
     font-weight: 500;
-    background-color: #258cfb;
+    background-color: var(--petsolive-primary);
     color: #fff;
     border: none;
     cursor: pointer;
@@ -107,23 +108,22 @@
 }
 
     .register-btn:hover {
-        background-color: #1672d8;
+        background-color: #1565C0;
         transform: translateY(-1px);
     }
 
     .register-btn:focus {
         outline: none;
-        box-shadow: 0 0 0 0.1rem #fff, 0 0 0 0.25rem #258cfb;
+        box-shadow: 0 0 0 0.1rem #ffffff, 0 0 0 0.25rem var(--petsolive-primary);
     }
 
-/* Login link alt tarafta */
 .login-link {
     margin-top: 1rem;
     text-align: center;
 }
 
     .login-link a {
-        color: #258cfb;
+        color: var(--petsolive-primary);
         text-decoration: none;
         font-weight: 500;
     }
@@ -131,3 +131,24 @@
         .login-link a:hover {
             text-decoration: underline;
         }
+
+@media (max-width: 768px) {
+    .register-container {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .register-title {
+        font-size: 1.3rem;
+    }
+
+    .register-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    .alert.alert-danger,
+    .alert.alert-success {
+        max-width: 100%;
+    }
+}

@@ -3,10 +3,6 @@
     ViewData["Title"] = "Login";
 }
 
-<!-- 
-     Sadece bu sayfanýn gövdesi .login-page sýnýfýyla 
-     sarmalansýn ki degrade animasyonu bu sayfaya özel olsun
--->
 <div class="login-page">
 
     @* Hata mesajlarý *@
@@ -60,7 +56,6 @@
 
 @section Scripts {
     <script>
-        // Sayfa yüklendikten sonra fade-in efekti
         document.addEventListener("DOMContentLoaded", function () {
             const container = document.querySelector(".login-container");
             if (container) {

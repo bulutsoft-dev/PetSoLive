@@ -9,9 +9,9 @@
 }
 
 <div class="helprequest-page">
-    <div class="helprequest-container helprequest-form">
-        <h2>Edit Help Request</h2>
+    <h2 class="helprequest-title">@ViewData["Title"]</h2>
 
+    <div class="helprequest-container">
         @if (!ViewData.ModelState.IsValid)
         {
             <div class="alert alert-danger">
@@ -54,7 +54,7 @@
                     @foreach (var status in Enum.GetValues(typeof(PetSoLive.Core.Enums.HelpRequestStatus))
                                                  .Cast<PetSoLive.Core.Enums.HelpRequestStatus>())
                     {
-                        <option value="@status">@status.ToString()</option>
+                            <option value="@status">@status.ToString()</option>
                     }
                 </select>
                 <span asp-validation-for="Status" class="text-danger"></span>

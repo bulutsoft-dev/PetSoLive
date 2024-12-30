@@ -1,44 +1,52 @@
 @{
-ViewData["Title"] = "Lost Pet Details";
+    ViewData["Title"] = "Lost Pet Details";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="lostpet-page">
+    <h2 class="lostpet-title">@ViewData["Title"]</h2>
 
-<div class="card">
-    @if (!string.IsNullOrEmpty(Model.ImageUrl))
-    {
-    <img src="@Model.ImageUrl" class="card-img-top" alt="Pet Image">
-    }
-    else
-    {
-    <img src="https://via.placeholder.com/300" class="card-img-top" alt="No Image Available">
-    }
+    <div class="lostpet-container">
+        <div class="card lostpet-details">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                    <img src="@Model.ImageUrl" class="card-img-top" alt="Pet Image">
+            }
+            else
+            {
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="No Image Available">
+            }
 
-    <div class="card-body">
-        <h5 class="card-title">@Model.PetName</h5>
-        <p class="card-text">@Model.Description</p>
-        <p class="card-text"><strong>Location:</strong> @Model.LastSeenLocation</p>
-        <p class="card-text"><strong>Last Seen Date:</strong> @Model.LastSeenDate.ToString("dd/MM/yyyy")</p>
-        <p class="card-text"><strong>Posted on:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy")</p>
+            <div class="card-body">
+                <h5 class="card-title">@Model.PetName</h5>
+                <p class="card-text">@Model.Description</p>
+                <p class="card-text"><strong>Location:</strong> @Model.LastSeenLocation</p>
+                <p class="card-text"><strong>Last Seen Date:</strong> @Model.LastSeenDate.ToString("dd/MM/yyyy")</p>
+                <p class="card-text"><strong>Posted on:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy")</p>
 
-        <!-- İlan sahibinin bilgisi -->
-        <h5>Owner Information:</h5>
-        <p class="card-text"><strong>Username:</strong> @Model.User?.Username</p>
-        <p class="card-text"><strong>Email:</strong> @Model.User?.Email</p>
-        <p class="card-text"><strong>Phone Number:</strong> @Model.User?.PhoneNumber</p>
-        <p class="card-text"><strong>Address:</strong> @Model.User?.Address</p>
-        <p class="card-text"><strong>City:</strong> @Model.User?.City</p>
-        <p class="card-text"><strong>District:</strong> @Model.User?.District</p>
+                <h5 class="mt-4">Owner Information:</h5>
+                <p class="card-text"><strong>Username:</strong> @Model.User?.Username</p>
+                <p class="card-text"><strong>Email:</strong> @Model.User?.Email</p>
+                <p class="card-text"><strong>Phone Number:</strong> @Model.User?.PhoneNumber</p>
+                <p class="card-text"><strong>Address:</strong> @Model.User?.Address</p>
+                <p class="card-text"><strong>City:</strong> @Model.User?.City</p>
+                <p class="card-text"><strong>District:</strong> @Model.User?.District</p>
 
-        <!-- Edit ve Delete işlemleri için butonlar, sadece ilan sahibine görünür -->
-        @if (ViewBag.CurrentUser == Model.User?.Username)
-        {
-        <div class="btn-group" role="group">
-            <a href="@Url.Action("Edit", "LostPetAd", new { id = Model.Id })" class="btn btn-warning">Edit</a>
-            <a href="@Url.Action("Delete", "LostPetAd", new { id = Model.Id })" class="btn btn-danger">Delete</a>
+                @if (ViewBag.CurrentUser == Model.User?.Username)
+                {
+                        <div class="btn-group mt-3" role="group">
+                            <a href="@Url.Action("Edit", "LostPetAd", new { id = Model.Id })" class="btn btn-warning">
+                                <i class="bi bi-pencil-square me-1"></i> Edit
+                            </a>
+                            <a href="@Url.Action("Delete", "LostPetAd", new { id = Model.Id })" class="btn btn-danger">
+                                <i class="bi bi-trash-fill me-1"></i> Delete
+                            </a>
+                        </div>
+                }
+
+                <a href="@Url.Action("Index", "LostPetAd")" class="btn btn-secondary mt-3">
+                    <i class="bi bi-arrow-left-circle-fill me-1"></i> Back to List
+                </a>
+            </div>
         </div>
-        }
-
-        <a href="@Url.Action("Index", "LostPetAd")" class="btn btn-secondary">Back to List</a>
     </div>
 </div>

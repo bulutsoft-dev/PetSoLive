@@ -1,15 +1,13 @@
-﻿/*
-  home.css
-  --------------------
-  Sadece Home/Index.cshtml için
-*/
-
-/* Hero Section */
-.home-hero {
+﻿.home-hero {
     position: relative;
     width: 100%;
-    height: 60vh; /* Ekranın 70% yüksekliğinde */
+    height: 60vh;
     background: url('/lib/bg.png') no-repeat center center;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
 }
 
 .home-hero-overlay {
@@ -18,11 +16,11 @@
     left: 0;
     width: 100%;
     height: 100%;
-    /* yarı saydam siyah overlay */
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(30, 136, 229, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 30px;
 }
 
 .hero-content {
@@ -30,47 +28,122 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 1rem;
-}
-
-/* CTA Butonu */
-.btn-hero-cta {
-    background-color: var(--petsolive-secondary);
     color: #fff;
-    padding: 0.75rem 1.5rem;
     border-radius: 30px;
-    font-size: 1.1rem;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-    text-decoration: none;
 }
 
-    .btn-hero-cta:hover {
-        background-color: var(--petsolive-primary);
-        color: #fff;
+    .hero-content h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
     }
 
-/* Info Cards */
+    .hero-content p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+    }
+
+    .hero-content .btn-hero-cta {
+        background-color: var(--petsolive-secondary);
+        color: #fff;
+        padding: 0.75rem 1.5rem;
+        border-radius: 30px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+    }
+
+        .hero-content .btn-hero-cta:hover {
+            background-color: var(--petsolive-primary);
+            color: #fff;
+        }
+
+.info-section {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 2rem 0;
+    background-color: var(--petsolive-light);
+}
+
 .info-card {
     border-radius: 8px;
     background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    width: 250px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+    .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
 
     .info-card .icon-big {
         font-size: 3rem;
         margin-bottom: 1rem;
+        color: var(--petsolive-primary);
     }
 
-.text-petsolive {
-    color: var(--petsolive-primary) !important;
-}
+    .info-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--petsolive-dark);
+        text-align: center;
+        color: cornflowerblue;
+    }
 
-/* Responsive adjustments */
+    .info-card p {
+        font-size: 1rem;
+        color: #555;
+    }
+
 @media (max-width: 768px) {
     .home-hero {
-        height: 50vh; /* mobilde biraz daha küçük */
+        height: 50vh;
     }
 
-    .info-card .icon-big {
+    .hero-content h1 {
         font-size: 2.5rem;
     }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    .info-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .info-card {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+.home-hero .hero-content {
+    z-index: 1;
+}
+
+.home-hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 0;
+    border-radius: 30px;
+}
+
+.btn-hero-cta:hover {
+    background-color: var(--petsolive-primary);
+    color: #fff;
+    text-decoration: none;
 }
