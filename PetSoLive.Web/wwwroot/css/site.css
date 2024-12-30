@@ -28,7 +28,7 @@ html {
 
 body {
     color: var(--petsolive-text);
-    margin-bottom: 60px;
+    margin-bottom: 0px;
     background-color: var(--petsolive-bg);
     display: flex;
     flex-direction: column;

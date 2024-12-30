@@ -1,5 +1,4 @@
-﻿@* Views/Shared/_Layout.cshtml *@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,13 +6,9 @@
     <title>@ViewData["Title"] - PetSoLive.Web</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-
     <link rel="stylesheet" href="~/css/adoption.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/helpRequest.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
@@ -22,115 +17,158 @@
     <link rel="stylesheet" href="~/css/pet.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/register.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/veterinarian.css" asp-append-version="true" />
-
+    <link rel="stylesheet" href="~/css/footer.css" asp-append-version="true" />
     @RenderSection("HeadSection", required: false)
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">
-                    PetSoLive
-                </a>
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarContent">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">
-                                <i class="bi bi-house-door-fill"></i> Home
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Home" asp-action="About">
-                                <i class="bi bi-info-circle-fill"></i> About
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Adoption" asp-action="Index">
-                                <i class="bi bi-clipboard-heart-fill"></i> Adoption
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="LostPetAd" asp-action="Index">
-                                <i class="bi bi-bookmark-heart-fill"></i> Lost Pet Ads
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="HelpRequest" asp-action="Index">
-                                <i class="bi bi-chat-square-heart-fill"></i> Help Requests
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Veterinarian" asp-action="Index">
-                                <i class="bi bi-gear-fill"></i> Veterinarians
-                            </a>
-                        </li>
-                    </ul>
-
-                    <ul class="navbar-nav">
-                        @* Session Kontrolü *@
-                        @{
-                            var username = Context.Session.GetString("Username");
-                        }
-                        @if (string.IsNullOrEmpty(username))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Account" asp-action="Login">
-                                    <i class="bi bi-box-arrow-in-right"></i> Login
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Account" asp-action="Register">
-                                    <i class="bi bi-pencil-square"></i> Register
-                                </a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <span class="nav-link text-white">
-                                    <i class="bi bi-person-fill"></i> Welcome, @username
-                                </span>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Account" asp-action="Logout">
-                                    <i class="bi bi-box-arrow-left"></i> Logout
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Veterinarian" asp-action="Register">
-                                    <i class="bi bi-clipboard-plus-fill"></i> Veterinarian Register
-                                </a>
-                            </li>
-                        }
-                    </ul>
-                </div>
+<body class="d-flex flex-column min-vh-100">
+<header>
+    <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">
+                PetSoLive
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto">
+                    @* Session Kontrolü *@
+                    @{
+                    var username = Context.Session.GetString("Username");
+                    }
+                    @if (string.IsNullOrEmpty(username))
+                    {
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-house-door-fill"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-controller="Home" asp-action="About">
+                            <i class="bi bi-info-circle-fill"></i> About
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-controller="Adoption" asp-action="Index">
+                            <i class="bi bi-clipboard-heart-fill"></i> Adoption
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-controller="LostPetAd" asp-action="Index">
+                            <i class="bi bi-bookmark-heart-fill"></i> Lost Pet Ads
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-controller="HelpRequest" asp-action="Index">
+                            <i class="bi bi-chat-square-heart-fill"></i> Help Requests
+                        </a>
+                    </li>
+                    }
+                    else
+                    {
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-controller="Veterinarian" asp-action="Index">
+                            <i class="bi bi-gear-fill"></i> Veterinarians Management
+                        </a>
+                    </li>
+                    }
+                </ul>
+                <ul class="navbar-nav">
+                    @if (string.IsNullOrEmpty(username))
+                    {
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-controller="Account" asp-action="Login">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-controller="Account" asp-action="Register">
+                            <i class="bi bi-pencil-square"></i> Register
+                        </a>
+                    </li>
+                    }
+                    else
+                    {
+                    <li class="nav-item">
+                        <span class="nav-link text-white">
+                            <i class="bi bi-person-fill"></i> Welcome, @username
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-controller="Account" asp-action="Logout">
+                            <i class="bi bi-box-arrow-left"></i> Logout
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-controller="Veterinarian" asp-action="Register">
+                            <i class="bi bi-clipboard-plus-fill"></i> Veterinarian Register
+                        </a>
+                    </li>
+                    }
+                </ul>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
+</header>
 
-    <div class="container pt-3">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+<div class="container pt-3 flex-grow-1">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <!-- About Section -->
+            <div class="col-md-4 mb-4">
+                <h5 class="text-uppercase fw-bold">About PetSoLive</h5>
+                <p>
+                    PetSoLive is dedicated to creating a community for pet lovers, providing resources for adoption, lost pet ads, and help requests.
+                </p>
+            </div>
+            <!-- Quick Links Section -->
+            <div class="col-md-4 mb-4">
+                <h5 class="text-uppercase fw-bold">Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="@Url.Action("Index", "Home")"><i class="bi bi-house-door-fill"></i> Home</a></li>
+                    <li><a href="@Url.Action("About", "Home")"><i class="bi bi-info-circle-fill"></i> About Us</a></li>
+                    <li><a href="@Url.Action("Index", "Adoption")"><i class="bi bi-clipboard-heart-fill"></i> Adoption</a></li>
+                    <li><a href="@Url.Action("Index", "LostPetAd")"><i class="bi bi-bookmark-heart-fill"></i> Lost Pet Ads</a></li>
+                    <li><a href="@Url.Action("Index", "HelpRequest")"><i class="bi bi-chat-square-heart-fill"></i> Help Requests</a></li>
+                </ul>
+            </div>
+            <!-- Contact Section -->
+            <div class="col-md-4 mb-4">
+                <h5 class="text-uppercase fw-bold">Contact Us</h5>
+                <p><i class="bi bi-envelope"></i> <strong>Email:</strong> petsolivesoft@gmail.com</p>
+                <p><i class="bi bi-phone"></i> <strong>Phone:</strong> +90 534 639 22 60</p>
+                <p><i class="bi bi-geo-alt"></i> <strong>Address:</strong> Muradiye, Manisa, Turkey</p>
+            </div>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - PetSoLive.Web -
-            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <div class="footer-bottom">
+        <div class="container d-flex justify-content-between align-items-center">
+            <p class="mb-0">&copy; 2024 PetSoLive - BulutSoft Bilgi Teknolojileri A.Ş. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://www.facebook.com" class="me-3" target="_blank" title="Facebook"><i class="bi bi-facebook"></i></a>
+                <a href="https://www.twitter.com" class="me-3" target="_blank" title="Twitter"><i class="bi bi-twitter"></i></a>
+                <a href="https://www.instagram.com" class="me-3" target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
+                <a href="https://www.linkedin.com" target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+            </div>
         </div>
-    </footer>
+    </div>
+</footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
-    @RenderSection("Scripts", required: false)
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+@RenderSection("Scripts", required: false)
 </body>
 </html>
