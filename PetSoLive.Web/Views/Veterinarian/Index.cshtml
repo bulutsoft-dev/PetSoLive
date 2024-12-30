@@ -1,58 +1,88 @@
 @model IEnumerable<PetSoLive.Core.Entities.Veterinarian>
 
 @{
-ViewData["Title"] = "Veterinarians List";
+    ViewData["Title"] = "Veterinarians List";
+    Layout = "_Layout";
 }
 
-<h1>@ViewData["Title"]</h1>
+@section HeadSection {
+    <link rel="stylesheet" href="~/css/veterinarian.css" />
+}
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Qualifications</th>
-        <th>Clinic Address</th>
-        <th>Clinic Phone Number</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var veterinarian in Model)
-    {
-    <tr>
-        <!-- Displaying the username -->
-        <td>@veterinarian.User?.Username</td>
-        <td>@veterinarian.Qualifications</td>
-        <td>@veterinarian.ClinicAddress</td>
-        <td>@veterinarian.ClinicPhoneNumber</td>
-        <td>@veterinarian.Status.ToString()</td>
-        <td>
-            @{
-            var username = Context.Session.GetString("Username");
-            }
-            @if (!string.IsNullOrEmpty(username))
-            {
-            @if (veterinarian.Status == PetSoLive.Core.Enums.VeterinarianStatus.Pending)
-            {
-            <a href="@Url.Action("Approve", "Veterinarian", new { veterinarianId = veterinarian.Id })" class="btn btn-success">Approve</a>
-            <a href="@Url.Action("Reject", "Veterinarian", new { veterinarianId = veterinarian.Id })" class="btn btn-danger">Reject</a>
-            }
-            else
-            {
-            <span class="badge bg-secondary">@veterinarian.Status.ToString()</span>
-            }
-            }
-            else
-            {
-            <span class="badge bg-warning">Login to manage approvals</span>
-            }
+<div class="veterinarian-page">
+    <h1 class="veterinarian-title">@ViewData["Title"]</h1>
 
+    <div class="veterinarian-container">
+        <table class="vet-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Qualifications</th>
+                    <th>Clinic Address</th>
+                    <th>Clinic Phone Number</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var veterinarian in Model)
+            {
+                <tr>
+                    <!-- Displaying the username -->
+                    <td>@veterinarian.User?.Username</td>
+                    <td>@veterinarian.Qualifications</td>
+                    <td>@veterinarian.ClinicAddress</td>
+                    <td>@veterinarian.ClinicPhoneNumber</td>
+                    <td>
+                        @if (veterinarian.Status == PetSoLive.Core.Enums.VeterinarianStatus.Pending)
+                        {
+                            <span class="vet-status vet-status-pending">Pending</span>
+                        }
+                        else if (veterinarian.Status == PetSoLive.Core.Enums.VeterinarianStatus.Approved)
+                        {
+                            <span class="vet-status vet-status-approved">Approved</span>
+                        }
+                        else
+                        {
+                            <span class="vet-status vet-status-rejected">Rejected</span>
+                        }
+                    </td>
+                    <td>
+                        @{
+                            var username = Context.Session.GetString("Username");
+                        }
+                        @if (!string.IsNullOrEmpty(username))
+                        {
+                            @if (veterinarian.Status == PetSoLive.Core.Enums.VeterinarianStatus.Pending)
+                            {
+                                <a href="@Url.Action("Approve", "Veterinarian", new { veterinarianId = veterinarian.Id })" 
+                                   class="btn btn-success btn-sm">
+                                    Approve
+                                </a>
+                                <a href="@Url.Action("Reject", "Veterinarian", new { veterinarianId = veterinarian.Id })" 
+                                   class="btn btn-danger btn-sm">
+                                    Reject
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">@veterinarian.Status.ToString()</span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning">Login to manage approvals</span>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
 
-        </td>
-    </tr>
-    }
-    </tbody>
-</table>
-
-<a href="@Url.Action("Register", "Veterinarian")" class="btn btn-primary">Register New Veterinarian</a>
+        <div class="mt-3">
+            <a href="@Url.Action("Register", "Veterinarian")" class="btn-vet">
+                Register New Veterinarian
+            </a>
+        </div>
+    </div>
+</div>

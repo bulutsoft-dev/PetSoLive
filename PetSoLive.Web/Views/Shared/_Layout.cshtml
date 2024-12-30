@@ -1,104 +1,128 @@
-﻿<!DOCTYPE html>
+﻿@* Views/Shared/_Layout.cshtml *@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - PetSoLive.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/PetSoLive.Web.styles.css" asp-append-version="true"/>
+
+    <!-- Google Fonts - Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Global site.css -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <!-- Diğer CSS Dosyaları -->
+    <link rel="stylesheet" href="~/css/adoption.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/email.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/helpRequest.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/lostPetAd.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pet.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/register.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/veterinarian.css" asp-append-version="true" />
+    <!-- Diğer modül CSS dosyalarını buraya ekleyebilirsiniz -->
+
+    @RenderSection("HeadSection", required: false)
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <!-- Brand -->
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PetSoLive.Web</a>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-light bg-primary border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <!-- Marka (Site Adı) -->
+                <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">
+                    PetSoLive.Web
+                </a>
 
-            <!-- Toggle button for mobile view -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                <!-- Mobil Toggle -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <!-- Navbar Links -->
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <!-- Left-aligned navigation links -->
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Adoption" asp-action="Index">Adoption</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="LostPetAd" asp-action="Index">Lost Pet Ads</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="HelpRequest" asp-action="Index">Help Requests</a>
-                    </li>
+                <!-- Navbar İçeriği -->
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <!-- Sol Taraftaki Menü -->
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="About">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Adoption" asp-action="Index">Adoption</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="LostPetAd" asp-action="Index">Lost Pet Ads</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="HelpRequest" asp-action="Index">Help Requests</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Veterinarian" asp-action="Index">Veterinarians</a>
+                        </li>
+                    </ul>
 
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Veterinarian" asp-action="Index">Veterinarians</a>
-                    </li>
-                </ul>
-
-                <!-- Inside the navbar section of your layout -->
-                <ul class="navbar-nav">
-                    @* Session check for login/logout *@
-                    @{
-                    var username = Context.Session.GetString("Username");
-                    }
-                    @if (string.IsNullOrEmpty(username))
-                    {
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
-                    </li>
-                    }
-                    else
-                    {
-                    <li class="nav-item">
-                        <a class="nav-link text-dark">Welcome, @username</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Logout</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Veterinarian" asp-action="Register">Veterinarian Register</a>
-                    </li>
-                    }
-                </ul>
-
+                    <!-- Sağ Taraftaki Menü (Login/Logout Durumuna Göre) -->
+                    <ul class="navbar-nav">
+                        @* Session Kontrolü *@
+                        @{
+                            var username = Context.Session.GetString("Username");
+                        }
+                        @if (string.IsNullOrEmpty(username))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <span class="nav-link text-white">Welcome, @username</span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Veterinarian" asp-action="Register">
+                                    Veterinarian Register
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-</header>
+        </nav>
+    </header>
 
-
-
-
-
-<div class="container">
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
-</div>
-
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2024 - PetSoLive.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <!-- Sayfanın Ana İçeriği -->
+    <div class="container pt-3">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
     </div>
-</footer>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
+
+    <!-- Footer -->
+    <footer class="border-top footer text-muted bg-light">
+        <div class="container">
+            &copy; 2024 - PetSoLive.Web -
+            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <!-- JS Kütüphaneleri ve site.js -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

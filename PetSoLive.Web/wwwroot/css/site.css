@@ -1,22 +1,255 @@
+/*
+  site.css
+  ----------------
+  Tüm sitenin global stilleri
+  (genel tipografi, renk paleti, ufak helper'lar)
+*/
+
+/* Google Fonts - Roboto */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* Renk Paleti */
+:root {
+    --petsolive-primary: #007bff; /* Mavi ton */
+    --petsolive-secondary: #6c757d; /* Gri ton */
+    --petsolive-success: #28a745; /* Yeþil ton */
+    --petsolive-danger: #dc3545; /* Kýrmýzý ton */
+    --petsolive-warning: #ffc107; /* Sarý ton */
+    --petsolive-info: #17a2b8; /* Açýk mavi ton */
+    --petsolive-light: #f8f9fa; /* Çok açýk gri ton */
+    --petsolive-dark: #343a40; /* Koyu gri ton */
+    --petsolive-text: #333333; /* Genel metin rengi */
+    --petsolive-bg: #f0f2f5; /* Açýk arka plan */
+}
+
+/* Global Reset & Box-Sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Genel Font ve Arka Plan */
 html {
-  font-size: 14px;
+    font-size: 14px;
+    scroll-behavior: smooth;
+    background-color: var(--petsolive-bg);
+    font-family: 'Roboto', sans-serif;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    color: var(--petsolive-text);
+    margin-bottom: 60px; /* Footer için boþluk */
+}
+
+/* Navbar Örneði */
+.navbar {
+    background-color: var(--petsolive-primary) !important;
+}
+
+    .navbar .nav-link {
+        color: #ffffff !important;
+        transition: opacity 0.2s ease-in-out;
+    }
+
+        .navbar .nav-link:hover {
+            opacity: 0.8;
+        }
+
+/* Footer Stili */
+.footer {
+    background-color: var(--petsolive-light);
+    font-size: 0.9rem;
+    padding: 10px 0;
+}
+
+    .footer a {
+        color: var(--petsolive-dark);
+        text-decoration: none;
+    }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+/* Button ve Form Elementleri */
+.btn {
+    font-family: 'Roboto', sans-serif;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--petsolive-primary);
+    border-color: var(--petsolive-primary);
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+.btn-secondary {
+    background-color: var(--petsolive-secondary);
+    border-color: var(--petsolive-secondary);
+}
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+
+.btn-success {
+    background-color: var(--petsolive-success);
+    border-color: var(--petsolive-success);
+}
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+
+.btn-danger {
+    background-color: var(--petsolive-danger);
+    border-color: var(--petsolive-danger);
+}
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+
+.btn-warning {
+    background-color: var(--petsolive-warning);
+    border-color: var(--petsolive-warning);
+}
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+        border-color: #d39e00;
+    }
+
+.btn-info {
+    background-color: var(--petsolive-info);
+    border-color: var(--petsolive-info);
+}
+
+    .btn-info:hover {
+        background-color: #138496;
+        border-color: #117a8b;
+    }
+
+/* Form Kontrolleri */
+.form-control {
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    padding: 0.75rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+    .form-control:focus {
+        border-color: var(--petsolive-primary);
+        box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25);
+    }
+
+/* Alert Stilleri */
+.alert {
+    margin: 1rem auto;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    max-width: 700px;
+}
+
+.alert-success {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: var(--petsolive-success);
+    border-left: 4px solid var(--petsolive-success);
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: var(--petsolive-danger);
+    border-left: 4px solid var(--petsolive-danger);
+}
+
+.alert-warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: var(--petsolive-warning);
+    border-left: 4px solid var(--petsolive-warning);
+}
+
+.alert-info {
+    background-color: rgba(23, 162, 184, 0.1);
+    color: var(--petsolive-info);
+    border-left: 4px solid var(--petsolive-info);
+}
+
+/* Kart (Card) Stili */
+.card {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.card-img-top {
+    border-radius: 8px 8px 0 0;
+    object-fit: cover;
+    height: 200px;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.card-title {
+    font-weight: 500;
+    color: var(--petsolive-dark);
+}
+
+/* Badge Stilleri */
+.badge {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+}
+
+.badge-success {
+    background-color: var(--petsolive-success);
+}
+
+.badge-danger {
+    background-color: var(--petsolive-danger);
+}
+
+.badge-warning {
+    background-color: var(--petsolive-warning);
+}
+
+.badge-info {
+    background-color: var(--petsolive-info);
+}
+
+/* Responsive Ayarlar */
+@media (max-width: 768px) {
+    .navbar-nav .nav-link {
+        text-align: center;
+        padding: 0.5rem 0;
+    }
+
+    .card-img-top {
+        height: 150px;
+    }
+}
+
+/* Footer Ýçin Ek Stil */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
 }

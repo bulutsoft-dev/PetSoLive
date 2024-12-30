@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetSoLive.Core", "PetSoLive.Core\PetSoLive.Core.csproj", "{626CCD8D-95A8-4FEF-80C9-FCEF575C30B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetSoLive.Data", "PetSoLive.Data\PetSoLive.Data.csproj", "{B4513CAE-4E9B-41FA-9C80-DCAC8ECE20B4}"
@@ -36,5 +39,11 @@ Global
 		{D88F0742-991B-4BFA-A6FD-7EFE0CEBB214}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D88F0742-991B-4BFA-A6FD-7EFE0CEBB214}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D88F0742-991B-4BFA-A6FD-7EFE0CEBB214}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3382A14B-EA23-4F18-B8AE-74C627430F75}
 	EndGlobalSection
 EndGlobal

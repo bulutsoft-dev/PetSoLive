@@ -1,0 +1,167 @@
+﻿/*
+  adoption.css
+  ----------------------
+  Adoption modülündeki Index, 
+  Adopt form, vb. sayfalar için.
+*/
+
+/* GENEL SAYFA DÜZENİ */
+.adoption-page {
+    min-height: calc(100vh - 80px);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff1c1, #ffc1f3, #e2c1ff);
+    background-size: 400% 400%;
+    animation: adoptionBgAnim 12s ease infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@keyframes adoptionBgAnim {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* BAŞLIK TARZI */
+.adoption-title {
+    text-align: center;
+    margin: 2rem 0 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #444;
+}
+
+/* CONTAINER (Form / Tekil içerik) */
+.adoption-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    margin-bottom: 2rem;
+}
+
+/* ARAMA ÇUBUĞU */
+#searchBar {
+    border-radius: 30px;
+    padding: 0.6rem 1rem;
+    border: 1px solid #ccc;
+    transition: box-shadow 0.3s;
+    outline: none;
+    width: 100%;
+}
+
+    #searchBar:focus {
+        border-color: #258cfb;
+        box-shadow: 0 0 0 0.1rem #ffffff, 0 0 0 0.25rem #258cfb;
+    }
+
+/* CARD LAYOUT FOR PETS */
+.adoption-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+}
+
+    .adoption-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .adoption-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .adoption-card .card-body {
+        padding: 1rem;
+    }
+
+    .adoption-card .card-title {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: #333;
+    }
+
+    .adoption-card .card-text {
+        font-size: 0.95rem;
+        color: #555;
+    }
+
+    .adoption-card .badge {
+        margin-right: 0.3rem;
+    }
+
+/* BUTONLAR */
+.btn-adoption {
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    border: none;
+    background-color: #258cfb;
+    color: #fff;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+    .btn-adoption:hover {
+        background-color: #1672d8;
+        transform: translateY(-1px);
+    }
+
+    .btn-adoption:focus {
+        outline: none;
+        box-shadow: 0 0 0 0.1rem #fff, 0 0 0 0.25rem #258cfb;
+    }
+
+/* FORM STYLES (Adopt form) */
+.adoption-form .form-group {
+    margin-bottom: 1.2rem;
+}
+
+.adoption-form label {
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.adoption-form .form-control {
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+    .adoption-form .form-control:focus {
+        border-color: #258cfb;
+        box-shadow: 0 0 0 0.1rem #ffffff, 0 0 0 0.25rem #258cfb;
+    }
+
+/* ALERT / SUCCESS / ERROR MESSAGES */
+.alert {
+    margin: 1rem auto;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    max-width: 600px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .adoption-card img {
+        height: 180px;
+    }
+}

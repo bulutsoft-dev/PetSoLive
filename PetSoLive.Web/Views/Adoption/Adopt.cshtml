@@ -1,61 +1,73 @@
 @model PetSoLive.Core.Entities.User
 
 @{
-ViewData["Title"] = "Adopt Pet";
-Layout = "_Layout";
+    ViewData["Title"] = "Adopt Pet";
+    Layout = "_Layout";
 }
 
-<div class="container">
-    <h2 class="text-center my-4">Adopt @ViewData["PetName"]</h2>
+@section HeadSection {
+    <link rel="stylesheet" href="~/css/adoption.css" />
+}
 
-    <form method="post" asp-controller="Adoption" asp-action="Adopt" class="needs-validation" novalidate>
-        <input type="hidden" name="PetId" value="@ViewData["PetId"]" />
+<div class="adoption-page">
+    <div class="adoption-container adoption-form">
+        <h2 class="text-center">Adopt @ViewData["PetName"]</h2>
 
-        <!-- User Name (pre-filled, read-only) -->
-        <div class="mb-3">
-            <label for="Name" class="form-label">Your Name</label>
-            <input type="text" class="form-control" id="Name" name="Name" value="@Model.Username" readonly />
-            <div class="form-text">This is your registered name.</div>
-        </div>
+        <form method="post" asp-controller="Adoption" asp-action="Adopt" class="needs-validation" novalidate>
+            <input type="hidden" name="PetId" value="@ViewData["PetId"]" />
 
-        <!-- User Email (pre-filled, read-only) -->
-        <div class="mb-3">
-            <label for="Email" class="form-label">Your Email</label>
-            <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" readonly />
-            <div class="form-text">This is your registered email address.</div>
-        </div>
+            <!-- User Name (pre-filled, read-only) -->
+            <div class="form-group">
+                <label for="Name" class="form-label">Your Name</label>
+                <input type="text" class="form-control" id="Name" name="Name" 
+                       value="@Model.Username" readonly />
+                <div class="form-text">This is your registered name.</div>
+            </div>
 
-        <!-- User Phone Number (pre-filled, editable) -->
-        <div class="mb-3">
-            <label for="Phone" class="form-label">Your Phone Number</label>
-            <input type="tel" class="form-control" id="Phone" name="Phone" value="@Model.PhoneNumber" required />
-            <div class="form-text">Update your phone number if necessary.</div>
-        </div>
+            <!-- User Email (pre-filled, read-only) -->
+            <div class="form-group">
+                <label for="Email" class="form-label">Your Email</label>
+                <input type="email" class="form-control" id="Email" name="Email" 
+                       value="@Model.Email" readonly />
+                <div class="form-text">This is your registered email address.</div>
+            </div>
 
-        <!-- User Address (pre-filled) -->
-        <div class="mb-3">
-            <label for="Address" class="form-label">Your Address</label>
-            <input type="text" class="form-control" id="Address" name="Address" value="@Model.Address" />
-            <div class="form-text">This is your registered address.</div>
-        </div>
+            <!-- Phone Number (editable) -->
+            <div class="form-group">
+                <label for="Phone" class="form-label">Your Phone Number</label>
+                <input type="tel" class="form-control" id="Phone" name="Phone" 
+                       value="@Model.PhoneNumber" required />
+                <div class="form-text">Update your phone number if necessary.</div>
+            </div>
 
-        <!-- User Date of Birth (pre-filled) -->
-        <div class="mb-3">
-            <label for="DateOfBirth" class="form-label">Your Date of Birth</label>
-            <input type="date" class="form-control" id="DateOfBirth" name="DateOfBirth" value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" />
-            <div class="form-text">This is your registered date of birth.</div>
-        </div>
+            <!-- Address (pre-filled) -->
+            <div class="form-group">
+                <label for="Address" class="form-label">Your Address</label>
+                <input type="text" class="form-control" id="Address" name="Address" 
+                       value="@Model.Address" />
+                <div class="form-text">This is your registered address.</div>
+            </div>
 
-        <!-- Message Section -->
-        <div class="mb-3">
-            <label for="Message" class="form-label">Message</label>
-            <textarea class="form-control" id="Message" name="Message" rows="4" placeholder="Write a message to the pet owner" required></textarea>
-            <div class="form-text">Explain why you would like to adopt this pet (optional).</div>
-        </div>
+            <!-- Date of Birth (pre-filled) -->
+            <div class="form-group">
+                <label for="DateOfBirth" class="form-label">Your Date of Birth</label>
+                <input type="date" class="form-control" id="DateOfBirth" name="DateOfBirth" 
+                       value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" />
+                <div class="form-text">This is your registered date of birth.</div>
+            </div>
 
-        <!-- Submit Button -->
-        <div class="text-end">
-            <button type="submit" class="btn btn-primary">Submit Adoption Request</button>
-        </div>
-    </form>
+            <!-- Message Section -->
+            <div class="form-group">
+                <label for="Message" class="form-label">Message</label>
+                <textarea class="form-control" id="Message" name="Message" rows="4" 
+                          placeholder="Write a message to the pet owner" required></textarea>
+                <div class="form-text">Explain why you would like to adopt this pet (optional).</div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-end">
+                <button type="submit" class="btn-adoption">Submit Adoption Request</button>
+            </div>
+        </form>
+    </div>
 </div>

@@ -1,8 +1,15 @@
-@{
-ViewBag.Title = "Adoption Request Exists";
+@section HeadSection {
+    <link rel="stylesheet" href="~/css/adoption.css" />
 }
 
-<div class="alert alert-warning">
-    <h4>You have already submitted an adoption request for this pet!</h4>
+<div class="adoption-page">
+    <div class="container my-5">
+        <div class="alert alert-warning">
+            <h4>You have already submitted an adoption request for this pet!</h4>
+        </div>
+        <a href="@Url.Action("Details", "Pet", new { id = ViewBag.PetId })"
+           class="btn-adoption">
+            Go to Pet Details
+        </a>
+    </div>
 </div>
-<a href="@Url.Action("Details", "Pet", new { id = ViewBag.PetId })" class="btn btn-primary">Go to Pet Details</a>

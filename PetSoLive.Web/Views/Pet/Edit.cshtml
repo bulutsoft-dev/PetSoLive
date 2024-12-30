@@ -1,72 +1,90 @@
 @{
-    ViewBag.Title = "title";
+    ViewData["Title"] = "Edit Pet";
     Layout = "_Layout";
 }
 
-@{
-ViewData["Title"] = "Edit Pet";
+@section HeadSection {
+    <link rel="stylesheet" href="~/css/pet.css" />
 }
 
-<h2>Edit Pet</h2>
+<div class="pet-page">
+    <h2 class="pet-title">Edit Pet</h2>
 
-<form asp-action="Edit" method="post">
-    <div class="form-group">
-        <label for="Name">Name</label>
-        <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required />
-    </div>
-    <div class="form-group">
-        <label for="Species">Species</label>
-        <input type="text" class="form-control" id="Species" name="Species" value="@Model.Species" required />
-    </div>
-    <div class="form-group">
-        <label for="Breed">Breed</label>
-        <input type="text" class="form-control" id="Breed" name="Breed" value="@Model.Breed" required />
-    </div>
-    <div class="form-group">
-        <label for="Age">Age</label>
-        <input type="number" class="form-control" id="Age" name="Age" value="@Model.Age" required />
-    </div>
-    <div class="form-group">
-        <label for="Gender">Gender</label>
-        <input type="text" class="form-control" id="Gender" name="Gender" value="@Model.Gender" required />
-    </div>
-    <div class="form-group">
-        <label for="Weight">Weight</label>
-        <input type="number" step="0.1" class="form-control" id="Weight" name="Weight" value="@Model.Weight" required />
-    </div>
-    <div class="form-group">
-        <label for="Color">Color</label>
-        <input type="text" class="form-control" id="Color" name="Color" value="@Model.Color" required />
-    </div>
-    <div class="form-group">
-        <label for="DateOfBirth">Date of Birth</label>
-        <input type="date" class="form-control" id="DateOfBirth" name="DateOfBirth" value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" required />
-    </div>
-    <div class="form-group">
-        <label for="Description">Description</label>
-        <textarea class="form-control" id="Description" name="Description" rows="3">@Model.Description</textarea>
-    </div>
-    <div class="form-group">
-        <label for="VaccinationStatus">Vaccination Status</label>
-        <input type="text" class="form-control" id="VaccinationStatus" name="VaccinationStatus" value="@Model.VaccinationStatus" required />
-    </div>
-    <div class="form-group">
-        <label for="MicrochipId">Microchip ID</label>
-        <input type="text" class="form-control" id="MicrochipId" name="MicrochipId" value="@Model.MicrochipId" required />
-    </div>
-    <div class="form-group">
-        <label for="IsNeutered">Is Neutered?</label>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="IsNeutered" name="IsNeutered" value="true" @(Model?.IsNeutered == true ? "checked" : "") />
-            <label class="form-check-label" for="IsNeutered">Yes, this pet is neutered.</label>
-        </div>
-    </div>
+    <div class="pet-container pet-form">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                </ul>
+            </div>
+        }
 
+        <form asp-action="Edit" method="post">
+            <!-- Pet fields (Name, Species, Breed, Age, Gender, etc.) -->
+            <div class="form-group">
+                <label for="Name">Name</label>
+                <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required />
+            </div>
+            <div class="form-group">
+                <label for="Species">Species</label>
+                <input type="text" class="form-control" id="Species" name="Species" value="@Model.Species" required />
+            </div>
+            <div class="form-group">
+                <label for="Breed">Breed</label>
+                <input type="text" class="form-control" id="Breed" name="Breed" value="@Model.Breed" required />
+            </div>
+            <div class="form-group">
+                <label for="Age">Age</label>
+                <input type="number" class="form-control" id="Age" name="Age" value="@Model.Age" required />
+            </div>
+            <div class="form-group">
+                <label for="Gender">Gender</label>
+                <input type="text" class="form-control" id="Gender" name="Gender" value="@Model.Gender" required />
+            </div>
+            <div class="form-group">
+                <label for="Weight">Weight</label>
+                <input type="number" step="0.1" class="form-control" id="Weight" name="Weight" value="@Model.Weight" required />
+            </div>
+            <div class="form-group">
+                <label for="Color">Color</label>
+                <input type="text" class="form-control" id="Color" name="Color" value="@Model.Color" required />
+            </div>
+            <div class="form-group">
+                <label for="DateOfBirth">Date of Birth</label>
+                <input type="date" class="form-control" id="DateOfBirth" name="DateOfBirth" 
+                       value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" required />
+            </div>
+            <div class="form-group">
+                <label for="Description">Description</label>
+                <textarea class="form-control" id="Description" name="Description" rows="3">@Model.Description</textarea>
+            </div>
+            <div class="form-group">
+                <label for="VaccinationStatus">Vaccination Status</label>
+                <input type="text" class="form-control" id="VaccinationStatus" name="VaccinationStatus" value="@Model.VaccinationStatus" required />
+            </div>
+            <div class="form-group">
+                <label for="MicrochipId">Microchip ID</label>
+                <input type="text" class="form-control" id="MicrochipId" name="MicrochipId" value="@Model.MicrochipId" required />
+            </div>
+            <div class="form-group">
+                <label for="IsNeutered">Is Neutered?</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="IsNeutered" name="IsNeutered" value="true" 
+                           @(Model?.IsNeutered == true ? "checked" : "") />
+                    <label class="form-check-label" for="IsNeutered">Yes, this pet is neutered.</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="ImageUrl">Image URL</label>
+                <input type="text" class="form-control" id="ImageUrl" name="ImageUrl" value="@Model.ImageUrl" />
+            </div>
 
-    <div class="form-group">
-        <label for="ImageUrl">Image URL</label>
-        <input type="text" class="form-control" id="ImageUrl" name="ImageUrl" value="@Model.ImageUrl" />
+            <button type="submit" class="btn-pet">Save Changes</button>
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary ml-2">Cancel</a>
+        </form>
     </div>
-
-    <button type="submit" class="btn btn-primary">Save Changes</button>
-</form>
+</div>

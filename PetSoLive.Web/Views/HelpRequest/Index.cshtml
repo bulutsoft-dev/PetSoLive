@@ -2,63 +2,74 @@
 @model IEnumerable<PetSoLive.Core.Entities.HelpRequest>
 
 @{
-ViewData["Title"] = "Help Requests";
+    ViewData["Title"] = "Help Requests";
+    Layout = "_Layout";
 }
 
-<h1 class="text-primary">@ViewData["Title"]</h1>
+@section HeadSection {
+    <link rel="stylesheet" href="~/css/helpRequest.css" />
+}
 
-<div class="row mb-3">
-    <div class="col-12">
-        <a class="btn btn-success btn-lg" href="@Url.Action("Create", "HelpRequest")">Create New Help Request</a>
-    </div>
-</div>
+<div class="helprequest-page">
+    <h1 class="helprequest-title">@ViewData["Title"]</h1>
 
-<div class="row">
-    @foreach (var helpRequest in Model)
-    {
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-lg">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h5><a href="@Url.Action("Details", "HelpRequest", new { id = helpRequest.Id })" class="card-title text-dark">@helpRequest.Title</a></h5>
-                    <span class="badge badge-pill badge-warning">@helpRequest.EmergencyLevel</span>
-                </div>
-
-                <!-- Status Display with Custom Style -->
-                <p class="card-text">
-                    <strong>Status:</strong>
-                    <span class="status-label 
-                            @(helpRequest.Status == HelpRequestStatus.Active ? "status-active" : "status-passive")">
-                            @helpRequest.Status
-                        </span>
-                </p>
-
-                <p class="card-text"><strong>Created At:</strong> @helpRequest.CreatedAt.ToString("g")</p>
-                <p class="card-text"><strong>Location:</strong> @helpRequest.Location</p>
-
-                @if (!string.IsNullOrEmpty(helpRequest.ContactName))
-                {
-                <p class="card-text"><strong>Contact Name:</strong> @helpRequest.ContactName</p>
-                }
-
-                @if (!string.IsNullOrEmpty(helpRequest.ContactPhone))
-                {
-                <p class="card-text"><strong>Contact Phone:</strong> @helpRequest.ContactPhone</p>
-                }
-
-                @if (!string.IsNullOrEmpty(helpRequest.ContactEmail))
-                {
-                <p class="card-text"><strong>Contact Email:</strong> @helpRequest.ContactEmail</p>
-                }
-
-                @if (!string.IsNullOrEmpty(helpRequest.ImageUrl))
-                {
-                <div class="mt-2">
-                    <img src="@helpRequest.ImageUrl" alt="Help Request Image" class="img-fluid rounded" />
-                </div>
-                }
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-12">
+                <a class="btn btn-success btn-lg" href="@Url.Action("Create", "HelpRequest")">
+                    Create New Help Request
+                </a>
             </div>
         </div>
+
+        <div class="row">
+            @foreach (var helpRequest in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="helprequest-card shadow-lg">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5>
+                                    <a href="@Url.Action("Details", "HelpRequest", new { id = helpRequest.Id })"
+                                       class="card-title text-dark">@helpRequest.Title</a>
+                                </h5>
+                                <span class="badge badge-pill badge-warning">@helpRequest.EmergencyLevel</span>
+                            </div>
+
+                            <p class="card-text">
+                                <strong>Status:</strong>
+                                <span class="status-label 
+                                    @(helpRequest.Status == HelpRequestStatus.Active ? "status-active" : "status-passive")">
+                                    @helpRequest.Status
+                                </span>
+                            </p>
+
+                            <p class="card-text"><strong>Created At:</strong> @helpRequest.CreatedAt.ToString("g")</p>
+                            <p class="card-text"><strong>Location:</strong> @helpRequest.Location</p>
+
+                            @if (!string.IsNullOrEmpty(helpRequest.ContactName))
+                            {
+                                <p class="card-text"><strong>Contact Name:</strong> @helpRequest.ContactName</p>
+                            }
+                            @if (!string.IsNullOrEmpty(helpRequest.ContactPhone))
+                            {
+                                <p class="card-text"><strong>Contact Phone:</strong> @helpRequest.ContactPhone</p>
+                            }
+                            @if (!string.IsNullOrEmpty(helpRequest.ContactEmail))
+                            {
+                                <p class="card-text"><strong>Contact Email:</strong> @helpRequest.ContactEmail</p>
+                            }
+
+                            @if (!string.IsNullOrEmpty(helpRequest.ImageUrl))
+                            {
+                                <div class="mt-2">
+                                    <img src="@helpRequest.ImageUrl" alt="Help Request Image" class="img-fluid rounded" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
-    }
 </div>

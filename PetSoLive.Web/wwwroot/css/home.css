@@ -1,0 +1,76 @@
+﻿/*
+  home.css
+  --------------------
+  Sadece Home/Index.cshtml için
+*/
+
+/* Hero Section */
+.home-hero {
+    position: relative;
+    width: 100%;
+    height: 60vh; /* Ekranın 70% yüksekliğinde */
+    background: url('/lib/bg.png') no-repeat center center;
+}
+
+.home-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* yarı saydam siyah overlay */
+    background-color: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* CTA Butonu */
+.btn-hero-cta {
+    background-color: var(--petsolive-secondary);
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+    .btn-hero-cta:hover {
+        background-color: var(--petsolive-primary);
+        color: #fff;
+    }
+
+/* Info Cards */
+.info-card {
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+    .info-card .icon-big {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+.text-petsolive {
+    color: var(--petsolive-primary) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .home-hero {
+        height: 50vh; /* mobilde biraz daha küçük */
+    }
+
+    .info-card .icon-big {
+        font-size: 2.5rem;
+    }
+}

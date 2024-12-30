@@ -1,0 +1,191 @@
+﻿/*
+  helpRequest.css
+  ----------------------
+  HelpRequest modülündeki 
+  Create, List, Details, Edit vb. sayfalar için.
+*/
+
+/* SAYFA DÜZENİ */
+.helprequest-page {
+    min-height: calc(100vh - 80px);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #cdf2f5, #fce2db);
+    background-size: 400% 400%;
+    animation: helpRequestBgAnim 12s ease infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@keyframes helpRequestBgAnim {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* BAŞLIK */
+.helprequest-title {
+    text-align: center;
+    margin: 2rem 0 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #444;
+}
+
+/* KAPSAYICI (Form, Detay, vb.) */
+.helprequest-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+    padding: 2rem;
+    width: 90%;
+    max-width: 700px;
+    margin-bottom: 2rem;
+}
+
+/* FORM STİLLERİ */
+.helprequest-form .form-group {
+    margin-bottom: 1.2rem;
+}
+
+.helprequest-form label {
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.helprequest-form .form-control {
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+    .helprequest-form .form-control:focus {
+        border-color: #258cfb;
+        box-shadow: 0 0 0 0.1rem #ffffff, 0 0 0 0.25rem #258cfb;
+    }
+
+/* BUTON */
+.btn-helprequest {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #258cfb;
+    color: #fff;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+    .btn-helprequest:hover {
+        background-color: #1672d8;
+        transform: translateY(-1px);
+    }
+
+    .btn-helprequest:focus {
+        outline: none;
+        box-shadow: 0 0 0 0.1rem #fff, 0 0 0 0.25rem #258cfb;
+    }
+
+/* ALERT */
+.alert {
+    margin: 1rem auto;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    max-width: 700px;
+}
+
+/* LİSTE / CARD YAPISI (List.cshtml) */
+.helprequest-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+}
+
+    .helprequest-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .helprequest-card .card-body {
+        padding: 1rem;
+    }
+
+    .helprequest-card .card-title {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: #333;
+    }
+
+    .helprequest-card .status-label {
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-weight: 600;
+    }
+
+.status-active {
+    background-color: #c8e6c9;
+    color: #388e3c;
+}
+
+.status-passive {
+    background-color: #ffe0b2;
+    color: #f57c00;
+}
+
+/* DETAY YAPISI (Details) */
+.helprequest-details .card {
+    max-width: 700px;
+    margin-bottom: 2rem;
+}
+
+.helprequest-details .card-header {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+/* YORUM BÖLÜMÜ */
+.comment-list .list-group-item {
+    margin-bottom: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+    .comment-list .list-group-item strong.text-info {
+        color: #17a2b8 !important;
+    }
+
+    .comment-list .list-group-item .btn-group {
+        margin-top: 0.5rem;
+    }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .helprequest-container {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .helprequest-card .card-body {
+        padding: 0.8rem;
+    }
+
+    .helprequest-title {
+        font-size: 1.5rem;
+    }
+}

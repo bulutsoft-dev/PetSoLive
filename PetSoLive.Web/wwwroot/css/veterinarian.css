@@ -1,0 +1,175 @@
+﻿/*
+  veterinarian.css
+  ----------------------
+  Veterinarian modülündeki 
+  Index, Register vb. sayfalar için.
+*/
+
+/* SAYFA DÜZENİ */
+.veterinarian-page {
+    min-height: calc(100vh - 80px);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #e6f7ff, #d1f7df);
+    background-size: 400% 400%;
+    animation: vetBgAnim 12s ease infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@keyframes vetBgAnim {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* BAŞLIK */
+.veterinarian-title {
+    text-align: center;
+    margin: 2rem 0 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #444;
+}
+
+/* KAPSAYICI (Form / Liste) */
+.veterinarian-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+    padding: 2rem;
+    width: 90%;
+    max-width: 700px;
+    margin-bottom: 2rem;
+}
+
+/* FORM STİLLERİ */
+.vet-form .form-group {
+    margin-bottom: 1.2rem;
+}
+
+.vet-form label {
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.vet-form .form-control {
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+    .vet-form .form-control:focus {
+        border-color: #258cfb;
+        box-shadow: 0 0 0 0.1rem #ffffff, 0 0 0 0.25rem #258cfb;
+    }
+
+/* BUTON */
+.btn-vet {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #258cfb;
+    color: #fff;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+    .btn-vet:hover {
+        background-color: #1672d8;
+        transform: translateY(-1px);
+    }
+
+    .btn-vet:focus {
+        outline: none;
+        box-shadow: 0 0 0 0.1rem #fff, 0 0 0 0.25rem #258cfb;
+    }
+
+/* ALERT */
+.alert {
+    margin: 1rem auto;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    max-width: 700px;
+}
+
+/* TABLE / LIST STİLİ (Index) */
+.vet-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+    .vet-table th, .vet-table td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #eee;
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    .vet-table th {
+        background-color: #f7f7f7;
+        font-weight: 600;
+        color: #444;
+    }
+
+    .vet-table tr:hover {
+        background-color: #fafafa;
+    }
+
+/* STATUS BADGE */
+.vet-status {
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.vet-status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.vet-status-approved {
+    background-color: #c8e6c9;
+    color: #388e3c;
+}
+
+.vet-status-rejected {
+    background-color: #ffcdd2;
+    color: #c62828;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .veterinarian-container {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .veterinarian-title {
+        font-size: 1.5rem;
+    }
+
+    .vet-table th, .vet-table td {
+        padding: 0.6rem;
+    }
+}

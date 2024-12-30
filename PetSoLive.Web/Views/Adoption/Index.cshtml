@@ -1,45 +1,58 @@
 @{
-ViewData["Title"] = "Available Pets for Adoption";
-Layout = "_Layout";  // Ensure you're using the layout
+    ViewData["Title"] = "Available Pets for Adoption";
+    Layout = "_Layout";
 }
 
-<div class="container">
-    <h2 class="my-4 text-center">Available Pets for Adoption</h2>
+@section HeadSection {
+    <link rel="stylesheet" href="~/css/adoption.css" />
+}
 
-    <!-- Search Bar -->
-    <div class="row mb-4">
-        <div class="col-md-6 offset-md-3">
-            <input type="text" class="form-control" id="searchBar" placeholder="Search by name or breed..." onkeyup="filterPets()" />
-        </div>
-    </div>
+<div class="adoption-page">
+    <h2 class="adoption-title">@ViewData["Title"]</h2>
 
-    <!-- Button to Create Pet -->
-    <div class="text-right mb-4">
-        <a asp-controller="Pet" asp-action="Create" class="btn btn-success">Create New Pet for Adoption</a>
-    </div>
-
-    <!-- Pet adoption list -->
-    <div class="row" id="petList">
-        @foreach (var pet in Model)
-        {
-        <div class="col-md-4 mb-4 pet-card">
-            <div class="card shadow-sm">
-                <!-- Display Pet Image -->
-                <img src="@pet.ImageUrl" class="card-img-top" alt="@pet.Name" />
-                <div class="card-body">
-                    <h5 class="card-title">@pet.Name</h5>
-                    <p class="card-text">@pet.Breed</p>
-                    <p>
-                        <span class="badge bg-info">@pet.Age years</span>
-                        <span class="badge bg-primary">@pet.Gender</span>
-                        <span class="badge bg-secondary">@pet.Species</span>
-                    </p>
-                    <!-- View Details Button -->
-                    <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id" class="btn btn-primary">View Details</a>
-                </div>
+    <div class="container">
+        <!-- Search Bar -->
+        <div class="row mb-4">
+            <div class="col-md-6 offset-md-3">
+                <input type="text" 
+                       class="form-control" 
+                       id="searchBar" 
+                       placeholder="Search by name or breed..."
+                       onkeyup="filterPets()" />
             </div>
         </div>
-        }
+
+        <!-- Button to Create Pet -->
+        <div class="text-end mb-4">
+            <a asp-controller="Pet" asp-action="Create" class="btn btn-success">Create New Pet for Adoption</a>
+        </div>
+
+        <!-- Pet adoption list -->
+        <div class="row" id="petList">
+            @foreach (var pet in Model)
+            {
+                <div class="col-md-4 mb-4 pet-card">
+                    <div class="adoption-card shadow-sm">
+                        <!-- Display Pet Image -->
+                        <img src="@pet.ImageUrl" alt="@pet.Name" />
+                        <div class="card-body">
+                            <h5 class="card-title">@pet.Name</h5>
+                            <p class="card-text">@pet.Breed</p>
+                            <p>
+                                <span class="badge bg-info">@pet.Age years</span>
+                                <span class="badge bg-primary">@pet.Gender</span>
+                                <span class="badge bg-secondary">@pet.Species</span>
+                            </p>
+                            <!-- View Details Button -->
+                            <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id" 
+                               class="btn-adoption">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 </div>
 

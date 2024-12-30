@@ -1,0 +1,133 @@
+﻿/*
+  register.css
+  --------------------
+  Sadece Register.cshtml için
+*/
+
+/* Arkaplan degrade animasyonu */
+.register-page {
+    min-height: calc(100vh - 80px);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: linear-gradient(-45deg, #7fffd4, #87cefa, #ffbc42, #ff6e7f);
+    background-size: 400% 400%;
+    animation: registerBgAnim 10s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes registerBgAnim {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Kutu */
+.register-container {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+    width: 90%;
+    max-width: 450px;
+    margin: 0 auto; /* Ortalamak için */
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 1s ease, transform 0.7s ease;
+}
+
+/* Başlık */
+.register-title {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Hata / Başarı kutuları */
+.alert.alert-danger,
+.alert.alert-success {
+    margin: 1rem auto;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    max-width: 450px;
+}
+
+/* Form Grupları */
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+    .form-group label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        display: block;
+        color: #444;
+    }
+
+/* Inputlar */
+.form-control {
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    transition: border 0.3s, box-shadow 0.3s;
+    outline: none;
+    font-size: 1rem;
+}
+
+    .form-control:focus {
+        border-color: #258cfb;
+        box-shadow: 0 0 0 0.1rem #ffffff, 0 0 0 0.25rem #258cfb;
+    }
+
+/* Buton */
+.register-btn {
+    display: block;
+    margin: 1rem auto 0;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: #258cfb;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+    .register-btn:hover {
+        background-color: #1672d8;
+        transform: translateY(-1px);
+    }
+
+    .register-btn:focus {
+        outline: none;
+        box-shadow: 0 0 0 0.1rem #fff, 0 0 0 0.25rem #258cfb;
+    }
+
+/* Login link alt tarafta */
+.login-link {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+    .login-link a {
+        color: #258cfb;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }

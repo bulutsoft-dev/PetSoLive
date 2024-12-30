@@ -1,87 +1,179 @@
 @{
-ViewData["Title"] = "Register";
+    Layout = "_Layout";
+    ViewData["Title"] = "Register";
 }
 
-@if (!ViewData.ModelState.IsValid)
-{
-<div class="alert alert-danger">
-    <ul>
-        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+@section HeadSection {
+    <!-- Yalnýzca Register sayfasýna özel CSS -->
+    <link rel="stylesheet" href="~/css/register.css" />
+}
+
+<div class="register-page">
+
+    @* Hata mesajlarý *@
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <div class="register-container">
+        <h2 class="register-title">Register</h2>
+
+        <!-- Baþarýlý kayýt vs. için TempData kullandýðýnýzý varsayabiliriz -->
+        @if (TempData["SuccessMessage"] != null)
         {
-        <li>@error.ErrorMessage</li>
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
         }
-    </ul>
-</div>
-}
 
-<h2>Register</h2>
+        <form method="post">
+            <!-- Username -->
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    class="form-control" 
+                    required 
+                />
+            </div>
 
-<form method="post">
-    <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label for="phoneNumber">Phone Number</label>
-        <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label for="address">Address</label>
-        <input type="text" id="address" name="address" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label for="dateOfBirth">Date of Birth</label>
-        <input type="date" id="dateOfBirth" name="dateOfBirth" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label for="profileImageUrl">Profile Image URL</label>
-        <input type="url" id="profileImageUrl" name="profileImageUrl" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label for="city">City</label>
-        <select id="city" name="city" class="form-control" required>
-            <option value="">Select a city</option>
-            @foreach (var city in ViewData["Cities"] as List<string>)
-            {
-            <option value="@city">@city</option>
-            }
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="district">District</label>
-        <select id="district" name="district" class="form-control" required>
-            <option value="">Select a district</option>
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Register</button>
-</form>
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="form-control" 
+                    required 
+                />
+            </div>
 
-<div>
-    <p>Already have an account? <a asp-action="Login">Login here</a>.</p>
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="form-control" 
+                    required 
+                />
+            </div>
+
+            <!-- Phone Number -->
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input 
+                    type="text" 
+                    id="phoneNumber" 
+                    name="phoneNumber" 
+                    class="form-control" 
+                    required 
+                />
+            </div>
+
+            <!-- Address -->
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input 
+                    type="text" 
+                    id="address" 
+                    name="address" 
+                    class="form-control" 
+                    required 
+                />
+            </div>
+
+            <!-- Date of Birth -->
+            <div class="form-group">
+                <label for="dateOfBirth">Date of Birth</label>
+                <input 
+                    type="date" 
+                    id="dateOfBirth" 
+                    name="dateOfBirth" 
+                    class="form-control" 
+                    required 
+                />
+            </div>
+
+            <!-- Profile Image URL -->
+            <div class="form-group">
+                <label for="profileImageUrl">Profile Image URL</label>
+                <input 
+                    type="url" 
+                    id="profileImageUrl" 
+                    name="profileImageUrl" 
+                    class="form-control" 
+                />
+            </div>
+
+            <!-- City -->
+            <div class="form-group">
+                <label for="city">City</label>
+                <select 
+                    id="city" 
+                    name="city" 
+                    class="form-control" 
+                    required
+                >
+                    <option value="">Select a city</option>
+                    @foreach (var city in ViewData["Cities"] as List<string>)
+                    {
+                        <option value="@city">@city</option>
+                    }
+                </select>
+            </div>
+
+            <!-- District -->
+            <div class="form-group">
+                <label for="district">District</label>
+                <select 
+                    id="district" 
+                    name="district" 
+                    class="form-control" 
+                    required
+                >
+                    <option value="">Select a district</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary register-btn">Register</button>
+        </form>
+
+        <div class="login-link">
+            <p>
+                Already have an account?
+                <a asp-controller="Account" asp-action="Login">Login here</a>.
+            </p>
+        </div>
+    </div>
 </div>
 
 @section Scripts
 {
-<script>
-    // Update districts based on selected city
-    $('#city').change(function () {
-        var city = $(this).val();
-        $.get('/Account/GetDistricts?city=' + city, function (data) {
-            var districtSelect = $('#district');
-            districtSelect.empty();
-            districtSelect.append('<option value="">Select a district</option>');
-            data.forEach(function (district) {
-                districtSelect.append('<option value="' + district + '">' + district + '</option>');
+    <script>
+        // District dropdown doldurma:
+        $('#city').change(function () {
+            var city = $(this).val();
+            $.get('/Account/GetDistricts?city=' + city, function (data) {
+                var districtSelect = $('#district');
+                districtSelect.empty();
+                districtSelect.append('<option value="">Select a district</option>');
+                data.forEach(function (district) {
+                    districtSelect.append('<option value="' + district + '">' + district + '</option>');
+                });
             });
         });
-    });
-</script>
+    </script>
 }

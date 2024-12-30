@@ -1,14 +1,21 @@
 @{
     ViewData["Title"] = "Delete Pet";
+    Layout = "_Layout";
 }
 
-<div class="container">
-    <h2>Delete Pet</h2>
-    <p>Are you sure you want to delete the pet <strong>@Model.Name</strong>?</p>
+@section HeadSection {
+    <link rel="stylesheet" href="~/css/pet.css" />
+}
 
-    <form asp-action="DeleteConfirmed" method="post">
-        <input type="hidden" name="id" value="@Model.Id" />
-        <button type="submit" class="btn btn-danger">Delete</button>
-        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Cancel</a>
-    </form>
+<div class="pet-page">
+    <div class="pet-container">
+        <h2>Delete Pet</h2>
+        <p>Are you sure you want to delete the pet <strong>@Model.Name</strong>?</p>
+
+        <form asp-action="DeleteConfirmed" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button type="submit" class="btn-pet">Delete</button>
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary ml-2">Cancel</a>
+        </form>
+    </div>
 </div>
