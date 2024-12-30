@@ -81,14 +81,6 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Alt dizini ayarla (PathBase)
-app.UsePathBase("/petsolive");
-app.Use((context, next) =>
-{
-    context.Request.PathBase = "/petsolive";
-    return next();
-});
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
