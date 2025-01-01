@@ -148,30 +148,6 @@ namespace PetSoLive.Data.Migrations
                     b.ToTable("AdoptionRequests", (string)null);
                 });
 
-            modelBuilder.Entity("PetSoLive.Core.Entities.Announcement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Announcements");
-                });
-
             modelBuilder.Entity("PetSoLive.Core.Entities.Assistance", b =>
                 {
                     b.Property<int>("Id")

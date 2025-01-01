@@ -13,23 +13,14 @@ namespace PetSoLive.Data
         // DbSet'ler
         public DbSet<User> Users { get; set; }
         public DbSet<Pet> Pets { get; set; }
-        public DbSet<Announcement> Announcements { get; set; }
         public DbSet<Adoption> Adoptions { get; set; }
         public DbSet<Assistance> Assistances { get; set; }
         public DbSet<PetOwner> PetOwners { get; set; }
         public DbSet<AdoptionRequest> AdoptionRequests { get; set; }
-
-        // Yeni eklemeler
         public DbSet<LostPetAd> LostPetAds { get; set; }
         public DbSet<HelpRequest> HelpRequests { get; set; }
-
-        // Veterinarian DbSet
         public DbSet<Veterinarian> Veterinarians { get; set; }
-        
-        // Admin DbSet
         public DbSet<Admin> Admins { get; set; }
-
-        // Yorumlar DbSet'i
         public DbSet<Comment> Comments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -131,7 +122,6 @@ namespace PetSoLive.Data
                 .WithMany(v => v.Comments)
                 .HasForeignKey(c => c.VeterinarianId)
                 .OnDelete(DeleteBehavior.Restrict); // Veteriner silindiğinde yorumlar silinmesin
-            
             
             // LostPetAd - User ilişkisi
             modelBuilder.Entity<LostPetAd>()

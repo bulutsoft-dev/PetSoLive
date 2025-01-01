@@ -36,6 +36,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(connectionString); // PostgreSQL için Npgsql kullanılıyor
 });
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 
 // Add distributed memory cache and session
 builder.Services.AddDistributedMemoryCache();
