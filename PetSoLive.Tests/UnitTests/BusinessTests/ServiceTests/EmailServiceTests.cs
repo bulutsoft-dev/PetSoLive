@@ -27,7 +27,7 @@ namespace PetSoLive.Tests.UnitTests
 
             _emailService = new EmailService(_smtpSettings);
         }
-
+        //failed beacuse of the smtp settings 
         [Fact]
         public async Task SendEmailAsync_ShouldSendEmail_WhenValidParameters()
         {
