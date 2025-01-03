@@ -1,11 +1,12 @@
-using PetSoLive.Core.Entities;
-using PetSoLive.Core.Interfaces;
+// Repository Implementation
 using Microsoft.EntityFrameworkCore;
+using PetSoLive.Core.Entities;
+using PetSoLive.Core.Enums;
+using PetSoLive.Core.Interfaces;
+using PetSoLive.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PetSoLive.Core.Enums;
-using PetSoLive.Data;
 
 namespace PetSoLive.Infrastructure.Repositories
 {
@@ -21,6 +22,12 @@ namespace PetSoLive.Infrastructure.Repositories
         public async Task<Veterinarian> GetByUserIdAsync(int userId)
         {
             return await _context.Veterinarians.FirstOrDefaultAsync(v => v.UserId == userId);
+        }
+
+        public async Task<Veterinarian> GetApprovedByUserIdAsync(int userId)
+        {
+            return await _context.Veterinarians
+                .FirstOrDefaultAsync(v => v.UserId == userId && v.Status == VeterinarianStatus.Approved);
         }
 
         public async Task<Veterinarian> CreateAsync(Veterinarian veterinarian)
@@ -43,16 +50,15 @@ namespace PetSoLive.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-
-        public async Task<Veterinarian> GetByIdAsync(int id)  // Add this method
+        public async Task<Veterinarian> GetByIdAsync(int id)
         {
-            return await _context.Veterinarians.FindAsync(id); // Retrieve veterinarian by Id
+            return await _context.Veterinarians.FindAsync(id);
         }
-        
+
         public async Task<List<Veterinarian>> GetAllVeterinariansAsync()
         {
             return await _context.Veterinarians
-                .Where(v => v.Status == VeterinarianStatus.Approved) // Onaylı veterinerleri filtrele
+                .Where(v => v.Status == VeterinarianStatus.Approved)
                 .ToListAsync();
         }
     }

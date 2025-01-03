@@ -68,5 +68,10 @@ namespace PetSoLive.Core.Services
         {
             return await _veterinarianRepository.GetAllAsync();
         }
+        
+        public async Task<Veterinarian> GetApprovedByUserIdAsync(int userId)
+        {
+            return await _veterinarianRepository.GetApprovedByUserIdAsync(userId);
+        }
     }
 }

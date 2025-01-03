@@ -213,4 +213,78 @@ public class VeterinarianRepositoryTests
             Assert.Single(result); // Only the approved one
             Assert.Equal(101, result.First().Id);
         }
+        
+        [Fact]
+        public async Task GetApprovedByUserIdAsync_WhenVetExistsAndApproved_ReturnsApprovedVet()
+        {
+            // Arrange
+            await using var context = GetInMemoryContext();
+            IVeterinarianRepository repository = new VeterinarianRepository(context);
+
+            var vet = new Veterinarian
+            {
+                Id = 1,
+                UserId = 123,
+                Status = VeterinarianStatus.Approved,
+                ClinicAddress = "Clinic Address",
+                ClinicPhoneNumber = "555-2222",
+                Qualifications = "Qualifications",
+            };
+            context.Veterinarians.Add(vet);
+            await context.SaveChangesAsync();
+
+            // Act
+            var result = await repository.GetApprovedByUserIdAsync(123);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(1, result.Id);
+            Assert.Equal(123, result.UserId);
+            Assert.Equal(VeterinarianStatus.Approved, result.Status);
+        }
+
+        [Fact]
+        public async Task GetApprovedByUserIdAsync_WhenVetExistsButNotApproved_ReturnsNull()
+        {
+            // Arrange
+            await using var context = GetInMemoryContext();
+            IVeterinarianRepository repository = new VeterinarianRepository(context);
+
+            var vet = new Veterinarian
+            {
+                Id = 2,
+                UserId = 456,
+                Status = VeterinarianStatus.Pending, // Not approved
+                ClinicAddress = "Clinic Address",
+                ClinicPhoneNumber = "555-2222",
+                Qualifications = "Qualifications",
+            };
+            context.Veterinarians.Add(vet);
+            await context.SaveChangesAsync();
+
+            // Act
+            var result = await repository.GetApprovedByUserIdAsync(456);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async Task GetApprovedByUserIdAsync_WhenVetDoesNotExist_ReturnsNull()
+        {
+            // Arrange
+            await using var context = GetInMemoryContext();
+            IVeterinarianRepository repository = new VeterinarianRepository(context);
+
+            // No veterinarian for user 999
+
+            // Act
+            var result = await repository.GetApprovedByUserIdAsync(999);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        
+        
 }

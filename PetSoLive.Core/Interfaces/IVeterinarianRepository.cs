@@ -13,5 +13,7 @@ namespace PetSoLive.Core.Interfaces
         Task<Veterinarian> GetByIdAsync(int id);  // Add this method
         
         Task<List<Veterinarian>> GetAllVeterinariansAsync();
+        
+        Task<Veterinarian> GetApprovedByUserIdAsync(int userId);
     }
 }

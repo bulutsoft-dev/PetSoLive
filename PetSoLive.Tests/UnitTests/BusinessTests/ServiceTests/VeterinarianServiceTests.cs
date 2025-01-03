@@ -257,4 +257,44 @@ public class VeterinarianServiceTests
                 Times.Once
             );
         }
+        
+        [Fact]
+        public async Task GetApprovedByUserIdAsync_ShouldReturnApprovedVeterinarian_WhenUserIdExists()
+        {
+            // Arrange
+            int userId = 1;
+            var approvedVeterinarian = new Veterinarian
+            {
+                UserId = userId,
+                Status = VeterinarianStatus.Approved
+            };
+
+            _veterinarianRepositoryMock
+                .Setup(repo => repo.GetApprovedByUserIdAsync(userId))
+                .ReturnsAsync(approvedVeterinarian);
+
+            // Act
+            var result = await _veterinarianService.GetApprovedByUserIdAsync(userId);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(VeterinarianStatus.Approved, result.Status);
+        }
+
+        [Fact]
+        public async Task GetApprovedByUserIdAsync_ShouldReturnNull_WhenNoApprovedVeterinarianExists()
+        {
+            // Arrange
+            int userId = 1;
+
+            _veterinarianRepositoryMock
+                .Setup(repo => repo.GetApprovedByUserIdAsync(userId))
+                .ReturnsAsync((Veterinarian)null);
+
+            // Act
+            var result = await _veterinarianService.GetApprovedByUserIdAsync(userId);
+
+            // Assert
+            Assert.Null(result);
+        }
 }

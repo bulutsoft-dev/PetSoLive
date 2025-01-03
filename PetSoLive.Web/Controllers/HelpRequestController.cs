@@ -109,7 +109,7 @@ public class HelpRequestController : Controller
         var user = username != null ? await _userService.GetUserByUsernameAsync(username) : null;
 
         ViewBag.CanEditOrDelete = user != null && helpRequest.UserId == user.Id;
-        ViewBag.isVeterinarian = user != null && await _veterinarianService.GetByUserIdAsync(user.Id) != null;
+        ViewBag.isVeterinarian = user != null && await _veterinarianService.GetApprovedByUserIdAsync(user.Id) != null;
         // Pass whether the current user can edit or delete specific comments
         if (user != null)
         {
