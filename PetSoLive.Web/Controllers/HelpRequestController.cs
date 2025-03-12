@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using PetSoLive.Business.Services;
+using Microsoft.Extensions.Localization;
+using PetSoLive.Core.Entities;
 using PetSoLive.Core.Enums;
 using PetSoLive.Core.Interfaces;
-using PetSoLive.Core.Entities;
-using System.Linq;
-using System.Threading.Tasks;
+
+namespace PetSoLive.Web.Controllers;
 
 public class HelpRequestController : Controller
 {
@@ -13,18 +13,21 @@ public class HelpRequestController : Controller
     private readonly IVeterinarianService _veterinarianService;
     private readonly IEmailService _emailService;
     private readonly ICommentService _commentService; // Add comment service
+    private readonly IStringLocalizer<HelpRequestController> _localizer;
 
     public HelpRequestController(IHelpRequestService helpRequestService, 
         IUserService userService, 
         IEmailService emailService,
         IVeterinarianService veterinarianService,
-        ICommentService commentService) // Inject comment service
+        ICommentService commentService,
+        IStringLocalizer<HelpRequestController> localizer) // Inject comment service
     {
         _helpRequestService = helpRequestService;
         _userService = userService;
         _emailService = emailService;
         _veterinarianService = veterinarianService;
         _commentService = commentService; // Assign comment service
+        _localizer = localizer;
     }
 
     [HttpGet]

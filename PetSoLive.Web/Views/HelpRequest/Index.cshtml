@@ -1,8 +1,11 @@
+@using Microsoft.Extensions.Localization
 @using PetSoLive.Core.Enums
+@using PetSoLive.Web.Controllers
+@inject IStringLocalizer<HelpRequestController> Localizer
 @model IEnumerable<PetSoLive.Core.Entities.HelpRequest>
 
 @{
-    ViewData["Title"] = "Help Requests";
+    ViewData["Title"] = Localizer["HelpRequestsTitle"];
     Layout = "_Layout";
 }
 
@@ -17,7 +20,7 @@
         <div class="row mb-3">
             <div class="col-12">
                 <a class="btn btn-success btn-lg" href="@Url.Action("Create", "HelpRequest")">
-                    Create New Help Request
+                    @Localizer["CreateNewHelpRequestButton"]
                 </a>
             </div>
         </div>
@@ -33,37 +36,57 @@
                                     <a href="@Url.Action("Details", "HelpRequest", new { id = helpRequest.Id })"
                                        class="card-title text-dark">@helpRequest.Title</a>
                                 </h5>
-                                <span class="badge badge-pill badge-warning">@helpRequest.EmergencyLevel</span>
+                                <span class="badge badge-pill badge-warning">
+                                    @Localizer[$"EmergencyLevel{helpRequest.EmergencyLevel}"]
+                                </span>
                             </div>
 
                             <p class="card-text">
-                                <strong>Status:</strong>
+                                <strong>@Localizer["StatusLabel"]:</strong>
                                 <span class="status-label 
                                     @(helpRequest.Status == HelpRequestStatus.Active ? "status-active" : "status-passive")">
-                                    @helpRequest.Status
+                                    @Localizer[$"HelpRequestStatus{helpRequest.Status}"]
                                 </span>
                             </p>
 
-                            <p class="card-text"><strong>Created At:</strong> @helpRequest.CreatedAt.ToString("g")</p>
-                            <p class="card-text"><strong>Location:</strong> @helpRequest.Location</p>
+                            <p class="card-text">
+                                <strong>@Localizer["CreatedAtLabel"]:</strong> 
+                                @helpRequest.CreatedAt.ToString("g")
+                            </p>
+
+                            <p class="card-text">
+                                <strong>@Localizer["LocationLabel"]:</strong> 
+                                @helpRequest.Location
+                            </p>
 
                             @if (!string.IsNullOrEmpty(helpRequest.ContactName))
                             {
-                                <p class="card-text"><strong>Contact Name:</strong> @helpRequest.ContactName</p>
+                                <p class="card-text">
+                                    <strong>@Localizer["ContactNameLabel"]:</strong> 
+                                    @helpRequest.ContactName
+                                </p>
                             }
                             @if (!string.IsNullOrEmpty(helpRequest.ContactPhone))
                             {
-                                <p class="card-text"><strong>Contact Phone:</strong> @helpRequest.ContactPhone</p>
+                                <p class="card-text">
+                                    <strong>@Localizer["ContactPhoneLabel"]:</strong> 
+                                    @helpRequest.ContactPhone
+                                </p>
                             }
                             @if (!string.IsNullOrEmpty(helpRequest.ContactEmail))
                             {
-                                <p class="card-text"><strong>Contact Email:</strong> @helpRequest.ContactEmail</p>
+                                <p class="card-text">
+                                    <strong>@Localizer["ContactEmailLabel"]:</strong> 
+                                    @helpRequest.ContactEmail
+                                </p>
                             }
 
                             @if (!string.IsNullOrEmpty(helpRequest.ImageUrl))
                             {
                                 <div class="mt-2">
-                                    <img src="@helpRequest.ImageUrl" alt="Help Request Image" class="img-fluid rounded" />
+                                    <img src="@helpRequest.ImageUrl" 
+                                         alt="@Localizer["HelpRequestImageAlt"]" 
+                                         class="img-fluid rounded" />
                                 </div>
                             }
                         </div>
