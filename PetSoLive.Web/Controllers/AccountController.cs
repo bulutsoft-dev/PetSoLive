@@ -1,14 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
+
+namespace PetSoLive.Web.Controllers;
 
 public class AccountController : Controller
 {
     private readonly IUserService _userService;
+            
+    private readonly IStringLocalizer<AccountController> _localizer;
 
-    public AccountController(IUserService userService)
+
+    public AccountController(IUserService userService,IStringLocalizer<AccountController> localizer)
     {
         _userService = userService;
+        _localizer = localizer;
     }
 
     public IActionResult Login()

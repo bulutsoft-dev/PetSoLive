@@ -109,7 +109,7 @@ if (!app.Environment.IsDevelopment())
 // Desteklenen dilleri tanımla
 var supportedCultures = new[] { "en-US", "tr-TR" };
 var localizationOptions = new RequestLocalizationOptions()
-    .SetDefaultCulture(supportedCultures[0])
+    .SetDefaultCulture(supportedCultures[1])
     .AddSupportedCultures(supportedCultures)
     .AddSupportedUICultures(supportedCultures);
 
