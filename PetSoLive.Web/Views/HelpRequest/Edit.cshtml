@@ -1,6 +1,10 @@
+@using Microsoft.Extensions.Localization
+@using PetSoLive.Web.Controllers
+@inject IStringLocalizer<HelpRequestController> Localizer
 @model PetSoLive.Core.Entities.HelpRequest
+
 @{
-    ViewData["Title"] = "Edit Help Request";
+    ViewData["Title"] = Localizer["EditHelpRequestTitle"];
     Layout = "_Layout";
 }
 
@@ -15,7 +19,7 @@
         @if (!ViewData.ModelState.IsValid)
         {
             <div class="alert alert-danger">
-                <h4>Errors:</h4>
+                <h4>@Localizer["ValidationErrorsHeader"]</h4>
                 <ul>
                     @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                     {
@@ -26,73 +30,79 @@
         }
 
         <form asp-action="Edit" method="post">
+            <!-- Başlık -->
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
+                <label asp-for="Title" class="control-label">@Localizer["TitleLabel"]</label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
 
+            <!-- Açıklama -->
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
+                <label asp-for="Description" class="control-label">@Localizer["DescriptionLabel"]</label>
                 <textarea asp-for="Description" class="form-control" rows="5"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
+            <!-- Acil Durum Seviyesi -->
             <div class="form-group">
-                <label asp-for="EmergencyLevel" class="control-label"></label>
+                <label asp-for="EmergencyLevel" class="control-label">@Localizer["EmergencyLevelLabel"]</label>
                 <select asp-for="EmergencyLevel" class="form-control">
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
+                    <option value="Low">@Localizer["EmergencyLevelLow"]</option>
+                    <option value="Medium">@Localizer["EmergencyLevelMedium"]</option>
+                    <option value="High">@Localizer["EmergencyLevelHigh"]</option>
                 </select>
                 <span asp-validation-for="EmergencyLevel" class="text-danger"></span>
             </div>
 
+            <!-- Durum -->
             <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
+                <label asp-for="Status" class="control-label">@Localizer["StatusLabel"]</label>
                 <select asp-for="Status" class="form-control">
                     @foreach (var status in Enum.GetValues(typeof(PetSoLive.Core.Enums.HelpRequestStatus))
                                                  .Cast<PetSoLive.Core.Enums.HelpRequestStatus>())
                     {
-                            <option value="@status">@status.ToString()</option>
+                        <option value="@status">@Localizer[$"HelpRequestStatus{status}"]</option>
                     }
                 </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
 
+            <!-- Diğer Alanlar -->
             <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
+                <label asp-for="Location" class="control-label">@Localizer["LocationLabel"]</label>
                 <input asp-for="Location" class="form-control" />
                 <span asp-validation-for="Location" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="ContactName" class="control-label"></label>
+                <label asp-for="ContactName" class="control-label">@Localizer["ContactNameLabel"]</label>
                 <input asp-for="ContactName" class="form-control" />
                 <span asp-validation-for="ContactName" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="ContactPhone" class="control-label"></label>
+                <label asp-for="ContactPhone" class="control-label">@Localizer["ContactPhoneLabel"]</label>
                 <input asp-for="ContactPhone" class="form-control" />
                 <span asp-validation-for="ContactPhone" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="ContactEmail" class="control-label"></label>
+                <label asp-for="ContactEmail" class="control-label">@Localizer["ContactEmailLabel"]</label>
                 <input asp-for="ContactEmail" class="form-control" />
                 <span asp-validation-for="ContactEmail" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label"></label>
+                <label asp-for="ImageUrl" class="control-label">@Localizer["ImageUrlLabel"]</label>
                 <input asp-for="ImageUrl" type="url" class="form-control" />
                 <span asp-validation-for="ImageUrl" class="text-danger"></span>
             </div>
 
+            <!-- Butonlar -->
             <div class="form-group">
-                <button type="submit" class="btn-helprequest">Save Changes</button>
-                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn-helprequest">@Localizer["SaveChangesButton"]</button>
+                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">@Localizer["CancelButton"]</a>
             </div>
         </form>
     </div>

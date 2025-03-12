@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <!-- Sayfa Başlıkları -->
+    <data name="CreateHelpRequestTitle" xml:space="preserve">
+    <value>Yardım Talebi Oluştur</value>
+  </data>
+
+    <!-- Form Etiketleri -->
+    <data name="TitleLabel" xml:space="preserve">
+    <value>Başlık</value>
+  </data>
+    <data name="DescriptionLabel" xml:space="preserve">
+    <value>Açıklama</value>
+  </data>
+    <data name="EmergencyLevelLabel" xml:space="preserve">
+    <value>Acil Durum Seviyesi</value>
+  </data>
+    <data name="LocationLabel" xml:space="preserve">
+    <value>Konum</value>
+  </data>
+    <data name="ContactNameLabel" xml:space="preserve">
+    <value>İletişim Adı</value>
+  </data>
+    <data name="ContactPhoneLabel" xml:space="preserve">
+    <value>İletişim Telefonu</value>
+  </data>
+    <data name="ContactEmailLabel" xml:space="preserve">
+    <value>İletişim E-postası</value>
+  </data>
+    <data name="ImageUrlLabel" xml:space="preserve">
+    <value>Resim URL</value>
+  </data>
+
+    <!-- Acil Durum Seviyeleri -->
+    <data name="SelectEmergencyLevel" xml:space="preserve">
+    <value>Acil Durum Seviyesi Seçin</value>
+  </data>
+    <data name="Low" xml:space="preserve">
+    <value>Düşük</value>
+  </data>
+    <data name="Medium" xml:space="preserve">
+    <value>Orta</value>
+  </data>
+    <data name="High" xml:space="preserve">
+    <value>Yüksek</value>
+  </data>
+
+    <!-- Butonlar -->
+    <data name="CreateButton" xml:space="preserve">
+    <value>Oluştur</value>
+  </data>
+
+    <!-- Validasyon Mesajları -->
+    <data name="RequiredField" xml:space="preserve">
+    <value>Bu alan zorunludur.</value>
+  </data>
+
+  <!-- Details Sayfası -->
+  <data name="HelpRequestDetailsTitle" xml:space="preserve">
+  <value>Yardım Talebi Detayları</value>
+</data>
+  <data name="EmergencyLevelLabel" xml:space="preserve">
+  <value>Acil Durum Seviyesi</value>
+</data>
+  <data name="CreatedAtLabel" xml:space="preserve">
+  <value>Oluşturulma Tarihi</value>
+</data>
+  <data name="LocationLabel" xml:space="preserve">
+  <value>Konum</value>
+</data>
+  <data name="ContactNameLabel" xml:space="preserve">
+  <value>İletişim Adı</value>
+</data>
+  <data name="ContactPhoneLabel" xml:space="preserve">
+  <value>İletişim Telefonu</value>
+</data>
+  <data name="ContactEmailLabel" xml:space="preserve">
+  <value>İletişim E-postası</value>
+</data>
+  <data name="DescriptionLabel" xml:space="preserve">
+  <value>Açıklama</value>
+</data>
+  <data name="EditButton" xml:space="preserve">
+  <value>Düzenle</value>
+</data>
+  <data name="DeleteButton" xml:space="preserve">
+  <value>Sil</value>
+</data>
+  <data name="DeleteHelpRequestConfirmation" xml:space="preserve">
+  <value>Bu yardım talebini silmek istediğinize emin misiniz?</value>
+</data>
+  <data name="VeterinarianBadge" xml:space="preserve">
+  <value>Veteriner</value>
+</data>
+  <data name="VeterinarianAlert" xml:space="preserve">
+  <value>Bir veteriner olarak bu talebe yardımcı olabilirsiniz.</value>
+</data>
+  <data name="CommentsHeader" xml:space="preserve">
+  <value>Yorumlar</value>
+</data>
+  <data name="NoCommentsText" xml:space="preserve">
+  <value>Henüz yorum yok.</value>
+</data>
+  <data name="AddCommentHeader" xml:space="preserve">
+  <value>Yorum Ekle</value>
+</data>
+  <data name="CommentPlaceholder" xml:space="preserve">
+  <value>Yorumunuzu buraya yazın...</value>
+</data>
+  <data name="PostCommentButton" xml:space="preserve">
+  <value>Yorum Gönder</value>
+</data>
+  <data name="BackToRequests" xml:space="preserve">
+  <value>Yardım Taleplerine Dön</value>
+</data>
+  <data name="DeleteCommentConfirmation" xml:space="preserve">
+  <value>Bu yorumu silmek istediğinize emin misiniz?</value>
+</data>
+
+  <!-- Edit Sayfası -->
+  <data name="EditHelpRequestTitle" xml:space="preserve">
+  <value>Yardım Talebini Düzenle</value>
+</data>
+  <data name="SaveChangesButton" xml:space="preserve">
+  <value>Değişiklikleri Kaydet</value>
+</data>
+  <data name="CancelButton" xml:space="preserve">
+  <value>İptal</value>
+</data>
+  <data name="ValidationErrorsHeader" xml:space="preserve">
+  <value>Hatalar:</value>
+</data>
+
+  <!-- Acil Durum Seviyeleri -->
+  <data name="EmergencyLevelLow" xml:space="preserve">
+  <value>Düşük</value>
+</data>
+  <data name="EmergencyLevelMedium" xml:space="preserve">
+  <value>Orta</value>
+</data>
+  <data name="EmergencyLevelHigh" xml:space="preserve">
+  <value>Yüksek</value>
+</data>
+
+  <!-- Durumlar -->
+  <data name="HelpRequestStatusActive" xml:space="preserve">
+  <value>Aktif</value>
+</data>
+  <data name="HelpRequestStatusResolved" xml:space="preserve">
+  <value>Çözüldü</value>
+</data>
+  <data name="HelpRequestStatusClosed" xml:space="preserve">
+  <value>Kapalı</value>
+</data>
+
+  <!-- HelpRequestController.tr.resx -->
+  <data name="TitleLabel" xml:space="preserve">
+  <value>Başlık</value>
+</data>
+  <data name="DescriptionLabel" xml:space="preserve">
+  <value>Açıklama</value>
+</data>
+  <data name="EmergencyLevelLabel" xml:space="preserve">
+  <value>Acil Durum Seviyesi</value>
+</data>
+  <data name="StatusLabel" xml:space="preserve">
+  <value>Durum</value>
+</data>
+  <data name="LocationLabel" xml:space="preserve">
+  <value>Konum</value>
+</data>
+  <data name="ContactNameLabel" xml:space="preserve">
+  <value>İletişim Adı</value>
+</data>
+  <data name="ContactPhoneLabel" xml:space="preserve">
+  <value>İletişim Telefonu</value>
+</data>
+  <data name="ContactEmailLabel" xml:space="preserve">
+  <value>İletişim E-postası</value>
+</data>
+  <data name="ImageUrlLabel" xml:space="preserve">
+  <value>Resim URL</value>
+</data>
+
+  <!-- Edit Comment Sayfası -->
+  <data name="EditCommentTitle" xml:space="preserve">
+  <value>Yorumu Düzenle</value>
+</data>
+  <data name="CommentLabel" xml:space="preserve">
+  <value>Yorum</value>
+</data>
+  <data name="UpdateButton" xml:space="preserve">
+  <value>Güncelle</value>
+</data>
+  <data name="ValidationErrorsHeader" xml:space="preserve">
+  <value>Hatalar:</value>
+</data>
+
+  <!-- Index Sayfası -->
+  <data name="HelpRequestsTitle" xml:space="preserve">
+  <value>Yardım Talepleri</value>
+</data>
+  <data name="CreateNewHelpRequestButton" xml:space="preserve">
+  <value>Yeni Yardım Talebi Oluştur</value>
+</data>
+  <data name="StatusLabel" xml:space="preserve">
+  <value>Durum</value>
+</data>
+  <data name="CreatedAtLabel" xml:space="preserve">
+  <value>Oluşturulma Tarihi</value>
+</data>
+  <data name="LocationLabel" xml:space="preserve">
+  <value>Konum</value>
+</data>
+  <data name="ContactNameLabel" xml:space="preserve">
+  <value>İletişim Adı</value>
+</data>
+  <data name="ContactPhoneLabel" xml:space="preserve">
+  <value>İletişim Telefonu</value>
+</data>
+  <data name="ContactEmailLabel" xml:space="preserve">
+  <value>İletişim E-postası</value>
+</data>
+
+  <!-- Acil Durum Seviyeleri -->
+  <data name="EmergencyLevelLow" xml:space="preserve">
+  <value>Düşük</value>
+</data>
+  <data name="EmergencyLevelMedium" xml:space="preserve">
+  <value>Orta</value>
+</data>
+  <data name="EmergencyLevelHigh" xml:space="preserve">
+  <value>Yüksek</value>
+</data>
+
+  <!-- Durumlar -->
+  <data name="HelpRequestStatusActive" xml:space="preserve">
+  <value>Aktif</value>
+</data>
+  <data name="HelpRequestStatusResolved" xml:space="preserve">
+  <value>Çözüldü</value>
+</data>
+  <data name="HelpRequestStatusClosed" xml:space="preserve">
+  <value>Kapalı</value>
+</data>
+
+  <!-- HelpRequestController.tr.resx -->
+  <data name="HelpRequestImageAlt" xml:space="preserve">
+  <value>Yardım talebi resmi</value>
+</data>
+</root>

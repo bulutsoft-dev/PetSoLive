@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
+using PetSoLive.Web.Controllers;
 using Xunit;
 
 public class AccountControllerTests

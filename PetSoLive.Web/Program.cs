@@ -1,4 +1,7 @@
+using System.Globalization;
 using DotNetEnv;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using PetSoLive.Business.Services;
 using PetSoLive.Core.Entities;
@@ -85,6 +88,14 @@ builder.Services.AddAuthentication("Cookies")
 
 builder.Services.AddAuthorization();
 
+// Localization servislerini ekle
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+// MVC için localization'ı aktif et
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -93,6 +104,16 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
+
+// Desteklenen dilleri tanımla
+var supportedCultures = new[] { "en-US", "tr-TR" };
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture(supportedCultures[1])
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+app.UseRequestLocalization(localizationOptions);
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

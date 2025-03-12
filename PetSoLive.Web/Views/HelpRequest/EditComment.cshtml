@@ -1,7 +1,11 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Localization
+@using PetSoLive.Web.Controllers
+@inject IStringLocalizer<HelpRequestController> Localizer
 @model PetSoLive.Core.Entities.Comment
 
 @{
-    ViewData["Title"] = "Edit Comment";
+    ViewData["Title"] = Localizer["EditCommentTitle"];
     Layout = "_Layout";
 }
 
@@ -11,12 +15,12 @@
 
 <div class="helprequest-page">
     <div class="helprequest-container helprequest-form">
-        <h2>Edit Comment</h2>
+        <h2>@ViewData["Title"]</h2>
 
         @if (!ViewData.ModelState.IsValid)
         {
             <div class="alert alert-danger">
-                <h4>Errors:</h4>
+                <h4>@Localizer["ValidationErrorsHeader"]</h4>
                 <ul>
                     @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                     {
@@ -27,17 +31,19 @@
         }
 
         <form asp-action="EditComment" method="post">
-            <!-- Gizli alanlar: Id, HelpRequestId -->
+            <!-- Gizli Alanlar -->
             <input type="hidden" name="id" value="@Model.Id" />
             <input type="hidden" name="helpRequestId" value="@Model.HelpRequestId" />
 
+            <!-- Yorum İçeriği -->
             <div class="form-group">
-                <label for="content">Comment</label>
+                <label for="content">@Localizer["CommentLabel"]</label>
                 <textarea id="content" name="content" class="form-control" rows="3">@Model.Content</textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn-helprequest">Update</button>
+            <!-- Güncelle Butonu -->
+            <button type="submit" class="btn-helprequest">@Localizer["UpdateButton"]</button>
         </form>
     </div>
 </div>

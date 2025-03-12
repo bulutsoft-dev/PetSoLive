@@ -1,5 +1,10 @@
+@using Microsoft.Extensions.Localization
+@using PetSoLive.Web.Controllers
+@inject IStringLocalizer<AdoptionController> Localizer
+@model IEnumerable<PetSoLive.Core.Entities.Pet>
+
 @{
-    ViewData["Title"] = "Available Pets for Adoption";
+    ViewData["Title"] = Localizer["AvailablePetsTitle"];
     Layout = "_Layout";
 }
 
@@ -11,42 +16,44 @@
     <h2 class="adoption-title">@ViewData["Title"]</h2>
 
     <div class="container">
-        <!-- Search Bar -->
+        <!-- Arama Çubuğu -->
         <div class="row mb-4">
             <div class="col-md-6 offset-md-3">
                 <input type="text" 
                        class="form-control" 
                        id="searchBar" 
-                       placeholder="Search by name or breed..."
+                       placeholder="@Localizer["SearchPlaceholder"]" 
                        onkeyup="filterPets()" />
             </div>
         </div>
 
-        <!-- Button to Create Pet -->
+        <!-- Yeni Pet Butonu -->
         <div class="text-end mb-4">
-            <a asp-controller="Pet" asp-action="Create" class="btn btn-success">Create New Pet for Adoption</a>
+            <a asp-controller="Pet" asp-action="Create" class="btn btn-success">
+                @Localizer["CreateNewPetButton"]
+            </a>
         </div>
 
-        <!-- Pet adoption list -->
+        <!-- Pet Listesi -->
         <div class="row" id="petList">
             @foreach (var pet in Model)
             {
                 <div class="col-md-4 mb-4 pet-card">
                     <div class="adoption-card shadow-sm">
-                        <!-- Display Pet Image -->
-                        <img src="@pet.ImageUrl" alt="@pet.Name" />
+                        <img src="@pet.ImageUrl" alt="@pet.Name" class="card-img-top" />
                         <div class="card-body">
                             <h5 class="card-title">@pet.Name</h5>
                             <p class="card-text">@pet.Breed</p>
                             <p>
-                                <span class="badge bg-info">@pet.Age years</span>
-                                <span class="badge bg-primary">@pet.Gender</span>
+                                <span class="badge bg-info">@pet.Age @Localizer["Years"]</span>
+                                <span class="badge bg-primary">
+                                    @(pet.Gender == "Male" ? Localizer["GenderMale"] : Localizer["GenderFemale"])
+                                </span>
                                 <span class="badge bg-secondary">@pet.Species</span>
                             </p>
-                            <!-- View Details Button -->
                             <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id" 
                                class="btn-adoption">
-                                View Details
+                                @Localizer["ViewDetailsButton"]
                             </a>
                         </div>
                     </div>

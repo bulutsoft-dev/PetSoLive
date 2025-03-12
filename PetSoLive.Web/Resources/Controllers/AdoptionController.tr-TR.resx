@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="YourNameLabel" xml:space="preserve">
+    <value>Adınız</value>
+  </data>
+  <data name="YourEmailLabel" xml:space="preserve">
+    <value>E-postanız</value>
+  </data>
+  <data name="YourPhoneLabel" xml:space="preserve">
+    <value>Telefon Numaranız</value>
+  </data>
+  <data name="YourAddressLabel" xml:space="preserve">
+    <value>Adresiniz</value>
+  </data>
+  <data name="YourDateOfBirthLabel" xml:space="preserve">
+    <value>Doğum Tarihiniz</value>
+  </data>
+  <data name="MessageLabel" xml:space="preserve">
+    <value>Mesaj</value>
+  </data>
+  <data name="MessagePlaceholder" xml:space="preserve">
+    <value>Pet sahibine mesaj yazın</value>
+  </data>
+  <data name="RegisteredNameHelp" xml:space="preserve">
+    <value>Kayıtlı adınız.</value>
+  </data>
+  <data name="RegisteredEmailHelp" xml:space="preserve">
+    <value>Kayıtlı e-posta adresiniz.</value>
+  </data>
+  <data name="UpdatePhoneHelp" xml:space="preserve">
+    <value>Telefon numaranızı güncelleyin</value>
+  </data>
+  <data name="RegisteredAddressHelp" xml:space="preserve">
+    <value>Kayıtlı adresiniz.</value>
+  </data>
+  <data name="RegisteredDateOfBirthHelp" xml:space="preserve">
+    <value>Kayıtlı doğum tarihiniz.</value>
+  </data>
+  <data name="SubmitAdoptionButton" xml:space="preserve">
+    <value>Sahiplenme Talebi Gönder</value>
+  </data>
+
+  <!-- AdoptionController.tr.resx -->
+  <data name="AlreadySubmittedRequest" xml:space="preserve">
+  <value>Bu pet için zaten bir sahiplenme talebi gönderdiniz!</value>
+</data>
+  <data name="GoToPetDetails" xml:space="preserve">
+  <value>Pet Detaylarına Git</value>
+</data>
+
+  <data name="AvailablePetsTitle" xml:space="preserve">
+  <value>Sahiplendirilecek Petler</value>
+</data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+  <value>İsim veya cins ara...</value>
+</data>
+  <data name="CreateNewPetButton" xml:space="preserve">
+  <value>Yeni Pet Oluştur</value>
+</data>
+  <data name="Years" xml:space="preserve">
+  <value>yaş</value>
+</data>
+  <data name="ViewDetailsButton" xml:space="preserve">
+  <value>Detayları Gör</value>
+</data>
+  <!-- Aşağıdakiler önceki cevaplarda eklenmiş olmalı -->
+  <data name="GenderMale" xml:space="preserve">
+  <value>Erkek</value>
+</data>
+  <data name="GenderFemale" xml:space="preserve">
+  <value>Dişi</value>
+</data>
+</root>

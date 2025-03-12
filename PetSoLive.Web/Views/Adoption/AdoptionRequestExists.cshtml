@@ -1,3 +1,7 @@
+@using Microsoft.Extensions.Localization
+@using PetSoLive.Web.Controllers
+@inject IStringLocalizer<AdoptionController> Localizer
+
 @section HeadSection {
     <link rel="stylesheet" href="~/css/adoption.css" />
 }
@@ -5,11 +9,11 @@
 <div class="adoption-page">
     <div class="container my-5">
         <div class="alert alert-warning">
-            <h4>You have already submitted an adoption request for this pet!</h4>
+            <h4>@Localizer["AlreadySubmittedRequest"]</h4>
         </div>
         <a href="@Url.Action("Details", "Pet", new { id = ViewBag.PetId })"
            class="btn-adoption">
-            Go to Pet Details
+            @Localizer["GoToPetDetails"]
         </a>
     </div>
 </div>

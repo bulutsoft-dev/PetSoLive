@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- Home/Index.cshtml -->
+  <data name="Home Page" xml:space="preserve">
+    <value>Ana Sayfa</value>
+  </data>
+  <data name="WelcomeMessage" xml:space="preserve">
+    <value>PetSoLive'a Hoş Geldiniz!</value>
+  </data>
+  <data name="LeadMessage" xml:space="preserve">
+    <value>Mükemmel dostunuzu bulun ve onlara bir yuva verin.</value>
+  </data>
+  <data name="Explore Adoptions" xml:space="preserve">
+    <value>Sahiplenmeyi Keşfet</value>
+  </data>
+  <data name="AdoptPet" xml:space="preserve">
+    <value>Evcil Hayvan Sahiplen</value>
+  </data>
+  <data name="AdoptPetDescription" xml:space="preserve">
+    <value>Yeni ailelerini bekleyen sevimli dostları keşfedin.</value>
+  </data>
+  <data name="See Pets" xml:space="preserve">
+    <value>Mevcut Hayvanları Gör</value>
+  </data>
+  <data name="LostPets" xml:space="preserve">
+    <value>Kayıp Hayvanlar</value>
+  </data>
+  <data name="LostPetsDescription" xml:space="preserve">
+    <value>Kayıp hayvanları sahipleriyle buluşturmaya yardım edin.</value>
+  </data>
+  <data name="View Lost Pets" xml:space="preserve">
+    <value>Kayıp Hayvanları Görüntüle</value>
+  </data>
+  <data name="Assistance" xml:space="preserve">
+    <value>Yardıma mı İhtiyacınız Var?</value>
+  </data>
+  <data name="AssistanceDescription" xml:space="preserve">
+    <value>Evcil hayvan bakımı, sağlık ve daha fazlası için destek alın.</value>
+  </data>
+  <data name="Get Help" xml:space="preserve">
+    <value>Hemen Yardım Al</value>
+  </data>
+
+  <!-- About.cshtml -->
+  <data name="AboutUsTitle" xml:space="preserve">
+    <value>Hakkımızda</value>
+  </data>
+  <data name="AboutPetSoLive" xml:space="preserve">
+    <value>PetSoLive Hakkında</value>
+  </data>
+  <data name="AboutDescription" xml:space="preserve">
+    <value>PetSoLive, evcil hayvan sahipleri, veterinerler, barınaklar ve toplumu bir araya getirerek hayvan refahını artırmak için tasarlanmış yenilikçi bir dijital platformdur. Platform, bu gruplar arasındaki iletişim boşluklarını kapatmayı amaçlayarak evlat edinme süreçlerini yönetmek, acil tıbbi destek sağlamak ve hayvan refahı için toplum odaklı bir ağ oluşturmak için sorunsuz ve etkili bir yol sunar. Hedefimiz, modern teknolojiyi kullanarak hem evcil hayvanlar hem de sahipleri için destekleyici ve şefkatli bir ekosistem yaratarak hayvanların yaşamlarını iyileştirmektir.</value>
+  </data>
+  <data name="OurMission" xml:space="preserve">
+    <value>Misyonumuz</value>
+  </data>
+  <data name="MissionText" xml:space="preserve">
+    <value>PetSoLive olarak misyonumuz, evcil hayvan sahipleri, veterinerler ve barınakların bağlantı kurabileceği, işbirliği yapabileceği ve hayvan refahına katkıda bulunabileceği dinamik ve kullanıcı dostu bir ortam yaratmaktır. Sadece sıkıntıdaki evcil hayvanların acil ihtiyaçlarını karşılamakla kalmayıp, hem hayvanlar hem de insanlar için uzun vadeli ilişkiler ve destek sistemleri oluşturan bir çözüm sunmaya çalışıyoruz.</value>
+  </data>
+  <data name="WhatWeOffer" xml:space="preserve">
+    <value>Neler Sunuyoruz?</value>
+  </data>
+  <data name="OfferList" xml:space="preserve">
+    <value>Platformumuz, evlat edinme süreçlerini kolaylaştırmak, acil yardım sağlamak ve evcil hayvan sahipleri ile veterinerler arasındaki iletişimi iyileştirmek için tasarlanmış bir dizi özellik sunar. Başlıca özellikler şunları içerir:</value>
+  </data>
+  <data name="AdoptionStories" xml:space="preserve">
+    <value>Evlat Edinme Hikayeleri: Yuva bulan hayvanların başarı hikayeleri.</value>
+  </data>
+  <data name="LostPetAds" xml:space="preserve">
+    <value>Kayıp İlanları: Kayıp hayvanları sahipleriyle buluşturmak için toplum temelli bir sistem.</value>
+  </data>
+  <data name="EmergencyHelp" xml:space="preserve">
+    <value>Acil Yardım Talepleri: Acil veteriner bakımına ihtiyacı olan hayvanlar için anında bildirimler ve destek.</value>
+  </data>
+  <data name="VeterinaryAdvice" xml:space="preserve">
+    <value>Veteriner Tavsiyeleri: Evcil hayvan sahiplerinin hayvanlarının sağlığını ve refahını sağlamasına yardımcı olacak deneyimli veterinerlerden düzenli ipuçları ve rehberlik.</value>
+  </data>
+  <data name="PetProfiles" xml:space="preserve">
+    <value>Evcil Hayvan Profilleri: Potansiyel sahiplendirenlerin bilinçli kararlar vermesine yardımcı olacak ayrıntılı evcil hayvan profilleri.</value>
+  </data>
+  <data name="RealTimeNotifications" xml:space="preserve">
+    <value>Gerçek Zamanlı Bildirimler: Kayıp hayvanlar, evlat edinme fırsatları ve acil bakım ihtiyaçları için topluluğu bilgilendirmek ve dahil etmek üzere uyarılar.</value>
+  </data>
+  <data name="WhyChoose" xml:space="preserve">
+    <value>Neden PetSoLive'ı Seçmelisiniz?</value>
+  </data>
+  <data name="WhyChooseText" xml:space="preserve">
+    <value>PetSoLive, PetFinder ve AdoptAPet gibi mevcut platformların bıraktığı boşlukları doldurmak amacıyla daha özelleştirilmiş ve dinamik çözümler sunarak tasarlandı. Hayvan refahına bütünsel bir yaklaşım benimsiyoruz ve hem toplum destekli hem de profesyonel veteriner yardımını entegre ediyoruz. Platformumuzu kullanarak kullanıcılar şunları yapabilir:</value>
+  </data>
+  <data name="FindLostPets" xml:space="preserve">
+    <value>Hızlı bir şekilde kayıp hayvanları bulun veya bölgenizde kayıp bir hayvanın yerini belirlemeye yardım edin.</value>
+  </data>
+  <data name="EmergencyServices" xml:space="preserve">
+    <value>Gerçek zamanlı olarak acil veteriner hizmetlerine ve tıbbi tavsiyelere erişin.</value>
+  </data>
+  <data name="StreamlineAdoption" xml:space="preserve">
+    <value>Barınaklardan veya bireylerden evcil hayvan edinerek evlat edinme sürecini kolaylaştırın.</value>
+  </data>
+  <data name="ShareExperiences" xml:space="preserve">
+    <value>Deneyimlerinizi ve tavsiyelerinizi diğer evcil hayvan sahipleri ve profesyonellerle paylaşın.</value>
+  </data>
+  <data name="SupportWelfare" xml:space="preserve">
+    <value>Toplu çabalar ve toplum katılımıyla hayvan refahını destekleyin.</value>
+  </data>
+  <data name="OurVision" xml:space="preserve">
+    <value>Vizyonumuz</value>
+  </data>
+  <data name="VisionText" xml:space="preserve">
+    <value>Hayvanların hak ettikleri özen ve saygıyı gördüğü bir dünya hayal ediyoruz. PetSoLive, sadece bir evlat edinme platformu sunmakla kalmayıp, hayvanların yaşamları boyunca gerekli tıbbi bakıma ve desteğe erişebilmelerini sağlamaya kararlıdır. Tutkulu bireyler ve profesyonellerden oluşan bir topluluk oluşturarak hayvan refahı üzerinde kalıcı bir etki yaratmayı ve hayvanların refahını ön planda tutan bir toplum yaratmayı umuyoruz.</value>
+  </data>
+  <data name="ProjectDevelopers" xml:space="preserve">
+    <value>Proje Geliştiricileri</value>
+  </data>
+  <data name="DevelopersText" xml:space="preserve">
+    <value>PetSoLive, hayvan refahına derinden bağlı bir geliştirici ekibinin sıkı çalışması ve özverisinin sonucudur. Proje aşağıdaki kişiler tarafından yönetilmiştir:</value>
+  </data>
+  <data name="FurkanBulut" xml:space="preserve">
+    <value>Furkan Bulut</value>
+  </data>
+  <data name="FurkanBulutRole" xml:space="preserve">
+    <value>Proje Lideri ve Baş Geliştirici. Furkan, yılların yazılım geliştirme deneyimini ve hayvan refahına güçlü bağlılığını projeye taşır.</value>
+  </data>
+  <data name="FurkanBaytak" xml:space="preserve">
+    <value>Furkan Baytak</value>
+  </data>
+  <data name="FurkanBaytakRole" xml:space="preserve">
+    <value>Full-stack Geliştirici. Furkan'ın hem önyüz hem de arka uç geliştirmedeki uzmanlığı, platformun başarısında kritik rol oynamıştır.</value>
+  </data>
+  <data name="FurkanOzkaya" xml:space="preserve">
+    <value>Furkan Özkaya</value>
+  </data>
+  <data name="FurkanOzkayaRole" xml:space="preserve">
+    <value>Arka Uç Geliştirici. Furkan, platformun teknik yönlerine odaklanarak sorunsuz çalışmasını ve kullanıcı deneyimini sağlar.</value>
+  </data>
+  <data name="HowItWorks" xml:space="preserve">
+    <value>PetSoLive Nasıl Çalışır?</value>
+  </data>
+  <data name="WorksText" xml:space="preserve">
+    <value>PetSoLive, sunum, iş mantığı ve veri depolama katmanlarını ayıran üç katmanlı bir mimari üzerine kuruludur. Bu yaklaşım, esneklik, ölçeklenebilirlik ve kolay yönetilebilir bir kod tabanı sağlar. Platform, evcil hayvan edinmek isteyen bireylerden barınaklara, veterinerlere ve hayvan refahı kuruluşlarına kadar geniş bir kullanıcı yelpazesini destekleyecek şekilde tasarlanmıştır. Teknik yapı şunları içerir:</value>
+  </data>
+  <data name="Frontend" xml:space="preserve">
+    <value>Önyüz</value>
+  </data>
+  <data name="FrontendTech" xml:space="preserve">
+    <value>Kullanıcı arayüzü, platformun hem duyarlı hem de kullanıcı dostu olmasını sağlamak için ASP.NET MVC, HTML5, CSS3 ve JavaScript kullanılarak oluşturulmuştur.</value>
+  </data>
+  <data name="Backend" xml:space="preserve">
+    <value>Arka Uç</value>
+  </data>
+  <data name="BackendTech" xml:space="preserve">
+    <value>İş mantığı ve API yönetimi, önyüz ve arka uç arasında hızlı ve verimli iletişim sağlayan ASP.NET Core tarafından yönetilir.</value>
+  </data>
+  <data name="Database" xml:space="preserve">
+    <value>Veritabanı</value>
+  </data>
+  <data name="DatabaseTech" xml:space="preserve">
+    <value>Tüm kullanıcı verileri ve medya dosyaları, platformun artan verilerle ölçeklenebilmesini sağlamak için Microsoft SQL Server'da güvenli bir şekilde saklanır.</value>
+  </data>
+  <data name="FutureDevelopments" xml:space="preserve">
+    <value>Gelecek Geliştirmeler</value>
+  </data>
+  <data name="FutureText" xml:space="preserve">
+    <value>PetSoLive şimdiden olumlu bir etki yaratırken, yeni özellikler ve iyileştirmeler üzerinde sürekli çalışıyoruz. Planlanan gelecek geliştirmelerden bazıları şunlardır:</value>
+  </data>
+  <data name="MobileApp" xml:space="preserve">
+    <value>Mobil Uygulama: Platforma hareket halindeyken daha kolay erişim sağlayacak bir mobil uygulama.</value>
+  </data>
+  <data name="AIRecommendations" xml:space="preserve">
+    <value>AI Destekli Öneriler: Kullanıcı tercihleri ve davranışlarına dayalı kişiselleştirilmiş evlat edinme önerileri ve veteriner bakımı.</value>
+  </data>
+  <data name="VideoConsultations" xml:space="preserve">
+    <value>Video Danışmanlıkları: Acil bakım ve tavsiye için veterinerlerle gerçek zamanlı video görüşmeleri.</value>
+  </data>
+  <data name="CommunityForums" xml:space="preserve">
+    <value>Topluluk Forumları: Evcil hayvan sahiplerinin deneyimlerini paylaşabileceği, tavsiye alabileceği ve birbirleriyle bağlantı kurabileceği bir alan.</value>
+  </data>
+  <data name="IoTIntegration" xml:space="preserve">
+    <value>IoT Entegrasyonu: Evcil hayvan bakımını ve takibini iyileştirmek için GPS izleyiciler ve sağlık monitörleri gibi akıllı cihazlarla entegrasyon.</value>
+  </data>
+  <data name="Conclusion" xml:space="preserve">
+    <value>Sonuç</value>
+  </data>
+  <data name="ConclusionText" xml:space="preserve">
+    <value>PetSoLive sadece bir evlat edinme platformu değil; aynı zamanda hayvan refahı için kritik hizmetler sunan, iletişimi teşvik eden ve hayat kurtarmaya yardımcı olan kapsamlı bir çözümdür. Şu ana kadar başardıklarımızdan gurur duyuyoruz ve yenilik yapmaya ve geliştirmeye devam ederken platformun geleceği için heyecanlıyız. Dünya çapında evcil hayvanların ve sahiplerinin hayatlarında bir fark yaratmak için bize katılın!</value>
+  </data>
+</root>

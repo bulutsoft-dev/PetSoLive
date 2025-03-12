@@ -11,7 +11,7 @@ namespace PetSoLive.Tests.Controllers
         public HomeControllerTests()
         {
             // Initialize the HomeController
-            _controller = new HomeController();
+            _controller = new HomeController(null);
         }
 
         [Fact]
