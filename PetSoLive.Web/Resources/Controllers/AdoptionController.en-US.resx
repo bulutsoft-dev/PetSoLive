@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+
+  <data name="YourNameLabel" xml:space="preserve">
+    <value>Your Name</value>
+  </data>
+  <data name="YourEmailLabel" xml:space="preserve">
+    <value>Your Email</value>
+  </data>
+  <data name="YourPhoneLabel" xml:space="preserve">
+    <value>Your Phone Number</value>
+  </data>
+  <data name="YourAddressLabel" xml:space="preserve">
+    <value>Your Address</value>
+  </data>
+  <data name="YourDateOfBirthLabel" xml:space="preserve">
+    <value>Your Date of Birth</value>
+  </data>
+  <data name="MessageLabel" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="MessagePlaceholder" xml:space="preserve">
+    <value>Write a message to the pet owner</value>
+  </data>
+  <data name="RegisteredNameHelp" xml:space="preserve">
+    <value>This is your registered name.</value>
+  </data>
+  <data name="RegisteredEmailHelp" xml:space="preserve">
+    <value>This is your registered email address.</value>
+  </data>
+  <data name="UpdatePhoneHelp" xml:space="preserve">
+    <value>Update your phone number if necessary.</value>
+  </data>
+  <data name="RegisteredAddressHelp" xml:space="preserve">
+    <value>This is your registered address.</value>
+  </data>
+  <data name="RegisteredDateOfBirthHelp" xml:space="preserve">
+    <value>This is your registered date of birth.</value>
+  </data>
+  <data name="SubmitAdoptionButton" xml:space="preserve">
+    <value>Submit Adoption Request</value>
+  </data>
+
+  <!-- AdoptionController.en.resx -->
+  <data name="AlreadySubmittedRequest" xml:space="preserve">
+  <value>You have already submitted an adoption request for this pet!</value>
+</data>
+  <data name="GoToPetDetails" xml:space="preserve">
+  <value>Go to Pet Details</value>
+</data>
+
+  <data name="AvailablePetsTitle" xml:space="preserve">
+  <value>Available Pets for Adoption</value>
+</data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+  <value>Search by name or breed...</value>
+</data>
+  <data name="CreateNewPetButton" xml:space="preserve">
+  <value>Create New Pet for Adoption</value>
+</data>
+  <data name="Years" xml:space="preserve">
+  <value>years</value>
+</data>
+  <data name="ViewDetailsButton" xml:space="preserve">
+  <value>View Details</value>
+</data>
+  <!-- Aşağıdakiler önceki cevaplarda eklenmiş olmalı -->
+  <data name="GenderMale" xml:space="preserve">
+  <value>Male</value>
+</data>
+  <data name="GenderFemale" xml:space="preserve">
+  <value>Female</value>
+</data>
+</root>

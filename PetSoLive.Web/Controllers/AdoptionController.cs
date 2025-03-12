@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using PetSoLive.Core.Interfaces;
+using Microsoft.Extensions.Localization;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Enums;
+using PetSoLive.Core.Interfaces;
+
+namespace PetSoLive.Web.Controllers;
 
 public class AdoptionController : Controller
 {
@@ -12,6 +15,7 @@ public class AdoptionController : Controller
     private readonly IPetOwnerService _petOwnerService;
     private readonly IAdoptionRequestRepository _adoptionRequestRepository;
     private readonly IAdoptionRequestService _adoptionRequestService;
+    private readonly IStringLocalizer<AdoptionController> _localizer;
 
     public AdoptionController(
         IAdoptionService adoptionService, 
@@ -20,7 +24,8 @@ public class AdoptionController : Controller
         IUserService userService, 
         IEmailService emailService, 
         IPetOwnerService petOwnerService,
-        IAdoptionRequestRepository adoptionRequestRepository)
+        IAdoptionRequestRepository adoptionRequestRepository,
+        IStringLocalizer<AdoptionController> localizer)
     {
         _adoptionService = adoptionService;
         _petService = petService;
@@ -29,12 +34,14 @@ public class AdoptionController : Controller
         _petOwnerService = petOwnerService;
         _adoptionRequestRepository = adoptionRequestRepository;
         _adoptionRequestService = adoptionRequestService;
+        _localizer = localizer;
     }
 
     [HttpGet]
     public async Task<IActionResult> Index()
     {
         var pets = await _petService.GetAllPetsAsync();
+        ViewData["Title"] = _localizer["AvailablePetsTitle"];
         return View(pets);
     }
 
@@ -181,20 +188,20 @@ public class AdoptionController : Controller
 
         var pendingRequests = await _adoptionRequestRepository.GetPendingRequestsByPetIdAsync(petId);
         if (pendingRequests != null ) {
-        foreach (var request in pendingRequests)
-        {
-            if (request.Id != adoptionRequestId)
+            foreach (var request in pendingRequests)
             {
-                request.Status = AdoptionStatus.Rejected;
-                await _adoptionRequestService.UpdateAdoptionRequestAsync(request);
-
-                var rejectedUser = request.User;
-                if (rejectedUser != null)
+                if (request.Id != adoptionRequestId)
                 {
-                    await SendRejectionEmailAsync(rejectedUser, pet);
+                    request.Status = AdoptionStatus.Rejected;
+                    await _adoptionRequestService.UpdateAdoptionRequestAsync(request);
+
+                    var rejectedUser = request.User;
+                    if (rejectedUser != null)
+                    {
+                        await SendRejectionEmailAsync(rejectedUser, pet);
+                    }
                 }
             }
-        }
         }
 
         var adoption = new Adoption
