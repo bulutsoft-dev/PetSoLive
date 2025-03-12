@@ -1,5 +1,9 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Localization
+@using PetSoLive.Web.Controllers
+@inject IStringLocalizer<HomeController> Localizer
+@{
+    ViewData["Title"] = Localizer["Home Page"];
     Layout = "_Layout";
 }
 
@@ -11,11 +15,11 @@
 <div class="home-hero">
     <div class="home-hero-overlay">
         <div class="hero-content text-white">
-            <h1 class="display-4">Welcome to PetSoLive</h1>
-            <p class="lead">Find your perfect pet or help those in need!</p>
+            <h1 class="display-4">@Localizer["WelcomeMessage"]</h1>
+            <p class="lead">@Localizer["LeadMessage"]</p>
             <!-- Hero CTA -->
             <a class="btn btn-hero-cta" asp-controller="Adoption" asp-action="Index">
-                Explore Adoptions
+                @Localizer["Explore Adoptions"]
             </a>
         </div>
     </div>
@@ -26,25 +30,25 @@
         <div class="col-md-4">
             <div class="info-card p-4 text-center shadow-sm">
                 <i class="bi bi-heart-fill icon-big text-petsolive"></i>
-                <h3>Adopt a Pet</h3>
-                <p>Give a loving home to a pet in need. Browse our adoption listings!</p>
-                <a asp-controller="Adoption" asp-action="Index" class="btn btn-primary">See Pets</a>
+                <h3>@Localizer["AdoptPet"]</h3>
+                <p>@Localizer["AdoptPetDescription"]</p>
+                <a asp-controller="Adoption" asp-action="Index" class="btn btn-primary">@Localizer["See Pets"]</a>
             </div>
         </div>
         <div class="col-md-4">
             <div class="info-card p-4 text-center shadow-sm">
                 <i class="bi bi-search icon-big text-petsolive"></i>
-                <h3>Lost Pets</h3>
-                <p>Help reunite lost pets with their owners. Post or find lost pet ads.</p>
-                <a asp-controller="LostPetAd" asp-action="Index" class="btn btn-primary">View Lost Pets</a>
+                <h3>@Localizer["LostPets"]</h3>
+                <p>@Localizer["LostPetsDescription"]</p>
+                <a asp-controller="LostPetAd" asp-action="Index" class="btn btn-primary">@Localizer["View Lost Pets"]</a>
             </div>
         </div>
         <div class="col-md-4">
             <div class="info-card p-4 text-center shadow-sm">
                 <i class="bi bi-geo-alt-fill icon-big text-petsolive"></i>
-                <h3>Assistance</h3>
-                <p>Need help with a pet-related issue? Request assistance or see existing help requests!</p>
-                <a asp-controller="HelpRequest" asp-action="Index" class="btn btn-primary">Get Help</a>
+                <h3>@Localizer["Assistance"]</h3>
+                <p>@Localizer["AssistanceDescription"]</p>
+                <a asp-controller="HelpRequest" asp-action="Index" class="btn btn-primary">@Localizer["Get Help"]</a>
             </div>
         </div>
     </div>

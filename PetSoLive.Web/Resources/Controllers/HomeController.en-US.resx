@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="Home Page" xml:space="preserve">
+    <value>Home Page</value>
+  </data>
+  <data name="WelcomeMessage" xml:space="preserve">
+    <value>Welcome to PetSoLive!</value>
+  </data>
+  <data name="LeadMessage" xml:space="preserve">
+    <value>Find your perfect companion and give them a forever home.</value>
+  </data>
+  <data name="Explore Adoptions" xml:space="preserve">
+    <value>Explore Adoptions</value>
+  </data>
+  <data name="AdoptPet" xml:space="preserve">
+    <value>Adopt a Pet</value>
+  </data>
+  <data name="AdoptPetDescription" xml:space="preserve">
+    <value>Discover loving pets waiting for their new families.</value>
+  </data>
+  <data name="See Pets" xml:space="preserve">
+    <value>See Available Pets</value>
+  </data>
+  <data name="LostPets" xml:space="preserve">
+    <value>Lost Pets</value>
+  </data>
+  <data name="LostPetsDescription" xml:space="preserve">
+    <value>Help reunite lost pets with their owners.</value>
+  </data>
+  <data name="View Lost Pets" xml:space="preserve">
+    <value>View Lost Pets</value>
+  </data>
+  <data name="Assistance" xml:space="preserve">
+    <value>Need Assistance?</value>
+  </data>
+  <data name="AssistanceDescription" xml:space="preserve">
+    <value>Get support for pet care, health, and more.</value>
+  </data>
+  <data name="Get Help" xml:space="preserve">
+    <value>Get Help Now</value>
+  </data>
+</root>

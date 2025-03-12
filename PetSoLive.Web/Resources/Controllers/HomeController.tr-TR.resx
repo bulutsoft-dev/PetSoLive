@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="Home Page" xml:space="preserve">
+    <value>Ana Sayfa</value>
+  </data>
+  <data name="WelcomeMessage" xml:space="preserve">
+    <value>PetSoLive'a Hoş Geldiniz!</value>
+  </data>
+  <data name="LeadMessage" xml:space="preserve">
+    <value>Mükemmel dostunuzu bulun ve onlara bir yuva verin.</value>
+  </data>
+  <data name="Explore Adoptions" xml:space="preserve">
+    <value>Sahiplenmeyi Keşfet</value>
+  </data>
+  <data name="AdoptPet" xml:space="preserve">
+    <value>Evcil Hayvan Sahiplen</value>
+  </data>
+  <data name="AdoptPetDescription" xml:space="preserve">
+    <value>Yeni ailelerini bekleyen sevimli dostları keşfedin.</value>
+  </data>
+  <data name="See Pets" xml:space="preserve">
+    <value>Mevcut Hayvanları Gör</value>
+  </data>
+  <data name="LostPets" xml:space="preserve">
+    <value>Kayıp Hayvanlar</value>
+  </data>
+  <data name="LostPetsDescription" xml:space="preserve">
+    <value>Kayıp hayvanları sahipleriyle buluşturmaya yardım edin.</value>
+  </data>
+  <data name="View Lost Pets" xml:space="preserve">
+    <value>Kayıp Hayvanları Görüntüle</value>
+  </data>
+  <data name="Assistance" xml:space="preserve">
+    <value>Yardıma mı İhtiyacınız Var?</value>
+  </data>
+  <data name="AssistanceDescription" xml:space="preserve">
+    <value>Evcil hayvan bakımı, sağlık ve daha fazlası için destek alın.</value>
+  </data>
+  <data name="Get Help" xml:space="preserve">
+    <value>Hemen Yardım Al</value>
+  </data>
+</root>
