@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- Home/Index.cshtml -->
   <data name="Home Page" xml:space="preserve">
     <value>Home Page</value>
   </data>
@@ -38,5 +39,148 @@
   </data>
   <data name="Get Help" xml:space="preserve">
     <value>Get Help Now</value>
+  </data>
+
+  <!-- About.cshtml -->
+  <data name="AboutUsTitle" xml:space="preserve">
+    <value>About Us</value>
+  </data>
+  <data name="AboutPetSoLive" xml:space="preserve">
+    <value>About PetSoLive</value>
+  </data>
+  <data name="AboutDescription" xml:space="preserve">
+    <value>PetSoLive is an innovative digital platform designed to improve animal welfare by connecting pet owners, veterinarians, shelters, and the broader community. The platform aims to bridge the communication gaps between these groups, offering a seamless and effective way to manage pet adoption, provide urgent medical support, and create a community-focused network for animal welfare. Our goal is to enhance the lives of animals by leveraging modern technology to create a supportive and compassionate ecosystem for both pets and their owners.</value>
+  </data>
+  <data name="OurMission" xml:space="preserve">
+    <value>Our Mission</value>
+  </data>
+  <data name="MissionText" xml:space="preserve">
+    <value>At PetSoLive, our mission is to create a dynamic and user-friendly environment where pet owners, veterinarians, and shelters can connect, collaborate, and contribute to animal welfare. We strive to provide a solution that not only addresses the immediate needs of pets in distress but also fosters long-term relationships and support systems for both animals and humans.</value>
+  </data>
+  <data name="WhatWeOffer" xml:space="preserve">
+    <value>What We Offer</value>
+  </data>
+  <data name="OfferList" xml:space="preserve">
+    <value>Our platform offers a range of features designed to streamline pet adoption, provide emergency assistance, and improve communication between pet owners and veterinarians. Some of the key features include:</value>
+  </data>
+  <data name="AdoptionStories" xml:space="preserve">
+    <value>Adoption Stories: Success stories of pets finding their forever homes.</value>
+  </data>
+  <data name="LostPetAds" xml:space="preserve">
+    <value>Lost Pet Ads: A community-based system to help reunite lost pets with their owners.</value>
+  </data>
+  <data name="EmergencyHelp" xml:space="preserve">
+    <value>Emergency Help Requests: Immediate notifications and support for pets in need of urgent veterinary care.</value>
+  </data>
+  <data name="VeterinaryAdvice" xml:space="preserve">
+    <value>Veterinary Advice: Regular tips and guidance from experienced veterinarians to help pet owners ensure the health and well-being of their pets.</value>
+  </data>
+  <data name="PetProfiles" xml:space="preserve">
+    <value>Pet Profiles: Detailed profiles of adoptable pets to help potential adopters make informed decisions.</value>
+  </data>
+  <data name="RealTimeNotifications" xml:space="preserve">
+    <value>Real-time Notifications: Alerts for lost pets, adoption opportunities, and urgent care needs to keep the community informed and engaged.</value>
+  </data>
+  <data name="WhyChoose" xml:space="preserve">
+    <value>Why Choose PetSoLive?</value>
+  </data>
+  <data name="WhyChooseText" xml:space="preserve">
+    <value>PetSoLive was designed with the intention of filling the gaps left by other existing platforms, such as PetFinder and AdoptAPet, by offering more tailored and dynamic solutions. We take a holistic approach to animal welfare, integrating both community-driven support and professional veterinary assistance. By using our platform, users can:</value>
+  </data>
+  <data name="FindLostPets" xml:space="preserve">
+    <value>Quickly find lost pets or help locate a missing animal in their area.</value>
+  </data>
+  <data name="EmergencyServices" xml:space="preserve">
+    <value>Access emergency veterinary services and medical advice in real-time.</value>
+  </data>
+  <data name="StreamlineAdoption" xml:space="preserve">
+    <value>Adopt pets from shelters or individuals, streamlining the adoption process.</value>
+  </data>
+  <data name="ShareExperiences" xml:space="preserve">
+    <value>Share experiences and advice with fellow pet owners and professionals.</value>
+  </data>
+  <data name="SupportWelfare" xml:space="preserve">
+    <value>Support animal welfare through collective efforts and community participation.</value>
+  </data>
+  <data name="OurVision" xml:space="preserve">
+    <value>Our Vision</value>
+  </data>
+  <data name="VisionText" xml:space="preserve">
+    <value>We envision a world where pets are treated with the care and respect they deserve. PetSoLive is committed to not only providing a platform for pet adoption but also ensuring that pets have access to necessary medical care and support throughout their lives. By creating a community of passionate individuals and professionals, we hope to make a lasting impact on animal welfare and help create a society that places the well-being of animals at the forefront.</value>
+  </data>
+  <data name="ProjectDevelopers" xml:space="preserve">
+    <value>Project Developers</value>
+  </data>
+  <data name="DevelopersText" xml:space="preserve">
+    <value>PetSoLive is the result of the hard work and dedication of a team of developers who are deeply passionate about animal welfare. The project has been led by the following individuals:</value>
+  </data>
+  <data name="FurkanBulut" xml:space="preserve">
+    <value>Furkan Bulut</value>
+  </data>
+  <data name="FurkanBulutRole" xml:space="preserve">
+    <value>Project Lead and Lead Developer. Furkan brings years of experience in software development and a strong commitment to animal welfare.</value>
+  </data>
+  <data name="FurkanBaytak" xml:space="preserve">
+    <value>Furkan Baytak</value>
+  </data>
+  <data name="FurkanBaytakRole" xml:space="preserve">
+    <value>Full-stack Developer. Furkan's expertise in both frontend and backend development has been crucial to the platform's success.</value>
+  </data>
+  <data name="FurkanOzkaya" xml:space="preserve">
+    <value>Furkan Özkaya</value>
+  </data>
+  <data name="FurkanOzkayaRole" xml:space="preserve">
+    <value>Backend Developer. Furkan focuses on the technical aspects of the platform, ensuring smooth operation and user experience.</value>
+  </data>
+  <data name="HowItWorks" xml:space="preserve">
+    <value>How PetSoLive Works</value>
+  </data>
+  <data name="WorksText" xml:space="preserve">
+    <value>PetSoLive is built on a three-layer architecture that separates the presentation, business logic, and data storage layers. This approach allows for flexibility, scalability, and an easy-to-manage codebase. The platform is designed to support a wide range of users, from individuals looking to adopt pets to shelters, veterinarians, and animal welfare organizations. The technical structure includes:</value>
+  </data>
+  <data name="Frontend" xml:space="preserve">
+    <value>Frontend</value>
+  </data>
+  <data name="FrontendTech" xml:space="preserve">
+    <value>The user interface is built using ASP.NET MVC, HTML5, CSS3, and JavaScript, ensuring the platform is both responsive and user-friendly.</value>
+  </data>
+  <data name="Backend" xml:space="preserve">
+    <value>Backend</value>
+  </data>
+  <data name="BackendTech" xml:space="preserve">
+    <value>The business logic and API management are handled by ASP.NET Core, which ensures fast and efficient communication between the frontend and backend.</value>
+  </data>
+  <data name="Database" xml:space="preserve">
+    <value>Database</value>
+  </data>
+  <data name="DatabaseTech" xml:space="preserve">
+    <value>All user data and media files are stored securely in Microsoft SQL Server, ensuring the platform can scale with increasing data.</value>
+  </data>
+  <data name="FutureDevelopments" xml:space="preserve">
+    <value>Future Developments</value>
+  </data>
+  <data name="FutureText" xml:space="preserve">
+    <value>While PetSoLive is already making a positive impact, we are continuously working on new features and improvements. Some of our planned future developments include:</value>
+  </data>
+  <data name="MobileApp" xml:space="preserve">
+    <value>Mobile Application: A mobile app for easier access to the platform on the go.</value>
+  </data>
+  <data name="AIRecommendations" xml:space="preserve">
+    <value>AI-Driven Recommendations: Personalized pet adoption suggestions and veterinary care based on user preferences and behaviors.</value>
+  </data>
+  <data name="VideoConsultations" xml:space="preserve">
+    <value>Video Consultations: Real-time video consultations with veterinarians for urgent care and advice.</value>
+  </data>
+  <data name="CommunityForums" xml:space="preserve">
+    <value>Community Forums: A space for pet owners to share experiences, advice, and connect with each other.</value>
+  </data>
+  <data name="IoTIntegration" xml:space="preserve">
+    <value>IoT Integration: Integration with smart devices like GPS trackers and health monitors to improve pet care and tracking.</value>
+  </data>
+  <data name="Conclusion" xml:space="preserve">
+    <value>Conclusion</value>
+  </data>
+  <data name="ConclusionText" xml:space="preserve">
+    <value>PetSoLive is more than just a pet adoption platform; it's a comprehensive solution for animal welfare, providing critical services, fostering communication, and helping save lives. We are proud of what we've accomplished so far, and we are excited for the future of the platform as we continue to innovate and improve. Join us in making a difference in the lives of pets and pet owners around the world!</value>
   </data>
 </root>
