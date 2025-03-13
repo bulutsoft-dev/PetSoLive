@@ -69,4 +69,8 @@
   <data name="About Us" xml:space="preserve">
     <value>Biz Kimiz?</value>
   </data>
+
+  <data name="Swicth" xml:space="preserve">
+    <value>Türkçe</value>
+</data>
 </root>
