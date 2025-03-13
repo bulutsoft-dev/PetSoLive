@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="VeterinariansListTitle" xml:space="preserve">
+    <value>Veterinerler Listesi</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Adı</value>
+  </data>
+  <data name="Qualifications" xml:space="preserve">
+    <value>Yeterlilikler</value>
+  </data>
+  <data name="ClinicAddress" xml:space="preserve">
+    <value>Poliklinik Adresi</value>
+  </data>
+  <data name="ClinicPhoneNumber" xml:space="preserve">
+    <value>Poliklinik Telefon Numarası</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>İşlemler</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Bekliyor</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Onaylı</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Reddedildi</value>
+  </data>
+  <data name="SubmitApplicationButton" xml:space="preserve">
+    <value>Onayla</value>
+  </data>
+  <data name="RejectApplicationButton" xml:space="preserve">
+    <value>Reddet</value>
+  </data>
+  <data name="LoginToManageApprovals" xml:space="preserve">
+    <value>Onayları yönetebilmek için giriş yapın</value>
+  </data>
+  <data name="RegisterNewVeterinarian" xml:space="preserve">
+    <value>Yeni Veteriner Kayıt Et</value>
+  </data>
+  <data name="RegisterAsVeterinarian" xml:space="preserve">
+    <value>Veteriner Olarak Kayıt Ol</value>
+  </data>
+  <data name="ApplicationAlreadySubmitted" xml:space="preserve">
+    <value>Başvurunuzu zaten gönderdiniz. Tekrar başvuru yapamazsınız.</value>
+  </data>
+  <data name="SubmitApplication" xml:space="preserve">
+    <value>Başvuruyu Gönder</value>
+  </data>
+  <data name="ApplicationSubmitted" xml:space="preserve">
+    <value>Başvuru Gönderildi</value>
+  </data>
+</root>
