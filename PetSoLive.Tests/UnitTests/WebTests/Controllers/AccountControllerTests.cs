@@ -100,7 +100,7 @@ public class AccountControllerTests
         };
 
         // Act
-        var result = await _controller.Register(user.Username, user.Email, user.PasswordHash, user.PhoneNumber, user.Address, user.DateOfBirth, user.ProfileImageUrl, user.City, user.District);
+        var result = await _controller.Register(user.Username, user.Email, user.PasswordHash, user.PhoneNumber, user.Address, user.DateOfBirth, user.City, user.District);
 
         // Assert
         var viewResult = Assert.IsType<ViewResult>(result);
@@ -127,7 +127,7 @@ public class AccountControllerTests
         _mockUserService.Setup(s => s.RegisterAsync(It.IsAny<User>())).Returns(Task.CompletedTask);
 
         // Act
-        var result = await _controller.Register(user.Username, user.Email, user.PasswordHash, user.PhoneNumber, user.Address, user.DateOfBirth, user.ProfileImageUrl, user.City, user.District);
+        var result = await _controller.Register(user.Username, user.Email, user.PasswordHash, user.PhoneNumber, user.Address, user.DateOfBirth, user.City, user.District);
 
         // Assert
         var redirectResult = Assert.IsType<RedirectToActionResult>(result);
