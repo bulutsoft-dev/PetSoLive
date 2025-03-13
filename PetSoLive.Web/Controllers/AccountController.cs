@@ -61,7 +61,7 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register(string username, string email, string password, string phoneNumber, string address, DateTime dateOfBirth, string profileImageUrl, string city, string district)
+    public async Task<IActionResult> Register(string username, string email, string password, string phoneNumber, string address, DateTime dateOfBirth, string city, string district)
     {
         if (!ModelState.IsValid)
         {
@@ -69,7 +69,8 @@ public class AccountController : Controller
             ViewData["Districts"] = CityList.GetDistrictsByCity(city);  // Populate districts based on selected city
             return View();
         }
-        profileImageUrl = profileImageUrl ?? string.Empty;
+
+        string profileImageUrl = "https://www.petsolive.com.tr/";
 
         var user = new User
         {
