@@ -1,7 +1,10 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Localization
 @using PetSoLive.Core.Enums
+@using PetSoLive.Web.Controllers
+@inject IStringLocalizer<PetController> Localizer
 @{
-    ViewData["Title"] = "Pet Details";
+    ViewData["Title"] = Localizer["PetDetailsTitle"];
 }
 
 @{
@@ -24,57 +27,60 @@
                             <h3 class="card-title text-primary">@Model.Name</h3>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>Species:</strong> <span class="badge bg-secondary">@Model.Species</span>
+                                    <strong>@Localizer["SpeciesLabel"]</strong> <span class="badge bg-secondary">@Model.Species</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>Breed:</strong> @Model.Breed
+                                    <strong>@Localizer["BreedLabel"]</strong> @Model.Breed
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>Age:</strong> @Model.Age years
+                                    <strong>@Localizer["AgeLabel"]</strong> @Model.Age @Localizer["Years"]
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>Gender:</strong> @Model.Gender
+                                    <strong>@Localizer["GenderLabel"]</strong> @Model.Gender
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>Weight:</strong> @Model.Weight kg
+                                    <strong>@Localizer["WeightLabel"]</strong> @Model.Weight @Localizer["Kg"]
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>Color:</strong> <span class="badge bg-light text-dark">@Model.Color</span>
+                                    <strong>@Localizer["ColorLabel"]</strong> <span class="badge bg-light text-dark">@Model.Color</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>Date of Birth:</strong> @Model.DateOfBirth?.ToString("MM/dd/yyyy")
+                                    <strong>@Localizer["DateOfBirthLabel"]</strong> @Model.DateOfBirth?.ToString("MM/dd/yyyy")
                                 </li>
                                 <li class="list-group-item">
-                                    <strong>Description:</strong> <p>@Model.Description</p>
+                                    <strong>@Localizer["DescriptionLabel"]</strong> <p>@Model.Description</p>
                                 </li>
                                 @if (!string.IsNullOrEmpty(Model.VaccinationStatus))
                                 {
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <strong>Vaccination Status:</strong> <span class="badge bg-success">@Model.VaccinationStatus</span>
+                                        <strong>@Localizer["VaccinationStatusLabel"]</strong> <span class="badge bg-success">@Model.VaccinationStatus</span>
                                     </li>
                                 }
                                 @if (!string.IsNullOrEmpty(Model.MicrochipId))
                                 {
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <strong>Microchip ID:</strong> @Model.MicrochipId
+                                        <strong>@Localizer["MicrochipIdLabel"]</strong> @Model.MicrochipId
                                     </li>
                                 }
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>Neutered:</strong> <span class="badge bg-@(Model.IsNeutered ? "success" : "danger")">@(Model.IsNeutered ? "Yes" : "No")</span>
+                                    <strong>@Localizer["NeuteredLabel"]</strong>
+                                    <span class="badge bg-@(Model.IsNeutered ? "success" : "danger")">
+                                        @(Model.IsNeutered ? Localizer["Yes"] : Localizer["No"])
+                                    </span>
                                 </li>
                             </ul>
 
                             @if (ViewBag.Adoption != null)
                             {
                                 <hr>
-                                <h5 class="text-success">Adoption Details:</h5>
-                                <p><strong>Adopted:</strong> Yes</p>
-                                <p><strong>Adopted by:</strong> @ViewBag.Adoption.User.Username</p>
-                                <p><strong>Adoption Date:</strong> @ViewBag.Adoption.AdoptionDate.ToString("MM/dd/yyyy")</p>
+                                <h5 class="text-success">@Localizer["AdoptionDetailsHeading"]</h5>
+                                <p><strong>@Localizer["AdoptedLabel"]</strong> @Localizer["Yes"]</p>
+                                <p><strong>@Localizer["AdoptedByLabel"]</strong> @ViewBag.Adoption.User.Username</p>
+                                <p><strong>@Localizer["AdoptionDateLabel"]</strong> @ViewBag.Adoption.AdoptionDate.ToString("MM/dd/yyyy")</p>
                             }
                             else
                             {
-                                <p><strong>Adopted:</strong> <span class="badge bg-danger">No</span></p>
+                                <p><strong>@Localizer["AdoptedLabel"]</strong> <span class="badge bg-danger">@Localizer["No"]</span></p>
                             }
                         </div>
                     </div>
@@ -90,67 +96,66 @@
                 <!-- Back to Adoption List Button -->
                 <div class="card text-center shadow-sm">
                     <div class="card-body">
-                        <a asp-controller="Adoption" asp-action="Index" class="btn btn-secondary btn-block">Back to Adoption List</a>
+                        <a asp-controller="Adoption" asp-action="Index" class="btn btn-secondary btn-block">@Localizer["BackToAdoptionList"]</a>
                     </div>
                 </div>
 
                 <!-- Conditional Buttons -->
                 @if (!ViewBag.IsUserLoggedIn)
                 {
-                <div class="card text-center shadow-sm">
-                    <div class="card-body">
-                        <a asp-controller="Account" asp-action="Login" class="btn btn-danger btn-block">You need to log in to adopt a pet</a>
+                    <div class="card text-center shadow-sm">
+                        <div class="card-body">
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-danger btn-block">@Localizer["LoginToAdoptMessage"]</a>
+                        </div>
                     </div>
-                </div>
                 }
                 else
                 {
-                @if (ViewBag.Adoption == null && !ViewBag.IsOwner)
-                {
-                <!-- Check if the user has already submitted an adoption request -->
-                @if (ViewBag.HasAdoptionRequest == true)
-                {
-                <div class="card text-center shadow-sm">
-                    <div class="card-body">
-                        <a href="#" class="btn btn-secondary btn-block disabled" tabindex="-1" aria-disabled="true">
-                            You have already submitted an adoption request for this pet
-                        </a>
-                    </div>
-                </div>
+                    @if (ViewBag.Adoption == null && !ViewBag.IsOwner)
+                    {
+                        <!-- Check if user has existing adoption request -->
+                        @if (ViewBag.HasAdoptionRequest == true)
+                        {
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <a href="#" class="btn btn-secondary btn-block disabled" tabindex="-1" aria-disabled="true">
+                                        @Localizer["AlreadyRequestedMessage"]
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <a asp-controller="Adoption" asp-action="Adopt" asp-route-petId="@Model.Id" class="btn btn-primary btn-block">@Localizer["AdoptButton"]</a>
+                                </div>
+                            </div>
+                        }
+                    }
+                    @if (ViewBag.IsOwner)
+                    {
+                        @if (ViewBag.Adoption == null)
+                        {
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <a asp-controller="Pet" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-block">@Localizer["EditButton"]</a>
+                                    <form asp-controller="Pet" asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-danger btn-block mt-2">@Localizer["DeleteButton"]</button>
+                                    </form>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="card text-center shadow-sm">
+                                <div class="card-body">
+                                    <a href="#" class="btn btn-warning btn-block disabled" tabindex="-1" aria-disabled="true">@Localizer["AlreadyAdoptedMessage"]</a>
+                                </div>
+                            </div>
+                        }
+                    }
                 }
-                else
-                {
-                <div class="card text-center shadow-sm">
-                    <div class="card-body">
-                        <a asp-controller="Adoption" asp-action="Adopt" asp-route-petId="@Model.Id" class="btn btn-primary btn-block">Adopt</a>
-                    </div>
-                </div>
-                }
-                }
-                @if (ViewBag.IsOwner)
-                {
-                @if (ViewBag.Adoption == null)
-                {
-                <div class="card text-center shadow-sm">
-                    <div class="card-body">
-                        <a asp-controller="Pet" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-block">Edit</a>
-                        <form asp-controller="Pet" asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-danger btn-block mt-2">Delete</button>
-                        </form>
-                    </div>
-                </div>
-                }
-                else
-                {
-                <div class="card text-center shadow-sm">
-                    <div class="card-body">
-                        <a href="#" class="btn btn-warning btn-block disabled" tabindex="-1" aria-disabled="true">This pet has already been adopted</a>
-                    </div>
-                </div>
-                }
-                }
-                }
-
             </div>
         </div>
     </div>
@@ -160,41 +165,40 @@
         <div class="col-lg-8">
             <div class="card shadow-lg">
                 <div class="card-header bg-info text-white">
-                    <h5 class="mb-0">Adoption Requests</h5>
+                    <h5 class="mb-0">@Localizer["AdoptionRequestsHeading"]</h5>
                 </div>
                 <div class="card-body">
-                    <!-- Adoption Requests Section -->
                     @if (ViewBag.AdoptionRequests != null && ViewBag.AdoptionRequests.Count > 0)
                     {
-                    <ul class="list-group">
-                        @foreach (var request in ViewBag.AdoptionRequests)
-                        {
-                        <li class="list-group-item mb-3 p-3 shadow-sm">
-                            <div class="d-flex justify-content-between">
-                                <strong>@request.User.Username</strong>
-                                <span class="badge bg-@(request.Status == AdoptionStatus.Pending ? "warning" : (request.Status == AdoptionStatus.Rejected ? "danger" : "success"))">@request.Status</span>
-                            </div>
-                            <p class="mt-2 text-muted">@request.Message</p>
-                            <small class="text-secondary">Requested on: @request.RequestDate.ToString("MM/dd/yyyy")</small>
-
-                            @if (request.Status == AdoptionStatus.Pending && ViewBag.IsOwner)
+                        <ul class="list-group">
+                            @foreach (var request in ViewBag.AdoptionRequests)
                             {
-                            <!-- Only show the approve button if the current user is the owner of the pet -->
-                            <form asp-controller="Adoption" asp-action="ApproveRequest" method="post">
-                                <input type="hidden" name="adoptionRequestId" value="@request.Id" />
-                                <input type="hidden" name="petId" value="@Model.Id" />
-                                <button type="submit" class="btn btn-success mt-2">Approve</button>
-                            </form>
+                                <li class="list-group-item mb-3 p-3 shadow-sm">
+                                    <div class="d-flex justify-content-between">
+                                        <strong>@request.User.Username</strong>
+                                        <span class="badge bg-@(request.Status == AdoptionStatus.Pending ? "warning" : (request.Status == AdoptionStatus.Rejected ? "danger" : "success"))">
+                                    @Localizer[$"AdoptionStatus_{request.Status}"]
+                                </span>
+                                    </div>
+                                    <p class="mt-2 text-muted">@request.Message</p>
+                                    <small class="text-secondary">@Localizer["RequestedOn"]: @request.RequestDate.ToString("MM/dd/yyyy")</small>
+
+                                    @if (request.Status == AdoptionStatus.Pending && ViewBag.IsOwner)
+                                    {
+                                        <form asp-controller="Adoption" asp-action="ApproveRequest" method="post">
+                                            <input type="hidden" name="adoptionRequestId" value="@request.Id" />
+                                            <input type="hidden" name="petId" value="@Model.Id" />
+                                            <button type="submit" class="btn btn-success mt-2">@Localizer["ApproveButton"]</button>
+                                        </form>
+                                    }
+                                </li>
                             }
-                        </li>
-                        }
-                    </ul>
+                        </ul>
                     }
                     else
                     {
-                    <p class="text-muted">No adoption requests yet.</p>
+                        <p class="text-muted">@Localizer["NoAdoptionRequestsMessage"]</p>
                     }
-
                 </div>
             </div>
         </div>
