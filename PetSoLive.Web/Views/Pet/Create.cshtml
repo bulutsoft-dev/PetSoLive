@@ -1,5 +1,9 @@
+@using Microsoft.Extensions.Localization
+@using PetSoLive.Web.Controllers
+@inject IStringLocalizer<PetController> Localizer
+
 @{
-    ViewData["Title"] = "Create Pet for Adoption";
+    ViewData["Title"] = Localizer["CreatePetTitle"];
     Layout = "_Layout";
 }
 
@@ -8,7 +12,7 @@
 }
 
 <div class="pet-page">
-    <h2 class="pet-title">Create Pet for Adoption</h2>
+    <h2 class="pet-title">@Localizer["CreatePetTitle"]</h2>
 
     <div class="pet-container pet-form">
         @if (!ViewData.ModelState.IsValid)
@@ -26,94 +30,94 @@
         <form asp-controller="Pet" asp-action="Create" method="post" enctype="multipart/form-data">
             <!-- Pet Name -->
             <div class="form-group">
-                <label for="Name">Pet Name</label>
+                <label for="Name">@Localizer["PetName"]</label>
                 <input type="text" class="form-control" id="Name" name="Name" required />
             </div>
 
             <!-- Species -->
             <div class="form-group">
-                <label for="Species">Species</label>
+                <label for="Species">@Localizer["Species"]</label>
                 <input type="text" class="form-control" id="Species" name="Species" required />
             </div>
 
             <!-- Breed -->
             <div class="form-group">
-                <label for="Breed">Breed</label>
+                <label for="Breed">@Localizer["Breed"]</label>
                 <input type="text" class="form-control" id="Breed" name="Breed" required />
             </div>
 
             <!-- Age -->
             <div class="form-group">
-                <label for="Age">Age</label>
+                <label for="Age">@Localizer["Age"]</label>
                 <input type="number" class="form-control" id="Age" name="Age" required />
             </div>
 
             <!-- Gender -->
             <div class="form-group">
-                <label>Gender</label>
+                <label>@Localizer["Gender"]</label>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" id="Male" name="Gender" value="Male" required />
-                    <label class="form-check-label" for="Male">Male</label>
+                    <label class="form-check-label" for="Male">@Localizer["Male"]</label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" id="Female" name="Gender" value="Female" required />
-                    <label class="form-check-label" for="Female">Female</label>
+                    <label class="form-check-label" for="Female">@Localizer["Female"]</label>
                 </div>
             </div>
 
             <!-- Weight -->
             <div class="form-group">
-                <label for="Weight">Weight</label>
+                <label for="Weight">@Localizer["Weight"]</label>
                 <input type="number" step="0.1" class="form-control" id="Weight" name="Weight" required />
             </div>
 
             <!-- Color -->
             <div class="form-group">
-                <label for="Color">Color</label>
+                <label for="Color">@Localizer["Color"]</label>
                 <input type="text" class="form-control" id="Color" name="Color" required />
             </div>
 
             <!-- Date of Birth -->
             <div class="form-group">
-                <label for="DateOfBirth">Date of Birth</label>
+                <label for="DateOfBirth">@Localizer["DateOfBirth"]</label>
                 <input type="date" class="form-control" id="DateOfBirth" name="DateOfBirth" required />
             </div>
 
             <!-- Description -->
             <div class="form-group">
-                <label for="Description">Description</label>
+                <label for="Description">@Localizer["Description"]</label>
                 <textarea class="form-control" id="Description" name="Description" rows="3" required></textarea>
             </div>
 
             <!-- Image URL -->
             <div class="form-group">
-                <label for="ImageUrl">Image URL</label>
+                <label for="ImageUrl">@Localizer["ImageUrl"]</label>
                 <input type="url" class="form-control" id="ImageUrl" name="ImageUrl" />
             </div>
 
             <!-- Vaccination Status -->
             <div class="form-group">
-                <label for="VaccinationStatus">Vaccination Status</label>
+                <label for="VaccinationStatus">@Localizer["VaccinationStatus"]</label>
                 <input type="text" class="form-control" id="VaccinationStatus" name="VaccinationStatus" />
             </div>
 
             <!-- Microchip ID -->
             <div class="form-group">
-                <label for="MicrochipId">Microchip ID</label>
+                <label for="MicrochipId">@Localizer["MicrochipId"]</label>
                 <input type="text" class="form-control" id="MicrochipId" name="MicrochipId" />
             </div>
 
             <!-- Is Neutered -->
             <div class="form-group">
-                <label for="IsNeutered">Is Neutered?</label>
+                <label for="IsNeutered">@Localizer["IsNeutered"]</label>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="IsNeutered" name="IsNeutered" value="true" />
-                    <label class="form-check-label" for="IsNeutered">Yes, this pet is neutered.</label>
+                    <label class="form-check-label" for="IsNeutered">@Localizer["IsNeuteredYes"]</label>
                 </div>
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="btn-pet">Create Pet</button>
+            <button type="submit" class="btn-pet">@Localizer["CreatePetButton"]</button>
         </form>
     </div>
 </div>

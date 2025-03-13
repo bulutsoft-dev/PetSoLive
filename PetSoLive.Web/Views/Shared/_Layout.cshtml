@@ -1,22 +1,26 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IViewLocalizer Localizer
+<!DOCTYPE html>
+<html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - PetSoLive</title>
 
     <meta name="google-site-verification" content="eWJ1V70hKDXQtBXfannf1JqGRcRbSXUXnvaQk7UNeqM" />
-    <meta name="description" content="PetSoLive is an innovative digital platform designed to improve animal welfare by connecting pet owners, veterinarians, shelters, and the broader community." />
+    <meta name="description" content="@Localizer["PetSoLive Description"]" />
     <meta name="author" content="PetSoLive" />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#343a40" />
     <meta name="msapplication-TileColor" content="#343a40" />
     <meta name="msapplication-TileImage" content="~/img/favicon/ms-icon-144x144.png" />
     <meta name="msapplication-config" content="~/img/favicon/browserconfig.xml" />
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/adoption.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/helpRequest.css" asp-append-version="true" />
@@ -35,111 +39,130 @@
     <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3">
         <div class="container-fluid">
             <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">
-                PetSoLive
+                @Localizer["PetSoLive"]
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="@Localizer["Toggle Navigation"]">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav me-auto">
                     @* Session Kontrolü *@
                     @{
-                    var username = Context.Session.GetString("Username");
+                        var username = Context.Session.GetString("Username");
                     }
                     @if (string.IsNullOrEmpty(username))
                     {
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Home" asp-action="Index">
-                            <i class="bi bi-house-door-fill"></i> Home
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Home" asp-action="About">
-                            <i class="bi bi-info-circle-fill"></i> About
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Adoption" asp-action="Index">
-                            <i class="bi bi-clipboard-heart-fill"></i> Adoption
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="LostPetAd" asp-action="Index">
-                            <i class="bi bi-bookmark-heart-fill"></i> Lost Pet Ads
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="HelpRequest" asp-action="Index">
-                            <i class="bi bi-chat-square-heart-fill"></i> Help Requests
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-door-fill"></i> @Localizer["Home"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="About">
+                                <i class="bi bi-info-circle-fill"></i> @Localizer["About"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Adoption" asp-action="Index">
+                                <i class="bi bi-clipboard-heart-fill"></i> @Localizer["Adoption"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="LostPetAd" asp-action="Index">
+                                <i class="bi bi-bookmark-heart-fill"></i> @Localizer["Lost Pet Ads"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="HelpRequest" asp-action="Index">
+                                <i class="bi bi-chat-square-heart-fill"></i> @Localizer["Help Requests"]
+                            </a>
+                        </li>
                     }
                     else
                     {
-<li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Home" asp-action="Index">
-                            <i class="bi bi-house-door-fill"></i> Home
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Home" asp-action="About">
-                            <i class="bi bi-info-circle-fill"></i> About
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Adoption" asp-action="Index">
-                            <i class="bi bi-clipboard-heart-fill"></i> Adoption
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="LostPetAd" asp-action="Index">
-                            <i class="bi bi-bookmark-heart-fill"></i> Lost Pet Ads
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="HelpRequest" asp-action="Index">
-                            <i class="bi bi-chat-square-heart-fill"></i> Help Requests
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Veterinarian" asp-action="Index">
-                            <i class="bi bi-gear-fill"></i> Veterinarians Management
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-door-fill"></i> @Localizer["Home"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="About">
+                                <i class="bi bi-info-circle-fill"></i> @Localizer["About"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Adoption" asp-action="Index">
+                                <i class="bi bi-clipboard-heart-fill"></i> @Localizer["Adoption"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="LostPetAd" asp-action="Index">
+                                <i class="bi bi-bookmark-heart-fill"></i> @Localizer["Lost Pet Ads"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="HelpRequest" asp-action="Index">
+                                <i class="bi bi-chat-square-heart-fill"></i> @Localizer["Help Requests"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Veterinarian" asp-action="Index">
+                                <i class="bi bi-gear-fill"></i> @Localizer["Veterinarians Management"]
+                            </a>
+                        </li>
                     }
                 </ul>
                 <ul class="navbar-nav">
                     @if (string.IsNullOrEmpty(username))
                     {
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Account" asp-action="Login">
-                            <i class="bi bi-box-arrow-in-right"></i> Login
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Account" asp-action="Register">
-                            <i class="bi bi-pencil-square"></i> Register
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Account" asp-action="Login">
+                                <i class="bi bi-box-arrow-in-right"></i> @Localizer["Login"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Account" asp-action="Register">
+                                <i class="bi bi-pencil-square"></i> @Localizer["Register"]
+                            </a>
+                        </li>
                     }
                     else
                     {
-                    <li class="nav-item">
+                        <li class="nav-item">
                         <span class="nav-link text-white">
-                            <i class="bi bi-person-fill"></i> Welcome, @username
+                            <i class="bi bi-person-fill"></i> @Localizer["Welcome"] @username
                         </span>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Account" asp-action="Logout">
-                            <i class="bi bi-box-arrow-left"></i> Logout
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Veterinarian" asp-action="Register">
-                            <i class="bi bi-clipboard-plus-fill"></i> Veterinarian Register
-                        </a>
-                    </li>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Account" asp-action="Logout">
+                                <i class="bi bi-box-arrow-left"></i> @Localizer["Logout"]
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Veterinarian" asp-action="Register">
+                                <i class="bi bi-clipboard-plus-fill"></i> @Localizer["Veterinarian Register"]
+                            </a>
+                        </li>
                     }
+                    <li class="nav-item">
+                        @{
+                            var currentCulture = CultureInfo.CurrentCulture.Name;
+                            var newCulture = currentCulture == "en-US" ? "tr-TR" : "en-US";
+                            var flag = currentCulture switch
+                            {
+                                "en-US" => "🇺🇸",
+                                "tr-TR" => "🇹🇷",
+                                _ => "🌐"
+                            };
+                        }
+                        <a class="nav-link text-white"
+                           asp-controller="Home"
+                           asp-action="SetLanguage"
+                           asp-route-culture="@newCulture"
+                           asp-route-returnUrl="@Context.Request.Path">
+                            @flag
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -157,53 +180,47 @@
         <div class="row">
             <!-- About Section -->
             <div class="col-md-4 mb-4">
-                <h5 class="text-uppercase fw-bold">About PetSoLive</h5>
+                <h5 class="text-uppercase fw-bold">@Localizer["footerDescription"]</h5>
                 <p>
-                    PetSoLive is dedicated to creating a community for pet lovers, providing resources for adoption, lost pet ads, and help requests.
+                    @Localizer["footerDescriptionContent"]
                 </p>
             </div>
             <!-- Quick Links Section -->
             <div class="col-md-4 mb-4">
-                <h5 class="text-uppercase fw-bold">Quick Links</h5>
+                <h5 class="text-uppercase fw-bold">@Localizer["Quick Links"]</h5>
                 <ul class="list-unstyled">
-                    <li><a href="@Url.Action("Index", "Home")"><i class="bi bi-house-door-fill"></i> Home</a></li>
-                    <li><a href="@Url.Action("About", "Home")"><i class="bi bi-info-circle-fill"></i> About Us</a></li>
-                    <li><a href="@Url.Action("Index", "Adoption")"><i class="bi bi-clipboard-heart-fill"></i> Adoption</a></li>
-                    <li><a href="@Url.Action("Index", "LostPetAd")"><i class="bi bi-bookmark-heart-fill"></i> Lost Pet Ads</a></li>
-                    <li><a href="@Url.Action("Index", "HelpRequest")"><i class="bi bi-chat-square-heart-fill"></i> Help Requests</a></li>
+                    <li><a href="@Url.Action("Index", "Home")"><i class="bi bi-house-door-fill"></i> @Localizer["Home"]</a></li>
+                    <li><a href="@Url.Action("About", "Home")"><i class="bi bi-info-circle-fill"></i> @Localizer["About Us"]</a></li>
+                    <li><a href="@Url.Action("Index", "Adoption")"><i class="bi bi-clipboard-heart-fill"></i> @Localizer["Adoption"]</a></li>
+                    <li><a href="@Url.Action("Index", "LostPetAd")"><i class="bi bi-bookmark-heart-fill"></i> @Localizer["Lost Pet Ads"]</a></li>
+                    <li><a href="@Url.Action("Index", "HelpRequest")"><i class="bi bi-chat-square-heart-fill"></i> @Localizer["Help Requests"]</a></li>
                 </ul>
             </div>
             <!-- Contact Section -->
             <div class="col-md-4 mb-4">
-                <h5 class="text-uppercase fw-bold">Contact Us</h5>
-                <p><i class="bi bi-envelope"></i> <strong>Email:</strong> petsolivesoft@gmail.com</p>
-                <p><i class="bi bi-phone"></i> <strong>Phone:</strong> +90 534 639 22 60</p>
-                <p><i class="bi bi-geo-alt"></i> <strong>Address:</strong> Muradiye, Manisa, Turkey</p>
+                <h5 class="text-uppercase fw-bold">@Localizer["Contact Us"]</h5>
+                <p><i class="bi bi-envelope"></i> <strong>@Localizer["Email"]:</strong> petsolivesoft@gmail.com</p>
+                <p><i class="bi bi-phone"></i> <strong>@Localizer["Phone"]:</strong> +90 534 639 22 60</p>
+                <p><i class="bi bi-geo-alt"></i> <strong>@Localizer["Address"]:</strong> Muradiye, Manisa, Turkey</p>
             </div>
         </div>
     </div>
 
     <div class="footer-bottom">
         <div class="container d-flex justify-content-between align-items-center">
-            <p class="mb-0">&copy; 2024 PetSoLive - BulutSoft Bilgi Teknolojileri A.Ş. All rights reserved.</p>
+            <p class="mb-0">&copy; 2024 PetSoLive - BulutSoft Bilgi Teknolojileri A.Ş. @Localizer["All rights reserved."]</p>
             <div class="social-links">
                 <a href="https://www.facebook.com" class="me-3" target="_blank" title="Facebook"><i class="bi bi-facebook"></i></a>
                 <a href="https://www.twitter.com" class="me-3" target="_blank" title="Twitter"><i class="bi bi-twitter"></i></a>
-                <a href="https://www.instagram.com" class="me-3" target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
-                <a href="https://www.linkedin.com" target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                <a href="https://www.instagram.com" target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
             </div>
         </div>
     </div>
 </footer>
 
-
-
-
-
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
-
 @RenderSection("Scripts", required: false)
 </body>
 </html>

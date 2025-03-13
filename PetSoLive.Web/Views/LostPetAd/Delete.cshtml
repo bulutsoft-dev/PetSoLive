@@ -1,19 +1,24 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@using PetSoLive.Web.Controllers
+@inject IStringLocalizer<LostPetAdController> Localizer
+
 @{
-ViewData["Title"] = "Delete Lost Pet Ad";
+    ViewData["Title"] = Localizer["DeleteTitle"];
 }
 
 <h2>@ViewData["Title"]</h2>
 
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">Are you sure you want to delete the lost pet ad?</h5>
-        <p><strong>Pet Name:</strong> @Model.PetName</p>
-        <p><strong>Location:</strong> @Model.LastSeenLocation</p>
-        <p><strong>Posted on:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy")</p>
+        <h5 class="card-title">@Localizer["DeleteConfirmation"]</h5>
+        <p><strong>@Localizer["PetName"]:</strong> @Model.PetName</p>
+        <p><strong>@Localizer["Location"]:</strong> @Model.LastSeenLocation</p>
+        <p><strong>@Localizer["PostedOn"]:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy")</p>
 
         <form method="post" asp-action="Delete" asp-route-id="@Model.Id">
-            <input type="submit" value="Yes, delete" class="btn btn-danger" />
-            <a href="@Url.Action("Index", "LostPetAd")" class="btn btn-secondary">Cancel</a>
+            <input type="submit" value="@Localizer["YesDelete"]" class="btn btn-danger" />
+            <a href="@Url.Action("Index", "LostPetAd")" class="btn btn-secondary">@Localizer["Cancel"]</a>
         </form>
     </div>
 </div>

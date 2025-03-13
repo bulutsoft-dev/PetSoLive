@@ -14,7 +14,7 @@ public class AccountControllerTests
     public AccountControllerTests()
     {
         _mockUserService = new Mock<IUserService>();
-        _controller = new AccountController(_mockUserService.Object);
+        _controller = new AccountController(_mockUserService.Object, null);
 
         // Mocking HttpContext and Session
         var httpContext = new DefaultHttpContext();

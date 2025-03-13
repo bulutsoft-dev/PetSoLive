@@ -1,5 +1,10 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@using PetSoLive.Web.Controllers
+@inject IStringLocalizer<LostPetAdController> Localizer
+
 @{
-    ViewData["Title"] = "Lost Pet Ads";
+    ViewData["Title"] = Localizer["Title"];
     Layout = "_Layout";
 }
 
@@ -8,11 +13,11 @@
 }
 
 <div class="lostpet-page">
-    <h2 class="lostpet-title">@ViewData["Title"]</h2>
+    <h2 class="lostpet-title">@Localizer["TitleIndex"]</h2>
 
     <div class="container">
         <a href="@Url.Action("Create", "LostPetAd")" class="btn btn-success mb-3">
-            Create New Lost Pet Ad
+            @Localizer["CreateNewAd"]
         </a>
 
         @if (TempData["SuccessMessage"] != null)
@@ -36,11 +41,11 @@
                     <div class="lostpet-card">
                         @if (!string.IsNullOrEmpty(ad.ImageUrl))
                         {
-                            <img src="@ad.ImageUrl" alt="Pet Image">
+                            <img src="@ad.ImageUrl" alt="@Localizer["PetImage"]">
                         }
                         else
                         {
-                            <img src="https://via.placeholder.com/300" alt="No Image Available">
+                            <img src="https://via.placeholder.com/300" alt="@Localizer["NoImageAvailable"]">
                         }
                         <div class="card-body">
                             <h5 class="card-title">@ad.PetName</h5>
@@ -50,7 +55,7 @@
                             </p>
                             <a href="@Url.Action("Details", "LostPetAd", new { id = ad.Id })"
                                class="btn btn-primary">
-                                View Details
+                                @Localizer["ViewDetails"]
                             </a>
                         </div>
                     </div>

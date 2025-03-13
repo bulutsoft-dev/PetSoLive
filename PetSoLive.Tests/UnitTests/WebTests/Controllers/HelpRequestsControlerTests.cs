@@ -11,6 +11,8 @@ using PetSoLive.Business.Services;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Enums;
 using PetSoLive.Core.Interfaces;
+using PetSoLive.Web.Controllers;
+
 namespace PetSoLive.Tests.Controllers;
 
 public class HelpRequestsControlerTests
@@ -37,7 +39,8 @@ public class HelpRequestsControlerTests
             _userServiceMock.Object,
             _emailServiceMock.Object,
             _veterinarianServiceMock.Object,
-            _commentServiceMock.Object
+            _commentServiceMock.Object,
+            null // IMapper is not used in the controller
         );
 
         // Setup a fake HTTP context with a test session

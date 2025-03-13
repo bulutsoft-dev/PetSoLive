@@ -1,11 +1,15 @@
 @model PetSoLive.Core.Entities.HelpRequest
+@using Microsoft.Extensions.Localization
+@using PetSoLive.Web.Controllers
+@inject IStringLocalizer<VeterinarianController> Localizer
+
 @{
-    ViewData["Title"] = "Register as Veterinarian";
+    ViewData["Title"] = Localizer["RegisterAsVeterinarian"];
     Layout = "_Layout";
 }
 
 @section HeadSection {
-        <link rel="stylesheet" href="~/css/veterinarian.css?v=1.1" />
+    <link rel="stylesheet" href="~/css/veterinarian.css?v=1.1" />
 }
 
 <div class="veterinarian-page">
@@ -14,35 +18,35 @@
 
         @if (ViewBag.ApplicationSubmitted != null && ViewBag.ApplicationSubmitted)
         {
-                <div class="alert alert-info">
-                    You have already submitted your application. You cannot apply again.
-                </div>
+            <div class="alert alert-info">
+                @Localizer["ApplicationAlreadySubmitted"]
+            </div>
         }
 
         <form method="post">
             <div class="form-group">
-                <label for="qualifications">Qualifications</label>
+                <label for="qualifications">@Localizer["Qualifications"]</label>
                 <input type="text" class="form-control" id="qualifications" name="qualifications" required />
             </div>
             <div class="form-group">
-                <label for="clinicAddress">Clinic Address</label>
+                <label for="clinicAddress">@Localizer["ClinicAddress"]</label>
                 <input type="text" class="form-control" id="clinicAddress" name="clinicAddress" required />
             </div>
             <div class="form-group">
-                <label for="clinicPhoneNumber">Clinic Phone Number</label>
+                <label for="clinicPhoneNumber">@Localizer["ClinicPhoneNumber"]</label>
                 <input type="text" class="form-control" id="clinicPhoneNumber" name="clinicPhoneNumber" required />
             </div>
 
             <button type="submit" class="btn-vet"
-            @(ViewBag.ApplicationSubmitted != null && ViewBag.ApplicationSubmitted ? "disabled" : "")>
+                    @(ViewBag.ApplicationSubmitted != null && ViewBag.ApplicationSubmitted ? "disabled" : "")>
                 @(ViewBag.ApplicationSubmitted != null && ViewBag.ApplicationSubmitted
-                        ? "Application Submitted"
-                        : "Submit Application")
+                    ? Localizer["ApplicationSubmitted"]
+                    : Localizer["SubmitApplication"])
             </button>
         </form>
     </div>
 </div>
 
 @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }

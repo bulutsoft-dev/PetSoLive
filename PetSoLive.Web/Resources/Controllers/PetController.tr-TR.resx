@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <data name="CreatePetTitle" xml:space="preserve">
+    <value>Evlat Edinme İçin Evcil Hayvan Oluştur</value>
+  </data>
+    <data name="PetName" xml:space="preserve">
+    <value>Evcil Hayvan Adı</value>
+  </data>
+    <data name="Species" xml:space="preserve">
+    <value>Tür</value>
+  </data>
+    <data name="Breed" xml:space="preserve">
+    <value>Cins</value>
+  </data>
+    <data name="Age" xml:space="preserve">
+    <value>Yaş</value>
+  </data>
+    <data name="Gender" xml:space="preserve">
+    <value>Cinsiyet</value>
+  </data>
+    <data name="Male" xml:space="preserve">
+    <value>Erkek</value>
+  </data>
+    <data name="Female" xml:space="preserve">
+    <value>Dişi</value>
+  </data>
+    <data name="Weight" xml:space="preserve">
+    <value>Ağırlık</value>
+  </data>
+    <data name="Color" xml:space="preserve">
+    <value>Renk</value>
+  </data>
+    <data name="DateOfBirth" xml:space="preserve">
+    <value>Doğum Tarihi</value>
+  </data>
+    <data name="Description" xml:space="preserve">
+    <value>Açıklama</value>
+  </data>
+    <data name="ImageUrl" xml:space="preserve">
+    <value>Resim URL</value>
+  </data>
+    <data name="VaccinationStatus" xml:space="preserve">
+    <value>Aşı Durumu</value>
+  </data>
+    <data name="MicrochipId" xml:space="preserve">
+    <value>Mikroçip ID</value>
+  </data>
+    <data name="IsNeutered" xml:space="preserve">
+    <value>Kısırlaştırıldı mı?</value>
+  </data>
+    <data name="IsNeuteredYes" xml:space="preserve">
+    <value>Evet, bu evcil hayvan kısırlaştırıldı.</value>
+  </data>
+    <data name="CreatePetButton" xml:space="preserve">
+    <value>Evcil Hayvan Oluştur</value>
+  </data>
+
+  <!-- Diğer mevcut veriler -->
+  <data name="DeletePetTitle" xml:space="preserve">
+    <value>Evcil Hayvanı Sil</value>
+  </data>
+  <data name="DeleteConfirmationMessage" xml:space="preserve">
+    <value>&lt;strong&gt;{0}&lt;/strong&gt; isimli evcil hayvanı silmek istediğinizden emin misiniz?</value>
+  </data>
+  <data name="DeleteButton" xml:space="preserve">
+    <value>Sil</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>İptal</value>
+  </data>
+
+
+  <data name="PetDetailsTitle" xml:space="preserve">
+    <value>Evcil Hayvan Detayları</value>
+</data>
+  <data name="SpeciesLabel" xml:space="preserve">
+    <value>Tür</value>
+</data>
+  <data name="BreedLabel" xml:space="preserve">
+    <value>Irk</value>
+</data>
+  <data name="AgeLabel" xml:space="preserve">
+    <value>Yaş</value>
+</data>
+  <data name="Years" xml:space="preserve">
+    <value>Yıl</value>
+</data>
+  <data name="GenderLabel" xml:space="preserve">
+    <value>Cinsiyet</value>
+</data>
+  <data name="WeightLabel" xml:space="preserve">
+    <value>Ağırlık</value>
+</data>
+  <data name="Kg" xml:space="preserve">
+    <value>Kg</value>
+</data>
+  <data name="ColorLabel" xml:space="preserve">
+    <value>Renk</value>
+</data>
+  <data name="DateOfBirthLabel" xml:space="preserve">
+    <value>Doğum Tarihi</value>
+</data>
+  <data name="DescriptionLabel" xml:space="preserve">
+    <value>Açıklama</value>
+</data>
+  <data name="VaccinationStatusLabel" xml:space="preserve">
+    <value>Aşılama Durumu</value>
+</data>
+  <data name="MicrochipIdLabel" xml:space="preserve">
+    <value>Mikroçip Numarası</value>
+</data>
+  <data name="NeuteredLabel" xml:space="preserve">
+    <value>Kısırlaştırılmış</value>
+</data>
+  <data name="Yes" xml:space="preserve">
+    <value>Evet</value>
+</data>
+  <data name="No" xml:space="preserve">
+    <value>Hayır</value>
+</data>
+  <data name="AdoptionDetailsHeading" xml:space="preserve">
+    <value>Evlat Edinme Detayları</value>
+</data>
+  <data name="AdoptedLabel" xml:space="preserve">
+    <value>Evlat Edinildi</value>
+</data>
+  <data name="AdoptedByLabel" xml:space="preserve">
+    <value>Evlat Edinen Kişi</value>
+</data>
+  <data name="AdoptionDateLabel" xml:space="preserve">
+    <value>Evlat Edinme Tarihi</value>
+</data>
+  <data name="BackToAdoptionList" xml:space="preserve">
+    <value>Evlat Edinme Listesine Dön</value>
+</data>
+  <data name="LoginToAdoptMessage" xml:space="preserve">
+    <value>Evlat Edinmek İçin Giriş Yapın</value>
+</data>
+  <data name="AlreadyRequestedMessage" xml:space="preserve">
+    <value>Bu Evcil Hayvan İçin Zaten Talep Oluşturuldu</value>
+</data>
+  <data name="AdoptButton" xml:space="preserve">
+    <value>Evlat Edin</value>
+</data>
+  <data name="EditButton" xml:space="preserve">
+    <value> Düzenle</value>
+</data>
+  <data name="DeleteButton" xml:space="preserve">
+    <value>Sil</value>
+</data>
+  <data name="AlreadyAdoptedMessage" xml:space="preserve">
+    <value>Bu Evcil Hayvan Zaten Evlat Edinilmiş</value>
+</data>
+  <data name="AdoptionRequestsHeading" xml:space="preserve">
+    <value>Evlat Edinme Talepleri</value>
+</data>
+  <data name="AdoptionStatus_Pending" xml:space="preserve">
+    <value>Bekliyor</value>
+</data>
+  <data name="AdoptionStatus_Rejected" xml:space="preserve">
+    <value>Reddedildi</value>
+</data>
+  <data name="AdoptionStatus_Approved" xml:space="preserve">
+    <value>Kabul Edildi</value>
+</data>
+  <data name="NoAdoptionRequestsMessage" xml:space="preserve">
+    <value>Henüz Evlat Edinme Talebi Yok</value>
+</data>
+  <data name="RequestedOn" xml:space="preserve">
+    <value>Talep Tarihi</value>
+</data>
+  <data name="ApproveButton" xml:space="preserve">
+    <value>Onayla</value>
+</data>
+
+
+
+  <data name="EditPetTitle" xml:space="preserve">
+    <value>Evcil Hayvanı Düzenle</value>
+</data>
+  <data name="EditPetFormHeading" xml:space="preserve">
+    <value>Evcil Hayvanı Düzenle</value>
+</data>
+  <data name="NameLabel" xml:space="preserve">
+    <value>Ad</value>
+</data>
+  <data name="SpeciesLabel" xml:space="preserve">
+    <value>Tür</value>
+</data>
+  <data name="BreedLabel" xml:space="preserve">
+    <value>Irk</value>
+</data>
+  <data name="AgeLabel" xml:space="preserve">
+    <value>Yaş</value>
+</data>
+  <data name="GenderLabel" xml:space="preserve">
+    <value>Cinsiyet</value>
+</data>
+  <data name="WeightLabel" xml:space="preserve">
+    <value>Ağırlık</value>
+</data>
+  <data name="ColorLabel" xml:space="preserve">
+    <value>Renk</value>
+</data>
+  <data name="DateOfBirthLabel" xml:space="preserve">
+    <value>Doğum Tarihi</value>
+</data>
+  <data name="DescriptionLabel" xml:space="preserve">
+    <value>Açıklama</value>
+</data>
+  <data name="VaccinationStatusLabel" xml:space="preserve">
+    <value>Aşılama Durumu</value>
+</data>
+  <data name="MicrochipIdLabel" xml:space="preserve">
+    <value>Mikroçip Numarası</value>
+</data>
+  <data name="IsNeuteredLabel" xml:space="preserve">
+    <value>Kısırlaştırılmış mı?</value>
+</data>
+  <data name="IsNeuteredYes" xml:space="preserve">
+    <value>Evet, bu evcil hayvan kısırlaştırılmıştır.</value>
+</data>
+  <data name="ImageUrlLabel" xml:space="preserve">
+    <value>Resim URL'si</value>
+</data>
+  <data name="SaveChangesButton" xml:space="preserve">
+    <value>Değişiklikleri Kaydet</value>
+</data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>İptal</value>
+</data>
+  <data name="ValidationErrorTitle" xml:space="preserve">
+    <value>Hata!</value>
+</data>
+  <data name="ValidationErrorMessage" xml:space="preserve">
+    <value>Formda bazı hatalar var. Lütfen tüm alanları kontrol edin.</value>
+</data>
+  <data name="RequiredFieldMessage" xml:space="preserve">
+    <value>Bu alan zorunludur.</value>
+</data>
+  <data name="FormErrorMessage" xml:space="preserve">
+    <value>Form gönderilirken bir hata oluştu. Lütfen tekrar deneyin.</value>
+</data>
+
+</root>

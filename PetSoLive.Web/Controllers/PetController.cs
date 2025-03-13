@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
 
@@ -11,19 +12,22 @@ namespace PetSoLive.Web.Controllers
         private readonly IAdoptionService _adoptionService;
         private readonly IAdoptionRequestRepository _adoptionRequestRepository;
         private readonly IEmailService _emailService;
+        private readonly IStringLocalizer<LostPetAdController> _localizer;
 
         public PetController(
             IPetService petService, 
             IUserService userService, 
             IAdoptionService adoptionService, 
             IAdoptionRequestRepository adoptionRequestRepository, 
-            IEmailService emailService)
+            IEmailService emailService,
+            IStringLocalizer<LostPetAdController> localizer)
         {
             _petService = petService;
             _userService = userService;
             _adoptionService = adoptionService;
             _adoptionRequestRepository = adoptionRequestRepository;
             _emailService = emailService;
+            _localizer = localizer;
         }
 
         private async Task<User> GetLoggedInUserAsync()

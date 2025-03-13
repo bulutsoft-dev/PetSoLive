@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <data name="CreatePetTitle" xml:space="preserve">
+    <value>Create Pet for Adoption</value>
+  </data>
+    <data name="PetName" xml:space="preserve">
+    <value>Pet Name</value>
+  </data>
+    <data name="Species" xml:space="preserve">
+    <value>Species</value>
+  </data>
+    <data name="Breed" xml:space="preserve">
+    <value>Breed</value>
+  </data>
+    <data name="Age" xml:space="preserve">
+    <value>Age</value>
+  </data>
+    <data name="Gender" xml:space="preserve">
+    <value>Gender</value>
+  </data>
+    <data name="Male" xml:space="preserve">
+    <value>Male</value>
+  </data>
+    <data name="Female" xml:space="preserve">
+    <value>Female</value>
+  </data>
+    <data name="Weight" xml:space="preserve">
+    <value>Weight</value>
+  </data>
+    <data name="Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+    <data name="DateOfBirth" xml:space="preserve">
+    <value>Date of Birth</value>
+  </data>
+    <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+    <data name="ImageUrl" xml:space="preserve">
+    <value>Image URL</value>
+  </data>
+    <data name="VaccinationStatus" xml:space="preserve">
+    <value>Vaccination Status</value>
+  </data>
+    <data name="MicrochipId" xml:space="preserve">
+    <value>Microchip ID</value>
+  </data>
+    <data name="IsNeutered" xml:space="preserve">
+    <value>Is Neutered?</value>
+  </data>
+    <data name="IsNeuteredYes" xml:space="preserve">
+    <value>Yes, this pet is neutered.</value>
+  </data>
+    <data name="CreatePetButton" xml:space="preserve">
+    <value>Create Pet</value>
+  </data>
+
+
+  <!-- Diğer mevcut veriler -->
+  <data name="DeletePetTitle" xml:space="preserve">
+    <value>Delete Pet</value>
+  </data>
+  <data name="DeleteConfirmationMessage" xml:space="preserve">
+    <value>Are you sure you want to delete the pet &lt;strong&gt;{0}&lt;/strong&gt;?</value>
+  </data>
+  <data name="DeleteButton" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+
+
+
+  <data name="PetDetailsTitle" xml:space="preserve">
+    <value>Pet Details</value>
+  </data>
+  <data name="SpeciesLabel" xml:space="preserve">
+    <value>Species</value>
+  </data>
+  <data name="BreedLabel" xml:space="preserve">
+    <value>Breed</value>
+  </data>
+  <data name="AgeLabel" xml:space="preserve">
+    <value>Age</value>
+  </data>
+  <data name="Years" xml:space="preserve">
+    <value>years</value>
+  </data>
+  <data name="GenderLabel" xml:space="preserve">
+    <value>Gender</value>
+  </data>
+  <data name="WeightLabel" xml:space="preserve">
+    <value>Weight</value>
+  </data>
+  <data name="Kg" xml:space="preserve">
+    <value>kg</value>
+  </data>
+  <data name="ColorLabel" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="DateOfBirthLabel" xml:space="preserve">
+    <value>Date of Birth</value>
+  </data>
+  <data name="DescriptionLabel" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="VaccinationStatusLabel" xml:space="preserve">
+    <value>Vaccination Status</value>
+  </data>
+  <data name="MicrochipIdLabel" xml:space="preserve">
+    <value>Microchip ID</value>
+  </data>
+  <data name="NeuteredLabel" xml:space="preserve">
+    <value>Neutered</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="AdoptionDetailsHeading" xml:space="preserve">
+    <value>Adoption Details</value>
+  </data>
+  <data name="AdoptedLabel" xml:space="preserve">
+    <value>Adopted</value>
+  </data>
+  <data name="AdoptedByLabel" xml:space="preserve">
+    <value>Adopted By</value>
+  </data>
+  <data name="AdoptionDateLabel" xml:space="preserve">
+    <value>Adoption Date</value>
+  </data>
+  <data name="BackToAdoptionList" xml:space="preserve">
+    <value>Back to Adoption List</value>
+  </data>
+  <data name="LoginToAdoptMessage" xml:space="preserve">
+    <value>Please log in to adopt</value>
+  </data>
+  <data name="AdoptButton" xml:space="preserve">
+    <value>Adopt</value>
+  </data>
+  <data name="EditButton" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="DeleteButton" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="AlreadyRequestedMessage" xml:space="preserve">
+    <value>You have already requested adoption</value>
+  </data>
+  <data name="AlreadyAdoptedMessage" xml:space="preserve">
+    <value>This pet has already been adopted</value>
+  </data>
+  <data name="AdoptionRequestsHeading" xml:space="preserve">
+    <value>Adoption Requests</value>
+  </data>
+  <data name="AdoptionStatus_Pending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="AdoptionStatus_Approved" xml:space="preserve">
+    <value>Approved</value>
+  </data>
+  <data name="AdoptionStatus_Rejected" xml:space="preserve">
+    <value>Rejected</value>
+  </data>
+  <data name="RequestedOn" xml:space="preserve">
+    <value>Requested On</value>
+  </data>
+  <data name="ApproveButton" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="NoAdoptionRequestsMessage" xml:space="preserve">
+    <value>No adoption requests</value>
+  </data>
+
+
+  <data name="EditPetTitle" xml:space="preserve">
+    <value>Edit Pet</value>
+</data>
+  <data name="EditPetFormHeading" xml:space="preserve">
+    <value>Edit Pet</value>
+</data>
+  <data name="NameLabel" xml:space="preserve">
+    <value>Name</value>
+</data>
+  <data name="SpeciesLabel" xml:space="preserve">
+    <value>Species</value>
+</data>
+  <data name="BreedLabel" xml:space="preserve">
+    <value>Breed</value>
+</data>
+  <data name="AgeLabel" xml:space="preserve">
+    <value>Age</value>
+</data>
+  <data name="GenderLabel" xml:space="preserve">
+    <value>Gender</value>
+</data>
+  <data name="WeightLabel" xml:space="preserve">
+    <value>Weight</value>
+</data>
+  <data name="ColorLabel" xml:space="preserve">
+    <value>Color</value>
+</data>
+  <data name="DateOfBirthLabel" xml:space="preserve">
+    <value>Date of Birth</value>
+</data>
+  <data name="DescriptionLabel" xml:space="preserve">
+    <value>Description</value>
+</data>
+  <data name="VaccinationStatusLabel" xml:space="preserve">
+    <value>Vaccination Status</value>
+</data>
+  <data name="MicrochipIdLabel" xml:space="preserve">
+    <value>Microchip ID</value>
+</data>
+  <data name="IsNeuteredLabel" xml:space="preserve">
+    <value>Is Neutered?</value>
+</data>
+  <data name="IsNeuteredYes" xml:space="preserve">
+    <value>Yes, this pet is neutered.</value>
+</data>
+  <data name="ImageUrlLabel" xml:space="preserve">
+    <value>Image URL</value>
+</data>
+  <data name="SaveChangesButton" xml:space="preserve">
+    <value>Save Changes</value>
+</data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>Cancel</value>
+</data>
+  <data name="ValidationErrorTitle" xml:space="preserve">
+    <value>Error!</value>
+</data>
+  <data name="ValidationErrorMessage" xml:space="preserve">
+    <value>There are some errors in the form. Please check all fields.</value>
+</data>
+  <data name="RequiredFieldMessage" xml:space="preserve">
+    <value>This field is required.</value>
+</data>
+  <data name="FormErrorMessage" xml:space="preserve">
+    <value>An error occurred while submitting the form. Please try again.</value>
+</data>
+</root>

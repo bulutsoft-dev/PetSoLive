@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="PetSoLive" xml:space="preserve">
+    <value>PetSoLive</value>
+  </data>
+  <data name="PetSoLive Description" xml:space="preserve">
+    <value>PetSoLive is dedicated to creating a community for pet lovers, providing resources for adoption, lost pet ads, and help requests.</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Adoption" xml:space="preserve">
+    <value>Adoption</value>
+  </data>
+  <data name="Lost Pet Ads" xml:space="preserve">
+    <value>Lost Pet Ads</value>
+  </data>
+  <data name="Help Requests" xml:space="preserve">
+    <value>Help Requests</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="Veterinarians Management" xml:space="preserve">
+    <value>Veterinarians Management</value>
+  </data>
+  <data name="Veterinarian Register" xml:space="preserve">
+    <value>Veterinarian Register</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
+  <data name="All rights reserved." xml:space="preserve">
+    <value>All rights reserved.</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="About PetSoLive" xml:space="preserve">
+    <value>About PetSoLive</value>
+  </data>
+  <data name="Quick Links" xml:space="preserve">
+    <value>Quick Links</value>
+  </data>
+  <data name="Contact Us" xml:space="preserve">
+    <value>Contact Us</value>
+  </data>
+  <data name="footerDescription" xml:space="preserve">
+    <value>About PetSoLive</value>
+</data>
+  <data name="footerDescriptionContent" xml:space="preserve">
+    <value>PetSoLive is dedicated to creating a community for pet lovers, providing resources for adoption, lost pet ads, and help requests.</value>
+</data>
+  <data name="About Us" xml:space="preserve">
+    <value>About Us</value>
+</data>
+
+</root>

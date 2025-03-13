@@ -1,5 +1,9 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Localization
+@using PetSoLive.Web.Controllers
+@inject IStringLocalizer<PetController> Localizer
 @{
-    ViewData["Title"] = "Edit Pet";
+    ViewData["Title"] = @Localizer["EditPetTitle"];
     Layout = "_Layout";
 }
 
@@ -8,7 +12,7 @@
 }
 
 <div class="pet-page">
-    <h2 class="pet-title">Edit Pet</h2>
+    <h2 class="pet-title">@Localizer["EditPetFormHeading"]</h2>
 
     <div class="pet-container pet-form">
         @if (!ViewData.ModelState.IsValid)
@@ -25,65 +29,65 @@
 
         <form asp-action="Edit" method="post">
             <div class="form-group">
-                <label for="Name">Name</label>
+                <label for="Name">@Localizer["NameLabel"]</label>
                 <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required />
             </div>
             <div class="form-group">
-                <label for="Species">Species</label>
+                <label for="Species">@Localizer["SpeciesLabel"]</label>
                 <input type="text" class="form-control" id="Species" name="Species" value="@Model.Species" required />
             </div>
             <div class="form-group">
-                <label for="Breed">Breed</label>
+                <label for="Breed">@Localizer["BreedLabel"]</label>
                 <input type="text" class="form-control" id="Breed" name="Breed" value="@Model.Breed" required />
             </div>
             <div class="form-group">
-                <label for="Age">Age</label>
+                <label for="Age">@Localizer["AgeLabel"]</label>
                 <input type="number" class="form-control" id="Age" name="Age" value="@Model.Age" required />
             </div>
             <div class="form-group">
-                <label for="Gender">Gender</label>
+                <label for="Gender">@Localizer["GenderLabel"]</label>
                 <input type="text" class="form-control" id="Gender" name="Gender" value="@Model.Gender" required />
             </div>
             <div class="form-group">
-                <label for="Weight">Weight</label>
+                <label for="Weight">@Localizer["WeightLabel"]</label>
                 <input type="number" step="0.1" class="form-control" id="Weight" name="Weight" value="@Model.Weight" required />
             </div>
             <div class="form-group">
-                <label for="Color">Color</label>
+                <label for="Color">@Localizer["ColorLabel"]</label>
                 <input type="text" class="form-control" id="Color" name="Color" value="@Model.Color" required />
             </div>
             <div class="form-group">
-                <label for="DateOfBirth">Date of Birth</label>
-                <input type="date" class="form-control" id="DateOfBirth" name="DateOfBirth" 
+                <label for="DateOfBirth">@Localizer["DateOfBirthLabel"]</label>
+                <input type="date" class="form-control" id="DateOfBirth" name="DateOfBirth"
                        value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" required />
             </div>
             <div class="form-group">
-                <label for="Description">Description</label>
+                <label for="Description">@Localizer["DescriptionLabel"]</label>
                 <textarea class="form-control" id="Description" name="Description" rows="3">@Model.Description</textarea>
             </div>
             <div class="form-group">
-                <label for="VaccinationStatus">Vaccination Status</label>
+                <label for="VaccinationStatus">@Localizer["VaccinationStatusLabel"]</label>
                 <input type="text" class="form-control" id="VaccinationStatus" name="VaccinationStatus" value="@Model.VaccinationStatus" required />
             </div>
             <div class="form-group">
-                <label for="MicrochipId">Microchip ID</label>
+                <label for="MicrochipId">@Localizer["MicrochipIdLabel"]</label>
                 <input type="text" class="form-control" id="MicrochipId" name="MicrochipId" value="@Model.MicrochipId" required />
             </div>
             <div class="form-group">
-                <label for="IsNeutered">Is Neutered?</label>
+                <label for="IsNeutered">@Localizer["IsNeuteredLabel"]</label>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="IsNeutered" name="IsNeutered" value="true" 
+                    <input class="form-check-input" type="checkbox" id="IsNeutered" name="IsNeutered" value="true"
                            @(Model?.IsNeutered == true ? "checked" : "") />
-                    <label class="form-check-label" for="IsNeutered">Yes, this pet is neutered.</label>
+                    <label class="form-check-label" for="IsNeutered">@Localizer["IsNeuteredYes"]</label>
                 </div>
             </div>
             <div class="form-group">
-                <label for="ImageUrl">Image URL</label>
+                <label for="ImageUrl">@Localizer["ImageUrlLabel"]</label>
                 <input type="text" class="form-control" id="ImageUrl" name="ImageUrl" value="@Model.ImageUrl" />
             </div>
 
-            <button type="submit" class="btn-pet">Save Changes</button>
-            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary ml-2">Cancel</a>
+            <button type="submit" class="btn-pet">@Localizer["SaveChangesButton"]</button>
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary ml-2">@Localizer["CancelButton"]</a>
         </form>
     </div>
 </div>

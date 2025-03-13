@@ -1,5 +1,10 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@using PetSoLive.Web.Controllers
+@inject IStringLocalizer<LostPetAdController> Localizer
+
 @{
-    ViewData["Title"] = "Edit Lost Pet Ad";
+    ViewData["Title"] = Localizer["Title"];
     Layout = "_Layout";
 }
 
@@ -8,10 +13,9 @@
 }
 
 <div class="lostpet-page">
-    <h2 class="lostpet-title">@ViewData["Title"]</h2>
+    <h2 class="lostpet-title">@Localizer["Title"]</h2>
 
     <div class="lostpet-container">
-        <!-- Error message display -->
         @if (TempData["ErrorMessage"] != null)
         {
             <div class="alert alert-danger">
@@ -19,7 +23,6 @@
             </div>
         }
 
-        <!-- Success message display -->
         @if (TempData["SuccessMessage"] != null)
         {
             <div class="alert alert-success">
@@ -31,45 +34,46 @@
             @Html.AntiForgeryToken()
 
             <div class="form-group">
-                <label for="PetName">Pet Name</label>
+                <label for="PetName">@Localizer["PetName"]</label>
                 <input type="text" id="PetName" name="PetName" class="form-control" value="@Model.PetName" required />
             </div>
 
             <div class="form-group">
-                <label for="Description">Description</label>
+                <label for="Description">@Localizer["Description"]</label>
                 <textarea id="Description" name="Description" class="form-control" required>@Model.Description</textarea>
             </div>
 
             <div class="form-group">
-                <label for="LastSeenDate">Last Seen Date</label>
+                <label for="LastSeenDate">@Localizer["LastSeenDate"]</label>
                 <input type="date" id="LastSeenDate" name="LastSeenDate" class="form-control" value="@Model.LastSeenDate.ToString("yyyy-MM-dd")" required />
             </div>
 
             <div class="form-group">
-                <label for="ImageUrl">Pet Image (URL)</label>
+                <label for="ImageUrl">@Localizer["PetImage"]</label>
                 <input type="url" id="ImageUrl" name="ImageUrl" class="form-control" value="@Model.ImageUrl" />
             </div>
 
             <div class="form-group">
-                <label for="city">City</label>
+                <label for="city">@Localizer["City"]</label>
                 <select id="city" name="city" class="form-control" required>
-                    <option value="">Select a city</option>
+                    <option value="">@Localizer["SelectCity"]</option>
                     @foreach (var city in ViewData["Cities"] as List<string>)
                     {
-                            <option value="@city">@city.ToString()</option>
+                        <option value="@city">@city.ToString()</option>
                     }
                 </select>
             </div>
+            
             <div class="form-group">
-                <label for="district">District</label>
+                <label for="district">@Localizer["District"]</label>
                 <select id="district" name="district" class="form-control" required>
-                    <option value="">Select a district</option>
+                    <option value="">@Localizer["SelectDistrict"]</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <button type="submit" class="btn-lostpet">Update Lost Pet Ad</button>
-                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn-lostpet">@Localizer["UpdateButton"]</button>
+                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">@Localizer["CancelButton"]</a>
             </div>
         </form>
     </div>
@@ -78,13 +82,12 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        // Update districts based on selected city
         $('#city').change(function () {
             var city = $(this).val();
             $.get('/Account/GetDistricts?city=' + city, function (data) {
                 var districtSelect = $('#district');
                 districtSelect.empty();
-                districtSelect.append('<option value="">Select a district</option>');
+                districtSelect.append('<option value="">@Localizer["SelectDistrict"]</option>');
                 data.forEach(function (district) {
                     districtSelect.append('<option value="' + district + '">' + district + '</option>');
                 });

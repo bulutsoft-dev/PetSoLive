@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
+using PetSoLive.Web.Controllers;
 using Xunit;
 
 namespace PetSoLive.Tests.Controllers;
@@ -29,7 +30,8 @@ public class LostPetAdControllerTests
         _controller = new LostPetAdController(
             _lostPetAdServiceMock.Object,
             _userServiceMock.Object,
-            _emailServiceMock.Object
+            _emailServiceMock.Object,
+            null
         );
 
         // Create a test HttpContext with an in-memory session

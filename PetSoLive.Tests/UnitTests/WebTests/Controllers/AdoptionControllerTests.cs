@@ -9,6 +9,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
+    using PetSoLive.Web.Controllers;
 
     namespace PetSoLive.Tests.Controllers
     {
@@ -47,7 +48,8 @@
                     _userServiceMock.Object,
                     _emailServiceMock.Object,
                     _petOwnerServiceMock.Object,
-                    _adoptionRequestRepositoryMock.Object
+                    _adoptionRequestRepositoryMock.Object,
+                    null
                 );
                 _controller.ControllerContext = new ControllerContext
                 {

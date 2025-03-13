@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Core.Enums;
 
@@ -9,12 +10,14 @@ namespace PetSoLive.Web.Controllers
         private readonly IVeterinarianService _veterinarianService;
         private readonly IUserService _userService;
         private readonly IAdminService _adminService;
+        private readonly IStringLocalizer<VeterinarianController> _localizer;
 
-        public VeterinarianController(IVeterinarianService veterinarianService, IUserService userService, IAdminService adminService)
+        public VeterinarianController(IVeterinarianService veterinarianService, IUserService userService, IAdminService adminService, IStringLocalizer<VeterinarianController> localizer)
         {
             _veterinarianService = veterinarianService;
             _userService = userService;
             _adminService = adminService;
+            _localizer = localizer;
         }
 
         private async Task<IActionResult> CheckLoginAsync()

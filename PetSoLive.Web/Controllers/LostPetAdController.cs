@@ -1,23 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
-using PetSoLive.Core.Entities;
+using Microsoft.Extensions.Localization;
 using PetSoLive.Core.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+
+namespace PetSoLive.Web.Controllers;
 
 public class LostPetAdController : Controller
 {
     private readonly ILostPetAdService _lostPetAdService;
     private readonly IEmailService _emailService;
     private readonly IUserService _userService;
+    private readonly IStringLocalizer<LostPetAdController> _localizer;
 
     // Constructor Dependency Injection
     public LostPetAdController(ILostPetAdService lostPetAdService, 
         IUserService userService,
-        IEmailService emailService)
+        IEmailService emailService,
+        IStringLocalizer<LostPetAdController> localizer)
     {
         _lostPetAdService = lostPetAdService;
         _userService = userService;
         _emailService = emailService;
+        _localizer = localizer;
     }
 
     // Oturum kontrolü metodu
@@ -111,6 +114,7 @@ public class LostPetAdController : Controller
 
         var currentUser = HttpContext.Session.GetString("Username");
         ViewBag.CurrentUser = currentUser;
+        TempData["DetailsMessage"] = _localizer["DetailsTitle"];
         return View(lostPetAd);
     }
     
@@ -222,7 +226,7 @@ public class LostPetAdController : Controller
             TempData["ErrorMessage"] = "You do not have permission to delete this ad.";
             return RedirectToAction("Index");
         }
-
+        TempData["DeleteMessage"] = _localizer["DeleteConfirmation"];
         return View(lostPetAd);
     }
 

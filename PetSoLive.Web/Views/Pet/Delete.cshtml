@@ -1,5 +1,9 @@
+@using Microsoft.Extensions.Localization
+@using PetSoLive.Web.Controllers
+@inject IStringLocalizer<PetController> Localizer
+
 @{
-    ViewData["Title"] = "Delete Pet";
+    ViewData["Title"] = Localizer["DeletePetTitle"];
     Layout = "_Layout";
 }
 
@@ -9,13 +13,13 @@
 
 <div class="pet-page">
     <div class="pet-container">
-        <h2>Delete Pet</h2>
-        <p>Are you sure you want to delete the pet <strong>@Model.Name</strong>?</p>
+        <h2>@Localizer["DeletePetTitle"]</h2>
+        <p>@Html.Raw(string.Format(Localizer["DeleteConfirmationMessage"], Model.Name))</p>
 
         <form asp-action="DeleteConfirmed" method="post">
             <input type="hidden" name="id" value="@Model.Id" />
-            <button type="submit" class="btn-pet">Delete</button>
-            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary ml-2">Cancel</a>
+            <button type="submit" class="btn-pet">@Localizer["DeleteButton"]</button>
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary ml-2">@Localizer["CancelButton"]</a>
         </form>
     </div>
 </div>

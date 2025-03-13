@@ -1,5 +1,10 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@using PetSoLive.Web.Controllers
+@inject IStringLocalizer<LostPetAdController> Localizer
+
 @{
-    ViewData["Title"] = "Lost Pet Details";
+    ViewData["Title"] = Localizer["DetailsTitle"];
 }
 
 <div class="lostpet-page">
@@ -9,42 +14,42 @@
         <div class="card lostpet-details">
             @if (!string.IsNullOrEmpty(Model.ImageUrl))
             {
-                    <img src="@Model.ImageUrl" class="card-img-top" alt="Pet Image">
+                <img src="@Model.ImageUrl" class="card-img-top" alt="Pet Image">
             }
             else
             {
-                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="No Image Available">
+                <img src="https://via.placeholder.com/300" class="card-img-top" alt="@Localizer["NoImageAvailable"]">
             }
 
             <div class="card-body">
-                <h5 class="card-title">@Model.PetName</h5>
-                <p class="card-text">@Model.Description</p>
-                <p class="card-text"><strong>Location:</strong> @Model.LastSeenLocation</p>
-                <p class="card-text"><strong>Last Seen Date:</strong> @Model.LastSeenDate.ToString("dd/MM/yyyy")</p>
-                <p class="card-text"><strong>Posted on:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy")</p>
+                <h5 class="card-title">@Localizer["PetName"]: @Model.PetName</h5>
+                <p class="card-text">@Localizer["Description"]: @Model.Description</p>
+                <p class="card-text"><strong>@Localizer["Location"]:</strong> @Model.LastSeenLocation</p>
+                <p class="card-text"><strong>@Localizer["LastSeenDate"]:</strong> @Model.LastSeenDate.ToString("dd/MM/yyyy")</p>
+                <p class="card-text"><strong>@Localizer["PostedOn"]:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy")</p>
 
-                <h5 class="mt-4">Owner Information:</h5>
-                <p class="card-text"><strong>Username:</strong> @Model.User?.Username</p>
-                <p class="card-text"><strong>Email:</strong> @Model.User?.Email</p>
-                <p class="card-text"><strong>Phone Number:</strong> @Model.User?.PhoneNumber</p>
-                <p class="card-text"><strong>Address:</strong> @Model.User?.Address</p>
-                <p class="card-text"><strong>City:</strong> @Model.User?.City</p>
-                <p class="card-text"><strong>District:</strong> @Model.User?.District</p>
+                <h5 class="mt-4">@Localizer["OwnerInformation"]</h5>
+                <p class="card-text"><strong>@Localizer["Username"]:</strong> @Model.User?.Username</p>
+                <p class="card-text"><strong>@Localizer["Email"]:</strong> @Model.User?.Email</p>
+                <p class="card-text"><strong>@Localizer["PhoneNumber"]:</strong> @Model.User?.PhoneNumber</p>
+                <p class="card-text"><strong>@Localizer["Address"]:</strong> @Model.User?.Address</p>
+                <p class="card-text"><strong>@Localizer["City"]:</strong> @Model.User?.City</p>
+                <p class="card-text"><strong>@Localizer["District"]:</strong> @Model.User?.District</p>
 
                 @if (ViewBag.CurrentUser == Model.User?.Username)
                 {
-                        <div class="btn-group mt-3" role="group">
-                            <a href="@Url.Action("Edit", "LostPetAd", new { id = Model.Id })" class="btn btn-warning">
-                                <i class="bi bi-pencil-square me-1"></i> Edit
-                            </a>
-                            <a href="@Url.Action("Delete", "LostPetAd", new { id = Model.Id })" class="btn btn-danger">
-                                <i class="bi bi-trash-fill me-1"></i> Delete
-                            </a>
-                        </div>
+                    <div class="btn-group mt-3" role="group">
+                        <a href="@Url.Action("Edit", "LostPetAd", new { id = Model.Id })" class="btn btn-warning">
+                            <i class="bi bi-pencil-square me-1"></i> @Localizer["EditButton"]
+                        </a>
+                        <a href="@Url.Action("Delete", "LostPetAd", new { id = Model.Id })" class="btn btn-danger">
+                            <i class="bi bi-trash-fill me-1"></i> @Localizer["DeleteButton"]
+                        </a>
+                    </div>
                 }
 
                 <a href="@Url.Action("Index", "LostPetAd")" class="btn btn-secondary mt-3">
-                    <i class="bi bi-arrow-left-circle-fill me-1"></i> Back to List
+                    <i class="bi bi-arrow-left-circle-fill me-1"></i> @Localizer["BackToList"]
                 </a>
             </div>
         </div>
