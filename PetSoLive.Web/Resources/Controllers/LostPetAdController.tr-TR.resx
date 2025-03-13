@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <data name="WelcomeMessage" xml:space="preserve">
+  <value>Hoş Geldiniz!</value>
+</data>
+    <data name="CreateTitle" xml:space="preserve">
+  <value>Kayıp Hayvan İlanı Oluştur</value>
+</data>
+    <data name="PetName" xml:space="preserve">
+  <value>Hayvan Adı</value>
+</data>
+    <data name="Description" xml:space="preserve">
+  <value>Açıklama</value>
+</data>
+    <data name="LastSeenDate" xml:space="preserve">
+  <value>Son Görülme Tarihi</value>
+</data>
+    <data name="City" xml:space="preserve">
+  <value>Şehir</value>
+</data>
+    <data name="District" xml:space="preserve">
+  <value>İlçe</value>
+</data>
+    <data name="ImageUrl" xml:space="preserve">
+  <value>Resim URL (Zorunlu)</value>
+</data>
+    <data name="SelectCity" xml:space="preserve">
+  <value>Şehir Seçin</value>
+</data>
+    <data name="SelectDistrict" xml:space="preserve">
+  <value>İlçe Seçin</value>
+</data>
+    <data name="EnterImageUrl" xml:space="preserve">
+  <value>Resim URL'si Girin</value>
+</data>
+    <data name="CreateButton" xml:space="preserve">
+  <value>Kayıp Hayvan İlanı Oluştur</value>
+</data>
+    <data name="DeleteTitle" xml:space="preserve">
+  <value>Kayıp Hayvan İlanını Sil</value>
+</data>
+    <data name="DeleteConfirmation" xml:space="preserve">
+  <value>Kayıp hayvan ilanını silmek istediğinizden emin misiniz?</value>
+</data>
+    <data name="PetName" xml:space="preserve">
+  <value>Hayvan Adı</value>
+</data>
+    <data name="Location" xml:space="preserve">
+  <value>Konum</value>
+</data>
+    <data name="PostedOn" xml:space="preserve">
+  <value>Yayınlanma Tarihi</value>
+</data>
+    <data name="YesDelete" xml:space="preserve">
+  <value>Evet, Sil</value>
+</data>
+    <data name="Cancel" xml:space="preserve">
+  <value>İptal</value>
+</data>
+
+    <data name="DetailsTitle" xml:space="preserve">
+  <value>Kayıp Hayvan Detayları</value>
+</data>
+    <data name="PetName" xml:space="preserve">
+  <value>Hayvan Adı</value>
+</data>
+    <data name="Description" xml:space="preserve">
+  <value>Açıklama</value>
+</data>
+    <data name="Location" xml:space="preserve">
+  <value>Konum</value>
+</data>
+    <data name="LastSeenDate" xml:space="preserve">
+  <value>Son Görülme Tarihi</value>
+</data>
+    <data name="PostedOn" xml:space="preserve">
+  <value>Yayınlanma Tarihi</value>
+</data>
+    <data name="OwnerInformation" xml:space="preserve">
+  <value>Sahip Bilgileri</value>
+</data>
+    <data name="Username" xml:space="preserve">
+  <value>Kullanıcı Adı</value>
+</data>
+    <data name="Email" xml:space="preserve">
+  <value>E-posta</value>
+</data>
+    <data name="PhoneNumber" xml:space="preserve">
+  <value>Telefon Numarası</value>
+</data>
+    <data name="Address" xml:space="preserve">
+  <value>Adres</value>
+</data>
+    <data name="City" xml:space="preserve">
+  <value>Şehir</value>
+</data>
+    <data name="District" xml:space="preserve">
+  <value>İlçe</value>
+</data>
+    <data name="EditButton" xml:space="preserve">
+  <value>Düzenle</value>
+</data>
+    <data name="DeleteButton" xml:space="preserve">
+  <value>Sil</value>
+</data>
+    <data name="BackToList" xml:space="preserve">
+  <value>Listeye Dön</value>
+</data>
+    <data name="NoImageAvailable" xml:space="preserve">
+  <value>Resim Yok</value>
+</data>
+    <data name="Title" xml:space="preserve">
+    <value>Kayıp Evcil Hayvan İlanını Düzenle</value>
+</data>
+    <data name="PetName" xml:space="preserve">
+    <value>Evcil Hayvan Adı</value>
+</data>
+    <data name="Description" xml:space="preserve">
+    <value>Açıklama</value>
+</data>
+    <data name="LastSeenDate" xml:space="preserve">
+    <value>Son Görülme Tarihi</value>
+</data>
+    <data name="PetImage" xml:space="preserve">
+    <value>Evcil Hayvan Resmi (URL)</value>
+</data>
+    <data name="City" xml:space="preserve">
+    <value>Şehir</value>
+</data>
+    <data name="SelectCity" xml:space="preserve">
+    <value>Bir şehir seçin</value>
+</data>
+    <data name="District" xml:space="preserve">
+    <value>İlçe</value>
+</data>
+    <data name="SelectDistrict" xml:space="preserve">
+    <value>Bir ilçe seçin</value>
+</data>
+    <data name="UpdateButton" xml:space="preserve">
+    <value>Kayıp İlanını Güncelle</value>
+</data>
+    <data name="CancelButton" xml:space="preserve">
+    <value>İptal</value>
+</data>
+    <data name="TitleIndex" xml:space="preserve">
+    <value>Kayıp Evcil Hayvan İlanları</value>
+</data>
+    <data name="CreateNewAd" xml:space="preserve">
+    <value>Yeni Kayıp Evcil Hayvan İlanı Oluştur</value>
+</data>
+    <data name="PetImage" xml:space="preserve">
+    <value>Evcil Hayvan Resmi</value>
+</data>
+    <data name="NoImageAvailable" xml:space="preserve">
+    <value>Görsel Bulunamadı</value>
+</data>
+    <data name="ViewDetails" xml:space="preserve">
+    <value>Detayları Görüntüle</value>
+</data>
+
+</root>
