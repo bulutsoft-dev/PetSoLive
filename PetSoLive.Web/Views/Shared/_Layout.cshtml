@@ -144,25 +144,25 @@
                             </a>
                         </li>
                     }
-                    <!-- Header İçinde Örnek Konum -->
-                    <div class="language-switcher ms-3">
-                        <div class="btn-group">
-                            <a class="btn btn-sm btn-outline-light @(CultureInfo.CurrentCulture.Name == "tr-TR" ? "active" : "")"
-                               asp-controller="Home"
-                               asp-action="SetLanguage"
-                               asp-route-culture="tr-TR"
-                               asp-route-returnUrl="@Context.Request.Path">
-                                Türkçe
-                            </a>
-                            <a class="btn btn-sm btn-outline-light @(CultureInfo.CurrentCulture.Name == "en-US" ? "active" : "")"
-                               asp-controller="Home"
-                               asp-action="SetLanguage"
-                               asp-route-culture="en-US"
-                               asp-route-returnUrl="@Context.Request.Path">
-                                English
-                            </a>
-                        </div>
-                    </div>
+                    <li class="nav-item">
+                        @{
+                            var currentCulture = CultureInfo.CurrentCulture.Name;
+                            var newCulture = currentCulture == "en-US" ? "tr-TR" : "en-US";
+                            var flag = currentCulture switch
+                            {
+                                "en-US" => "🇺🇸",
+                                "tr-TR" => "🇹🇷",
+                                _ => "🌐"
+                            };
+                        }
+                        <a class="nav-link text-white"
+                           asp-controller="Home"
+                           asp-action="SetLanguage"
+                           asp-route-culture="@newCulture"
+                           asp-route-returnUrl="@Context.Request.Path">
+                            @flag
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
