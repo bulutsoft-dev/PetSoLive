@@ -114,7 +114,6 @@ public class LostPetAdController : Controller
 
         var currentUser = HttpContext.Session.GetString("Username");
         ViewBag.CurrentUser = currentUser;
-        TempData["DetailsMessage"] = _localizer["DetailsTitle"];
         return View(lostPetAd);
     }
     
