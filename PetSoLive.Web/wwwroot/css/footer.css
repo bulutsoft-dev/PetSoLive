@@ -1,69 +1,62 @@
 /* Footer Styles */
 .footer {
-    background-color: var(--petsolive-light);
-    padding: 40px 0;
-    color: var(--petsolive-dark);
-    border-top: 5px solid var(--petsolive-primary); /* Sharp line above the footer */
+    background-color:  var(--petsolive-primary);
+    color: #ffffff; /* White text color */
+    padding: 20px 0;
+    margin-top: auto; /* Ensure footer sticks to the bottom */
 }
 
 .footer h5 {
-    color: var(--petsolive-primary);
-    font-weight: 700;
-    margin-bottom: 1rem;
-}
-
-.footer p {
-    font-size: 0.9rem;
-    color: var(--petsolive-primary);
+    color: #ffffff; /* White color for headings */
+    margin-bottom: 15px;
 }
 
 .footer a {
-    color: var(--petsolive-primary);
-    text-decoration: none;
-    transition: color 0.3s ease;
+    color: #ffffff; /* White color for links */
+    text-decoration: none; /* Remove underline */
 }
 
 .footer a:hover {
-    color: var(--petsolive-primary);
-    text-decoration: underline;
+    color: #007bff; /* Change color on hover */
 }
 
-.footer .social-links a {
-    font-size: 1.5rem;
-    transition: color 0.3s ease;
+.footer ul {
+    list-style-type: none; /* Remove bullet points */
+    padding-left: 0;
 }
 
-.footer .social-links a:hover {
-    color: var(--petsolive-primary);
+.footer ul li {
+    margin-bottom: 10px;
 }
 
 .footer-bottom {
-    background-color: var(--petsolive-primary);
+    background-color: var(--petsolive-secondary);
     padding: 10px 0;
-    color: var(--petsolive-light);
+    text-align: center;
 }
 
 .footer-bottom p {
-    font-size: 0.9rem;
-    color: var(--petsolive-bg);
-    
+    margin: 0;
+    color: #ffffff; /* White text color */
 }
 
-.footer-bottom .social-links a {
-    color: var(--petsolive-bg);
+.social-links a {
+    color: #ffffff; /* White color for social icons */
+    margin: 0 10px;
+    font-size: 1.2rem;
 }
 
-@media (max-width: 768px) {
-    .footer .row {
-        text-align: center;
-    }
+.social-links a:hover {
+    color: #007bff; /* Change color on hover */
+}
 
-    .footer .col-md-4 {
-        margin-bottom: 20px;
-    }
+/* Ensure the footer is always at the bottom */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
-    .footer .social-links {
-        text-align: center;
-        margin-top: 10px;
-    }
+.container {
+    flex: 1;
 }
