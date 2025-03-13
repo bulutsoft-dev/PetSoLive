@@ -46,74 +46,35 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav me-auto">
-                    @* Session Kontrolü *@
-                    @{
-                        var username = Context.Session.GetString("Username");
-                    }
-                    @if (string.IsNullOrEmpty(username))
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">
-                                <i class="bi bi-house-door-fill"></i> @Localizer["Home"]
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Home" asp-action="About">
-                                <i class="bi bi-info-circle-fill"></i> @Localizer["About"]
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Adoption" asp-action="Index">
-                                <i class="bi bi-clipboard-heart-fill"></i> @Localizer["Adoption"]
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="LostPetAd" asp-action="Index">
-                                <i class="bi bi-bookmark-heart-fill"></i> @Localizer["Lost Pet Ads"]
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="HelpRequest" asp-action="Index">
-                                <i class="bi bi-chat-square-heart-fill"></i> @Localizer["Help Requests"]
-                            </a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">
-                                <i class="bi bi-house-door-fill"></i> @Localizer["Home"]
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Home" asp-action="About">
-                                <i class="bi bi-info-circle-fill"></i> @Localizer["About"]
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Adoption" asp-action="Index">
-                                <i class="bi bi-clipboard-heart-fill"></i> @Localizer["Adoption"]
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="LostPetAd" asp-action="Index">
-                                <i class="bi bi-bookmark-heart-fill"></i> @Localizer["Lost Pet Ads"]
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="HelpRequest" asp-action="Index">
-                                <i class="bi bi-chat-square-heart-fill"></i> @Localizer["Help Requests"]
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Veterinarian" asp-action="Index">
-                                <i class="bi bi-gear-fill"></i> @Localizer["Veterinarians Management"]
-                            </a>
-                        </li>
-                    }
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-house-door-fill"></i> @Localizer["Home"]
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-controller="Home" asp-action="About">
+                            <i class="bi bi-house-door-fill"></i> @Localizer["About"]
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-controller="Adoption" asp-action="Index">
+                            <i class="bi bi-clipboard-heart-fill"></i> @Localizer["Adoption"]
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-controller="LostPetAd" asp-action="Index">
+                            <i class="bi bi-bookmark-heart-fill"></i> @Localizer["Lost Pet Ads"]
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-controller="HelpRequest" asp-action="Index">
+                            <i class="bi bi-chat-square-heart-fill"></i> @Localizer["Help Requests"]
+                        </a>
+                    </li>
                 </ul>
+
                 <ul class="navbar-nav">
-                    @if (string.IsNullOrEmpty(username))
+                    @if (string.IsNullOrEmpty(Context.Session.GetString("Username")))
                     {
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-controller="Account" asp-action="Login">
@@ -128,20 +89,30 @@
                     }
                     else
                     {
-                        <li class="nav-item">
-                        <span class="nav-link text-white">
-                            <i class="bi bi-person-fill"></i> @Localizer["Welcome"] @username
-                        </span>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Account" asp-action="Logout">
-                                <i class="bi bi-box-arrow-left"></i> @Localizer["Logout"]
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                         @{
+                                        var username = Context.Session.GetString("Username");
+                                    }
+                                    <i class="bi bi-person-fill"></i> @Localizer["Welcome"] @username
                             </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Veterinarian" asp-action="Register">
-                                <i class="bi bi-clipboard-plus-fill"></i> @Localizer["Veterinarian Register"]
-                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Veterinarian" asp-action="Index">
+                                        <i class="bi bi-gear-fill"></i> @Localizer["Veterinarians Management"]
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Veterinarian" asp-action="Register">
+                                        <i class="bi bi-clipboard-plus-fill"></i> @Localizer["Veterinarian Register"]
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Logout">
+                                        <i class="bi bi-box-arrow-left"></i> @Localizer["Logout"]
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     }
                     <li class="nav-item">
@@ -155,11 +126,7 @@
                                 _ => "🌐"
                             };
                         }
-                        <a class="nav-link text-white"
-                           asp-controller="Home"
-                           asp-action="SetLanguage"
-                           asp-route-culture="@newCulture"
-                           asp-route-returnUrl="@Context.Request.Path">
+                        <a class="nav-link text-white" asp-controller="Home" asp-action="SetLanguage" asp-route-culture="@newCulture" asp-route-returnUrl="@Context.Request.Path">
                             @flag @Localizer["Swicth"]
                         </a>
                     </li>
@@ -168,6 +135,8 @@
         </div>
     </nav>
 </header>
+
+
 
 <div class="container pt-3 flex-grow-1">
     <main role="main" class="pb-3">

@@ -16,7 +16,7 @@
     <value>Evlat Edinme</value>
   </data>
   <data name="Lost Pet Ads" xml:space="preserve">
-    <value>Kayıp Evcil Hayvan İlanları</value>
+    <value>Kayıp Hayvan İlanları</value>
   </data>
   <data name="Help Requests" xml:space="preserve">
     <value>Yardım Talepleri</value>
@@ -72,5 +72,8 @@
 
   <data name="Swicth" xml:space="preserve">
     <value>Türkçe</value>
+</data> 
+  <data name="Account" xml:space="preserve">
+    <value>Hesap</value>
 </data>
 </root>

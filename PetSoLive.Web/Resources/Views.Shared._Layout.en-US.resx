@@ -72,5 +72,10 @@
   <data name="Swicth" xml:space="preserve">
     <value>English</value>
 </data>
-
+  <data name="Swicth" xml:space="preserve">
+    <value>English</value>
+</data>
+  <data name="Account" xml:space="preserve">
+    <value>Account</value>
+</data>
 </root>
