@@ -36,7 +36,8 @@ public class PetControllerTests
                 _userServiceMock.Object,
                 _adoptionServiceMock.Object,
                 _adoptionRequestRepoMock.Object,
-                _emailServiceMock.Object
+                _emailServiceMock.Object,
+                null
             );
 
             // Set up a fake HTTP context with a session

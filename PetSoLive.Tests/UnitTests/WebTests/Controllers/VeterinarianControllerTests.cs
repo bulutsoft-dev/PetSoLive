@@ -29,7 +29,8 @@ private readonly Mock<IVeterinarianService> _veterinarianServiceMock;
             _controller = new VeterinarianController(
                 _veterinarianServiceMock.Object,
                 _userServiceMock.Object,
-                _adminServiceMock.Object
+                _adminServiceMock.Object,
+                null
             );
 
             _httpContext = new DefaultHttpContext
