@@ -12,7 +12,7 @@ namespace PetSoLive.Core.Entities
         public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? LastLoginDate { get; set; }
-        public string ProfileImageUrl { get; set; }
+        public string? ProfileImageUrl { get; set; }
 
         public List<string> Roles { get; set; } = new List<string>();
 

@@ -69,6 +69,7 @@ public class AccountController : Controller
             ViewData["Districts"] = CityList.GetDistrictsByCity(city);  // Populate districts based on selected city
             return View();
         }
+        profileImageUrl = profileImageUrl ?? string.Empty;
 
         var user = new User
         {
