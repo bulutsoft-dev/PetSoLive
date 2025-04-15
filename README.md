@@ -75,7 +75,7 @@ Platformun tüm iş mantığı bu katmanda gerçekleştirilir:
 
 ### **3. Veri Katmanı**
 Tüm kullanıcı bilgileri ve medya dosyaları burada saklanır:
-- **Microsoft SQL Server:** Yapısal veri saklama.
+- **PostgreSQL:** Yapısal veri saklama.
 - **Windows IIS:** Medya dosyası yönetimi ve veri şifreleme.
 
 ---
