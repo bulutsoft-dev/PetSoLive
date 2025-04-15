@@ -33,13 +33,11 @@ var smtpSettings = new SmtpSettings
 
 builder.Services.AddSingleton(smtpSettings);
 
-// PostgreSQL Database Connection String
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING") ?? "Data Source=app.db";
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseNpgsql(connectionString); // PostgreSQL için Npgsql kullanılıyor
+    options.UseSqlite(connectionString); // SQLite kullanılıyor
 });
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 
 // Add distributed memory cache and session
