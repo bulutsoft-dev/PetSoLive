@@ -8,26 +8,13 @@ namespace PetSoLive.Web.Controllers;
 
 public class HelpRequestController : Controller
 {
-    private readonly IHelpRequestService _helpRequestService;
-    private readonly IUserService _userService;
-    private readonly IVeterinarianService _veterinarianService;
-    private readonly IEmailService _emailService;
-    private readonly ICommentService _commentService; // Add comment service
+    private readonly IServiceManager _serviceManager;
     private readonly IStringLocalizer<HelpRequestController> _localizer;
 
-    public HelpRequestController(IHelpRequestService helpRequestService, 
-        IUserService userService, 
-        IEmailService emailService,
-        IVeterinarianService veterinarianService,
-        ICommentService commentService,
-        IStringLocalizer<HelpRequestController> localizer) // Inject comment service
+    public HelpRequestController(IServiceManager serviceManager, IStringLocalizer<HelpRequestController> localizer)
     {
-        _helpRequestService = helpRequestService;
-        _userService = userService;
-        _emailService = emailService;
-        _veterinarianService = veterinarianService;
-        _commentService = commentService; // Assign comment service
-        _localizer = localizer;
+        _serviceManager = serviceManager ?? throw new ArgumentNullException(nameof(serviceManager));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
     }
 
     [HttpGet]
@@ -39,7 +26,7 @@ public class HelpRequestController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        var user = await _userService.GetUserByUsernameAsync(username);
+        var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
         if (user == null)
         {
             return RedirectToAction("Login", "Account");
@@ -61,7 +48,7 @@ public class HelpRequestController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        var user = await _userService.GetUserByUsernameAsync(username);
+        var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
         if (user == null)
         {
             return RedirectToAction("Login", "Account");
@@ -73,9 +60,9 @@ public class HelpRequestController : Controller
 
         if (ModelState.IsValid)
         {
-            await _helpRequestService.CreateHelpRequestAsync(helpRequest);
+            await _serviceManager.HelpRequestService.CreateHelpRequestAsync(helpRequest);
 
-            var veterinarians = await _veterinarianService.GetAllVeterinariansAsync();
+            var veterinarians = await _serviceManager.VeterinarianService.GetAllVeterinariansAsync();
             foreach (var veterinarian in veterinarians)
             {
                 await SendNewHelpRequestEmailAsync(veterinarian.User, helpRequest, user);
@@ -90,37 +77,34 @@ public class HelpRequestController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var helpRequests = await _helpRequestService.GetHelpRequestsAsync();
+        var helpRequests = await _serviceManager.HelpRequestService.GetHelpRequestsAsync();
         return View(helpRequests);
     }
 
     [HttpGet]
     public async Task<IActionResult> Details(int id)
     {
-        var helpRequest = await _helpRequestService.GetHelpRequestByIdAsync(id);
+        var helpRequest = await _serviceManager.HelpRequestService.GetHelpRequestByIdAsync(id);
 
         if (helpRequest == null)
         {
             return NotFound();
         }
 
-        // Yorumları dahil et (Include Comments)
-        var comments = await _commentService.GetCommentsByHelpRequestIdAsync(id);
+        var comments = await _serviceManager.CommentService.GetCommentsByHelpRequestIdAsync(id);
         helpRequest.Comments = comments;
 
         var username = HttpContext.Session.GetString("Username");
-        var user = username != null ? await _userService.GetUserByUsernameAsync(username) : null;
+        var user = username != null ? await _serviceManager.UserService.GetUserByUsernameAsync(username) : null;
 
         ViewBag.CanEditOrDelete = user != null && helpRequest.UserId == user.Id;
-        ViewBag.isVeterinarian = user != null && await _veterinarianService.GetApprovedByUserIdAsync(user.Id) != null;
-        // Pass whether the current user can edit or delete specific comments
+        ViewBag.isVeterinarian = user != null && await _serviceManager.VeterinarianService.GetApprovedByUserIdAsync(user.Id) != null;
         if (user != null)
         {
             ViewBag.CanEditOrDeleteComment = comments.Where(c => c.UserId == user.Id).Select(c => c.Id).ToList();
         }
         return View(helpRequest);
     }
-
 
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
@@ -131,13 +115,13 @@ public class HelpRequestController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        var user = await _userService.GetUserByUsernameAsync(username);
+        var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
         if (user == null)
         {
             return RedirectToAction("Login", "Account");
         }
 
-        var helpRequest = await _helpRequestService.GetHelpRequestByIdAsync(id);
+        var helpRequest = await _serviceManager.HelpRequestService.GetHelpRequestByIdAsync(id);
         if (helpRequest == null || helpRequest.UserId != user.Id)
         {
             return Unauthorized();
@@ -156,13 +140,13 @@ public class HelpRequestController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        var user = await _userService.GetUserByUsernameAsync(username);
+        var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
         if (user == null)
         {
             return RedirectToAction("Login", "Account");
         }
 
-        var existingRequest = await _helpRequestService.GetHelpRequestByIdAsync(helpRequest.Id);
+        var existingRequest = await _serviceManager.HelpRequestService.GetHelpRequestByIdAsync(helpRequest.Id);
         if (existingRequest == null || existingRequest.UserId != user.Id)
         {
             return Unauthorized();
@@ -180,9 +164,9 @@ public class HelpRequestController : Controller
             existingRequest.ContactEmail = helpRequest.ContactEmail;
             existingRequest.ImageUrl = helpRequest.ImageUrl;
 
-            await _helpRequestService.UpdateHelpRequestAsync(existingRequest);
+            await _serviceManager.HelpRequestService.UpdateHelpRequestAsync(existingRequest);
 
-            var veterinarians = await _veterinarianService.GetAllVeterinariansAsync();
+            var veterinarians = await _serviceManager.VeterinarianService.GetAllVeterinariansAsync();
             foreach (var vet in veterinarians)
             {
                 await SendUpdatedHelpRequestEmailAsync(vet.User, existingRequest, user);
@@ -203,21 +187,21 @@ public class HelpRequestController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        var user = await _userService.GetUserByUsernameAsync(username);
+        var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
         if (user == null)
         {
             return RedirectToAction("Login", "Account");
         }
 
-        var helpRequest = await _helpRequestService.GetHelpRequestByIdAsync(id);
+        var helpRequest = await _serviceManager.HelpRequestService.GetHelpRequestByIdAsync(id);
         if (helpRequest == null || helpRequest.UserId != user.Id)
         {
             return Unauthorized();
         }
 
-        await _helpRequestService.DeleteHelpRequestAsync(id);
+        await _serviceManager.HelpRequestService.DeleteHelpRequestAsync(id);
 
-        var veterinarians = await _veterinarianService.GetAllVeterinariansAsync();
+        var veterinarians = await _serviceManager.VeterinarianService.GetAllVeterinariansAsync();
         foreach (var veterinarian in veterinarians)
         {
             await SendDeletedHelpRequestEmailAsync(veterinarian.User, helpRequest, user);
@@ -225,6 +209,7 @@ public class HelpRequestController : Controller
 
         return RedirectToAction("Index");
     }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddComment(int id, string content)
@@ -235,21 +220,20 @@ public class HelpRequestController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        var user = await _userService.GetUserByUsernameAsync(username);
+        var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
         if (user == null)
         {
             return RedirectToAction("Login", "Account");
         }
 
-        var helpRequest = await _helpRequestService.GetHelpRequestByIdAsync(id);
+        var helpRequest = await _serviceManager.HelpRequestService.GetHelpRequestByIdAsync(id);
         if (helpRequest == null)
         {
             return NotFound();
         }
 
-        // Check if the user is a veterinarian
-        var veterinarian = await _veterinarianService.GetByUserIdAsync(user.Id);
-        int? veterinarianId = veterinarian?.Id; // If user is a veterinarian, get their ID, otherwise set to null
+        var veterinarian = await _serviceManager.VeterinarianService.GetByUserIdAsync(user.Id);
+        int? veterinarianId = veterinarian?.Id;
 
         var comment = new Comment
         {
@@ -257,19 +241,18 @@ public class HelpRequestController : Controller
             CreatedAt = DateTime.Now,
             HelpRequestId = helpRequest.Id,
             UserId = user.Id,
-            VeterinarianId = veterinarianId // Store VeterinarianId if the user is a veterinarian
+            VeterinarianId = veterinarianId
         };
 
-        // Add the comment to the database
-        await _commentService.AddCommentAsync(comment);
+        await _serviceManager.CommentService.AddCommentAsync(comment);
 
         return RedirectToAction("Details", "HelpRequest", new { id = helpRequest.Id });
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> EditComment(int id)
     {
-        var comment = await _commentService.GetCommentByIdAsync(id);
+        var comment = await _serviceManager.CommentService.GetCommentByIdAsync(id);
         if (comment == null)
         {
             return NotFound();
@@ -281,16 +264,15 @@ public class HelpRequestController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        var user = await _userService.GetUserByUsernameAsync(username);
+        var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
         if (user == null || comment.UserId != user.Id)
         {
             return Unauthorized();
         }
 
-        return View(comment); // Yorumu doğrudan View'a gönderiyoruz.
+        return View(comment);
     }
 
-    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditComment(int id, int helpRequestId, string content)
@@ -301,13 +283,13 @@ public class HelpRequestController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        var user = await _userService.GetUserByUsernameAsync(username);
+        var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
         if (user == null)
         {
             return RedirectToAction("Login", "Account");
         }
 
-        var existingComment = await _commentService.GetCommentByIdAsync(id);
+        var existingComment = await _serviceManager.CommentService.GetCommentByIdAsync(id);
         if (existingComment == null || existingComment.UserId != user.Id)
         {
             return Unauthorized();
@@ -316,24 +298,20 @@ public class HelpRequestController : Controller
         if (string.IsNullOrWhiteSpace(content))
         {
             ModelState.AddModelError(nameof(content), "Content cannot be empty.");
-            return View(existingComment); // Hatalı durumlarda eski yorumu yeniden yükler.
+            return View(existingComment);
         }
 
         existingComment.Content = content;
         existingComment.CreatedAt = DateTime.Now;
 
-        var veterinarian = await _veterinarianService.GetByUserIdAsync(user.Id);
+        var veterinarian = await _serviceManager.VeterinarianService.GetByUserIdAsync(user.Id);
         existingComment.VeterinarianId = veterinarian?.Id;
 
-        await _commentService.UpdateCommentAsync(existingComment);
+        await _serviceManager.CommentService.UpdateCommentAsync(existingComment);
 
         return RedirectToAction("Details", new { id = helpRequestId });
     }
 
-
-
-
-// Delete Comment Action
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteComment(int commentId)
@@ -344,50 +322,47 @@ public class HelpRequestController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        var user = await _userService.GetUserByUsernameAsync(username);
+        var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
         if (user == null)
         {
             return RedirectToAction("Login", "Account");
         }
 
-        var comment = await _commentService.GetCommentByIdAsync(commentId);
+        var comment = await _serviceManager.CommentService.GetCommentByIdAsync(commentId);
         if (comment == null || comment.UserId != user.Id)
         {
             return Unauthorized();
         }
 
-        await _commentService.DeleteCommentAsync(commentId);
+        await _serviceManager.CommentService.DeleteCommentAsync(commentId);
 
         return RedirectToAction("Details", new { id = comment.HelpRequestId });
     }
 
-    // Method to send email for new help request
     private async Task SendNewHelpRequestEmailAsync(User veterinarian, HelpRequest helpRequest, User requester)
     {
         string subject = "New Help Request: Animal in Need!";
         var emailHelper = new EmailHelper();
         string body = emailHelper.GenerateVeterinarianNotificationEmailBody(helpRequest, requester);
 
-        await _emailService.SendEmailAsync(veterinarian.Email, subject, body);
+        await _serviceManager.EmailService.SendEmailAsync(veterinarian.Email, subject, body);
     }
 
-    // Method to send email for updated help request
     private async Task SendUpdatedHelpRequestEmailAsync(User veterinarian, HelpRequest helpRequest, User requester)
     {
         string subject = "Help Request Updated: Animal in Need!";
         var emailHelper = new EmailHelper();
         string body = emailHelper.GenerateEditHelpRequestEmailBody(helpRequest, requester);
 
-        await _emailService.SendEmailAsync(veterinarian.Email, subject, body);
+        await _serviceManager.EmailService.SendEmailAsync(veterinarian.Email, subject, body);
     }
 
-    // Method to send email for deleted help request
     private async Task SendDeletedHelpRequestEmailAsync(User veterinarian, HelpRequest helpRequest, User requester)
     {
         string subject = "Help Request Deleted: Animal in Need!";
         var emailHelper = new EmailHelper();
         string body = emailHelper.GenerateDeleteHelpRequestEmailBody(helpRequest, requester);
 
-        await _emailService.SendEmailAsync(veterinarian.Email, subject, body);
+        await _serviceManager.EmailService.SendEmailAsync(veterinarian.Email, subject, body);
     }
 }
