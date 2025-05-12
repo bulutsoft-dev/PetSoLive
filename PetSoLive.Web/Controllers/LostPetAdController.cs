@@ -1,26 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
 
 namespace PetSoLive.Web.Controllers;
 
 public class LostPetAdController : Controller
 {
-    private readonly ILostPetAdService _lostPetAdService;
-    private readonly IEmailService _emailService;
-    private readonly IUserService _userService;
+    private readonly IServiceManager _serviceManager;
     private readonly IStringLocalizer<LostPetAdController> _localizer;
 
     // Constructor Dependency Injection
-    public LostPetAdController(ILostPetAdService lostPetAdService, 
-        IUserService userService,
-        IEmailService emailService,
-        IStringLocalizer<LostPetAdController> localizer)
+    public LostPetAdController(IServiceManager serviceManager, IStringLocalizer<LostPetAdController> localizer)
     {
-        _lostPetAdService = lostPetAdService;
-        _userService = userService;
-        _emailService = emailService;
-        _localizer = localizer;
+        _serviceManager = serviceManager ?? throw new ArgumentNullException(nameof(serviceManager));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
     }
 
     // Oturum kontrolü metodu
@@ -32,16 +26,16 @@ public class LostPetAdController : Controller
         }
         return null;
     }
-    // Yeni bir GET metodu ekleyin, AJAX isteğini karşılayacak
+
+    // Yeni bir GET metodu, AJAX isteğini karşılayacak
     public IActionResult GetDistrictsByCity(string city)
     {
         // GetDistrictsByCity metodunu çağırarak ilgili ilçeleri alıyoruz
         var districts = CityList.GetDistrictsByCity(city);
-    
+
         // Dönen ilçeleri JSON formatında döndürüyoruz
         return Json(districts);
     }
-
 
     // GET: /LostPetAd/Create
     public IActionResult Create()
@@ -54,10 +48,11 @@ public class LostPetAdController : Controller
         ViewData["Cities"] = CityList.Cities;
 
         // Başlangıçta district listesi boş olacak
-        ViewData["Districts"] = new List<string>(); 
+        ViewData["Districts"] = new List<string>();
 
         return View();
     }
+
     // Kayıp ilanı oluşturma işlemi
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -68,7 +63,7 @@ public class LostPetAdController : Controller
 
         if (string.IsNullOrEmpty(city) || string.IsNullOrEmpty(district))
         {
-            TempData["ErrorMessage"] = "City and District are required.";
+            TempData["ErrorMessage"] = _localizer["CityAndDistrictRequired"]?.Value ?? "City and District are required.";
             ViewData["Cities"] = CityList.Cities;
             ViewData["Districts"] = new List<string>();
             return View(lostPetAd);
@@ -78,13 +73,13 @@ public class LostPetAdController : Controller
         lostPetAd.LastSeenDistrict = district;
 
         var username = HttpContext.Session.GetString("Username");
-        var user = await _userService.GetUserByUsernameAsync(username);
+        var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
         lostPetAd.UserId = user.Id;
 
         // Kaybolan ilanı kaydedelim
-        await _lostPetAdService.CreateLostPetAdAsync(lostPetAd, city, district);
+        await _serviceManager.LostPetAdService.CreateLostPetAdAsync(lostPetAd, city, district);
 
-        TempData["SuccessMessage"] = "The lost pet ad has been created successfully, and notifications have been sent.";
+        TempData["SuccessMessage"] = _localizer["AdCreatedSuccess"]?.Value ?? "The lost pet ad has been created successfully, and notifications have been sent.";
 
         return RedirectToAction("Index");
     }
@@ -92,42 +87,41 @@ public class LostPetAdController : Controller
     // GET: /LostPetAd/Index
     public async Task<IActionResult> Index()
     {
-        var lostPetAds = await _lostPetAdService.GetAllLostPetAdsAsync();
+        var lostPetAds = await _serviceManager.LostPetAdService.GetAllLostPetAdsAsync();
         if (lostPetAds == null)
         {
-            TempData["ErrorMessage"] = "Could not retrieve lost pet ads. Please try again later.";
+            TempData["ErrorMessage"] = _localizer["RetrieveAdsError"]?.Value ?? "Could not retrieve lost pet ads. Please try again later.";
             lostPetAds = new List<LostPetAd>();
         }
 
-        return View(lostPetAds); 
+        return View(lostPetAds);
     }
 
     // GET: /LostPetAd/Details/5
     public async Task<IActionResult> Details(int id)
     {
-        var lostPetAd = await _lostPetAdService.GetLostPetAdByIdAsync(id);
+        var lostPetAd = await _serviceManager.LostPetAdService.GetLostPetAdByIdAsync(id);
         if (lostPetAd == null)
         {
-            TempData["ErrorMessage"] = "Lost Pet Ad not found.";
+            TempData["ErrorMessage"] = _localizer["AdNotFound"]?.Value ?? "Lost Pet Ad not found.";
             return RedirectToAction("Index");
         }
 
         var currentUser = HttpContext.Session.GetString("Username");
-        ViewBag.CurrentUser = currentUser;
+        ViewData["CurrentUser"] = currentUser;
         return View(lostPetAd);
     }
-    
 
-// GET: /LostPetAd/Edit/5
+    // GET: /LostPetAd/Edit/5
     public async Task<IActionResult> Edit(int id)
     {
         var redirectResult = RedirectToLoginIfNotLoggedIn();
         if (redirectResult != null) return redirectResult;
 
-        var lostPetAd = await _lostPetAdService.GetLostPetAdByIdAsync(id);
+        var lostPetAd = await _serviceManager.LostPetAdService.GetLostPetAdByIdAsync(id);
         if (lostPetAd == null)
         {
-            TempData["ErrorMessage"] = "Lost Pet Ad not found.";
+            TempData["ErrorMessage"] = _localizer["AdNotFound"]?.Value ?? "Lost Pet Ad not found.";
             return RedirectToAction("Index");
         }
 
@@ -135,17 +129,16 @@ public class LostPetAdController : Controller
         var currentUser = HttpContext.Session.GetString("Username");
         if (lostPetAd.User == null || lostPetAd.User.Username != currentUser)
         {
-            TempData["ErrorMessage"] = "You do not have permission to edit this ad.";
+            TempData["ErrorMessage"] = _localizer["EditPermissionDenied"]?.Value ?? "You do not have permission to edit this ad.";
             return RedirectToAction("Index");
         }
 
         // Populate city and district lists
         ViewData["Cities"] = CityList.Cities;
-        ViewData["Districts"] = lostPetAd.LastSeenCity != null ?  GetDistrictsByCity(lostPetAd.LastSeenCity) : new List<string>();
+        ViewData["Districts"] = lostPetAd.LastSeenCity != null ? CityList.GetDistrictsByCity(lostPetAd.LastSeenCity) : new List<string>();
 
         return View(lostPetAd);
     }
-
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -156,14 +149,14 @@ public class LostPetAdController : Controller
 
         if (id != updatedLostPetAd.Id)
         {
-            TempData["ErrorMessage"] = "Invalid ad ID.";
+            TempData["ErrorMessage"] = _localizer["InvalidAdId"]?.Value ?? "Invalid ad ID.";
             return RedirectToAction("Index");
         }
 
-        var lostPetAd = await _lostPetAdService.GetLostPetAdByIdAsync(id);
+        var lostPetAd = await _serviceManager.LostPetAdService.GetLostPetAdByIdAsync(id);
         if (lostPetAd == null)
         {
-            TempData["ErrorMessage"] = "Lost Pet Ad not found.";
+            TempData["ErrorMessage"] = _localizer["AdNotFound"]?.Value ?? "Lost Pet Ad not found.";
             return RedirectToAction("Index");
         }
 
@@ -171,7 +164,7 @@ public class LostPetAdController : Controller
         var currentUser = HttpContext.Session.GetString("Username");
         if (lostPetAd.User == null || lostPetAd.User.Username != currentUser)
         {
-            TempData["ErrorMessage"] = "You do not have permission to edit this ad.";
+            TempData["ErrorMessage"] = _localizer["EditPermissionDenied"]?.Value ?? "You do not have permission to edit this ad.";
             return RedirectToAction("Index");
         }
 
@@ -186,28 +179,25 @@ public class LostPetAdController : Controller
         try
         {
             // Update the lost pet ad
-            await _lostPetAdService.UpdateLostPetAdAsync(lostPetAd);
-            TempData["SuccessMessage"] = "The lost pet ad has been updated successfully.";
+            await _serviceManager.LostPetAdService.UpdateLostPetAdAsync(lostPetAd);
+            TempData["SuccessMessage"] = _localizer["AdUpdatedSuccess"]?.Value ?? "The lost pet ad has been updated successfully.";
             return RedirectToAction("Details", new { id = lostPetAd.Id });
         }
         catch (Exception ex)
         {
-            TempData["ErrorMessage"] = $"An error occurred while updating the lost pet ad: {ex.Message}";
+            TempData["ErrorMessage"] = _localizer["UpdateAdError"]?.Value ?? $"An error occurred while updating the lost pet ad: {ex.Message}";
             return RedirectToAction("Index");
         }
     }
 
-
-
-
     // GET: /LostPetAd/Delete/5
     public async Task<IActionResult> Delete(int id)
     {
-        var lostPetAd = await _lostPetAdService.GetLostPetAdByIdAsync(id);
+        var lostPetAd = await _serviceManager.LostPetAdService.GetLostPetAdByIdAsync(id);
 
         if (lostPetAd == null)
         {
-            TempData["ErrorMessage"] = "Lost Pet Ad not found.";
+            TempData["ErrorMessage"] = _localizer["AdNotFound"]?.Value ?? "Lost Pet Ad not found.";
             return RedirectToAction("Index");
         }
 
@@ -216,16 +206,17 @@ public class LostPetAdController : Controller
 
         if (lostPetAd.User == null)
         {
-            TempData["ErrorMessage"] = "The user associated with this ad is not found.";
+            TempData["ErrorMessage"] = _localizer["UserNotFound"]?.Value ?? "The user associated with this ad is not found.";
             return RedirectToAction("Index");
         }
 
         if (lostPetAd.User.Username != currentUser)
         {
-            TempData["ErrorMessage"] = "You do not have permission to delete this ad.";
+            TempData["ErrorMessage"] = _localizer["DeletePermissionDenied"]?.Value ?? "You do not have permission to delete this ad.";
             return RedirectToAction("Index");
         }
-        TempData["DeleteMessage"] = _localizer["DeleteConfirmation"];
+
+        TempData["DeleteMessage"] = _localizer["DeleteConfirmation"]?.Value ?? "Are you sure you want to delete this ad?";
         return View(lostPetAd);
     }
 
@@ -234,11 +225,11 @@ public class LostPetAdController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var lostPetAd = await _lostPetAdService.GetLostPetAdByIdAsync(id);
+        var lostPetAd = await _serviceManager.LostPetAdService.GetLostPetAdByIdAsync(id);
 
         if (lostPetAd == null)
         {
-            TempData["ErrorMessage"] = "Lost Pet Ad not found.";
+            TempData["ErrorMessage"] = _localizer["AdNotFound"]?.Value ?? "Lost Pet Ad not found.";
             return RedirectToAction("Index");
         }
 
@@ -247,19 +238,18 @@ public class LostPetAdController : Controller
 
         if (lostPetAd.User == null)
         {
-            TempData["ErrorMessage"] = "The user associated with this ad is not found.";
+            TempData["ErrorMessage"] = _localizer["UserNotFound"]?.Value ?? "The user associated with this ad is not found.";
             return RedirectToAction("Index");
         }
 
         if (lostPetAd.User.Username != currentUser)
         {
-            TempData["ErrorMessage"] = "You do not have permission to delete this ad.";
+            TempData["ErrorMessage"] = _localizer["DeletePermissionDenied"]?.Value ?? "You do not have permission to delete this ad.";
             return RedirectToAction("Index");
         }
 
-        await _lostPetAdService.DeleteLostPetAdAsync(lostPetAd);
-        TempData["SuccessMessage"] = "The lost pet ad has been deleted successfully.";
+        await _serviceManager.LostPetAdService.DeleteLostPetAdAsync(lostPetAd);
+        TempData["SuccessMessage"] = _localizer["AdDeletedSuccess"]?.Value ?? "The lost pet ad has been deleted successfully.";
         return RedirectToAction("Index");
     }
-    
 }
