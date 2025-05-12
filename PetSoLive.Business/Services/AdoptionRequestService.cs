@@ -1,43 +1,32 @@
-using Microsoft.EntityFrameworkCore;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
-using PetSoLive.Data;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PetSoLive.Business.Services
 {
     public class AdoptionRequestService : IAdoptionRequestService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IAdoptionRequestRepository _adoptionRequestRepository;
 
-        public AdoptionRequestService(ApplicationDbContext context)
+        public AdoptionRequestService(IAdoptionRequestRepository adoptionRequestRepository)
         {
-            _context = context;
+            _adoptionRequestRepository = adoptionRequestRepository ?? throw new ArgumentNullException(nameof(adoptionRequestRepository));
         }
 
         public async Task<AdoptionRequest> GetAdoptionRequestByIdAsync(int requestId)
         {
-            return await _context.AdoptionRequests
-                .Include(ar => ar.User)
-                .FirstOrDefaultAsync(ar => ar.Id == requestId);
-        }
-
-        public async Task<List<AdoptionRequest>> GetAdoptionRequestsByPetIdAsync(int petId)
-        {
-            return await _context.AdoptionRequests
-                .Where(ar => ar.PetId == petId)
-                .ToListAsync();
+            return await _adoptionRequestRepository.GetByIdAsync(requestId);
         }
 
         public async Task UpdateAdoptionRequestAsync(AdoptionRequest request)
         {
-            _context.AdoptionRequests.Update(request);
-            await _context.SaveChangesAsync();
+            await _adoptionRequestRepository.UpdateAsync(request);
         }
 
-        public async Task UpdatePetAsync(Pet pet)
+        public async Task<List<AdoptionRequest>> GetPendingRequestsByPetIdAsync(int petId)
         {
-            _context.Pets.Update(pet);
-            await _context.SaveChangesAsync();
+            return await _adoptionRequestRepository.GetPendingRequestsByPetIdAsync(petId);
         }
     }
 }

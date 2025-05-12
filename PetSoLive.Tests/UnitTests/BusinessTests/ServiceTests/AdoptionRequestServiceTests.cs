@@ -1,80 +1,80 @@
-
-using Microsoft.EntityFrameworkCore;
-using PetSoLive.Business.Services;
+using Moq;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Enums;
-using PetSoLive.Data;
-using Xunit;
+using PetSoLive.Core.Interfaces;
+using PetSoLive.Business.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace PetSoLive.Tests.UnitTests
 {
-    public class AdoptionRequestServiceTests : IDisposable
+    public class AdoptionRequestServiceTests
     {
-        private readonly ApplicationDbContext _context;
+        private readonly Mock<IAdoptionRequestRepository> _adoptionRequestRepositoryMock;
         private readonly AdoptionRequestService _service;
 
         public AdoptionRequestServiceTests()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
-                .Options;
-
-            _context = new ApplicationDbContext(options);
-            _service = new AdoptionRequestService(_context);
-        }
-
-        public void Dispose()
-        {
-            _context.Database.EnsureDeleted();
-            _context.Dispose();
+            _adoptionRequestRepositoryMock = new Mock<IAdoptionRequestRepository>();
+            _service = new AdoptionRequestService(_adoptionRequestRepositoryMock.Object);
         }
 
         [Fact]
         public async Task GetAdoptionRequestByIdAsync_ShouldReturnAdoptionRequest_WhenRequestExists()
         {
-            var user = new User
-            {
-                Username = "testuser",
-                Email = "test@example.com",
-                PasswordHash = "hashedpassword",
-                PhoneNumber = "1234567890",
-                Address = "123 Test St",
-                DateOfBirth = DateTime.Now.AddYears(-30),
-                IsActive = true,
-                CreatedDate = DateTime.Now,
-                ProfileImageUrl = "https://example.com/profile.jpg"
-            };
-            _context.Users.Add(user);
-
+            // Arrange
             var adoptionRequest = new AdoptionRequest
             {
+                Id = 1,
                 PetId = 1,
-                UserId = user.Id,
+                UserId = 1,
                 Message = "I want to adopt this pet.",
                 Status = AdoptionStatus.Pending,
-                RequestDate = DateTime.Now
+                RequestDate = DateTime.Now,
+                User = new User { Id = 1, Username = "testuser" },
+                Pet = new Pet { Id = 1, Name = "Fluffy" }
             };
 
-            _context.AdoptionRequests.Add(adoptionRequest);
-            await _context.SaveChangesAsync();
+            _adoptionRequestRepositoryMock.Setup(repo => repo.GetByIdAsync(1))
+                .ReturnsAsync(adoptionRequest);
 
-            var result = await _service.GetAdoptionRequestByIdAsync(adoptionRequest.Id);
+            // Act
+            var result = await _service.GetAdoptionRequestByIdAsync(1);
 
+            // Assert
             Assert.NotNull(result);
             Assert.Equal(adoptionRequest.Id, result.Id);
+            Assert.Equal(adoptionRequest.Message, result.Message);
+            Assert.Equal(adoptionRequest.Status, result.Status);
+            Assert.NotNull(result.User);
+            Assert.NotNull(result.Pet);
         }
 
         [Fact]
-        public async Task GetAdoptionRequestsByPetIdAsync_ShouldReturnRequests_WhenRequestsExist()
+        public async Task GetAdoptionRequestByIdAsync_ShouldReturnNull_WhenRequestDoesNotExist()
         {
+            // Arrange
+            _adoptionRequestRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()))
+                .ReturnsAsync((AdoptionRequest)null);
+
+            // Act
+            var result = await _service.GetAdoptionRequestByIdAsync(999);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async Task GetPendingRequestsByPetIdAsync_ShouldReturnRequests_WhenRequestsExist()
+        {
+            // Arrange
             var adoptionRequests = new List<AdoptionRequest>
             {
                 new AdoptionRequest
                 {
+                    Id = 1,
                     PetId = 1,
                     UserId = 1,
                     Message = "I want to adopt this pet.",
@@ -83,6 +83,7 @@ namespace PetSoLive.Tests.UnitTests
                 },
                 new AdoptionRequest
                 {
+                    Id = 2,
                     PetId = 1,
                     UserId = 2,
                     Message = "I also want to adopt this pet.",
@@ -91,20 +92,40 @@ namespace PetSoLive.Tests.UnitTests
                 }
             };
 
-            _context.AdoptionRequests.AddRange(adoptionRequests);
-            await _context.SaveChangesAsync();
+            _adoptionRequestRepositoryMock.Setup(repo => repo.GetPendingRequestsByPetIdAsync(1))
+                .ReturnsAsync(adoptionRequests);
 
-            var result = await _service.GetAdoptionRequestsByPetIdAsync(1);
+            // Act
+            var result = await _service.GetPendingRequestsByPetIdAsync(1);
 
+            // Assert
             Assert.NotNull(result);
             Assert.Equal(2, result.Count);
+            Assert.All(result, r => Assert.Equal(AdoptionStatus.Pending, r.Status));
         }
 
         [Fact]
-        public async Task UpdateAdoptionRequestAsync_ShouldUpdateRequest_WhenValid()
+        public async Task GetPendingRequestsByPetIdAsync_ShouldReturnEmptyList_WhenNoRequestsExist()
         {
+            // Arrange
+            _adoptionRequestRepositoryMock.Setup(repo => repo.GetPendingRequestsByPetIdAsync(1))
+                .ReturnsAsync(new List<AdoptionRequest>());
+
+            // Act
+            var result = await _service.GetPendingRequestsByPetIdAsync(1);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public async Task UpdateAdoptionRequestAsync_ShouldCallRepositoryUpdate_WhenValid()
+        {
+            // Arrange
             var adoptionRequest = new AdoptionRequest
             {
+                Id = 1,
                 PetId = 1,
                 UserId = 1,
                 Message = "I want to adopt this pet.",
@@ -112,48 +133,16 @@ namespace PetSoLive.Tests.UnitTests
                 RequestDate = DateTime.Now
             };
 
-            _context.AdoptionRequests.Add(adoptionRequest);
-            await _context.SaveChangesAsync();
+            _adoptionRequestRepositoryMock.Setup(repo => repo.UpdateAsync(It.IsAny<AdoptionRequest>()))
+                .Returns(Task.CompletedTask);
 
             adoptionRequest.Status = AdoptionStatus.Approved;
 
+            // Act
             await _service.UpdateAdoptionRequestAsync(adoptionRequest);
 
-            var updatedRequest = await _context.AdoptionRequests.FindAsync(adoptionRequest.Id);
-            Assert.NotNull(updatedRequest);
-            Assert.Equal(AdoptionStatus.Approved, updatedRequest.Status);
-        }
-
-        [Fact]
-        public async Task UpdatePetAsync_ShouldUpdatePet_WhenValid()
-        {
-            var pet = new Pet
-            {
-                Name = "Fluffy",
-                Species = "Cat",
-                Breed = "Persian",
-                Age = 3,
-                Gender = "Female",
-                Weight = 4.5,
-                Color = "White",
-                DateOfBirth = new DateTime(2020, 5, 10),
-                Description = "Friendly and playful.",
-                VaccinationStatus = "Up to date",
-                MicrochipId = "123456789",
-                IsNeutered = true,
-                ImageUrl = "url_to_image"
-            };
-
-            _context.Pets.Add(pet);
-            await _context.SaveChangesAsync();
-
-            pet.Name = "Fluffy Updated";
-
-            await _service.UpdatePetAsync(pet);
-
-            var updatedPet = await _context.Pets.FindAsync(pet.Id);
-            Assert.NotNull(updatedPet);
-            Assert.Equal("Fluffy Updated", updatedPet.Name);
+            // Assert
+            _adoptionRequestRepositoryMock.Verify(repo => repo.UpdateAsync(It.Is<AdoptionRequest>(r => r.Id == 1 && r.Status == AdoptionStatus.Approved)), Times.Once());
         }
     }
 }

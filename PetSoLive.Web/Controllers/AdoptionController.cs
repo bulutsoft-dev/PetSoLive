@@ -8,39 +8,21 @@ namespace PetSoLive.Web.Controllers;
 
 public class AdoptionController : Controller
 {
-    private readonly IAdoptionService _adoptionService;
-    private readonly IPetService _petService;
-    private readonly IUserService _userService;
-    private readonly IEmailService _emailService;
-    private readonly IPetOwnerService _petOwnerService;
-    private readonly IAdoptionRequestRepository _adoptionRequestRepository;
-    private readonly IAdoptionRequestService _adoptionRequestService;
+    private readonly IServiceManager _serviceManager;
     private readonly IStringLocalizer<AdoptionController> _localizer;
 
     public AdoptionController(
-        IAdoptionService adoptionService, 
-        IAdoptionRequestService adoptionRequestService,
-        IPetService petService, 
-        IUserService userService, 
-        IEmailService emailService, 
-        IPetOwnerService petOwnerService,
-        IAdoptionRequestRepository adoptionRequestRepository,
+        IServiceManager serviceManager,
         IStringLocalizer<AdoptionController> localizer)
     {
-        _adoptionService = adoptionService;
-        _petService = petService;
-        _userService = userService;
-        _emailService = emailService;
-        _petOwnerService = petOwnerService;
-        _adoptionRequestRepository = adoptionRequestRepository;
-        _adoptionRequestService = adoptionRequestService;
-        _localizer = localizer;
+        _serviceManager = serviceManager ?? throw new ArgumentNullException(nameof(serviceManager));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
     }
 
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var pets = await _petService.GetAllPetsAsync();
+        var pets = await _serviceManager.PetService.GetAllPetsAsync();
         ViewData["Title"] = _localizer["AvailablePetsTitle"];
         return View(pets);
     }
@@ -53,13 +35,13 @@ public class AdoptionController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        var user = await _userService.GetUserByUsernameAsync(username);
+        var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
         if (user == null)
         {
             return BadRequest("User not found.");
         }
 
-        var existingRequest = await _adoptionService.GetAdoptionRequestByUserAndPetAsync(user.Id, petId);
+        var existingRequest = await _serviceManager.AdoptionService.GetAdoptionRequestByUserAndPetAsync(user.Id, petId);
         if (existingRequest != null)
         {
             ViewBag.ErrorMessage = "You have already submitted an adoption request for this pet.";
@@ -67,7 +49,7 @@ public class AdoptionController : Controller
             return View("AdoptionRequestExists");
         }
 
-        var pet = await _petService.GetPetByIdAsync(petId);
+        var pet = await _serviceManager.PetService.GetPetByIdAsync(petId);
         if (pet == null)
         {
             return NotFound();
@@ -88,19 +70,19 @@ public class AdoptionController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        var pet = await _petService.GetPetByIdAsync(petId);
+        var pet = await _serviceManager.PetService.GetPetByIdAsync(petId);
         if (pet == null)
         {
             return NotFound();
         }
 
-        var user = await _userService.GetUserByUsernameAsync(username);
+        var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
         if (user == null)
         {
             return BadRequest("User not found.");
         }
 
-        var existingRequest = await _adoptionService.GetAdoptionRequestByUserAndPetAsync(user.Id, petId);
+        var existingRequest = await _serviceManager.AdoptionService.GetAdoptionRequestByUserAndPetAsync(user.Id, petId);
         if (existingRequest != null)
         {
             ViewBag.ErrorMessage = "You have already submitted an adoption request for this pet.";
@@ -113,7 +95,7 @@ public class AdoptionController : Controller
         user.Address = address;
         user.DateOfBirth = dateOfBirth;
 
-        await _userService.UpdateUserAsync(user);
+        await _serviceManager.UserService.UpdateUserAsync(user);
 
         var adoptionRequest = new AdoptionRequest
         {
@@ -125,7 +107,7 @@ public class AdoptionController : Controller
             User = user
         };
 
-        await _adoptionService.CreateAdoptionRequestAsync(adoptionRequest);
+        await _serviceManager.AdoptionService.CreateAdoptionRequestAsync(adoptionRequest);
         await SendAdoptionRequestNotificationAsync(adoptionRequest);
         await SendAdoptionConfirmationEmailAsync(user, pet);
 
@@ -134,13 +116,13 @@ public class AdoptionController : Controller
 
     public async Task SendAdoptionRequestNotificationAsync(AdoptionRequest adoptionRequest)
     {
-        var petOwner = await _petOwnerService.GetPetOwnerByPetIdAsync(adoptionRequest.PetId);
+        var petOwner = await _serviceManager.PetOwnerService.GetPetOwnerByPetIdAsync(adoptionRequest.PetId);
         if (petOwner == null)
         {
             return;
         }
         
-        var petOwnerUser = await _userService.GetUserByIdAsync(petOwner.UserId);
+        var petOwnerUser = await _serviceManager.UserService.GetUserByIdAsync(petOwner.UserId);
 
         var user = adoptionRequest.User;
         var pet = adoptionRequest.Pet;
@@ -149,7 +131,7 @@ public class AdoptionController : Controller
         var emailHelper = new EmailHelper();
         var body = emailHelper.GenerateAdoptionRequestEmailBody(user, pet, adoptionRequest);
 
-        await _emailService.SendEmailAsync(petOwnerUser.Email, subject, body);
+        await _serviceManager.EmailService.SendEmailAsync(petOwnerUser.Email, subject, body);
     }
 
     public async Task SendAdoptionConfirmationEmailAsync(User user, Pet pet)
@@ -158,18 +140,18 @@ public class AdoptionController : Controller
         var emailHelper = new EmailHelper();
         var body = emailHelper.GenerateAdoptionRequestConfirmationEmailBody(user, pet);
 
-        await _emailService.SendEmailAsync(user.Email, subject, body);
+        await _serviceManager.EmailService.SendEmailAsync(user.Email, subject, body);
     }
 
     public async Task<IActionResult> ApproveRequest(int adoptionRequestId, int petId)
     {
-        var adoptionRequest = await _adoptionRequestService.GetAdoptionRequestByIdAsync(adoptionRequestId);
+        var adoptionRequest = await _serviceManager.AdoptionRequestService.GetAdoptionRequestByIdAsync(adoptionRequestId);
         if (adoptionRequest == null || adoptionRequest.PetId != petId)
         {
             return NotFound();
         }
 
-        var pet = await _petService.GetPetByIdAsync(petId);
+        var pet = await _serviceManager.PetService.GetPetByIdAsync(petId);
         var petOwner = pet.PetOwners.FirstOrDefault();
 
         if (petOwner?.UserId.ToString() != User?.Identity?.Name)
@@ -178,7 +160,7 @@ public class AdoptionController : Controller
         }
 
         adoptionRequest.Status = AdoptionStatus.Approved;
-        await _adoptionRequestService.UpdateAdoptionRequestAsync(adoptionRequest);
+        await _serviceManager.AdoptionRequestService.UpdateAdoptionRequestAsync(adoptionRequest);
 
         var approvedUser = adoptionRequest.User;
         if (approvedUser != null)
@@ -186,14 +168,15 @@ public class AdoptionController : Controller
             await SendApprovalEmailAsync(approvedUser, pet);
         }
 
-        var pendingRequests = await _adoptionRequestRepository.GetPendingRequestsByPetIdAsync(petId);
-        if (pendingRequests != null ) {
+        var pendingRequests = await _serviceManager.AdoptionRequestService.GetPendingRequestsByPetIdAsync(petId);
+        if (pendingRequests != null)
+        {
             foreach (var request in pendingRequests)
             {
                 if (request.Id != adoptionRequestId)
                 {
                     request.Status = AdoptionStatus.Rejected;
-                    await _adoptionRequestService.UpdateAdoptionRequestAsync(request);
+                    await _serviceManager.AdoptionRequestService.UpdateAdoptionRequestAsync(request);
 
                     var rejectedUser = request.User;
                     if (rejectedUser != null)
@@ -214,7 +197,7 @@ public class AdoptionController : Controller
             User = adoptionRequest.User
         };
 
-        await _adoptionService.CreateAdoptionAsync(adoption);
+        await _serviceManager.AdoptionService.CreateAdoptionAsync(adoption);
 
         return RedirectToAction("Index");
     }
@@ -223,13 +206,13 @@ public class AdoptionController : Controller
     {
         var subject = "Your Adoption Request Has Been Approved";
         var body = new EmailHelper().GenerateAdoptionConfirmationEmailBody(user, pet);
-        await _emailService.SendEmailAsync(user.Email, subject, body);
+        await _serviceManager.EmailService.SendEmailAsync(user.Email, subject, body);
     }
 
     private async Task SendRejectionEmailAsync(User user, Pet pet)
     {
         var subject = "Adoption Request Rejected";
         var body = new EmailHelper().GenerateRejectionEmailBody(user, pet);
-        await _emailService.SendEmailAsync(user.Email, subject, body);
+        await _serviceManager.EmailService.SendEmailAsync(user.Email, subject, body);
     }
 }

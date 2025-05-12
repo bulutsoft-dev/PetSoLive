@@ -7,15 +7,13 @@ namespace PetSoLive.Web.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly IUserService _userService;
-            
+    private readonly IServiceManager _serviceManager;
     private readonly IStringLocalizer<AccountController> _localizer;
 
-
-    public AccountController(IUserService userService,IStringLocalizer<AccountController> localizer)
+    public AccountController(IServiceManager serviceManager, IStringLocalizer<AccountController> localizer)
     {
-        _userService = userService;
-        _localizer = localizer;
+        _serviceManager = serviceManager ?? throw new ArgumentNullException(nameof(serviceManager));
+        _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
     }
 
     public IActionResult Login()
@@ -35,7 +33,7 @@ public class AccountController : Controller
 
         try
         {
-            var user = await _userService.AuthenticateAsync(username, password);
+            var user = await _serviceManager.UserService.AuthenticateAsync(username, password);
             if (user != null)
             {
                 HttpContext.Session.SetString("Username", user.Username);
@@ -52,11 +50,11 @@ public class AccountController : Controller
 
         return View();
     }
+
     public IActionResult Register()
     {
         ViewData["Cities"] = CityList.Cities;
         ViewData["Districts"] = new List<string>();  // Initial empty list for districts
-    
         return View();
     }
 
@@ -76,7 +74,7 @@ public class AccountController : Controller
         {
             Username = username,
             Email = email,
-            PasswordHash = password,
+            PasswordHash = password, // Not: Gerçek uygulamada parola hash'lenmeli
             PhoneNumber = phoneNumber,
             Address = address,
             DateOfBirth = dateOfBirth,
@@ -85,7 +83,7 @@ public class AccountController : Controller
             District = district
         };
 
-        await _userService.RegisterAsync(user);
+        await _serviceManager.UserService.RegisterAsync(user);
         return RedirectToAction("Login");
     }
 
