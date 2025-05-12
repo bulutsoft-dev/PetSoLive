@@ -26,6 +26,10 @@ namespace PetSoLive.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<User>()
+                .Property(u => u.Id)
+                .ValueGeneratedOnAdd();
+
 
             // Adoption - Pet ilişkisi
             modelBuilder.Entity<Adoption>()
