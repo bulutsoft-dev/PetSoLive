@@ -1,54 +1,54 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using PetSoLive.Core.Interfaces;
+using PetSoLive.Core.Entities;
 using PetSoLive.Core.Enums;
+using PetSoLive.Core.Interfaces;
 
 namespace PetSoLive.Web.Controllers
 {
     public class VeterinarianController : Controller
     {
-        private readonly IVeterinarianService _veterinarianService;
-        private readonly IUserService _userService;
-        private readonly IAdminService _adminService;
+        private readonly IServiceManager _serviceManager;
         private readonly IStringLocalizer<VeterinarianController> _localizer;
 
-        public VeterinarianController(IVeterinarianService veterinarianService, IUserService userService, IAdminService adminService, IStringLocalizer<VeterinarianController> localizer)
+        public VeterinarianController(IServiceManager serviceManager, IStringLocalizer<VeterinarianController> localizer)
         {
-            _veterinarianService = veterinarianService;
-            _userService = userService;
-            _adminService = adminService;
-            _localizer = localizer;
+            _serviceManager = serviceManager ?? throw new ArgumentNullException(nameof(serviceManager));
+            _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
         }
 
-        private async Task<IActionResult> CheckLoginAsync()
+        private async Task<User> GetLoggedInUserAsync()
         {
             var username = HttpContext.Session.GetString("Username");
-            if (string.IsNullOrEmpty(username))
-            {
-                return RedirectToAction("Login", "Account"); // Kullanıcı giriş yapmamışsa Login sayfasına yönlendir
-            }
+            if (string.IsNullOrEmpty(username)) return null;
+            return await _serviceManager.UserService.GetUserByUsernameAsync(username);
+        }
 
-            var user = await _userService.GetUserByUsernameAsync(username);
-            if (user == null)
+        private IActionResult RedirectToLoginIfNotLoggedIn()
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Username")))
             {
-                return RedirectToAction("Login", "Account"); // Kullanıcı bulunamadıysa Login sayfasına yönlendir
+                return RedirectToAction("Login", "Account");
             }
-
-            return null; // Kullanıcı giriş yapmışsa null döndür
+            return null;
         }
 
         public async Task<IActionResult> Register()
         {
-            var loginCheckResult = await CheckLoginAsync();
-            if (loginCheckResult != null) return loginCheckResult;
+            var loginRedirect = RedirectToLoginIfNotLoggedIn();
+            if (loginRedirect != null) return loginRedirect;
 
-            var username = HttpContext.Session.GetString("Username");
-            var user = await _userService.GetUserByUsernameAsync(username);
-            
-            var existingApplication = await _veterinarianService.GetByUserIdAsync(user.Id);
+            var user = await GetLoggedInUserAsync();
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = _localizer["UserNotFound"].Value;
+                return RedirectToAction("Login", "Account");
+            }
+
+            var existingApplication = await _serviceManager.VeterinarianService.GetByUserIdAsync(user.Id);
             if (existingApplication != null)
             {
-                ViewBag.ApplicationSubmitted = true; // Başvuru yapılmış, formu gösterme
+                ViewData["ApplicationSubmitted"] = true;
                 return View();
             }
 
@@ -56,25 +56,82 @@ namespace PetSoLive.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(int userId, string qualifications, string clinicAddress, string clinicPhoneNumber)
         {
-            var loginCheckResult = await CheckLoginAsync();
-            if (loginCheckResult != null) return loginCheckResult;
+            var loginRedirect = RedirectToLoginIfNotLoggedIn();
+            if (loginRedirect != null) return loginRedirect;
 
-            var username = HttpContext.Session.GetString("Username");
-            var user = await _userService.GetUserByUsernameAsync(username);
+            var user = await GetLoggedInUserAsync();
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = _localizer["UserNotFound"].Value;
+                return RedirectToAction("Login", "Account");
+            }
 
-            var existingApplication = await _veterinarianService.GetByUserIdAsync(user.Id);
+            if (userId != user.Id)
+            {
+                TempData["ErrorMessage"] = _localizer["UnauthorizedAction"].Value;
+                return RedirectToAction("Error", "Home");
+            }
+
+            var existingApplication = await _serviceManager.VeterinarianService.GetByUserIdAsync(user.Id);
             if (existingApplication != null)
             {
-                ModelState.AddModelError("", "You have already submitted an application for veterinarian registration.");
+                ModelState.AddModelError("", _localizer["ExistingApplication"].Value);
                 return View();
+            }
+
+            // Manual validation
+            if (string.IsNullOrWhiteSpace(qualifications))
+            {
+                ModelState.AddModelError("qualifications", _localizer["QualificationsRequired"].Value);
+            }
+            else if (qualifications.Length > 500)
+            {
+                ModelState.AddModelError("qualifications", _localizer["QualificationsTooLong"].Value);
+            }
+
+            if (string.IsNullOrWhiteSpace(clinicAddress))
+            {
+                ModelState.AddModelError("clinicAddress", _localizer["ClinicAddressRequired"].Value);
+            }
+            else if (clinicAddress.Length > 200)
+            {
+                ModelState.AddModelError("clinicAddress", _localizer["ClinicAddressTooLong"].Value);
+            }
+
+            if (string.IsNullOrWhiteSpace(clinicPhoneNumber))
+            {
+                ModelState.AddModelError("clinicPhoneNumber", _localizer["ClinicPhoneRequired"].Value);
+            }
+            else if (clinicPhoneNumber.Length > 20)
+            {
+                ModelState.AddModelError("clinicPhoneNumber", _localizer["ClinicPhoneTooLong"].Value);
+            }
+            else if (!System.Text.RegularExpressions.Regex.IsMatch(clinicPhoneNumber, @"^[\d\s\-+]+$"))
+            {
+                ModelState.AddModelError("clinicPhoneNumber", _localizer["InvalidPhoneFormat"].Value);
             }
 
             if (ModelState.IsValid)
             {
-                await _veterinarianService.RegisterVeterinarianAsync(user.Id, qualifications, clinicAddress, clinicPhoneNumber);
-                return RedirectToAction(nameof(Register)); 
+                try
+                {
+                    // Store the returned Veterinarian if needed
+                    var veterinarian = await _serviceManager.VeterinarianService.RegisterVeterinarianAsync(
+                        userId,
+                        qualifications,
+                        clinicAddress,
+                        clinicPhoneNumber
+                    );
+                    TempData["SuccessMessage"] = _localizer["ApplicationSubmitted"].Value;
+                    return RedirectToAction(nameof(Register));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", _localizer["RegistrationFailed"].Value + " " + ex.Message);
+                }
             }
 
             return View();
@@ -82,48 +139,61 @@ namespace PetSoLive.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var loginCheckResult = await CheckLoginAsync();
-            if (loginCheckResult != null) return loginCheckResult;
+            var loginRedirect = RedirectToLoginIfNotLoggedIn();
+            if (loginRedirect != null) return loginRedirect;
 
-            var username = HttpContext.Session.GetString("Username");
-            var user = await _userService.GetUserByUsernameAsync(username);
+            var user = await GetLoggedInUserAsync();
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = _localizer["UserNotFound"].Value;
+                return RedirectToAction("Login", "Account");
+            }
 
-            var isAdmin = await _adminService.IsUserAdminAsync(user.Id);
+            var isAdmin = await _serviceManager.AdminService.IsUserAdminAsync(user.Id);
             if (!isAdmin)
             {
-                ViewBag.ErrorMessage = "You are not authorized to view this page.";
+                TempData["ErrorMessage"] = _localizer["NotAuthorized"].Value;
                 return RedirectToAction("Error", "Home");
             }
 
-            var veterinarians = await _veterinarianService.GetAllVeterinariansAsync();
+            var veterinarians = await _serviceManager.VeterinarianService.GetAllVeterinariansAsync();
             return View(veterinarians);
         }
 
         public async Task<IActionResult> Approve(int veterinarianId)
         {
-            var loginCheckResult = await CheckLoginAsync();
-            if (loginCheckResult != null) return loginCheckResult;
+            var loginRedirect = RedirectToLoginIfNotLoggedIn();
+            if (loginRedirect != null) return loginRedirect;
 
-            var username = HttpContext.Session.GetString("Username");
-            var user = await _userService.GetUserByUsernameAsync(username);
+            var user = await GetLoggedInUserAsync();
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = _localizer["UserNotFound"].Value;
+                return RedirectToAction("Login", "Account");
+            }
 
-            var isAdmin = await _adminService.IsUserAdminAsync(user.Id);
+            var isAdmin = await _serviceManager.AdminService.IsUserAdminAsync(user.Id);
             if (!isAdmin)
             {
-                ViewBag.ErrorMessage = "You are not authorized to approve veterinarians.";
+                TempData["ErrorMessage"] = _localizer["NotAuthorizedApprove"].Value;
                 return RedirectToAction("Error", "Home");
             }
 
-            var veterinarian = await _veterinarianService.GetByIdAsync(veterinarianId);
+            var veterinarian = await _serviceManager.VeterinarianService.GetByIdAsync(veterinarianId);
             if (veterinarian == null)
             {
-                ViewBag.ErrorMessage = "Veterinarian not found.";
+                TempData["ErrorMessage"] = _localizer["VeterinarianNotFound"].Value;
                 return RedirectToAction("Error", "Home");
             }
 
             if (veterinarian.Status == VeterinarianStatus.Pending)
             {
-                await _veterinarianService.ApproveVeterinarianAsync(veterinarianId);
+                await _serviceManager.VeterinarianService.ApproveVeterinarianAsync(veterinarianId);
+                TempData["SuccessMessage"] = _localizer["VeterinarianApproved"].Value;
+            }
+            else
+            {
+                TempData["ErrorMessage"] = _localizer["InvalidVeterinarianStatus"].Value;
             }
 
             return RedirectToAction(nameof(Index));
@@ -131,29 +201,38 @@ namespace PetSoLive.Web.Controllers
 
         public async Task<IActionResult> Reject(int veterinarianId)
         {
-            var loginCheckResult = await CheckLoginAsync();
-            if (loginCheckResult != null) return loginCheckResult;
+            var loginRedirect = RedirectToLoginIfNotLoggedIn();
+            if (loginRedirect != null) return loginRedirect;
 
-            var username = HttpContext.Session.GetString("Username");
-            var user = await _userService.GetUserByUsernameAsync(username);
+            var user = await GetLoggedInUserAsync();
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = _localizer["UserNotFound"].Value;
+                return RedirectToAction("Login", "Account");
+            }
 
-            var isAdmin = await _adminService.IsUserAdminAsync(user.Id);
+            var isAdmin = await _serviceManager.AdminService.IsUserAdminAsync(user.Id);
             if (!isAdmin)
             {
-                ViewBag.ErrorMessage = "You are not authorized to reject veterinarians.";
+                TempData["ErrorMessage"] = _localizer["NotAuthorizedReject"].Value;
                 return RedirectToAction("Error", "Home");
             }
 
-            var veterinarian = await _veterinarianService.GetByIdAsync(veterinarianId);
+            var veterinarian = await _serviceManager.VeterinarianService.GetByIdAsync(veterinarianId);
             if (veterinarian == null)
             {
-                ViewBag.ErrorMessage = "Veterinarian not found.";
+                TempData["ErrorMessage"] = _localizer["VeterinarianNotFound"].Value;
                 return RedirectToAction("Error", "Home");
             }
 
             if (veterinarian.Status == VeterinarianStatus.Pending)
             {
-                await _veterinarianService.RejectVeterinarianAsync(veterinarianId);
+                await _serviceManager.VeterinarianService.RejectVeterinarianAsync(veterinarianId);
+                TempData["SuccessMessage"] = _localizer["VeterinarianRejected"].Value;
+            }
+            else
+            {
+                TempData["ErrorMessage"] = _localizer["InvalidVeterinarianStatus"].Value;
             }
 
             return RedirectToAction(nameof(Index));

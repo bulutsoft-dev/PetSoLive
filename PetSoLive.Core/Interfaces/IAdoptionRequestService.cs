@@ -9,5 +9,6 @@ namespace PetSoLive.Core.Interfaces
         Task<AdoptionRequest> GetAdoptionRequestByIdAsync(int requestId);
         Task UpdateAdoptionRequestAsync(AdoptionRequest request);
         Task<List<AdoptionRequest>> GetPendingRequestsByPetIdAsync(int petId);
+        Task<List<AdoptionRequest>> GetAdoptionRequestsByPetIdAsync(int petId);
     }
 }
