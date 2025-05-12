@@ -16,17 +16,28 @@ namespace PetSoLive.Business.Services
 
         public async Task<AdoptionRequest> GetAdoptionRequestByIdAsync(int requestId)
         {
-            return await _adoptionRequestRepository.GetByIdAsync(requestId);
+            var request = await _adoptionRequestRepository.GetByIdAsync(requestId);
+            if (request == null)
+            {
+                throw new KeyNotFoundException($"Adoption request with ID {requestId} not found.");
+            }
+            return request;
         }
 
         public async Task UpdateAdoptionRequestAsync(AdoptionRequest request)
         {
+            if (request == null) throw new ArgumentNullException(nameof(request));
             await _adoptionRequestRepository.UpdateAsync(request);
         }
 
         public async Task<List<AdoptionRequest>> GetPendingRequestsByPetIdAsync(int petId)
         {
             return await _adoptionRequestRepository.GetPendingRequestsByPetIdAsync(petId);
+        }
+
+        public async Task<List<AdoptionRequest>> GetAdoptionRequestsByPetIdAsync(int petId)
+        {
+            return await _adoptionRequestRepository.GetAdoptionRequestsByPetIdAsync(petId);
         }
     }
 }
