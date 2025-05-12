@@ -8,19 +8,23 @@ using Xunit;
 
 public class AccountControllerTests
 {
+    private readonly Mock<IServiceManager> _mockServiceManager;
     private readonly Mock<IUserService> _mockUserService;
     private readonly AccountController _controller;
 
     public AccountControllerTests()
     {
         _mockUserService = new Mock<IUserService>();
-        _controller = new AccountController(_mockUserService.Object, null);
+        _mockServiceManager = new Mock<IServiceManager>();
+        _mockServiceManager.Setup(sm => sm.UserService).Returns(_mockUserService.Object);
+
+        _controller = new AccountController(_mockServiceManager.Object, null);
 
         // Mocking HttpContext and Session
         var httpContext = new DefaultHttpContext();
         var sessionMock = new Mock<ISession>();
         httpContext.Session = sessionMock.Object;
-        
+
         _controller.ControllerContext = new ControllerContext
         {
             HttpContext = httpContext
@@ -66,8 +70,8 @@ public class AccountControllerTests
         var result = await _controller.Login(username, password);
 
         // Assert
-        var redirectResult = Assert.IsType<RedirectToActionResult>(result); // RedirectToActionResult bekliyoruz
-        Assert.Equal("Index", redirectResult.ActionName); // Home/Index'e yönlendirme yapılmalı
+        var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+        Assert.Equal("Index", redirectResult.ActionName);
         Assert.Equal("Home", redirectResult.ControllerName);
     }
 
@@ -95,12 +99,14 @@ public class AccountControllerTests
             Address = "123 Test St.",
             DateOfBirth = DateTime.Now.AddYears(-30),
             ProfileImageUrl = "profile.jpg",
-            City = "TestCity",  // Add city
-            District = "TestDistrict"  // Add district
+            City = "TestCity",
+            District = "TestDistrict"
         };
 
         // Act
-        var result = await _controller.Register(user.Username, user.Email, user.PasswordHash, user.PhoneNumber, user.Address, user.DateOfBirth, user.City, user.District);
+        var result = await _controller.Register(
+            user.Username, user.Email, user.PasswordHash, user.PhoneNumber,
+            user.Address, user.DateOfBirth, user.City, user.District);
 
         // Assert
         var viewResult = Assert.IsType<ViewResult>(result);
@@ -120,14 +126,16 @@ public class AccountControllerTests
             Address = "123 Test St.",
             DateOfBirth = DateTime.Now.AddYears(-30),
             ProfileImageUrl = "profile.jpg",
-            City = "TestCity",  // Add city
-            District = "TestDistrict"  // Add district
+            City = "TestCity",
+            District = "TestDistrict"
         };
 
         _mockUserService.Setup(s => s.RegisterAsync(It.IsAny<User>())).Returns(Task.CompletedTask);
 
         // Act
-        var result = await _controller.Register(user.Username, user.Email, user.PasswordHash, user.PhoneNumber, user.Address, user.DateOfBirth, user.City, user.District);
+        var result = await _controller.Register(
+            user.Username, user.Email, user.PasswordHash, user.PhoneNumber,
+            user.Address, user.DateOfBirth, user.City, user.District);
 
         // Assert
         var redirectResult = Assert.IsType<RedirectToActionResult>(result);
@@ -141,7 +149,7 @@ public class AccountControllerTests
         var result = _controller.Logout();
 
         // Assert
-        var redirectResult = Assert.IsType<RedirectToActionResult>(result); // Redirect bekliyoruz
-        Assert.Equal("Login", redirectResult.ActionName); // Login sayfasına yönlendirme
+        var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+        Assert.Equal("Login", redirectResult.ActionName);
     }
 }
