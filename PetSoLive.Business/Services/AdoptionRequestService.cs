@@ -7,29 +7,26 @@ namespace PetSoLive.Business.Services
 {
     public class AdoptionRequestService : IAdoptionRequestService
     {
-        private readonly IAdoptionRepository _adoptionRepository;
+        private readonly IAdoptionRequestRepository _adoptionRequestRepository;
 
-        public AdoptionRequestService(IAdoptionRepository adoptionRepository)
+        public AdoptionRequestService(IAdoptionRequestRepository adoptionRequestRepository)
         {
-            _adoptionRepository = adoptionRepository;
+            _adoptionRequestRepository = adoptionRequestRepository ?? throw new ArgumentNullException(nameof(adoptionRequestRepository));
         }
 
         public async Task<AdoptionRequest> GetAdoptionRequestByIdAsync(int requestId)
         {
-            // Implementasyon, örneğin bir repository üzerinden veri çekebilir
-            // Bu sadece bir örnektir, gerçek implementasyon veri tabanına bağlıdır
-            throw new NotImplementedException("GetAdoptionRequestByIdAsync not implemented.");
+            return await _adoptionRequestRepository.GetByIdAsync(requestId);
         }
 
         public async Task UpdateAdoptionRequestAsync(AdoptionRequest request)
         {
-            // Implementasyon, örneğin bir repository üzerinden veri güncelleyebilir
-            throw new NotImplementedException("UpdateAdoptionRequestAsync not implemented.");
+            await _adoptionRequestRepository.UpdateAsync(request);
         }
 
         public async Task<List<AdoptionRequest>> GetPendingRequestsByPetIdAsync(int petId)
         {
-            return await _adoptionRepository.GetPendingRequestsByPetIdAsync(petId);
+            return await _adoptionRequestRepository.GetPendingRequestsByPetIdAsync(petId);
         }
     }
 }
