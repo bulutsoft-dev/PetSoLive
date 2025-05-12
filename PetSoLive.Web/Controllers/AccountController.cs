@@ -7,12 +7,14 @@ namespace PetSoLive.Web.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly IServiceManager _serviceManager;
+    private readonly IUserService _userService;
+            
     private readonly IStringLocalizer<AccountController> _localizer;
 
-    public AccountController(IServiceManager serviceManager, IStringLocalizer<AccountController> localizer)
+
+    public AccountController(IUserService userService,IStringLocalizer<AccountController> localizer)
     {
-        _serviceManager = serviceManager;
+        _userService = userService;
         _localizer = localizer;
     }
 
@@ -27,13 +29,13 @@ public class AccountController : Controller
     {
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
-            ModelState.AddModelError("", "Kullanıcı adı ve şifre zorunludur.");
+            ModelState.AddModelError("", "Username and password are required.");
             return View();
         }
 
         try
         {
-            var user = await _serviceManager.UserService.AuthenticateAsync(username, password);
+            var user = await _userService.AuthenticateAsync(username, password);
             if (user != null)
             {
                 HttpContext.Session.SetString("Username", user.Username);
@@ -41,7 +43,7 @@ public class AccountController : Controller
                 return RedirectToAction("Index", "Home");
             }
 
-            ModelState.AddModelError("", "Geçersiz kullanıcı adı veya şifre.");
+            ModelState.AddModelError("", "Invalid username or password.");
         }
         catch (Exception ex)
         {
@@ -50,26 +52,25 @@ public class AccountController : Controller
 
         return View();
     }
-
     public IActionResult Register()
     {
         ViewData["Cities"] = CityList.Cities;
-        ViewData["Districts"] = new List<string>(); // Başlangıçta boş
-
+        ViewData["Districts"] = new List<string>();  // Initial empty list for districts
+    
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register(
-        string username, string email, string password, string phoneNumber,
-        string address, DateTime dateOfBirth, string city, string district)
+    public async Task<IActionResult> Register(string username, string email, string password, string phoneNumber, string address, DateTime dateOfBirth, string city, string district)
     {
         if (!ModelState.IsValid)
         {
             ViewData["Cities"] = CityList.Cities;
-            ViewData["Districts"] = CityList.GetDistrictsByCity(city);
+            ViewData["Districts"] = CityList.GetDistrictsByCity(city);  // Populate districts based on selected city
             return View();
         }
+
+        string profileImageUrl = "https://www.petsolive.com.tr/";
 
         var user = new User
         {
@@ -79,12 +80,12 @@ public class AccountController : Controller
             PhoneNumber = phoneNumber,
             Address = address,
             DateOfBirth = dateOfBirth,
-            ProfileImageUrl = "https://www.petsolive.com.tr/",
+            ProfileImageUrl = profileImageUrl,
             City = city,
             District = district
         };
 
-        await _serviceManager.UserService.RegisterAsync(user);
+        await _userService.RegisterAsync(user);
         return RedirectToAction("Login");
     }
 
