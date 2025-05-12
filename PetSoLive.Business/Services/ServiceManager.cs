@@ -15,19 +15,21 @@ namespace PetSoLive.Business.Services
             IPetOwnerService petOwnerService,
             IPetService petService,
             IUserService userService,
-            IVeterinarianService veterinarianService)
+            IVeterinarianService veterinarianService,
+            IAdoptionRequestRepository adoptionRequestRepository)
         {
-            AdminService = adminService;
-            AdoptionRequestService = adoptionRequestService;
-            AdoptionService = adoptionService;
-            CommentService = commentService;
-            EmailService = emailService;
-            HelpRequestService = helpRequestService;
-            LostPetAdService = lostPetAdService;
-            PetOwnerService = petOwnerService;
-            PetService = petService;
-            UserService = userService;
-            VeterinarianService = veterinarianService;
+            AdminService = adminService ?? throw new ArgumentNullException(nameof(adminService));
+            AdoptionRequestService = adoptionRequestService ?? throw new ArgumentNullException(nameof(adoptionRequestService));
+            AdoptionService = adoptionService ?? throw new ArgumentNullException(nameof(adoptionService));
+            CommentService = commentService ?? throw new ArgumentNullException(nameof(commentService));
+            EmailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
+            HelpRequestService = helpRequestService ?? throw new ArgumentNullException(nameof(helpRequestService));
+            LostPetAdService = lostPetAdService ?? throw new ArgumentNullException(nameof(lostPetAdService));
+            PetOwnerService = petOwnerService ?? throw new ArgumentNullException(nameof(petOwnerService));
+            PetService = petService ?? throw new ArgumentNullException(nameof(petService));
+            UserService = userService ?? throw new ArgumentNullException(nameof(userService));
+            VeterinarianService = veterinarianService ?? throw new ArgumentNullException(nameof(veterinarianService));
+            AdoptionRequestRepository = adoptionRequestRepository ?? throw new ArgumentNullException(nameof(adoptionRequestRepository));
         }
 
         public IAdminService AdminService { get; }
@@ -41,5 +43,6 @@ namespace PetSoLive.Business.Services
         public IPetService PetService { get; }
         public IUserService UserService { get; }
         public IVeterinarianService VeterinarianService { get; }
+        public IAdoptionRequestRepository AdoptionRequestRepository { get; }
     }
 }
