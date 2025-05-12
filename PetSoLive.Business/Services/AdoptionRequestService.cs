@@ -1,43 +1,35 @@
-using Microsoft.EntityFrameworkCore;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
-using PetSoLive.Data;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PetSoLive.Business.Services
 {
     public class AdoptionRequestService : IAdoptionRequestService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IAdoptionRepository _adoptionRepository;
 
-        public AdoptionRequestService(ApplicationDbContext context)
+        public AdoptionRequestService(IAdoptionRepository adoptionRepository)
         {
-            _context = context;
+            _adoptionRepository = adoptionRepository;
         }
 
         public async Task<AdoptionRequest> GetAdoptionRequestByIdAsync(int requestId)
         {
-            return await _context.AdoptionRequests
-                .Include(ar => ar.User)
-                .FirstOrDefaultAsync(ar => ar.Id == requestId);
-        }
-
-        public async Task<List<AdoptionRequest>> GetAdoptionRequestsByPetIdAsync(int petId)
-        {
-            return await _context.AdoptionRequests
-                .Where(ar => ar.PetId == petId)
-                .ToListAsync();
+            // Implementasyon, örneğin bir repository üzerinden veri çekebilir
+            // Bu sadece bir örnektir, gerçek implementasyon veri tabanına bağlıdır
+            throw new NotImplementedException("GetAdoptionRequestByIdAsync not implemented.");
         }
 
         public async Task UpdateAdoptionRequestAsync(AdoptionRequest request)
         {
-            _context.AdoptionRequests.Update(request);
-            await _context.SaveChangesAsync();
+            // Implementasyon, örneğin bir repository üzerinden veri güncelleyebilir
+            throw new NotImplementedException("UpdateAdoptionRequestAsync not implemented.");
         }
 
-        public async Task UpdatePetAsync(Pet pet)
+        public async Task<List<AdoptionRequest>> GetPendingRequestsByPetIdAsync(int petId)
         {
-            _context.Pets.Update(pet);
-            await _context.SaveChangesAsync();
+            return await _adoptionRepository.GetPendingRequestsByPetIdAsync(petId);
         }
     }
 }

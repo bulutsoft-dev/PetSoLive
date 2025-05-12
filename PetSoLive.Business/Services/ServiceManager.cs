@@ -15,8 +15,7 @@ namespace PetSoLive.Business.Services
             IPetOwnerService petOwnerService,
             IPetService petService,
             IUserService userService,
-            IVeterinarianService veterinarianService,
-            IAdoptionRequestRepository adoptionRequestRepository)
+            IVeterinarianService veterinarianService)
         {
             AdminService = adminService ?? throw new ArgumentNullException(nameof(adminService));
             AdoptionRequestService = adoptionRequestService ?? throw new ArgumentNullException(nameof(adoptionRequestService));
@@ -29,7 +28,6 @@ namespace PetSoLive.Business.Services
             PetService = petService ?? throw new ArgumentNullException(nameof(petService));
             UserService = userService ?? throw new ArgumentNullException(nameof(userService));
             VeterinarianService = veterinarianService ?? throw new ArgumentNullException(nameof(veterinarianService));
-            AdoptionRequestRepository = adoptionRequestRepository ?? throw new ArgumentNullException(nameof(adoptionRequestRepository));
         }
 
         public IAdminService AdminService { get; }
@@ -43,6 +41,5 @@ namespace PetSoLive.Business.Services
         public IPetService PetService { get; }
         public IUserService UserService { get; }
         public IVeterinarianService VeterinarianService { get; }
-        public IAdoptionRequestRepository AdoptionRequestRepository { get; }
     }
 }
