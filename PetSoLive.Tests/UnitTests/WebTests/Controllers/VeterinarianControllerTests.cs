@@ -1,45 +1,61 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Moq;
-using Xunit;
-
-// Adjust these namespaces to match your actual project
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Enums;
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Web.Controllers;
-namespace PetSoLive.Tests.Controllers;
+using Xunit;
 
-public class VeterinarianControllerTests
+namespace PetSoLive.Tests.Controllers
 {
-private readonly Mock<IVeterinarianService> _veterinarianServiceMock;
+    public class VeterinarianControllerTests
+    {
+        private readonly Mock<IServiceManager> _serviceManagerMock;
+        private readonly Mock<IStringLocalizer<VeterinarianController>> _localizerMock;
+        private readonly Mock<IVeterinarianService> _veterinarianServiceMock;
         private readonly Mock<IUserService> _userServiceMock;
         private readonly Mock<IAdminService> _adminServiceMock;
-
+        private readonly Mock<ISession> _sessionMock;
         private readonly VeterinarianController _controller;
         private readonly DefaultHttpContext _httpContext;
 
         public VeterinarianControllerTests()
         {
+            _serviceManagerMock = new Mock<IServiceManager>();
+            _localizerMock = new Mock<IStringLocalizer<VeterinarianController>>();
             _veterinarianServiceMock = new Mock<IVeterinarianService>();
             _userServiceMock = new Mock<IUserService>();
             _adminServiceMock = new Mock<IAdminService>();
+            _sessionMock = new Mock<ISession>();
 
-            _controller = new VeterinarianController(
-                _veterinarianServiceMock.Object,
-                _userServiceMock.Object,
-                _adminServiceMock.Object,
-                null
-            );
+            // Setup IServiceManager
+            _serviceManagerMock.SetupGet(m => m.VeterinarianService).Returns(_veterinarianServiceMock.Object);
+            _serviceManagerMock.SetupGet(m => m.UserService).Returns(_userServiceMock.Object);
+            _serviceManagerMock.SetupGet(m => m.AdminService).Returns(_adminServiceMock.Object);
 
+            // Setup IStringLocalizer
+            _localizerMock.Setup(l => l[It.IsAny<string>()])
+                .Returns<string>(name => new LocalizedString(name, name));
+            _localizerMock.Setup(l => l[It.IsAny<string>(), It.IsAny<object[]>()])
+                .Returns<string, object[]>((name, args) => new LocalizedString(name, string.Format(name, args)));
+
+            // Setup HttpContext and Session
             _httpContext = new DefaultHttpContext
             {
-                Session = new VeterinarianTestSession() // custom test session
+                Session = _sessionMock.Object
             };
-            _controller.ControllerContext = new ControllerContext
+            _controller = new VeterinarianController(_serviceManagerMock.Object, _localizerMock.Object)
             {
-                HttpContext = _httpContext
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = _httpContext
+                }
             };
         }
 
@@ -48,66 +64,78 @@ private readonly Mock<IVeterinarianService> _veterinarianServiceMock;
         public async Task Register_Get_WhenNotLoggedIn_RedirectsToLogin()
         {
             // Arrange
-            // user is not logged in => no Username in session
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny)).Returns(false);
 
             // Act
-            var result = await _controller.Register() as RedirectToActionResult;
+            var result = await _controller.Register();
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal("Login", result.ActionName);
-            Assert.Equal("Account", result.ControllerName);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+            Assert.Equal("Account", redirectResult.ControllerName);
         }
 
         [Fact]
-        public async Task Register_Get_WhenUserLoggedInAndNoExistingApplication_ReturnsView()
+        public async Task Register_Get_WhenUserNotFound_RedirectsToLogin()
         {
             // Arrange
-            _httpContext.Session.SetString("Username", "TestUser");
-            var user = new User { Id = 10, Username = "TestUser" };
-
-            // Mock user retrieval
-            _userServiceMock
-                .Setup(s => s.GetUserByUsernameAsync("TestUser"))
-                .ReturnsAsync(user);
-
-            // No existing vet application
-            _veterinarianServiceMock
-                .Setup(v => v.GetByUserIdAsync(user.Id))
-                .ReturnsAsync((Veterinarian)null);
+            var username = "TestUser";
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync((User)null);
 
             // Act
-            var result = await _controller.Register() as ViewResult;
+            var result = await _controller.Register();
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Null(result.ViewName); // default view
-            Assert.False(_controller.ViewBag.ApplicationSubmitted == true);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+            Assert.Equal("Account", redirectResult.ControllerName);
+            Assert.Equal("UserNotFound", _controller.TempData["ErrorMessage"]);
         }
 
         [Fact]
-        public async Task Register_Get_WhenUserHasExistingApplication_SetsViewBagFlag()
+        public async Task Register_Get_WhenNoExistingApplication_ReturnsView()
         {
             // Arrange
-            _httpContext.Session.SetString("Username", "TestUser");
-            var user = new User { Id = 10, Username = "TestUser" };
+            var username = "TestUser";
+            var user = new User { Id = 10, Username = username };
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
+            _veterinarianServiceMock.Setup(v => v.GetByUserIdAsync(user.Id)).ReturnsAsync((Veterinarian)null);
 
-            _userServiceMock
-                .Setup(s => s.GetUserByUsernameAsync("TestUser"))
-                .ReturnsAsync(user);
+            // Act
+            var result = await _controller.Register();
 
-            // Vet application already exists
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Null(viewResult.ViewName);
+            Assert.False(viewResult.ViewData.ContainsKey("ApplicationSubmitted"));
+        }
+
+        [Fact]
+        public async Task Register_Get_WhenExistingApplication_SetsViewDataFlag()
+        {
+            // Arrange
+            var username = "TestUser";
+            var user = new User { Id = 10, Username = username };
             var existingVet = new Veterinarian { Id = 5, UserId = user.Id };
-            _veterinarianServiceMock
-                .Setup(v => v.GetByUserIdAsync(user.Id))
-                .ReturnsAsync(existingVet);
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
+            _veterinarianServiceMock.Setup(v => v.GetByUserIdAsync(user.Id)).ReturnsAsync(existingVet);
 
             // Act
-            var result = await _controller.Register() as ViewResult;
+            var result = await _controller.Register();
 
             // Assert
-            Assert.NotNull(result);
-            Assert.True((bool)_controller.ViewBag.ApplicationSubmitted);
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Null(viewResult.ViewName);
+            Assert.True((bool)viewResult.ViewData["ApplicationSubmitted"]);
         }
         #endregion
 
@@ -116,66 +144,158 @@ private readonly Mock<IVeterinarianService> _veterinarianServiceMock;
         public async Task Register_Post_WhenNotLoggedIn_RedirectsToLogin()
         {
             // Arrange
-            // not logged in => no Username
-            var userId = 10;
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny)).Returns(false);
 
             // Act
-            var result = await _controller.Register(userId, "Quals", "Address", "555-1234") as RedirectToActionResult;
+            var result = await _controller.Register(10, "Quals", "Address", "555-1234");
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal("Login", result.ActionName);
-            Assert.Equal("Account", result.ControllerName);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+            Assert.Equal("Account", redirectResult.ControllerName);
         }
 
         [Fact]
-        public async Task Register_Post_WhenUserHasExistingApp_ReturnsErrorInModelState()
+        public async Task Register_Post_WhenUserNotFound_RedirectsToLogin()
         {
             // Arrange
-            _httpContext.Session.SetString("Username", "TestUser");
-            var user = new User { Id = 10, Username = "TestUser" };
-
-            _userServiceMock.Setup(u => u.GetUserByUsernameAsync("TestUser"))
-                .ReturnsAsync(user);
-
-            _veterinarianServiceMock.Setup(v => v.GetByUserIdAsync(10))
-                .ReturnsAsync(new Veterinarian { Id = 5, UserId = 10 });
+            var username = "TestUser";
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync((User)null);
 
             // Act
-            var result = await _controller.Register(10, "Quals", "Address", "Phone") as ViewResult;
+            var result = await _controller.Register(10, "Quals", "Address", "555-1234");
 
             // Assert
-            Assert.NotNull(result);
-            Assert.False(_controller.ModelState.IsValid); 
-            Assert.True(_controller.ModelState.ContainsKey(""));
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+            Assert.Equal("Account", redirectResult.ControllerName);
+            Assert.Equal("UserNotFound", _controller.TempData["ErrorMessage"]);
         }
 
         [Fact]
-        public async Task Register_Post_WhenModelIsValid_RegistersVetAndRedirects()
+        public async Task Register_Post_WhenUserIdMismatch_RedirectsToError()
         {
             // Arrange
-            _httpContext.Session.SetString("Username", "TestUser");
-            var user = new User { Id = 10, Username = "TestUser" };
-            _userServiceMock
-                .Setup(u => u.GetUserByUsernameAsync("TestUser"))
-                .ReturnsAsync(user);
-
-            _veterinarianServiceMock
-                .Setup(v => v.GetByUserIdAsync(10))
-                .ReturnsAsync((Veterinarian)null); // no existing application
-
-            // We can consider model to be valid because we pass in plausible parameters
-            _controller.ModelState.Clear();
+            var username = "TestUser";
+            var user = new User { Id = 10, Username = username };
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
             // Act
-            var result = await _controller.Register(10, "My Quals", "My Clinic", "555-1234") as RedirectToActionResult;
+            var result = await _controller.Register(999, "Quals", "Address", "555-1234");
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(nameof(VeterinarianController.Register), result.ActionName);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Error", redirectResult.ActionName);
+            Assert.Equal("Home", redirectResult.ControllerName);
+            Assert.Equal("UnauthorizedAction", _controller.TempData["ErrorMessage"]);
+        }
 
-            _veterinarianServiceMock.Verify(v => v.RegisterVeterinarianAsync(
-                user.Id, "My Quals", "My Clinic", "555-1234"), Times.Once);
+        [Fact]
+        public async Task Register_Post_WhenExistingApplication_ReturnsViewWithError()
+        {
+            // Arrange
+            var username = "TestUser";
+            var user = new User { Id = 10, Username = username };
+            var existingVet = new Veterinarian { Id = 5, UserId = user.Id };
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
+            _veterinarianServiceMock.Setup(v => v.GetByUserIdAsync(user.Id)).ReturnsAsync(existingVet);
+
+            // Act
+            var result = await _controller.Register(user.Id, "Quals", "Address", "555-1234");
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Null(viewResult.ViewName);
+            Assert.False(_controller.ModelState.IsValid);
+            var error = _controller.ModelState[""].Errors[0];
+            Assert.Equal("ExistingApplication", error.ErrorMessage);
+        }
+
+        [Fact]
+        public async Task Register_Post_WhenInvalidInputs_ReturnsViewWithErrors()
+        {
+            // Arrange
+            var username = "TestUser";
+            var user = new User { Id = 10, Username = username };
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
+            _veterinarianServiceMock.Setup(v => v.GetByUserIdAsync(user.Id)).ReturnsAsync((Veterinarian)null);
+
+            // Invalid inputs: empty qualifications, too long address, invalid phone
+            var qualifications = "";
+            var clinicAddress = new string('A', 201); // Exceeds 200 chars
+            var clinicPhoneNumber = "invalid"; // Invalid format
+
+            // Act
+            var result = await _controller.Register(user.Id, qualifications, clinicAddress, clinicPhoneNumber);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Null(viewResult.ViewName);
+            Assert.False(_controller.ModelState.IsValid);
+            Assert.Contains(_controller.ModelState["qualifications"].Errors, e => e.ErrorMessage == "QualificationsRequired");
+            Assert.Contains(_controller.ModelState["clinicAddress"].Errors, e => e.ErrorMessage == "ClinicAddressTooLong");
+            Assert.Contains(_controller.ModelState["clinicPhoneNumber"].Errors, e => e.ErrorMessage == "InvalidPhoneFormat");
+        }
+
+        [Fact]
+        public async Task Register_Post_WhenValid_RegistersAndRedirects()
+        {
+            // Arrange
+            var username = "TestUser";
+            var user = new User { Id = 10, Username = username };
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
+            _veterinarianServiceMock.Setup(v => v.GetByUserIdAsync(user.Id)).ReturnsAsync((Veterinarian)null);
+            _veterinarianServiceMock.Setup(v => v.RegisterVeterinarianAsync(user.Id, "Quals", "Address", "555-1234"))
+                .ReturnsAsync(new Veterinarian { Id = 5, UserId = user.Id, Qualifications = "Quals", ClinicAddress = "Address", ClinicPhoneNumber = "555-1234" });
+
+            // Act
+            var result = await _controller.Register(user.Id, "Quals", "Address", "555-1234");
+
+            // Assert
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal(nameof(_controller.Register), redirectResult.ActionName);
+            _veterinarianServiceMock.Verify(v => v.RegisterVeterinarianAsync(user.Id, "Quals", "Address", "555-1234"), Times.Once());
+            Assert.Equal("ApplicationSubmitted", _controller.TempData["SuccessMessage"]);
+        }
+
+        [Fact]
+        public async Task Register_Post_WhenServiceThrows_ReturnsViewWithError()
+        {
+            // Arrange
+            var username = "TestUser";
+            var user = new User { Id = 10, Username = username };
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
+            _veterinarianServiceMock.Setup(v => v.GetByUserIdAsync(user.Id)).ReturnsAsync((Veterinarian)null);
+            _veterinarianServiceMock.Setup(v => v.RegisterVeterinarianAsync(user.Id, "Quals", "Address", "555-1234"))
+                .ThrowsAsync(new Exception("Service error"));
+
+            // Act
+            var result = await _controller.Register(user.Id, "Quals", "Address", "555-1234");
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Null(viewResult.ViewName);
+            Assert.False(_controller.ModelState.IsValid);
+            var error = _controller.ModelState[""].Errors[0];
+            Assert.StartsWith("RegistrationFailed", error.ErrorMessage);
         }
         #endregion
 
@@ -183,67 +303,85 @@ private readonly Mock<IVeterinarianService> _veterinarianServiceMock;
         [Fact]
         public async Task Index_WhenNotLoggedIn_RedirectsToLogin()
         {
-            // Arrange: no username in session
+            // Arrange
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny)).Returns(false);
 
             // Act
-            var result = await _controller.Index() as RedirectToActionResult;
+            var result = await _controller.Index();
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal("Login", result.ActionName);
-            Assert.Equal("Account", result.ControllerName);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+            Assert.Equal("Account", redirectResult.ControllerName);
         }
 
         [Fact]
-        public async Task Index_WhenNotAdmin_RedirectsToErrorWithMessage()
+        public async Task Index_WhenUserNotFound_RedirectsToLogin()
         {
             // Arrange
-            _httpContext.Session.SetString("Username", "TestUser");
-            var user = new User { Id = 1, Username = "TestUser" };
-
-            _userServiceMock.Setup(u => u.GetUserByUsernameAsync("TestUser"))
-                .ReturnsAsync(user);
-
-            // Not admin
-            _adminServiceMock.Setup(a => a.IsUserAdminAsync(user.Id))
-                .ReturnsAsync(false);
+            var username = "TestUser";
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync((User)null);
 
             // Act
-            var result = await _controller.Index() as RedirectToActionResult;
+            var result = await _controller.Index();
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal("Error", result.ActionName);
-            Assert.Equal("Home", result.ControllerName);
-            Assert.Equal("You are not authorized to view this page.", _controller.ViewBag.ErrorMessage);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+            Assert.Equal("Account", redirectResult.ControllerName);
+            Assert.Equal("UserNotFound", _controller.TempData["ErrorMessage"]);
         }
 
         [Fact]
-        public async Task Index_WhenAdmin_ReturnsViewWithVets()
+        public async Task Index_WhenNotAdmin_RedirectsToError()
         {
             // Arrange
-            _httpContext.Session.SetString("Username", "AdminUser");
-            var user = new User { Id = 2, Username = "AdminUser" };
-            _userServiceMock.Setup(u => u.GetUserByUsernameAsync("AdminUser"))
-                .ReturnsAsync(user);
+            var username = "TestUser";
+            var user = new User { Id = 1, Username = username };
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
+            _adminServiceMock.Setup(a => a.IsUserAdminAsync(user.Id)).ReturnsAsync(false);
 
-            _adminServiceMock.Setup(a => a.IsUserAdminAsync(user.Id))
-                .ReturnsAsync(true);
+            // Act
+            var result = await _controller.Index();
 
+            // Assert
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Error", redirectResult.ActionName);
+            Assert.Equal("Home", redirectResult.ControllerName);
+            Assert.Equal("NotAuthorized", _controller.TempData["ErrorMessage"]);
+        }
+
+        [Fact]
+        public async Task Index_WhenAdmin_ReturnsViewWithVeterinarians()
+        {
+            // Arrange
+            var username = "AdminUser";
+            var user = new User { Id = 2, Username = username };
             var vetList = new List<Veterinarian>
             {
                 new Veterinarian { Id = 10, UserId = 99 },
                 new Veterinarian { Id = 11, UserId = 100 }
             };
-            _veterinarianServiceMock.Setup(v => v.GetAllVeterinariansAsync())
-                .ReturnsAsync(vetList);
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
+            _adminServiceMock.Setup(a => a.IsUserAdminAsync(user.Id)).ReturnsAsync(true);
+            _veterinarianServiceMock.Setup(v => v.GetAllVeterinariansAsync()).ReturnsAsync(vetList);
 
             // Act
-            var result = await _controller.Index() as ViewResult;
+            var result = await _controller.Index();
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(vetList, result.Model);
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Null(viewResult.ViewName);
+            Assert.Equal(vetList, viewResult.Model);
         }
         #endregion
 
@@ -251,228 +389,262 @@ private readonly Mock<IVeterinarianService> _veterinarianServiceMock;
         [Fact]
         public async Task Approve_WhenNotLoggedIn_RedirectsToLogin()
         {
-            // Arrange: no username in session
+            // Arrange
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny)).Returns(false);
 
             // Act
-            var result = await _controller.Approve(10) as RedirectToActionResult;
+            var result = await _controller.Approve(10);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal("Login", result.ActionName);
-            Assert.Equal("Account", result.ControllerName);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+            Assert.Equal("Account", redirectResult.ControllerName);
+        }
+
+        [Fact]
+        public async Task Approve_WhenUserNotFound_RedirectsToLogin()
+        {
+            // Arrange
+            var username = "TestUser";
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync((User)null);
+
+            // Act
+            var result = await _controller.Approve(10);
+
+            // Assert
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+            Assert.Equal("Account", redirectResult.ControllerName);
+            Assert.Equal("UserNotFound", _controller.TempData["ErrorMessage"]);
         }
 
         [Fact]
         public async Task Approve_WhenNotAdmin_RedirectsToError()
         {
             // Arrange
-            _httpContext.Session.SetString("Username", "TestUser");
-            var user = new User { Id = 1 };
-            _userServiceMock.Setup(u => u.GetUserByUsernameAsync("TestUser"))
-                .ReturnsAsync(user);
-
-            _adminServiceMock.Setup(a => a.IsUserAdminAsync(1)).ReturnsAsync(false);
+            var username = "TestUser";
+            var user = new User { Id = 1, Username = username };
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
+            _adminServiceMock.Setup(a => a.IsUserAdminAsync(user.Id)).ReturnsAsync(false);
 
             // Act
-            var result = await _controller.Approve(10) as RedirectToActionResult;
+            var result = await _controller.Approve(10);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal("Error", result.ActionName);
-            Assert.Equal("Home", result.ControllerName);
-            Assert.Equal("You are not authorized to approve veterinarians.", _controller.ViewBag.ErrorMessage);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Error", redirectResult.ActionName);
+            Assert.Equal("Home", redirectResult.ControllerName);
+            Assert.Equal("NotAuthorizedApprove", _controller.TempData["ErrorMessage"]);
         }
 
         [Fact]
-        public async Task Approve_WhenVetNotFound_RedirectsToError()
+        public async Task Approve_WhenVeterinarianNotFound_RedirectsToError()
         {
             // Arrange
-            _httpContext.Session.SetString("Username", "AdminUser");
-            var user = new User { Id = 2 };
-            _userServiceMock.Setup(u => u.GetUserByUsernameAsync("AdminUser"))
-                .ReturnsAsync(user);
-
-            _adminServiceMock.Setup(a => a.IsUserAdminAsync(2)).ReturnsAsync(true);
-
-            _veterinarianServiceMock.Setup(v => v.GetByIdAsync(999))
-                .ReturnsAsync((Veterinarian)null);
+            var username = "AdminUser";
+            var user = new User { Id = 2, Username = username };
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
+            _adminServiceMock.Setup(a => a.IsUserAdminAsync(user.Id)).ReturnsAsync(true);
+            _veterinarianServiceMock.Setup(v => v.GetByIdAsync(999)).ReturnsAsync((Veterinarian)null);
 
             // Act
-            var result = await _controller.Approve(999) as RedirectToActionResult;
+            var result = await _controller.Approve(999);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal("Error", result.ActionName);
-            Assert.Equal("Home", result.ControllerName);
-            Assert.Equal("Veterinarian not found.", _controller.ViewBag.ErrorMessage);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Error", redirectResult.ActionName);
+            Assert.Equal("Home", redirectResult.ControllerName);
+            Assert.Equal("VeterinarianNotFound", _controller.TempData["ErrorMessage"]);
         }
 
         [Fact]
-        public async Task Approve_WhenVetIsPending_CallsServiceApproveAndRedirects()
+        public async Task Approve_WhenPending_CallsServiceAndRedirects()
         {
             // Arrange
-            _httpContext.Session.SetString("Username", "AdminUser");
-            var adminUser = new User { Id = 2 };
-            _userServiceMock.Setup(u => u.GetUserByUsernameAsync("AdminUser"))
-                .ReturnsAsync(adminUser);
-
-            _adminServiceMock.Setup(a => a.IsUserAdminAsync(2))
-                .ReturnsAsync(true);
-
-            var pendingVet = new Veterinarian
-            {
-                Id = 10,
-                Status = VeterinarianStatus.Pending
-            };
-            _veterinarianServiceMock.Setup(v => v.GetByIdAsync(10))
-                .ReturnsAsync(pendingVet);
+            var username = "AdminUser";
+            var user = new User { Id = 2, Username = username };
+            var pendingVet = new Veterinarian { Id = 10, Status = VeterinarianStatus.Pending };
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
+            _adminServiceMock.Setup(a => a.IsUserAdminAsync(user.Id)).ReturnsAsync(true);
+            _veterinarianServiceMock.Setup(v => v.GetByIdAsync(10)).ReturnsAsync(pendingVet);
+            _veterinarianServiceMock.Setup(v => v.ApproveVeterinarianAsync(10)).Returns(Task.CompletedTask);
 
             // Act
-            var result = await _controller.Approve(10) as RedirectToActionResult;
+            var result = await _controller.Approve(10);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(nameof(VeterinarianController.Index), result.ActionName);
-            _veterinarianServiceMock.Verify(v => v.ApproveVeterinarianAsync(10), Times.Once);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal(nameof(_controller.Index), redirectResult.ActionName);
+            _veterinarianServiceMock.Verify(v => v.ApproveVeterinarianAsync(10), Times.Once());
+            Assert.Equal("VeterinarianApproved", _controller.TempData["SuccessMessage"]);
         }
 
         [Fact]
-        public async Task Approve_WhenVetIsNotPending_NoActionTaken()
+        public async Task Approve_WhenNotPending_ReturnsError()
         {
             // Arrange
-            _httpContext.Session.SetString("Username", "AdminUser");
-            var adminUser = new User { Id = 2 };
-            _userServiceMock.Setup(u => u.GetUserByUsernameAsync("AdminUser"))
-                .ReturnsAsync(adminUser);
-
-            _adminServiceMock.Setup(a => a.IsUserAdminAsync(2)).ReturnsAsync(true);
-
-            // Suppose the vet is already Approved
-            var approvedVet = new Veterinarian
-            {
-                Id = 10,
-                Status = VeterinarianStatus.Approved
-            };
+            var username = "AdminUser";
+            var user = new User { Id = 2, Username = username };
+            var approvedVet = new Veterinarian { Id = 10, Status = VeterinarianStatus.Approved };
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
+            _adminServiceMock.Setup(a => a.IsUserAdminAsync(user.Id)).ReturnsAsync(true);
             _veterinarianServiceMock.Setup(v => v.GetByIdAsync(10)).ReturnsAsync(approvedVet);
 
             // Act
-            var result = await _controller.Approve(10) as RedirectToActionResult;
+            var result = await _controller.Approve(10);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(nameof(VeterinarianController.Index), result.ActionName);
-
-            // The service should not be called for an already approved vet
-            _veterinarianServiceMock.Verify(v => v.ApproveVeterinarianAsync(It.IsAny<int>()), Times.Never);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal(nameof(_controller.Index), redirectResult.ActionName);
+            _veterinarianServiceMock.Verify(v => v.ApproveVeterinarianAsync(It.IsAny<int>()), Times.Never());
+            Assert.Equal("InvalidVeterinarianStatus", _controller.TempData["ErrorMessage"]);
         }
         #endregion
 
         #region Reject
         [Fact]
-        public async Task Reject_WhenVetNotFound_RedirectsToError()
+        public async Task Reject_WhenNotLoggedIn_RedirectsToLogin()
         {
             // Arrange
-            _httpContext.Session.SetString("Username", "AdminUser");
-            var user = new User { Id = 10 };
-            _userServiceMock.Setup(u => u.GetUserByUsernameAsync("AdminUser"))
-                .ReturnsAsync(user);
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny)).Returns(false);
 
-            _adminServiceMock.Setup(a => a.IsUserAdminAsync(10)).ReturnsAsync(true);
+            // Act
+            var result = await _controller.Reject(10);
 
+            // Assert
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+            Assert.Equal("Account", redirectResult.ControllerName);
+        }
+
+        [Fact]
+        public async Task Reject_WhenUserNotFound_RedirectsToLogin()
+        {
+            // Arrange
+            var username = "TestUser";
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync((User)null);
+
+            // Act
+            var result = await _controller.Reject(10);
+
+            // Assert
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+            Assert.Equal("Account", redirectResult.ControllerName);
+            Assert.Equal("UserNotFound", _controller.TempData["ErrorMessage"]);
+        }
+
+        [Fact]
+        public async Task Reject_WhenNotAdmin_RedirectsToError()
+        {
+            // Arrange
+            var username = "TestUser";
+            var user = new User { Id = 1, Username = username };
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
+            _adminServiceMock.Setup(a => a.IsUserAdminAsync(user.Id)).ReturnsAsync(false);
+
+            // Act
+            var result = await _controller.Reject(10);
+
+            // Assert
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Error", redirectResult.ActionName);
+            Assert.Equal("Home", redirectResult.ControllerName);
+            Assert.Equal("NotAuthorizedReject", _controller.TempData["ErrorMessage"]);
+        }
+
+        [Fact]
+        public async Task Reject_WhenVeterinarianNotFound_RedirectsToError()
+        {
+            // Arrange
+            var username = "AdminUser";
+            var user = new User { Id = 2, Username = username };
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
+            _adminServiceMock.Setup(a => a.IsUserAdminAsync(user.Id)).ReturnsAsync(true);
             _veterinarianServiceMock.Setup(v => v.GetByIdAsync(999)).ReturnsAsync((Veterinarian)null);
 
             // Act
-            var result = await _controller.Reject(999) as RedirectToActionResult;
+            var result = await _controller.Reject(999);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal("Error", result.ActionName);
-            Assert.Equal("Home", result.ControllerName);
-            Assert.Equal("Veterinarian not found.", _controller.ViewBag.ErrorMessage);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Error", redirectResult.ActionName);
+            Assert.Equal("Home", redirectResult.ControllerName);
+            Assert.Equal("VeterinarianNotFound", _controller.TempData["ErrorMessage"]);
         }
 
         [Fact]
-        public async Task Reject_WhenPendingVet_CallsServiceRejectAndRedirects()
+        public async Task Reject_WhenPending_CallsServiceAndRedirects()
         {
             // Arrange
-            _httpContext.Session.SetString("Username", "AdminUser");
-            var user = new User { Id = 10 };
-            _userServiceMock.Setup(u => u.GetUserByUsernameAsync("AdminUser"))
-                .ReturnsAsync(user);
-
-            _adminServiceMock.Setup(a => a.IsUserAdminAsync(10)).ReturnsAsync(true);
-
+            var username = "AdminUser";
+            var user = new User { Id = 2, Username = username };
             var pendingVet = new Veterinarian { Id = 20, Status = VeterinarianStatus.Pending };
-            _veterinarianServiceMock.Setup(v => v.GetByIdAsync(20))
-                .ReturnsAsync(pendingVet);
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
+            _adminServiceMock.Setup(a => a.IsUserAdminAsync(user.Id)).ReturnsAsync(true);
+            _veterinarianServiceMock.Setup(v => v.GetByIdAsync(20)).ReturnsAsync(pendingVet);
+            _veterinarianServiceMock.Setup(v => v.RejectVeterinarianAsync(20)).Returns(Task.CompletedTask);
 
             // Act
-            var result = await _controller.Reject(20) as RedirectToActionResult;
+            var result = await _controller.Reject(20);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(nameof(VeterinarianController.Index), result.ActionName);
-            _veterinarianServiceMock.Verify(v => v.RejectVeterinarianAsync(20), Times.Once);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal(nameof(_controller.Index), redirectResult.ActionName);
+            _veterinarianServiceMock.Verify(v => v.RejectVeterinarianAsync(20), Times.Once());
+            Assert.Equal("VeterinarianRejected", _controller.TempData["SuccessMessage"]);
         }
 
         [Fact]
-        public async Task Reject_WhenVetIsNotPending_NoActionTaken()
+        public async Task Reject_WhenNotPending_ReturnsError()
         {
             // Arrange
-            _httpContext.Session.SetString("Username", "AdminUser");
-            var user = new User { Id = 10 };
-            _userServiceMock.Setup(u => u.GetUserByUsernameAsync("AdminUser"))
-                .ReturnsAsync(user);
-
-            _adminServiceMock.Setup(a => a.IsUserAdminAsync(10))
-                .ReturnsAsync(true);
-
-            // Vet already Rejected
-            var rejectedVet = new Veterinarian
-            {
-                Id = 21,
-                Status = VeterinarianStatus.Rejected
-            };
+            var username = "AdminUser";
+            var user = new User { Id = 2, Username = username };
+            var rejectedVet = new Veterinarian { Id = 21, Status = VeterinarianStatus.Rejected };
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns(true)
+                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
+            _adminServiceMock.Setup(a => a.IsUserAdminAsync(user.Id)).ReturnsAsync(true);
             _veterinarianServiceMock.Setup(v => v.GetByIdAsync(21)).ReturnsAsync(rejectedVet);
 
             // Act
-            var result = await _controller.Reject(21) as RedirectToActionResult;
+            var result = await _controller.Reject(21);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(nameof(VeterinarianController.Index), result.ActionName);
-
-            // Should not call reject again
-            _veterinarianServiceMock.Verify(v => v.RejectVeterinarianAsync(It.IsAny<int>()), Times.Never);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal(nameof(_controller.Index), redirectResult.ActionName);
+            _veterinarianServiceMock.Verify(v => v.RejectVeterinarianAsync(It.IsAny<int>()), Times.Never());
+            Assert.Equal("InvalidVeterinarianStatus", _controller.TempData["ErrorMessage"]);
         }
         #endregion
     }
-
-#region TestSession
-
-/// <summary>
-/// A simple test session class implementing ISession in-memory for controller tests.
-/// </summary>
-public class VeterinarianTestSession : ISession
-{
-    private readonly Dictionary<string, byte[]> _storage = new Dictionary<string, byte[]>();
-
-    public bool IsAvailable => true;
-    public string Id => Guid.NewGuid().ToString();
-    public IEnumerable<string> Keys => _storage.Keys;
-
-    public void Clear() => _storage.Clear();
-    public Task CommitAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
-    public Task LoadAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
-
-    public void Remove(string key)
-    {
-        if (_storage.ContainsKey(key))
-            _storage.Remove(key);
-    }
-
-    public void Set(string key, byte[] value) => _storage[key] = value;
-
-    public bool TryGetValue(string key, out byte[] value) => _storage.TryGetValue(key, out value);
 }
-#endregion
