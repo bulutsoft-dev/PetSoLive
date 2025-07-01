@@ -37,6 +37,19 @@ builder.Services.AddPetSoLiveDependencies(connectionString);
 // *** Eksik olan satır ***
 builder.Services.AddControllers();
 
+// CORS policy tanımı
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+// *** CORS middleware çağrısı burada olmalı ***
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization();
@@ -44,6 +57,8 @@ builder.Services.AddAuthorization();
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAll");
+
 app.UseAuthentication();
 app.UseAuthorization();
 

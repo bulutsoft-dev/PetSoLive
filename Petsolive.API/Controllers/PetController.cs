@@ -100,12 +100,11 @@ public class PetController : ControllerBase
         // Petin owner'ı var mı kontrol et
         var hasOwner = await _serviceManager.PetService.IsUserOwnerOfPetAsync(id, userId);
         if (!hasOwner)
-            return Forbid("Bu petin sahibi değilsiniz veya petin sahibi yok.");
+            return StatusCode(403, "Bu petin sahibi değilsiniz veya petin sahibi yok.");
 
-        // PetOwner kaydını sil (pet silinmeden önce)
-        await _serviceManager.PetService.DeletePetOwnerAsync(id, userId);
-
+        // Sadece peti sil, owner kaydını service veya cascade ile sil
         await _serviceManager.PetService.DeletePetAsync(id, userId);
+
         return NoContent();
     }
 }
