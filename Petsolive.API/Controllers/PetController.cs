@@ -35,13 +35,13 @@ public class PetController : ControllerBase
         return Ok(_mapper.Map<PetDto>(pet));
     }
 
-    [HttpPost]
-    public async Task<ActionResult<PetDto>> Create([FromBody] PetDto petDto)
-    {
-        var pet = _mapper.Map<Pet>(petDto);
-        await _serviceManager.PetService.CreatePetAsync(pet);
-        return CreatedAtAction(nameof(GetById), new { id = pet.Id }, _mapper.Map<PetDto>(pet));
-    }
+[HttpPost]
+public async Task<ActionResult<PetDto>> Create([FromBody] PetDto petDto)
+{
+    var pet = _mapper.Map<Pet>(petDto);
+    await _serviceManager.PetService.CreatePetAsync(pet);
+    return CreatedAtAction(nameof(GetById), new { id = pet.Id }, _mapper.Map<PetDto>(pet));
+}
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] PetDto petDto)
