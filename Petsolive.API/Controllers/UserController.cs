@@ -18,6 +18,7 @@ public class UserController : ControllerBase
         _mapper = mapper;
     }
 
+    /// <summary>Tüm kullanıcıları getirir.</summary>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
     {
@@ -26,6 +27,7 @@ public class UserController : ControllerBase
         return Ok(userDtos);
     }
 
+    /// <summary>Belirli kullanıcıyı getirir.</summary>
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDto>> GetById(int id)
     {
@@ -34,6 +36,7 @@ public class UserController : ControllerBase
         return Ok(_mapper.Map<UserDto>(user));
     }
 
+    /// <summary>Kullanıcıyı günceller.</summary>
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UserDto userDto)
     {

@@ -48,9 +48,3 @@ public class AccountController : ControllerBase
     }
 }
 
-// AuthResponseDto.cs
-public class AuthResponseDto
-{
-    public string Token { get; set; }
-    public UserDto User { get; set; }
-}
