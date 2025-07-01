@@ -176,6 +176,18 @@ public class UserService : IUserService
             isUpdated = true;
         }
 
+        // City ve District güncellemesi
+        if (!string.IsNullOrEmpty(user.City) && user.City != existingUser.City)
+        {
+            existingUser.City = user.City;
+            isUpdated = true;
+        }
+        if (!string.IsNullOrEmpty(user.District) && user.District != existingUser.District)
+        {
+            existingUser.District = user.District;
+            isUpdated = true;
+        }
+
         if (isUpdated)
         {
             await _userRepository.UpdateAsync(existingUser);
