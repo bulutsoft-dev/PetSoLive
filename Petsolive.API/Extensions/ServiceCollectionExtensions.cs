@@ -4,6 +4,7 @@ using PetSoLive.Business.Services;
 using PetSoLive.Data.Repositories;
 using PetSoLive.Data;
 using Microsoft.EntityFrameworkCore;
+using PetSoLive.Core.Entities;
 using PetSoLive.Core.Services;
 using PetSoLive.Infrastructure.Repositories;
 
@@ -19,6 +20,7 @@ public static class ServiceCollectionExtensions
 
         // Repository katmanı
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRepository<User>, UserRepository>();
         services.AddScoped<IPetRepository, PetRepository>();
         services.AddScoped<IPetOwnerRepository, PetOwnerRepository>();
         services.AddScoped<IVeterinarianRepository, VeterinarianRepository>();
@@ -47,6 +49,18 @@ public static class ServiceCollectionExtensions
 
         // AutoMapper
         services.AddAutoMapper(typeof(Petsolive.API.Mapping.MappingProfile));
+
+        // SMTP Settings registration
+        var smtpSettings = new PetSoLive.Core.Entities.SmtpSettings
+        {
+            Host = Environment.GetEnvironmentVariable("SMTP_HOST")!,
+            Port = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT")!),
+            Username = Environment.GetEnvironmentVariable("SMTP_USERNAME")!,
+            Password = Environment.GetEnvironmentVariable("SMTP_PASSWORD")!,
+            FromEmail = Environment.GetEnvironmentVariable("SMTP_FROM_EMAIL")!,
+            EnableSsl = bool.TryParse(Environment.GetEnvironmentVariable("SMTP_ENABLE_SSL"), out var enableSsl) && enableSsl
+        };
+        services.AddSingleton(smtpSettings);
 
         return services;
     }
