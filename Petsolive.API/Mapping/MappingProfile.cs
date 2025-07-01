@@ -11,7 +11,9 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         // UserDto -> User
-        CreateMap<User, UserDto>().ReverseMap()
+        CreateMap<User, UserDto>()
+            .ForMember(dest => dest.Password, opt => opt.Ignore())
+            .ReverseMap()
             .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src =>
                 src.DateOfBirth != default
                     ? DateTime.SpecifyKind(src.DateOfBirth, DateTimeKind.Utc)
@@ -26,7 +28,8 @@ public class MappingProfile : Profile
                 src.LastLoginDate.HasValue
                     ? DateTime.SpecifyKind(src.LastLoginDate.Value, DateTimeKind.Utc)
                     : (DateTime?)null
-            ));
+            ))
+            .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
 
         // Pet <-> PetDto
         CreateMap<Pet, PetDto>().ReverseMap()
