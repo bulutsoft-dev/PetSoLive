@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PetSoLive.Core.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Petsolive.API.DTOs;
 using PetSoLive.Core.Entities;
 
@@ -28,6 +29,7 @@ public class AdoptionController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create([FromBody] AdoptionDto adoptionDto)
     {
         var adoption = _mapper.Map<Adoption>(adoptionDto);

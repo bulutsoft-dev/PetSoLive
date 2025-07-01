@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PetSoLive.Core.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Petsolive.API.DTOs;
 
 namespace Petsolive.API.Controllers;
@@ -38,6 +39,7 @@ public class UserController : ControllerBase
 
     /// <summary>Kullanıcıyı günceller.</summary>
     [HttpPut("{id}")]
+    [Authorize]
     public async Task<IActionResult> Update(int id, [FromBody] UserDto userDto)
     {
         var user = _mapper.Map<PetSoLive.Core.Entities.User>(userDto);

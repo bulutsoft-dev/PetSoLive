@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PetSoLive.Core.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using PetSoLive.API.DTOs;
 using PetSoLive.Core.Entities;
 
@@ -35,6 +36,7 @@ public class LostPetAdController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create([FromBody] LostPetAdDto dto)
     {
         dto.Id = 0; // Id'yi sıfırla, veritabanı otomatik versin
@@ -44,6 +46,7 @@ public class LostPetAdController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize]
     public async Task<IActionResult> Update(int id, [FromBody] LostPetAdDto dto)
     {
         var entity = _mapper.Map<LostPetAd>(dto);
@@ -53,6 +56,7 @@ public class LostPetAdController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
         var ad = await _serviceManager.LostPetAdService.GetLostPetAdByIdAsync(id);

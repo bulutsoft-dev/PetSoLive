@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PetSoLive.Core.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Petsolive.API.DTOs;
 
 namespace Petsolive.API.Controllers;
@@ -26,6 +27,7 @@ public class VeterinarianController : ControllerBase
     }
 
     [HttpPost("register")]
+    [Authorize]
     public async Task<ActionResult<VeterinarianDto>> Register([FromBody] VeterinarianDto vetDto)
     {
         var vet = await _serviceManager.VeterinarianService.RegisterVeterinarianAsync(
@@ -34,6 +36,7 @@ public class VeterinarianController : ControllerBase
     }
 
     [HttpPut("{id}/approve")]
+    [Authorize]
     public async Task<IActionResult> Approve(int id)
     {
         await _serviceManager.VeterinarianService.ApproveVeterinarianAsync(id);
@@ -41,6 +44,7 @@ public class VeterinarianController : ControllerBase
     }
 
     [HttpPut("{id}/reject")]
+    [Authorize]
     public async Task<IActionResult> Reject(int id)
     {
         await _serviceManager.VeterinarianService.RejectVeterinarianAsync(id);

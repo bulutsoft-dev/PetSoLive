@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PetSoLive.Core.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Petsolive.API.DTOs;
 using PetSoLive.Core.Entities;
 
@@ -35,6 +36,7 @@ public class HelpRequestController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create([FromBody] HelpRequestDto dto)
     {
         dto.Id = 0; // Id'yi sıfırla, veritabanı otomatik versin
@@ -43,6 +45,7 @@ public class HelpRequestController : ControllerBase
         return Ok();
     }
     [HttpPut("{id}")]
+    [Authorize]
     public async Task<IActionResult> Update(int id, [FromBody] HelpRequestDto dto)
     {
         var entity = _mapper.Map<HelpRequest>(dto);
@@ -52,6 +55,7 @@ public class HelpRequestController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
         await _serviceManager.HelpRequestService.DeleteHelpRequestAsync(id);

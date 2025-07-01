@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PetSoLive.Core.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Petsolive.API.DTOs;
 using PetSoLive.Core.Entities;
 
@@ -27,6 +28,7 @@ public class CommentController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Add([FromBody] CommentDto dto)
     {
         var entity = _mapper.Map<Comment>(dto);
@@ -35,6 +37,7 @@ public class CommentController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
         await _serviceManager.CommentService.DeleteCommentAsync(id);
