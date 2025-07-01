@@ -192,4 +192,9 @@ public class UserService : IUserService
 
         return usersInLocation;
     }
+
+    public async Task<List<User>> GetAllUsersAsync()
+    {
+        return (await _userRepository.GetAllAsync()).ToList();
+    }
 }

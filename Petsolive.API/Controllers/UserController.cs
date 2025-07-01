@@ -23,7 +23,7 @@ public class UserController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
     {
-        var users = await _serviceManager.UserService.GetUsersByLocationAsync("", "");
+        var users = await _serviceManager.UserService.GetAllUsersAsync();
         var userDtos = _mapper.Map<IEnumerable<UserDto>>(users);
         return Ok(userDtos);
     }
