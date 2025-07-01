@@ -1,6 +1,15 @@
+using DotNetEnv;
+using Petsolive.API.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
+// .env dosyasını yükle
+Env.Load();
+
 // Add services to the container.
+var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+builder.Services.AddPetSoLiveDependencies(connectionString);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
