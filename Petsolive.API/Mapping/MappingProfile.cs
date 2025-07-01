@@ -68,7 +68,8 @@ public class MappingProfile : Profile
             .ReverseMap()
             .ForMember(dest => dest.User, opt => opt.Ignore())
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<VeterinarianStatus>(src.Status)))
-            .ForMember(dest => dest.Comments, opt => opt.Ignore());
+            .ForMember(dest => dest.Comments, opt => opt.Ignore())
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         // Admin <-> AdminDto
         CreateMap<Admin, AdminDto>()
