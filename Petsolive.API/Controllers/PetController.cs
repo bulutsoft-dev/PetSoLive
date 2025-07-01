@@ -47,14 +47,14 @@ public class PetController : ControllerBase
     public async Task<IActionResult> Update(int id, [FromBody] PetDto petDto)
     {
         var pet = _mapper.Map<Pet>(petDto);
-        await _serviceManager.PetService.UpdatePetAsync(id, pet, 0); // userId parametresi örnek
+        await _serviceManager.PetService.UpdatePetAsync(id, pet, 0); // userId örnek
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        await _serviceManager.PetService.DeletePetAsync(id, 0); // userId parametresi örnek
+        await _serviceManager.PetService.DeletePetAsync(id, 0); // userId örnek
         return NoContent();
     }
 }

@@ -3,6 +3,7 @@ using PetSoLive.Core.Interfaces;
 using AutoMapper;
 using Petsolive.API.DTOs;
 using PetSoLive.Core.Entities;
+using Petsolive.API.Helpers;
 
 namespace Petsolive.API.Controllers;
 
@@ -12,11 +13,13 @@ public class AccountController : ControllerBase
 {
     private readonly IServiceManager _serviceManager;
     private readonly IMapper _mapper;
+    private readonly JwtHelper _jwtHelper;
 
     public AccountController(IServiceManager serviceManager, IMapper mapper)
     {
         _serviceManager = serviceManager;
         _mapper = mapper;
+        _jwtHelper = new JwtHelper(); // .env'den otomatik okur
     }
 
     [HttpPost("register")]
@@ -28,14 +31,26 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<AuthDto>> Login([FromBody] AuthDto loginDto)
+    public async Task<ActionResult<AuthResponseDto>> Login([FromBody] AuthDto loginDto)
     {
         var user = await _serviceManager.UserService.AuthenticateAsync(loginDto.Username, loginDto.Password);
         if (user == null)
             return Unauthorized("Invalid credentials");
 
-        // JWT üretimi burada yapılmalı (örnek olarak UserDto dönülüyor)
+        var token = _jwtHelper.GenerateToken(user.Id, user.Username, user.Roles);
         var userDto = _mapper.Map<UserDto>(user);
-        return Ok(userDto);
+
+        return Ok(new AuthResponseDto
+        {
+            Token = token,
+            User = userDto
+        });
     }
+}
+
+// AuthResponseDto.cs
+public class AuthResponseDto
+{
+    public string Token { get; set; }
+    public UserDto User { get; set; }
 }
