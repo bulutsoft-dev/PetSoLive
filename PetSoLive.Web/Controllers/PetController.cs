@@ -62,7 +62,7 @@ namespace PetSoLive.Web.Controllers
                 {
                     PetId = pet.Id,
                     UserId = user.Id,
-                    OwnershipDate = DateTime.Now
+                    OwnershipDate = DateTime.UtcNow
                 };
 
                 await _serviceManager.PetService.AssignPetOwnerAsync(petOwner);

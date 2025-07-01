@@ -68,6 +68,11 @@ public class AccountController : Controller
             return View();
         }
 
+        if (dateOfBirth.Kind == DateTimeKind.Unspecified)
+            dateOfBirth = DateTime.SpecifyKind(dateOfBirth, DateTimeKind.Utc);
+        else
+            dateOfBirth = dateOfBirth.ToUniversalTime();
+
         string profileImageUrl = "https://www.petsolive.com.tr/";
 
         var user = new User

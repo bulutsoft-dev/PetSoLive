@@ -10,51 +10,111 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        // User <-> UserDto
-        CreateMap<User, UserDto>();
+        // UserDto -> User
+        CreateMap<User, UserDto>().ReverseMap()
+            .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src =>
+                src.DateOfBirth != default
+                    ? DateTime.SpecifyKind(src.DateOfBirth, DateTimeKind.Utc)
+                    : default(DateTime)
+            ))
+            .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src =>
+                src.CreatedDate != default
+                    ? DateTime.SpecifyKind(src.CreatedDate, DateTimeKind.Utc)
+                    : default(DateTime)
+            ))
+            .ForMember(dest => dest.LastLoginDate, opt => opt.MapFrom(src =>
+                src.LastLoginDate.HasValue
+                    ? DateTime.SpecifyKind(src.LastLoginDate.Value, DateTimeKind.Utc)
+                    : (DateTime?)null
+            ));
 
         // Pet <-> PetDto
-        CreateMap<Pet, PetDto>();
+        CreateMap<Pet, PetDto>().ReverseMap()
+            .ForMember(dest => dest.Id, opt => opt.Ignore()) // Create işlemlerinde Id'yi ignore et
+            .ForMember(dest => dest.AdoptionRequests, opt => opt.Ignore())
+            .ForMember(dest => dest.PetOwners, opt => opt.Ignore());
 
         // PetOwner <-> PetOwnerDto
         CreateMap<PetOwner, PetOwnerDto>()
             .ForMember(dest => dest.PetName, opt => opt.MapFrom(src => src.Pet.Name))
-            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username));
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username))
+            .ReverseMap()
+            .ForMember(dest => dest.Pet, opt => opt.Ignore())
+            .ForMember(dest => dest.User, opt => opt.Ignore());
 
         // Veterinarian <-> VeterinarianDto
         CreateMap<Veterinarian, VeterinarianDto>()
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ReverseMap()
+            .ForMember(dest => dest.User, opt => opt.Ignore())
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<VeterinarianStatus>(src.Status)))
+            .ForMember(dest => dest.Comments, opt => opt.Ignore());
 
         // Admin <-> AdminDto
         CreateMap<Admin, AdminDto>()
-            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username));
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username))
+            .ReverseMap()
+            .ForMember(dest => dest.User, opt => opt.Ignore());
 
         // Adoption <-> AdoptionDto
         CreateMap<Adoption, AdoptionDto>()
             .ForMember(dest => dest.PetName, opt => opt.MapFrom(src => src.Pet.Name))
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ReverseMap()
+            .ForMember(dest => dest.Pet, opt => opt.Ignore())
+            .ForMember(dest => dest.User, opt => opt.Ignore())
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<AdoptionStatus>(src.Status)))
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         // AdoptionRequest <-> AdoptionRequestDto
         CreateMap<AdoptionRequest, AdoptionRequestDto>()
             .ForMember(dest => dest.PetName, opt => opt.MapFrom(src => src.Pet.Name))
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ReverseMap()
+            .ForMember(dest => dest.Pet, opt => opt.Ignore())
+            .ForMember(dest => dest.User, opt => opt.Ignore())
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<AdoptionStatus>(src.Status)))
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         // HelpRequest <-> HelpRequestDto
         CreateMap<HelpRequest, HelpRequestDto>()
             .ForMember(dest => dest.EmergencyLevel, opt => opt.MapFrom(src => src.EmergencyLevel.ToString()))
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ReverseMap()
+            .ForMember(dest => dest.User, opt => opt.Ignore())
+            .ForMember(dest => dest.EmergencyLevel, opt => opt.MapFrom(src => Enum.Parse<EmergencyLevel>(src.EmergencyLevel)))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<HelpRequestStatus>(src.Status)))
+            .ForMember(dest => dest.Comments, opt => opt.Ignore())
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         // Comment <-> CommentDto
         CreateMap<Comment, CommentDto>()
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username))
-            .ForMember(dest => dest.VeterinarianName, opt => opt.MapFrom(src => src.Veterinarian != null ? src.Veterinarian.User.Username : null));
+            .ForMember(dest => dest.VeterinarianName, opt => opt.MapFrom(src => src.Veterinarian != null ? src.Veterinarian.User.Username : null))
+            .ReverseMap()
+            .ForMember(dest => dest.User, opt => opt.Ignore())
+            .ForMember(dest => dest.Veterinarian, opt => opt.Ignore())
+            .ForMember(dest => dest.HelpRequest, opt => opt.Ignore())
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         // LostPetAd <-> LostPetAdDto
         CreateMap<LostPetAd, LostPetAdDto>()
-            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username));
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username))
+            .ReverseMap()
+            .ForMember(dest => dest.User, opt => opt.Ignore())
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+        // AuthDto <-> User (for login/register)
+        CreateMap<AuthDto, User>();
+
+        // AuthResponseDto <-> User (for login response)
+        CreateMap<User, AuthResponseDto>()
+            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src));
+
+        // LostPetAdFilterDto: Sadece filtreleme için, entity map gerekmez.
     }
 }

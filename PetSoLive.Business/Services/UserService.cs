@@ -14,14 +14,14 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
-    // Kullanıcıyı kimlik ve şifre ile doğrulama
     public async Task<User> AuthenticateAsync(string username, string password)
     {
         var user = await _userRepository.GetAllAsync()
-                                        .ContinueWith(task => task.Result.FirstOrDefault(u => u.Username == username));
+            .ContinueWith(task => task.Result.FirstOrDefault(u => u.Username == username));
 
         if (user != null && BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
         {
+            // LastLoginDate'i UTC olarak işaretle
             user.LastLoginDate = DateTime.UtcNow;
             await _userRepository.UpdateAsync(user);
             return user;
@@ -30,7 +30,6 @@ public class UserService : IUserService
         return null;
     }
 
-    // Yeni bir kullanıcı kaydetme
     public async Task RegisterAsync(User user)
     {
         if (string.IsNullOrWhiteSpace(user.PasswordHash))
@@ -39,7 +38,7 @@ public class UserService : IUserService
         }
 
         var existingUser = await _userRepository.GetAllAsync()
-                                                 .ContinueWith(task => task.Result.FirstOrDefault(u => u.Username == user.Username || u.Email == user.Email));
+            .ContinueWith(task => task.Result.FirstOrDefault(u => u.Username == user.Username || u.Email == user.Email));
 
         if (existingUser != null)
         {
@@ -52,8 +51,19 @@ public class UserService : IUserService
         }
 
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
+
+        // CreatedDate'i UTC olarak işaretle
         user.CreatedDate = DateTime.UtcNow;
         user.IsActive = true;
+
+        // Eğer doğum tarihi geliyorsa, UTC olarak işaretle
+        if (user.DateOfBirth != default)
+        {
+            if (user.DateOfBirth.Kind == DateTimeKind.Unspecified)
+                user.DateOfBirth = DateTime.SpecifyKind(user.DateOfBirth, DateTimeKind.Utc);
+            else
+                user.DateOfBirth = user.DateOfBirth.ToUniversalTime();
+        }
 
         await _userRepository.AddAsync(user);
     }
@@ -125,7 +135,11 @@ public class UserService : IUserService
 
         if (user.DateOfBirth != default && user.DateOfBirth != existingUser.DateOfBirth)
         {
-            existingUser.DateOfBirth = user.DateOfBirth;
+            // DateTimeKind'ı kontrol et ve UTC olarak ayarla
+            if (user.DateOfBirth.Kind == DateTimeKind.Unspecified)
+                existingUser.DateOfBirth = DateTime.SpecifyKind(user.DateOfBirth, DateTimeKind.Utc);
+            else
+                existingUser.DateOfBirth = user.DateOfBirth.ToUniversalTime();
             isUpdated = true;
         }
 
@@ -137,7 +151,11 @@ public class UserService : IUserService
 
         if (user.LastLoginDate.HasValue && user.LastLoginDate != existingUser.LastLoginDate)
         {
-            existingUser.LastLoginDate = user.LastLoginDate.Value;
+            // DateTimeKind'ı kontrol et ve UTC olarak ayarla
+            if (user.LastLoginDate.Value.Kind == DateTimeKind.Unspecified)
+                existingUser.LastLoginDate = DateTime.SpecifyKind(user.LastLoginDate.Value, DateTimeKind.Utc);
+            else
+                existingUser.LastLoginDate = user.LastLoginDate.Value.ToUniversalTime();
             isUpdated = true;
         }
 
