@@ -127,6 +127,19 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.User, opt => opt.Ignore())
             .ForMember(dest => dest.Id, opt => opt.Ignore());
 
+            // LostPetAdDto -> LostPetAd
+CreateMap<LostPetAdDto, LostPetAd>()
+    .ForMember(dest => dest.User, opt => opt.Ignore())
+    .ForMember(dest => dest.Id, opt => opt.Ignore())
+    .ForMember(dest => dest.LastSeenDate, opt => opt.MapFrom(src =>
+        src.LastSeenDate.Kind == DateTimeKind.Utc
+            ? src.LastSeenDate
+            : DateTime.SpecifyKind(src.LastSeenDate, DateTimeKind.Utc)))
+    .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src =>
+        src.CreatedAt.Kind == DateTimeKind.Utc
+            ? src.CreatedAt
+            : DateTime.SpecifyKind(src.CreatedAt, DateTimeKind.Utc)));
+
         // AuthDto -> User (for login)
         CreateMap<AuthDto, User>()
             .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password))

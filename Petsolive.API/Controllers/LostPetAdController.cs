@@ -37,6 +37,7 @@ public class LostPetAdController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] LostPetAdDto dto)
     {
+        dto.Id = 0; // Id'yi sıfırla, veritabanı otomatik versin
         var entity = _mapper.Map<LostPetAd>(dto);
         await _serviceManager.LostPetAdService.CreateLostPetAdAsync(entity, dto.LastSeenCity, dto.LastSeenDistrict);
         return Ok();
