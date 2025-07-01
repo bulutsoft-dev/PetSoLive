@@ -42,7 +42,18 @@ public class UserService : IUserService
 
         if (existingUser != null)
         {
-            throw new ArgumentException("Username or email already exists.");
+            if (existingUser.Username == user.Username)
+            {
+                throw new ArgumentException($"Username '{user.Username}' already exists.");
+            }
+            else if (existingUser.Email == user.Email)
+            {
+                throw new ArgumentException($"Email '{user.Email}' already exists.");
+            }
+            else
+            {
+                throw new ArgumentException("Username or email already exists.");
+            }
         }
 
         if (user.Roles == null || !user.Roles.Any())

@@ -1,18 +1,32 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Petsolive.API.DTOs;
 
-public class UserDto
+public class RegisterDto
 {
-    public int Id { get; set; }
+    [Required]
+    [StringLength(50, MinimumLength = 3)]
     public string Username { get; set; }
+    
+    [Required]
+    [EmailAddress]
     public string Email { get; set; }
+    
+    [Required]
+    [StringLength(100, MinimumLength = 6)]
+    public string Password { get; set; }
+    
+    [Required]
+    [Phone]
     public string PhoneNumber { get; set; }
+    
+    [Required]
     public string Address { get; set; }
+    
+    [Required]
     public DateTime DateOfBirth { get; set; }
-    public bool IsActive { get; set; }
-    public DateTime CreatedDate { get; set; }
-    public DateTime? LastLoginDate { get; set; }
+    
     public string? ProfileImageUrl { get; set; }
-    public List<string> Roles { get; set; }
     public string? City { get; set; }
     public string? District { get; set; }
-}
+} 

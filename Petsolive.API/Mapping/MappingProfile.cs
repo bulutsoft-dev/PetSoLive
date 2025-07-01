@@ -10,10 +10,8 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        // UserDto -> User
+// User -> UserDto (şifre alanını ignore et)
         CreateMap<User, UserDto>()
-            .ForMember(dest => dest.Password, opt => opt.Ignore())
-            .ReverseMap()
             .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src =>
                 src.DateOfBirth != default
                     ? DateTime.SpecifyKind(src.DateOfBirth, DateTimeKind.Utc)
@@ -28,8 +26,26 @@ public class MappingProfile : Profile
                 src.LastLoginDate.HasValue
                     ? DateTime.SpecifyKind(src.LastLoginDate.Value, DateTimeKind.Utc)
                     : (DateTime?)null
+            ));
+
+        // UserDto -> User (şifre alanını ignore et)
+        CreateMap<UserDto, User>()
+            .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
+            .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src =>
+                src.DateOfBirth != default
+                    ? DateTime.SpecifyKind(src.DateOfBirth, DateTimeKind.Utc)
+                    : default(DateTime)
             ))
-            .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
+            .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src =>
+                src.CreatedDate != default
+                    ? DateTime.SpecifyKind(src.CreatedDate, DateTimeKind.Utc)
+                    : default(DateTime)
+            ))
+            .ForMember(dest => dest.LastLoginDate, opt => opt.MapFrom(src =>
+                src.LastLoginDate.HasValue
+                    ? DateTime.SpecifyKind(src.LastLoginDate.Value, DateTimeKind.Utc)
+                    : (DateTime?)null
+            ));
 
         // Pet <-> PetDto
         CreateMap<Pet, PetDto>().ReverseMap()
@@ -111,8 +127,36 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.User, opt => opt.Ignore())
             .ForMember(dest => dest.Id, opt => opt.Ignore());
 
-        // AuthDto <-> User (for login/register)
-        CreateMap<AuthDto, User>();
+        // AuthDto -> User (for login)
+        CreateMap<AuthDto, User>()
+            .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password))
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
+            .ForMember(dest => dest.Email, opt => opt.Ignore())
+            .ForMember(dest => dest.PhoneNumber, opt => opt.Ignore())
+            .ForMember(dest => dest.Address, opt => opt.Ignore())
+            .ForMember(dest => dest.DateOfBirth, opt => opt.Ignore())
+            .ForMember(dest => dest.IsActive, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedDate, opt => opt.Ignore())
+            .ForMember(dest => dest.LastLoginDate, opt => opt.Ignore())
+            .ForMember(dest => dest.ProfileImageUrl, opt => opt.Ignore())
+            .ForMember(dest => dest.Roles, opt => opt.Ignore())
+            .ForMember(dest => dest.City, opt => opt.Ignore())
+            .ForMember(dest => dest.District, opt => opt.Ignore())
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+        // RegisterDto -> User (for registration)
+        CreateMap<RegisterDto, User>()
+            .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password))
+            .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src =>
+                src.DateOfBirth != default
+                    ? DateTime.SpecifyKind(src.DateOfBirth, DateTimeKind.Utc)
+                    : default(DateTime)
+            ))
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedDate, opt => opt.Ignore())
+            .ForMember(dest => dest.LastLoginDate, opt => opt.Ignore())
+            .ForMember(dest => dest.IsActive, opt => opt.Ignore())
+            .ForMember(dest => dest.Roles, opt => opt.Ignore());
 
         // AuthResponseDto <-> User (for login response)
         CreateMap<User, AuthResponseDto>()

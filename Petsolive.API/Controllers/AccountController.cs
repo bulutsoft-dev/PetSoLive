@@ -23,11 +23,27 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] UserDto userDto)
+    public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
     {
-        var user = _mapper.Map<User>(userDto);
-        await _serviceManager.UserService.RegisterAsync(user);
-        return Ok();
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(new { error = "Invalid input data", details = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage) });
+        }
+
+        try
+        {
+            var user = _mapper.Map<User>(registerDto);
+            await _serviceManager.UserService.RegisterAsync(user);
+            return Ok(new { message = "User registered successfully" });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = "An error occurred during registration" });
+        }
     }
 
     [HttpPost("login")]
