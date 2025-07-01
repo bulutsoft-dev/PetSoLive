@@ -1,0 +1,26 @@
+/PetSoLive.API               # Yeni API projesi (ASP.NET Core Web API)
+│
+├── /Controllers             # API controller'lar (sadece JSON döner)
+│   ├── AuthController.cs
+│   ├── PetController.cs
+│   ├── AdoptionController.cs
+│   ├── AssistanceController.cs
+│
+├── /Middlewares             # JWT, Exception handling, Logging vs.
+│   ├── JwtMiddleware.cs
+│   ├── ExceptionMiddleware.cs
+│
+├── /Filters                 # Global Action Filters, ValidationFilters
+│   ├── ValidationFilter.cs
+│
+├── /Extensions              # IServiceCollection ve AppBuilder uzantıları
+│   ├── ServiceCollectionExtensions.cs
+│   ├── ApplicationBuilderExtensions.cs
+│
+├── /Configurations          # Swagger, JWT config ayarları
+│   ├── SwaggerConfig.cs
+│   ├── JwtConfig.cs
+│
+├── Program.cs               # Giriş noktası
+├── appsettings.json         # API ayarları
+├── PetSoLive.API.csproj
