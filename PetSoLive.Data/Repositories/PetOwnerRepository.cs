@@ -28,4 +28,13 @@ public class PetOwnerRepository : IPetOwnerRepository
             .Include(po => po.User)
             .FirstOrDefaultAsync(po => po.PetId == petId);
     }
+
+    public async Task DeleteAsync(int petId, int userId)
+    {
+        var petOwner = await _context.PetOwners.FirstOrDefaultAsync(po => po.PetId == petId && po.UserId == userId);
+        if (petOwner != null)
+        {
+            _context.PetOwners.Remove(petOwner);
+        }
+    }
 }

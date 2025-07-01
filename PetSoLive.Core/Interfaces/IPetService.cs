@@ -11,5 +11,6 @@ namespace PetSoLive.Core.Interfaces
         Task<bool> IsUserOwnerOfPetAsync(int id, int userId);
         Task AssignPetOwnerAsync(PetOwner petOwner);
         Task DeletePetAsync(int petId, int userId);
+        Task DeletePetOwnerAsync(int petId, int userId);
     }
 }
