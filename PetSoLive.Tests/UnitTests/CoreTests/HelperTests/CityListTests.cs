@@ -5,14 +5,14 @@ namespace PetSoLive.Tests.UnitTests.CoreTests.HelperTests;
 public class CityListTests
 {
     [Fact]
-    public void Cities_ShouldContainExpectedFourCities()
+    public void Cities_ShouldContainExpectedCities()
     {
         // Arrange & Act
         var cities = CityList.Cities;
 
         // Assert
         Assert.NotNull(cities);
-        Assert.Equal(4, cities.Count);
+        Assert.True(cities.Count >= 81); // Türkiye'deki şehir sayısı
         Assert.Contains("Manisa", cities);
         Assert.Contains("İzmir", cities);
         Assert.Contains("İstanbul", cities);
@@ -20,10 +20,10 @@ public class CityListTests
     }
 
     [Theory]
-    [InlineData("İstanbul", new[] { "Kadıköy", "Beşiktaş", "Üsküdar" })]
-    [InlineData("Manisa",   new[] { "Akhisar", "Turgutlu", "Salihli" })]
-    [InlineData("İzmir",    new[] { "Karşıyaka", "Konak", "Bornova" })]
-    [InlineData("Muğla",    new[] { "Menteşe", "Bodrum", "Fethiye", "Milas" })]
+    [InlineData("İstanbul", new[] { "Kadıköy", "Beşiktaş", "Üsküdar", "Fatih" })]
+    [InlineData("Manisa",   new[] { "Akhisar", "Turgutlu", "Salihli", "Alaşehir" })]
+    [InlineData("İzmir",    new[] { "Karşıyaka", "Konak", "Bornova", "Buca" })]
+    [InlineData("Muğla",    new[] { "Menteşe", "Bodrum", "Fethiye", "Marmaris" })]
     public void GetDistrictsByCity_WhenCityIsKnown_ReturnsCorrectDistricts(string city, string[] expectedDistricts)
     {
         // Arrange & Act
@@ -40,7 +40,7 @@ public class CityListTests
     }
 
     [Fact]
-    public void GetDistrictsByCity_WhenCityIsUnknown_ReturnsEmptyList()
+    public void GetDistrictsByCity_WhenCityIsUnknown_ReturnsOther()
     {
         // Arrange
         var city = "UnknownCity";
@@ -50,6 +50,7 @@ public class CityListTests
 
         // Assert
         Assert.NotNull(districts);
-        Assert.Empty(districts);
+        Assert.Single(districts);
+        Assert.Equal("Diğer", districts[0]);
     }
 }
