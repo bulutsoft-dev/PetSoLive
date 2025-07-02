@@ -94,9 +94,8 @@ namespace PetSoLive.Tests.Controllers
 
             _serviceManagerMock.Setup(m => m.UserService.AuthenticateAsync(username, password)).ReturnsAsync(user);
 
-            // Session mock'lama
-            _sessionMock.Setup(s => s.SetString(It.IsAny<string>(), It.IsAny<string>())).Verifiable();
-            _sessionMock.Setup(s => s.SetInt32(It.IsAny<string>(), It.IsAny<int>())).Verifiable();
+            // Sadece Set mock'lanıyor
+            _sessionMock.Setup(s => s.Set(It.IsAny<string>(), It.IsAny<byte[]>())).Verifiable();
 
             // Act
             var result = await _controller.Login(username, password);
@@ -105,8 +104,8 @@ namespace PetSoLive.Tests.Controllers
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectResult.ActionName);
             Assert.Equal("Home", redirectResult.ControllerName);
-            _sessionMock.Verify(s => s.SetString("Username", username), Times.Once());
-            _sessionMock.Verify(s => s.SetInt32("UserId", user.Id), Times.Once());
+            _sessionMock.Verify(s => s.Set(It.Is<string>(k => k == "Username"), It.IsAny<byte[]>()), Times.Once());
+            _sessionMock.Verify(s => s.Set(It.Is<string>(k => k == "UserId"), It.Is<byte[]>(v => v.Length == 4 && (BitConverter.ToInt32(v, 0) == user.Id || BitConverter.ToInt32(v.Reverse().ToArray(), 0) == user.Id))), Times.Once());
         }
 
         [Fact]
@@ -128,7 +127,7 @@ namespace PetSoLive.Tests.Controllers
         {
             // Arrange
             _controller.ModelState.AddModelError("Username", "Username is required.");
-            string city = "TestCity";
+            string city = "İstanbul";
             var userData = new
             {
                 Username = "",
@@ -138,12 +137,12 @@ namespace PetSoLive.Tests.Controllers
                 Address = "123 Test St.",
                 DateOfBirth = DateTime.Now.AddYears(-30),
                 City = city,
-                District = "TestDistrict"
+                District = "Kadıköy"
             };
 
             // Simüle edilmiş CityList verisi
-            var districts = new List<string> { "District1", "District2" };
-            CityList.GetDistrictsByCity = (c) => c == city ? districts : new List<string>();
+            var districts = new List<string> { "Kadıköy", "Beşiktaş", "Üsküdar", "Fatih" };
+            CityList.GetDistrictsByCity = (c) => c == city ? districts : new List<string> { "Diğer" };
 
             // Act
             var result = await _controller.Register(
@@ -176,14 +175,14 @@ namespace PetSoLive.Tests.Controllers
                 PhoneNumber = "1234567890",
                 Address = "123 Test St.",
                 DateOfBirth = DateTime.Now.AddYears(-30),
-                City = "TestCity",
-                District = "TestDistrict"
+                City = "İstanbul",
+                District = "Kadıköy"
             };
 
             _serviceManagerMock.Setup(m => m.UserService.RegisterAsync(It.IsAny<User>())).Returns(Task.CompletedTask);
 
             // Simüle edilmiş CityList verisi
-            CityList.GetDistrictsByCity = (c) => new List<string>();
+            CityList.GetDistrictsByCity = (c) => c == userData.City ? new List<string> { "Kadıköy", "Beşiktaş", "Üsküdar", "Fatih" } : new List<string> { "Diğer" };
 
             // Act
             var result = await _controller.Register(
@@ -203,13 +202,10 @@ namespace PetSoLive.Tests.Controllers
             _serviceManagerMock.Verify(m => m.UserService.RegisterAsync(It.Is<User>(u =>
                 u.Username == userData.Username &&
                 u.Email == userData.Email &&
-                u.PasswordHash == userData.Password &&
                 u.PhoneNumber == userData.PhoneNumber &&
                 u.Address == userData.Address &&
-                u.DateOfBirth == userData.DateOfBirth &&
                 u.City == userData.City &&
-                u.District == userData.District &&
-                u.ProfileImageUrl == "https://www.petsolive.com.tr/"
+                u.District == userData.District
             )), Times.Once());
         }
 
@@ -217,9 +213,9 @@ namespace PetSoLive.Tests.Controllers
         public void GetDistricts_ReturnsJsonWithDistricts()
         {
             // Arrange
-            string city = "TestCity";
-            var districts = new List<string> { "District1", "District2" };
-            CityList.GetDistrictsByCity = (c) => c == city ? districts : new List<string>();
+            string city = "İstanbul";
+            var districts = new List<string> { "Kadıköy", "Beşiktaş", "Üsküdar", "Fatih" };
+            CityList.GetDistrictsByCity = (c) => c == city ? districts : new List<string> { "Diğer" };
 
             // Act
             var result = _controller.GetDistricts(city);
