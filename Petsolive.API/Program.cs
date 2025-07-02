@@ -57,7 +57,7 @@ builder.Services.AddAuthorization();
 var app = builder.Build();
 
 app.UseHttpsRedirection();
-//app.UseMiddleware<Petsolive.API.Middlewares.ApiKeyMiddleware>();
+app.UseMiddleware<Petsolive.API.Middlewares.ApiKeyMiddleware>();
 app.UseCors("AllowAll");
 
 app.UseAuthentication();
