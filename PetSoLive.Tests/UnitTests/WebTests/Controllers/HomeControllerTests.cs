@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using Moq;
 using PetSoLive.Web.Controllers;
 using Xunit;
 
@@ -10,8 +12,11 @@ namespace PetSoLive.Tests.Controllers
 
         public HomeControllerTests()
         {
-            // Initialize the HomeController
-            _controller = new HomeController(null);
+            // Mock localizer
+            var localizerMock = new Mock<IStringLocalizer<HomeController>>();
+            localizerMock.Setup(l => l["Home Page"]).Returns(new LocalizedString("Home Page", "Home Page"));
+
+            _controller = new HomeController(localizerMock.Object);
         }
 
         [Fact]
