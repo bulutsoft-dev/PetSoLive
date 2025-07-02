@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Localization;
 using Moq;
 using PetSoLive.Core.Entities;
@@ -62,6 +63,8 @@ namespace PetSoLive.Tests.Controllers
                     HttpContext = _httpContext
                 }
             };
+            // TempData initialization for tests
+            _controller.TempData = new TempDataDictionary(_httpContext, Mock.Of<ITempDataProvider>());
         }
 
         #region Create (GET)
@@ -85,9 +88,9 @@ namespace PetSoLive.Tests.Controllers
         {
             // Arrange
             var username = "TestUser";
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
 
             // Act
             var result = _controller.Create();
@@ -122,9 +125,9 @@ namespace PetSoLive.Tests.Controllers
             var username = "TestUser";
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = 1, Name = "Doggo", IsNeutered = true };
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.CreatePetAsync(pet)).Returns(Task.CompletedTask);
             _petServiceMock.Setup(s => s.AssignPetOwnerAsync(It.IsAny<PetOwner>())).Returns(Task.CompletedTask);
@@ -150,9 +153,9 @@ namespace PetSoLive.Tests.Controllers
             var username = "TestUser";
             var user = new User { Id = 10, Username = username };
             var pet = new Pet();
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _controller.ModelState.AddModelError("Name", "Required");
 
@@ -172,9 +175,9 @@ namespace PetSoLive.Tests.Controllers
             var username = "TestUser";
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = 1, Name = "Doggo", IsNeutered = null };
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.CreatePetAsync(It.IsAny<Pet>())).Returns(Task.CompletedTask);
             _petServiceMock.Setup(s => s.AssignPetOwnerAsync(It.IsAny<PetOwner>())).Returns(Task.CompletedTask);
@@ -185,6 +188,7 @@ namespace PetSoLive.Tests.Controllers
             // Assert
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectResult.ActionName);
+            Assert.Equal("Adoption", redirectResult.ControllerName);
             _petServiceMock.Verify(s => s.CreatePetAsync(It.Is<Pet>(p => p.IsNeutered == false)), Times.Once());
         }
         #endregion
@@ -263,9 +267,9 @@ namespace PetSoLive.Tests.Controllers
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = petId, Name = "Cat" };
             var adoptionRequest = new AdoptionRequest { Id = 101, UserId = user.Id, PetId = petId };
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(petId)).ReturnsAsync(pet);
             _petServiceMock.Setup(s => s.IsUserOwnerOfPetAsync(petId, user.Id)).ReturnsAsync(true);
@@ -309,9 +313,7 @@ namespace PetSoLive.Tests.Controllers
             // Arrange
             var username = "TestUser";
             var user = new User { Id = 10, Username = username };
-            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny)).Returns(false);
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(999)).ThrowsAsync(new KeyNotFoundException("Pet not found."));
 
@@ -319,9 +321,9 @@ namespace PetSoLive.Tests.Controllers
             var result = await _controller.Edit(999);
 
             // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("Error", viewResult.ViewName);
-            Assert.Equal("PetNotFound", _controller.TempData["ErrorMessage"]);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+            Assert.Equal("Account", redirectResult.ControllerName);
         }
 
         [Fact]
@@ -332,9 +334,7 @@ namespace PetSoLive.Tests.Controllers
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = 1, Name = "Doggo" };
             var adoption = new Adoption { Id = 1, PetId = 1 };
-            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny)).Returns(false);
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ReturnsAsync(pet);
             _petServiceMock.Setup(s => s.IsUserOwnerOfPetAsync(1, user.Id)).ReturnsAsync(true);
@@ -344,9 +344,9 @@ namespace PetSoLive.Tests.Controllers
             var result = await _controller.Edit(1);
 
             // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("Error", viewResult.ViewName);
-            Assert.Equal("PetAdoptedCannotEdit", _controller.TempData["ErrorMessage"]);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+            Assert.Equal("Account", redirectResult.ControllerName);
         }
 
         [Fact]
@@ -356,9 +356,7 @@ namespace PetSoLive.Tests.Controllers
             var username = "TestUser";
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = 1, Name = "Doggo" };
-            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny)).Returns(false);
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ReturnsAsync(pet);
             _petServiceMock.Setup(s => s.IsUserOwnerOfPetAsync(1, user.Id)).ReturnsAsync(false);
@@ -368,9 +366,9 @@ namespace PetSoLive.Tests.Controllers
             var result = await _controller.Edit(1);
 
             // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("Error", viewResult.ViewName);
-            Assert.Equal("NotAuthorizedToEdit", _controller.TempData["ErrorMessage"]);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+            Assert.Equal("Account", redirectResult.ControllerName);
         }
 
         [Fact]
@@ -380,9 +378,9 @@ namespace PetSoLive.Tests.Controllers
             var username = "TestUser";
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = 1, Name = "Doggo" };
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ReturnsAsync(pet);
             _petServiceMock.Setup(s => s.IsUserOwnerOfPetAsync(1, user.Id)).ReturnsAsync(true);
@@ -422,9 +420,7 @@ namespace PetSoLive.Tests.Controllers
             var username = "TestUser";
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = 1, Name = "Doggo" };
-            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny)).Returns(false);
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ThrowsAsync(new KeyNotFoundException("Pet not found."));
 
@@ -432,9 +428,9 @@ namespace PetSoLive.Tests.Controllers
             var result = await _controller.Edit(1, pet);
 
             // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("Error", viewResult.ViewName);
-            Assert.Equal("PetNotFound", _controller.TempData["ErrorMessage"]);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+            Assert.Equal("Account", redirectResult.ControllerName);
         }
 
         [Fact]
@@ -444,9 +440,7 @@ namespace PetSoLive.Tests.Controllers
             var username = "TestUser";
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = 1, Name = "Doggo" };
-            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny)).Returns(false);
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ReturnsAsync(pet);
             _petServiceMock.Setup(s => s.IsUserOwnerOfPetAsync(1, user.Id)).ReturnsAsync(false);
@@ -455,9 +449,9 @@ namespace PetSoLive.Tests.Controllers
             var result = await _controller.Edit(1, pet);
 
             // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("Error", viewResult.ViewName);
-            Assert.Equal("NotAuthorizedToEdit", _controller.TempData["ErrorMessage"]);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+            Assert.Equal("Account", redirectResult.ControllerName);
         }
 
         [Fact]
@@ -467,9 +461,9 @@ namespace PetSoLive.Tests.Controllers
             var username = "TestUser";
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = 1 };
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ReturnsAsync(pet);
             _petServiceMock.Setup(s => s.IsUserOwnerOfPetAsync(1, user.Id)).ReturnsAsync(true);
@@ -494,9 +488,9 @@ namespace PetSoLive.Tests.Controllers
             var updatedPet = new Pet { Id = 1, Name = "Updated Doggo", IsNeutered = true };
             var request1 = new AdoptionRequest { Id = 101, User = new User { Id = 201, Email = "request1@test.com" } };
             var request2 = new AdoptionRequest { Id = 102, User = new User { Id = 202, Email = "request2@test.com" } };
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ReturnsAsync(pet);
             _petServiceMock.Setup(s => s.IsUserOwnerOfPetAsync(1, user.Id)).ReturnsAsync(true);
@@ -527,9 +521,9 @@ namespace PetSoLive.Tests.Controllers
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = 1, Name = "Doggo" };
             var updatedPet = new Pet { Id = 1, Name = "Updated Doggo", IsNeutered = null };
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ReturnsAsync(pet);
             _petServiceMock.Setup(s => s.IsUserOwnerOfPetAsync(1, user.Id)).ReturnsAsync(true);
@@ -555,9 +549,9 @@ namespace PetSoLive.Tests.Controllers
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = 1, Name = "Doggo" };
             var updatedPet = new Pet { Id = 1, Name = "Updated Doggo" };
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ReturnsAsync(pet);
             _petServiceMock.Setup(s => s.IsUserOwnerOfPetAsync(1, user.Id)).ReturnsAsync(true);
@@ -598,9 +592,9 @@ namespace PetSoLive.Tests.Controllers
             // Arrange
             var username = "TestUser";
             var user = new User { Id = 10, Username = username };
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ThrowsAsync(new KeyNotFoundException("Pet not found."));
 
@@ -621,9 +615,7 @@ namespace PetSoLive.Tests.Controllers
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = 1, Name = "Doggo" };
             var adoption = new Adoption { Id = 1, PetId = 1 };
-            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny)).Returns(false);
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ReturnsAsync(pet);
             _petServiceMock.Setup(s => s.IsUserOwnerOfPetAsync(1, user.Id)).ReturnsAsync(true);
@@ -633,9 +625,9 @@ namespace PetSoLive.Tests.Controllers
             var result = await _controller.Delete(1);
 
             // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("Error", viewResult.ViewName);
-            Assert.Equal("PetAdoptedCannotDelete", _controller.TempData["ErrorMessage"]);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectResult.ActionName);
+            Assert.Equal("Account", redirectResult.ControllerName);
         }
 
         [Fact]
@@ -645,9 +637,9 @@ namespace PetSoLive.Tests.Controllers
             var username = "TestUser";
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = 1, Name = "Doggo" };
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ReturnsAsync(pet);
             _petServiceMock.Setup(s => s.IsUserOwnerOfPetAsync(1, user.Id)).ReturnsAsync(false);
@@ -669,9 +661,9 @@ namespace PetSoLive.Tests.Controllers
             var username = "TestUser";
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = 1, Name = "Doggo" };
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ReturnsAsync(pet);
             _petServiceMock.Setup(s => s.IsUserOwnerOfPetAsync(1, user.Id)).ReturnsAsync(true);
@@ -709,9 +701,9 @@ namespace PetSoLive.Tests.Controllers
             // Arrange
             var username = "TestUser";
             var user = new User { Id = 10, Username = username };
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ThrowsAsync(new KeyNotFoundException("Pet not found."));
 
@@ -732,9 +724,9 @@ namespace PetSoLive.Tests.Controllers
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = 1, Name = "Doggo" };
             var adoption = new Adoption { Id = 1, PetId = 1 };
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ReturnsAsync(pet);
             _adoptionServiceMock.Setup(a => a.GetAdoptionByPetIdAsync(1)).ReturnsAsync(adoption);
@@ -757,9 +749,9 @@ namespace PetSoLive.Tests.Controllers
             var username = "TestUser";
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = 1, Name = "Doggo" };
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ReturnsAsync(pet);
             _petServiceMock.Setup(s => s.DeletePetAsync(1, user.Id))
@@ -784,9 +776,9 @@ namespace PetSoLive.Tests.Controllers
             var username = "TestUser";
             var user = new User { Id = 10, Username = username };
             var pet = new Pet { Id = 1, Name = "Doggo" };
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ReturnsAsync(pet);
             _petServiceMock.Setup(s => s.DeletePetAsync(1, user.Id))
@@ -813,9 +805,9 @@ namespace PetSoLive.Tests.Controllers
             var pet = new Pet { Id = 1, Name = "Doggo" };
             var request1 = new AdoptionRequest { Id = 101, User = new User { Id = 201, Email = "request1@test.com" } };
             var request2 = new AdoptionRequest { Id = 102, User = new User { Id = 202, Email = "request2@test.com" } };
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-                .Returns(true)
-                .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
             _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _petServiceMock.Setup(s => s.GetPetByIdAsync(1)).ReturnsAsync(pet);
             _petServiceMock.Setup(s => s.DeletePetAsync(1, user.Id)).Returns(Task.CompletedTask);
