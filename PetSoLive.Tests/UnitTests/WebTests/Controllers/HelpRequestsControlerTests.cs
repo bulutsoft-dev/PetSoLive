@@ -81,8 +81,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         // Act
@@ -125,8 +124,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         var newHelpRequest = new HelpRequest
@@ -175,8 +173,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         var invalidHelpRequest = new HelpRequest
@@ -286,8 +283,7 @@ public class HelpRequestControllerTests
             new Comment { Id = 11, Content = "Comment2", UserId = 2 }
         };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
         _helpRequestServiceMock.Setup(s => s.GetHelpRequestByIdAsync(1)).ReturnsAsync(hr);
         _commentServiceMock.Setup(c => c.GetCommentsByHelpRequestIdAsync(1)).ReturnsAsync(comments);
@@ -327,8 +323,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         var hr = new HelpRequest
@@ -358,8 +353,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         var hr = new HelpRequest
@@ -389,8 +383,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         var existingRequest = new HelpRequest
@@ -442,8 +435,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         var existingRequest = new HelpRequest
@@ -481,8 +473,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         var hr = new HelpRequest
@@ -512,8 +503,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         var hr = new HelpRequest
@@ -566,8 +556,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
         _helpRequestServiceMock.Setup(s => s.GetHelpRequestByIdAsync(999)).ReturnsAsync((HelpRequest)null);
 
@@ -585,8 +574,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         var hr = new HelpRequest
@@ -640,8 +628,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
         _commentServiceMock.Setup(c => c.GetCommentByIdAsync(999)).ReturnsAsync((Comment)null);
 
@@ -659,8 +646,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         var comment = new Comment { Id = 1, UserId = 1, HelpRequestId = 100, Content = "Test Comment" };
@@ -681,8 +667,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         var comment = new Comment { Id = 1, UserId = 1, HelpRequestId = 100, Content = "Old Comment" };
@@ -707,8 +692,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         var comment = new Comment { Id = 1, UserId = 1, HelpRequestId = 100, Content = "Old Comment" };
@@ -731,8 +715,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         var comment = new Comment { Id = 1, UserId = 999, HelpRequestId = 100 };
@@ -753,8 +736,7 @@ public class HelpRequestControllerTests
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = Encoding.UTF8.GetBytes(username); return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         var comment = new Comment { Id = 1, UserId = 1, HelpRequestId = 100 };
