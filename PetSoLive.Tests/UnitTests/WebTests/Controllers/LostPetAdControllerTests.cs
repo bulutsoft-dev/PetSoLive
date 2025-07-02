@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Localization;
 using Moq;
 using PetSoLive.Core.Entities;
@@ -56,6 +57,9 @@ public class LostPetAdControllerTests
                 HttpContext = _httpContext
             }
         };
+
+        // TempData initialization for tests
+        _controller.TempData = new TempDataDictionary(_httpContext, Mock.Of<ITempDataProvider>());
     }
 
     #region GetDistrictsByCity
@@ -99,9 +103,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "TestUser";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
 
         // Act
         var result = _controller.Create();
@@ -141,9 +145,9 @@ public class LostPetAdControllerTests
         // Arrange
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         var lostPetAd = new LostPetAd
@@ -179,9 +183,9 @@ public class LostPetAdControllerTests
         // Arrange
         var username = "TestUser";
         var user = new User { Id = 1, Username = username };
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         _userServiceMock.Setup(s => s.GetUserByUsernameAsync(username)).ReturnsAsync(user);
 
         var lostPetAd = new LostPetAd { PetName = "Fluffy" };
@@ -266,9 +270,9 @@ public class LostPetAdControllerTests
         };
         _lostPetAdServiceMock.Setup(s => s.GetLostPetAdByIdAsync(10)).ReturnsAsync(ad);
         var username = "AnotherUser";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
 
         // Act
         var result = await _controller.Details(10);
@@ -301,9 +305,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "AdOwner";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         _lostPetAdServiceMock.Setup(s => s.GetLostPetAdByIdAsync(10)).ReturnsAsync((LostPetAd)null);
 
         // Act
@@ -320,9 +324,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "NotOwner";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         var ad = new LostPetAd
         {
             Id = 10,
@@ -345,9 +349,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "AdOwner";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         var ad = new LostPetAd
         {
             Id = 10,
@@ -392,9 +396,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "AdOwner";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         var ad = new LostPetAd { Id = 11 }; // Mismatched ID
         var city = "İzmir";
         var district = "Bornova";
@@ -413,9 +417,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "AdOwner";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         var ad = new LostPetAd { Id = 10 };
         var city = "İzmir";
         var district = "Bornova";
@@ -435,9 +439,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "NotOwner";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         var existingAd = new LostPetAd
         {
             Id = 10,
@@ -462,9 +466,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "AdOwner";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         var existingAd = new LostPetAd
         {
             Id = 10,
@@ -511,9 +515,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "AdOwner";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         var existingAd = new LostPetAd
         {
             Id = 10,
@@ -557,9 +561,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "Owner";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         _lostPetAdServiceMock.Setup(s => s.GetLostPetAdByIdAsync(10)).ReturnsAsync((LostPetAd)null);
 
         // Act
@@ -576,9 +580,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "Owner";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         var ad = new LostPetAd { Id = 10, User = null };
         _lostPetAdServiceMock.Setup(s => s.GetLostPetAdByIdAsync(10)).ReturnsAsync(ad);
 
@@ -596,9 +600,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "NotOwner";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         var ad = new LostPetAd { Id = 10, User = new User { Username = "Owner" } };
         _lostPetAdServiceMock.Setup(s => s.GetLostPetAdByIdAsync(10)).ReturnsAsync(ad);
 
@@ -616,9 +620,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "Owner";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         var ad = new LostPetAd { Id = 10, User = new User { Username = "Owner" } };
         _lostPetAdServiceMock.Setup(s => s.GetLostPetAdByIdAsync(10)).ReturnsAsync(ad);
 
@@ -653,9 +657,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "Owner";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         _lostPetAdServiceMock.Setup(s => s.GetLostPetAdByIdAsync(10)).ReturnsAsync((LostPetAd)null);
 
         // Act
@@ -672,9 +676,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "Owner";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         var ad = new LostPetAd { Id = 10, User = null };
         _lostPetAdServiceMock.Setup(s => s.GetLostPetAdByIdAsync(10)).ReturnsAsync(ad);
 
@@ -692,9 +696,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "NotOwner";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         var ad = new LostPetAd { Id = 10, User = new User { Username = "Owner" } };
         _lostPetAdServiceMock.Setup(s => s.GetLostPetAdByIdAsync(10)).ReturnsAsync(ad);
 
@@ -712,9 +716,9 @@ public class LostPetAdControllerTests
     {
         // Arrange
         var username = "Owner";
+        byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
-            .Returns(true)
-            .Callback((string key, out byte[] value) => value = Encoding.UTF8.GetBytes(username));
+            .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
         var ad = new LostPetAd { Id = 10, User = new User { Username = "Owner" } };
         _lostPetAdServiceMock.Setup(s => s.GetLostPetAdByIdAsync(10)).ReturnsAsync(ad);
         _lostPetAdServiceMock.Setup(s => s.DeleteLostPetAdAsync(It.IsAny<LostPetAd>())).Returns(Task.CompletedTask);
