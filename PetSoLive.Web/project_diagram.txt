@@ -1,81 +1,171 @@
-/PetSoLive (Main Solution Folder)  # Ana çözüm klasörü, tüm projelerin ve çözüm dosyasının bulunduğu klasördür.
+PetSoLive (Çözüm Kökü)
 │
-├── /PetSoLive.Web (Presentation Layer)  # Web uygulaması, kullanıcı arayüzü, controller ve view'ları içerir.
-│   ├── /Controllers  # Web uygulamasının controller sınıflarının bulunduğu klasör
-│   │   ├── HomeController.cs  # Ana sayfa işlemlerini yöneten controller
-│   │   ├── AccountController.cs  # Kullanıcı hesap yönetimi işlemlerini yöneten controller
-│   │   ├── AdoptionController.cs  # Evlat edinme işlemleri için controller
-│   │   ├── AssistanceController.cs  # Yardım talepleri işlemleri için controller
-│   │   ├── PetController.cs  # Pet işlemleri (pet oluşturma, güncelleme vb.) için controller
-│   ├── /Views  # Web uygulamasının HTML sayfalarının bulunduğu klasör (MVC View'ları)
-│   │   ├── /Home  # Home view'ları
-│   │   │   ├── Index.cshtml  # Ana sayfa view'ı
-│   │   │   ├── About.cshtml  # Hakkında sayfası view'ı
-│   │   ├── /Account  # Hesap ile ilgili view'lar
-│   │   │   ├── Login.cshtml  # Kullanıcı giriş view'ı
-│   │   │   ├── Register.cshtml  # Kullanıcı kayıt view'ı
-│   │   ├── /Adoption  # Evlat edinme işlemleri ile ilgili view'lar
-│   │   │   ├── Index.cshtml  # Evlat edinme listeleme sayfası
-│   │   │   ├── Details.cshtml  # Evlat edinme detay sayfası
-│   │   ├── /Pet  # Pet işlemleri ile ilgili view'lar
-│   │   │   ├── Details.cshtml  # Pet detayları görüntüleme sayfası
-│   │   │   ├── Create.cshtml  # Pet oluşturma sayfası (Yeni pet eklemek için)
-│   │   ├── /Assistance  # Yardım talepleri ile ilgili view'lar
-│   │   │   ├── Create.cshtml  # Yardım talebi oluşturma sayfası
-│   │   │   ├── List.cshtml  # Yardım taleplerinin listelendiği sayfa
-│   ├── /wwwroot  # Statik dosyaların bulunduğu klasör (CSS, JS, Images)
-│   │   ├── /css  # CSS dosyalarının bulunduğu klasör
-│   │   ├── /js  # JavaScript dosyalarının bulunduğu klasör
-│   │   ├── /images  # Görsellerin bulunduğu klasör
-│   ├── Program.cs  # Web uygulamasının başlatılmasını sağlayan program dosyası
-│   ├── appsettings.json  # Uygulama yapılandırma dosyası
-│   ├── appsettings.Development.json  # Geliştirme ortamı için yapılandırma dosyası
+├── Petsolive.API
 │
-├── /PetSoLive.Core (Core Layer)  # Uygulamanın iş mantığı, model sınıfları ve arayüzleri
-│   ├── /Entities  # Veritabanı ile ilgili model sınıflarının bulunduğu klasör
-│   │   ├── User.cs  # Kullanıcı model sınıfı
-│   │   ├── Pet.cs  # Pet model sınıfı (Pet özellikleri ve ilişkileri)
-│   │   ├── Announcement.cs  # İlan model sınıfı
-│   │   ├── Adoption.cs  # Evlat edinme işlemi için model sınıfı
-│   ├── /Enums  # Sabit değerler (enum'lar) içeren klasör
-│   │   ├── AdoptionStatus.cs  # Evlat edinme durumu için enum
-│   ├── /Interfaces  # Uygulamanın servis katmanları için arayüzlerin bulunduğu klasör
-│   │   ├── IRepository.cs  # Genel repository arayüzü (CRUD işlemleri için)
-│   │   ├── IAdoptionService.cs  # Evlat edinme servis arayüzü
-│   │   ├── IAssistanceService.cs  # Yardım servisi arayüzü
-│   │   ├── IUserService.cs  # Kullanıcı yönetimi servis arayüzü
-│   │   ├── IPetService.cs  # Pet yönetimi servis arayüzü (Yeni eklenen servis)
-│   ├── /DTOs  # Veri transfer nesneleri (DTO) klasörü
-│   │   ├── UserDto.cs  # Kullanıcıya ait veri transfer nesnesi
-│   │   ├── PetDto.cs  # Pet'e ait veri transfer nesnesi (Yeni eklenen DTO)
-│   ├── /Helpers  # Yardımcı sınıfların bulunduğu klasör
-│   │   ├── NotificationHelper.cs  # Bildirim yardımcı sınıfı
+├── PetSoLive.Business
+│   ├── Dependencies
+│   └── Services
+│       ├── AdminService.cs
+│       ├── AdoptionRequestService.cs
+│       ├── AdoptionService.cs
+│       ├── CommentService.cs
+│       ├── EmailService.cs
+│       ├── HelpRequestService.cs
+│       ├── LostPetAdService.cs
+│       ├── PetOwnerService.cs
+│       ├── PetService.cs
+│       ├── ServiceManager.cs
+│       ├── UserService.cs
+│       └── VeterinarianService.cs
 │
-├── /PetSoLive.Data (Data Access Layer)  # Veritabanı erişim katmanı
-│   ├── /Repositories  # Repository sınıflarının bulunduğu klasör
-│   │   ├── UserRepository.cs  # Kullanıcı veritabanı işlemleri için repository
-│   │   ├── PetRepository.cs  # Pet veritabanı işlemleri için repository (Yeni eklenen repository)
-│   │   ├── AdoptionRepository.cs  # Evlat edinme işlemleri için repository
-│   │   ├── AnnouncementRepository.cs  # İlanlar için repository
-│   ├── ApplicationDbContext.cs  # Veritabanı bağlamı (DbContext sınıfı)
-│   ├── /Migrations  # Veritabanı migrasyon dosyaları
-│       ├── [Migration Files]  # Migration dosyaları burada yer alır
+├── PetSoLive.Core
+│   ├── Dependencies
+│   ├── DTOs
+│   ├── Entities
+│   │   ├── Admin.cs
+│   │   ├── Adoption.cs
+│   │   ├── AdoptRequest.cs
+│   │   ├── Assistance.cs
+│   │   ├── Comment.cs
+│   │   ├── HelpRequest.cs
+│   │   ├── LostPetAd.cs
+│   │   ├── Pet.cs
+│   │   ├── PetOwner.cs
+│   │   ├── SmtpSettings.cs
+│   │   ├── User.cs
+│   │   └── Veterinarian.cs
+│   ├── Enums
+│   │   ├── AdoptionStatus.cs
+│   │   ├── EmergencyLevel.cs
+│   │   ├── HelpRequestStatus.cs
+│   │   └── VeterinarianStatus.cs
+│   ├── Helpers
+│   │   ├── CityList.cs
+│   │   └── EmailHelper.cs
+│   └── Interfaces
+│       ├── IAdminRepository.cs
+│       ├── IAdminService.cs
+│       ├── IAdoptionRepository.cs
+│       ├── IAdoptionRequestRepository.cs
+│       ├── IAdoptionRequestService.cs
+│       ├── IAdoptionService.cs
+│       ├── ICommentRepository.cs
+│       ├── ICommentService.cs
+│       ├── IEmailService.cs
+│       ├── IHelpRequestRepository.cs
+│       ├── IHelpRequestService.cs
+│       ├── ILosPetAdRepository.cs
+│       ├── ILostPetAdService.cs
+│       ├── IPetOwnerRepository.cs
+│       ├── IPetOwnerService.cs
+│       ├── IPetRepository.cs
+│       ├── IPetService.cs
+│       ├── IRepository.cs
+│       ├── IServiceManager.cs
+│       ├── IUserRepository.cs
+│       ├── IUserService.cs
+│       ├── IVeterinarianRepository.cs
+│       └── IVeterinarianService.cs
 │
-├── /PetSoLive.Business (Business Logic Layer)  # İş mantığı katmanı (Servisler)
-│   ├── /Services  # Servis sınıflarının bulunduğu klasör
-│   │   ├── AdoptionService.cs  # Evlat edinme işlemleri için servis sınıfı
-│   │   ├── AssistanceService.cs  # Yardım talepleri işlemleri için servis sınıfı
-│   │   ├── UserService.cs  # Kullanıcı yönetimi için servis sınıfı
-│   │   ├── PetService.cs  # Pet yönetimi için servis sınıfı (Yeni eklenen servis)
-│   ├── BusinessRules.cs  # İş mantığı kurallarını içeren sınıf
+├── PetSoLive.Data
+│   ├── Dependencies
+│   ├── Migrations
+│   ├── Repositories
+│   │   ├── AdminRepository.cs
+│   │   ├── AdoptionRepository.cs
+│   │   ├── AdoptionRequestRepository.cs
+│   │   ├── CommentRepository.cs
+│   │   ├── HelpRequestRepository.cs
+│   │   ├── LostPetRepository.cs
+│   │   ├── PetOwnerRepository.cs
+│   │   ├── PetRepository.cs
+│   │   ├── UserRepository.cs
+│   │   └── VeterinarianRepository.cs
+│   └── ApplicationDbContext.cs
 │
-├── /PetSoLive.Tests (Testing Layer)  # Test katmanı
-│   ├── /UnitTests  # Birim testlerinin bulunduğu klasör
-│   │   ├── AdoptionServiceTests.cs  # Evlat edinme servisi için birim testleri
-│   │   ├── AssistanceServiceTests.cs  # Yardım servisi için birim testleri
-│   │   ├── PetServiceTests.cs  # Pet servisi için birim testleri (Yeni eklendi)
-│   ├── /IntegrationTests  # Entegre testlerin bulunduğu klasör
-│   │   ├── UserControllerTests.cs  # Kullanıcı controller'ı için entegrasyon testleri
-│   ├── PetSoLive.Tests.csproj  # Test projesi için proje dosyası
+├── PetSoLive.Tests
 │
-├── PetSoLive.sln  # Çözüm dosyası, tüm projeleri birleştirir
+├── PetSoLive.Web
+│   ├── Dependencies
+│   ├── Properties
+│   ├── wwwroot
+│   ├── Controllers
+│   │   ├── AccountController.cs
+│   │   ├── AdoptionController.cs
+│   │   ├── HelpRequestController.cs
+│   │   ├── HomeController.cs
+│   │   ├── LostPetAdController.cs
+│   │   ├── PetController.cs
+│   │   └── VeterinarianController.cs
+│   ├── Resources
+│   │   ├── Controllers
+│   │   │   ├── AccountController.en-US.resx
+│   │   │   ├── AccountController.tr-TR.resx
+│   │   │   ├── AdoptionController.en-US.resx
+│   │   │   ├── AdoptionController.tr-TR.resx
+│   │   │   ├── HelpRequestController.en-US.resx
+│   │   │   ├── HelpRequestController.tr-TR.resx
+│   │   │   ├── HomeController.en-US.resx
+│   │   │   ├── HomeController.tr-TR.resx
+│   │   │   ├── LostPetAdController.en-US.resx
+│   │   │   ├── LostPetAdController.tr-TR.resx
+│   │   │   ├── PetController.en-US.resx
+│   │   │   ├── PetController.tr-TR.resx
+│   │   │   ├── VeterinarianController.en-US.resx
+│   │   │   └── VeterinarianController.tr-TR.resx
+│   │   └── Shared
+│   │       ├── Views.Shared._Layout.en-US.resx
+│   │       └── Views.Shared._Layout.tr-TR.resx
+│   ├── Views
+│   │   ├── Account
+│   │   │   ├── Login.cshtml
+│   │   │   └── Register.cshtml
+│   │   ├── Adoption
+│   │   │   ├── Adopt.cshtml
+│   │   │   ├── AdoptionRequestExists.cshtml
+│   │   │   └── Index.cshtml
+│   │   ├── HelpRequest
+│   │   │   ├── Create.cshtml
+│   │   │   ├── Details.cshtml
+│   │   │   ├── Edit.cshtml
+│   │   │   ├── EditComment.cshtml
+│   │   │   └── Index.cshtml
+│   │   ├── Home
+│   │   │   ├── About.cshtml
+│   │   │   ├── Index.cshtml
+│   │   │   └── Privacy.cshtml
+│   │   ├── LostPetAd
+│   │   │   ├── Create.cshtml
+│   │   │   ├── Delete.cshtml
+│   │   │   ├── Details.cshtml
+│   │   │   ├── Edit.cshtml
+│   │   │   └── Index.cshtml
+│   │   ├── Pet
+│   │   │   ├── Create.cshtml
+│   │   │   ├── Delete.cshtml
+│   │   │   ├── Details.cshtml
+│   │   │   └── Edit.cshtml
+│   │   ├── Shared
+│   │   │   ├── _Layout.cshtml
+│   │   │   ├── _ValidationScriptsPartial.cshtml
+│   │   │   └── Error.cshtml
+│   │   └── Veterinarian
+│   │       ├── Index.cshtml
+│   │       └── Register.cshtml
+│   ├── _ViewImports.cshtml
+│   └── _ViewStart.cshtml
+│
+├── .env
+├── .gitignore
+├── app.db
+├── appsettings.json
+├── appsettings.Development.json
+├── Dockerfile
+├── migration_script.sh
+├── Program.cs
+├── programcs_with_env
+├── project_diagram.txt
+├── run.sh
+├── solution_sturcutre_with_api.txt
+├── tes_diagram.txt
+├── test_run.sh

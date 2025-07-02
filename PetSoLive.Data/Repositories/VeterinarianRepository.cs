@@ -7,6 +7,7 @@ using PetSoLive.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace PetSoLive.Infrastructure.Repositories
 {
@@ -39,6 +40,12 @@ namespace PetSoLive.Infrastructure.Repositories
 
         public async Task UpdateAsync(Veterinarian veterinarian)
         {
+            // AppliedDate'in UTC olduğundan emin ol
+            if (veterinarian.AppliedDate.Kind != DateTimeKind.Utc)
+            {
+                veterinarian.AppliedDate = DateTime.SpecifyKind(veterinarian.AppliedDate, DateTimeKind.Utc);
+            }
+
             _context.Veterinarians.Update(veterinarian);
             await _context.SaveChangesAsync();
         }

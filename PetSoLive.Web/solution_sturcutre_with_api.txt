@@ -1,0 +1,8 @@
+/PetSoLive.sln
+│
+├── /PetSoLive.Web           # Razor/MVC view'ları (UI)
+├── /PetSoLive.API           # ✅ Yeni JSON Web API
+├── /PetSoLive.Core          # Modeller, DTO, Interface (shared)
+├── /PetSoLive.Business      # Servisler, iş kuralları
+├── /PetSoLive.Data          # EF Core, DbContext, Repository
+├── /PetSoLive.Tests         # Test katmanı

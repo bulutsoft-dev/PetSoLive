@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetSoLive.Tests", "PetSoLiv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetSoLive.Web", "PetSoLive.Web\PetSoLive.Web.csproj", "{D88F0742-991B-4BFA-A6FD-7EFE0CEBB214}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Petsolive.API", "Petsolive.API\Petsolive.API.csproj", "{89D54F29-DF9A-4A5C-804D-DB0041E4D738}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D88F0742-991B-4BFA-A6FD-7EFE0CEBB214}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D88F0742-991B-4BFA-A6FD-7EFE0CEBB214}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D88F0742-991B-4BFA-A6FD-7EFE0CEBB214}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89D54F29-DF9A-4A5C-804D-DB0041E4D738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89D54F29-DF9A-4A5C-804D-DB0041E4D738}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89D54F29-DF9A-4A5C-804D-DB0041E4D738}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89D54F29-DF9A-4A5C-804D-DB0041E4D738}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

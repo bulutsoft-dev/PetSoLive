@@ -8,5 +8,6 @@ namespace PetSoLive.Core.Interfaces
         Task AddAsync(PetOwner petOwner);
         Task SaveChangesAsync();
         Task<PetOwner> GetPetOwnerByPetIdAsync(int petId);
+        Task DeleteAsync(int petId, int userId);
     }
 }

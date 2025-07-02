@@ -1,0 +1,48 @@
+PetSoLive.API
+│
+├── Controllers
+│   ├── AdminController.cs
+│   ├── AdoptionController.cs
+│   ├── AdoptionRequestController.cs
+│   ├── CommentController.cs
+│   ├── HelpRequestController.cs
+│   ├── LostPetAdController.cs
+│   ├── PetController.cs
+│   ├── PetOwnerController.cs
+│   ├── UserController.cs
+│   ├── VeterinarianController.cs
+│   └── AccountController.cs        # Kimlik doğrulama ve kullanıcı işlemleri
+│
+├── DTOs
+│   ├── AdminDto.cs
+│   ├── AdoptionDto.cs
+│   ├── AdoptionRequestDto.cs
+│   ├── CommentDto.cs
+│   ├── HelpRequestDto.cs
+│   ├── LostPetAdDto.cs
+│   ├── PetDto.cs
+│   ├── PetOwnerDto.cs
+│   ├── UserDto.cs
+│   ├── VeterinarianDto.cs
+│   └── AuthDto.cs                  # Giriş, kayıt gibi işlemler için
+│
+├── Mappings
+│   └── MappingProfile.cs           # AutoMapper profil ayarları
+│
+├── Middlewares                   # (Opsiyonel)
+│   └── ExceptionMiddleware.cs    # Global hata yönetimi için
+│
+├── Extensions
+│   └── ServiceCollectionExtensions.cs   # Servis kayıtları için genişletmeler
+│
+├── Helpers
+│   └── JwtHelper.cs              # JWT token oluşturma vb.
+│
+├── Properties
+│   └── launchSettings.json       # Debug ve launch ayarları
+│
+├── appsettings.json
+├── appsettings.Development.json
+├── Program.cs                   # Uygulama başlangıç noktası (minimal API veya Startup.cs içerebilir)
+├── Startup.cs                  # (Varsa) servis konfigürasyonları ve pipeline tanımı
+└── PetSoLive.API.csproj         # Proje dosyası

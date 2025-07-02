@@ -1,9 +1,13 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using PetSoLive.Core.Enums;
 
 namespace PetSoLive.Core.Entities
 {
     public class Veterinarian
-    {
+    {   
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public int UserId { get; set; }  // Relation with User entity

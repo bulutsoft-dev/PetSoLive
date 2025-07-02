@@ -38,6 +38,25 @@ namespace PetSoLive.Data.Repositories
         // Update an existing user
         public async Task UpdateAsync(User entity)
         {
+            // DateTime alanlarını kontrol et
+            if (entity.DateOfBirth != default && entity.DateOfBirth.Kind == DateTimeKind.Unspecified)
+                entity.DateOfBirth = DateTime.SpecifyKind(entity.DateOfBirth, DateTimeKind.Utc);
+            else if (entity.DateOfBirth != default)
+                entity.DateOfBirth = entity.DateOfBirth.ToUniversalTime();
+
+            if (entity.CreatedDate != default && entity.CreatedDate.Kind == DateTimeKind.Unspecified)
+                entity.CreatedDate = DateTime.SpecifyKind(entity.CreatedDate, DateTimeKind.Utc);
+            else if (entity.CreatedDate != default)
+                entity.CreatedDate = entity.CreatedDate.ToUniversalTime();
+
+            if (entity.LastLoginDate.HasValue)
+            {
+                if (entity.LastLoginDate.Value.Kind == DateTimeKind.Unspecified)
+                    entity.LastLoginDate = DateTime.SpecifyKind(entity.LastLoginDate.Value, DateTimeKind.Utc);
+                else
+                    entity.LastLoginDate = entity.LastLoginDate.Value.ToUniversalTime();
+            }
+
             _context.Users.Update(entity);
             await _context.SaveChangesAsync();
         }

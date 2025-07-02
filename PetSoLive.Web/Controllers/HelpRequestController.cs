@@ -55,7 +55,7 @@ public class HelpRequestController : Controller
         }
 
         helpRequest.UserId = user.Id;
-        helpRequest.CreatedAt = DateTime.Now;
+        helpRequest.CreatedAt = DateTime.UtcNow;
         helpRequest.Status = HelpRequestStatus.Active;
 
         if (ModelState.IsValid)
@@ -238,7 +238,7 @@ public class HelpRequestController : Controller
         var comment = new Comment
         {
             Content = content,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             HelpRequestId = helpRequest.Id,
             UserId = user.Id,
             VeterinarianId = veterinarianId
@@ -302,7 +302,7 @@ public class HelpRequestController : Controller
         }
 
         existingComment.Content = content;
-        existingComment.CreatedAt = DateTime.Now;
+        existingComment.CreatedAt = DateTime.UtcNow;
 
         var veterinarian = await _serviceManager.VeterinarianService.GetByUserIdAsync(user.Id);
         existingComment.VeterinarianId = veterinarian?.Id;

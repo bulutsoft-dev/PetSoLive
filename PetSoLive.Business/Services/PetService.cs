@@ -91,4 +91,10 @@ public class PetService : IPetService
 
         await _petRepository.DeleteAsync(pet);
     }
+
+    public async Task DeletePetOwnerAsync(int petId, int userId)
+    {
+        await _petOwnerRepository.DeleteAsync(petId, userId);
+        await _petOwnerRepository.SaveChangesAsync();
+    }
 }

@@ -91,6 +91,11 @@ public class AdoptionController : Controller
             return View("AdoptionRequestExists");
         }
 
+        if (dateOfBirth.Kind == DateTimeKind.Unspecified)
+            dateOfBirth = DateTime.SpecifyKind(dateOfBirth, DateTimeKind.Utc);
+        else
+            dateOfBirth = dateOfBirth.ToUniversalTime();
+
         user.PhoneNumber = phone;
         user.Address = address;
         user.DateOfBirth = dateOfBirth;
@@ -102,7 +107,7 @@ public class AdoptionController : Controller
             PetId = petId,
             Message = message,
             Status = AdoptionStatus.Pending,
-            RequestDate = DateTime.Now,
+            RequestDate = DateTime.UtcNow,
             UserId = user.Id,
             User = user
         };
@@ -191,7 +196,7 @@ public class AdoptionController : Controller
         {
             PetId = petId,
             UserId = adoptionRequest.UserId,
-            AdoptionDate = DateTime.Now,
+            AdoptionDate = DateTime.UtcNow,
             Status = AdoptionStatus.Approved,
             Pet = pet,
             User = adoptionRequest.User
