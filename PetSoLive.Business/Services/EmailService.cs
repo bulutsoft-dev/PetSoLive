@@ -3,15 +3,30 @@ using System.Net.Mail;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
 
+public interface ISmtpClient : IDisposable
+{
+    Task SendMailAsync(MailMessage message);
+}
+
+public class SmtpClientWrapper : ISmtpClient
+{
+    private readonly SmtpClient _client;
+    public SmtpClientWrapper(SmtpClient client) => _client = client;
+    public Task SendMailAsync(MailMessage message) => _client.SendMailAsync(message);
+    public void Dispose() => _client.Dispose();
+}
+
 namespace PetSoLive.Business.Services
 {
     public class EmailService : IEmailService
     {
-        private readonly SmtpSettings _smtpSettings;
+        private readonly SmtpSettings _settings;
+        private readonly ISmtpClient _smtpClient;
 
-        public EmailService(SmtpSettings smtpSettings)
+        public EmailService(SmtpSettings settings, ISmtpClient smtpClient)
         {
-            _smtpSettings = smtpSettings;
+            _settings = settings;
+            _smtpClient = smtpClient;
         }
 
         public async Task SendEmailAsync(string to, string subject, string body)
@@ -20,22 +35,8 @@ namespace PetSoLive.Business.Services
             if (string.IsNullOrEmpty(subject)) throw new ArgumentNullException(nameof(subject));
             if (string.IsNullOrEmpty(body)) throw new ArgumentNullException(nameof(body));
 
-            var client = new SmtpClient(_smtpSettings.Host, _smtpSettings.Port)
-            {
-                Credentials = new NetworkCredential(_smtpSettings.Username, _smtpSettings.Password),
-                EnableSsl = _smtpSettings.EnableSsl
-            };
-
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress(_smtpSettings.FromEmail),
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = true
-            };
-            mailMessage.To.Add(to);
-
-            await client.SendMailAsync(mailMessage);
+            var mail = new MailMessage(_settings.FromEmail, to, subject, body);
+            await _smtpClient.SendMailAsync(mail);
         }
     }
 }
