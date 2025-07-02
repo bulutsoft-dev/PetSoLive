@@ -39,15 +39,20 @@ public class HelpRequestController : ControllerBase
     [Authorize]
     public async Task<IActionResult> Create([FromBody] HelpRequestDto dto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest();
         dto.Id = 0; // Id'yi sıfırla, veritabanı otomatik versin
         var entity = _mapper.Map<HelpRequest>(dto);
         await _serviceManager.HelpRequestService.CreateHelpRequestAsync(entity);
         return Ok();
     }
+
     [HttpPut("{id}")]
     [Authorize]
     public async Task<IActionResult> Update(int id, [FromBody] HelpRequestDto dto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest();
         var entity = _mapper.Map<HelpRequest>(dto);
         entity.Id = id;
         await _serviceManager.HelpRequestService.UpdateHelpRequestAsync(entity);
