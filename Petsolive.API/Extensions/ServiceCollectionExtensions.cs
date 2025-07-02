@@ -42,6 +42,12 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IHelpRequestService, HelpRequestService>();
         services.AddScoped<ILostPetAdService, LostPetAdService>();
+        
+        // Register SmtpClient for DI
+        services.AddTransient<System.Net.Mail.SmtpClient>();
+        // Register ISmtpClient for DI
+        services.AddScoped<ISmtpClient, SmtpClientWrapper>();
+        
         services.AddScoped<IEmailService, EmailService>();
 
         // ServiceManager
