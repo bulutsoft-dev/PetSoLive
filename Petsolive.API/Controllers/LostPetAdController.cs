@@ -39,6 +39,9 @@ public class LostPetAdController : ControllerBase
     [Authorize]
     public async Task<IActionResult> Create([FromBody] LostPetAdDto dto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest();
+
         dto.Id = 0; // Id'yi sıfırla, veritabanı otomatik versin
         var entity = _mapper.Map<LostPetAd>(dto);
         await _serviceManager.LostPetAdService.CreateLostPetAdAsync(entity, dto.LastSeenCity, dto.LastSeenDistrict);
@@ -49,6 +52,9 @@ public class LostPetAdController : ControllerBase
     [Authorize]
     public async Task<IActionResult> Update(int id, [FromBody] LostPetAdDto dto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest();
+
         var entity = _mapper.Map<LostPetAd>(dto);
         entity.Id = id;
         await _serviceManager.LostPetAdService.UpdateLostPetAdAsync(entity);
