@@ -32,6 +32,9 @@ public class AdoptionController : ControllerBase
     [Authorize]
     public async Task<IActionResult> Create([FromBody] AdoptionDto adoptionDto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest();
+
         var adoption = _mapper.Map<Adoption>(adoptionDto);
         await _serviceManager.AdoptionService.CreateAdoptionAsync(adoption);
         return Ok();
