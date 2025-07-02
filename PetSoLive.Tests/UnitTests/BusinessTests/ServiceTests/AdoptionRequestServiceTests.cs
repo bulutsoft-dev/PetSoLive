@@ -53,17 +53,14 @@ namespace PetSoLive.Tests.UnitTests
         }
 
         [Fact]
-        public async Task GetAdoptionRequestByIdAsync_ShouldReturnNull_WhenRequestDoesNotExist()
+        public async Task GetAdoptionRequestByIdAsync_ShouldThrowKeyNotFoundException_WhenRequestDoesNotExist()
         {
             // Arrange
             _adoptionRequestRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<int>()))
                 .ReturnsAsync((AdoptionRequest)null);
 
-            // Act
-            var result = await _service.GetAdoptionRequestByIdAsync(999);
-
-            // Assert
-            Assert.Null(result);
+            // Act & Assert
+            await Assert.ThrowsAsync<KeyNotFoundException>(() => _service.GetAdoptionRequestByIdAsync(999));
         }
 
         [Fact]

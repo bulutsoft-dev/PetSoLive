@@ -86,6 +86,10 @@ namespace PetSoLive.Tests.Controllers
             _controller.ControllerContext.HttpContext = context;
 
             _serviceManagerMock.Setup(m => m.PetService.GetPetByIdAsync(It.IsAny<int>())).ReturnsAsync((Pet)null);
+            _serviceManagerMock.Setup(m => m.UserService.GetUserByUsernameAsync(It.IsAny<string>())).ReturnsAsync(new User { Id = 1, Username = "user1" });
+            var adoptionServiceMock = new Mock<IAdoptionService>();
+            _serviceManagerMock.Setup(m => m.AdoptionService).Returns(adoptionServiceMock.Object);
+            adoptionServiceMock.Setup(m => m.GetAdoptionRequestByUserAndPetAsync(It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync((AdoptionRequest)null);
 
             // Act
             var result = await _controller.Adopt(1);

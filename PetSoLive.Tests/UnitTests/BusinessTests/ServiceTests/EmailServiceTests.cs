@@ -10,8 +10,9 @@ namespace PetSoLive.Tests.UnitTests
 {
     public class EmailServiceTests
     {
-        private readonly EmailService _emailService;
         private readonly SmtpSettings _smtpSettings;
+        private readonly Mock<ISmtpClient> _smtpClientMock;
+        private readonly EmailService _emailService;
 
         public EmailServiceTests()
         {
@@ -24,10 +25,10 @@ namespace PetSoLive.Tests.UnitTests
                 FromEmail = "furkanbtng@gmail.com",
                 EnableSsl = true
             };
-
-            _emailService = new EmailService(_smtpSettings);
+            _smtpClientMock = new Mock<ISmtpClient>();
+            _emailService = new EmailService(_smtpSettings, _smtpClientMock.Object);
         }
-        //failed beacuse of the smtp settings 
+
         [Fact]
         public async Task SendEmailAsync_ShouldSendEmail_WhenValidParameters()
         {
@@ -35,41 +36,36 @@ namespace PetSoLive.Tests.UnitTests
             var to = "furkanbtng@gmail.com";
             var subject = "Test Subject";
             var body = "Test Body";
+            _smtpClientMock.Setup(x => x.SendMailAsync(It.IsAny<MailMessage>())).Returns(Task.CompletedTask);
 
-            // Act & Assert
+            // Act
             await _emailService.SendEmailAsync(to, subject, body);
+
+            // Assert
+            _smtpClientMock.Verify(x => x.SendMailAsync(It.Is<MailMessage>(m => m.To[0].Address == to && m.Subject == subject && m.Body == body)), Times.Once);
         }
 
         [Fact]
         public async Task SendEmailAsync_ShouldThrowArgumentNullException_WhenToIsNull()
         {
-            // Arrange
             var subject = "Test Subject";
             var body = "Test Body";
-
-            // Act & Assert
             await Assert.ThrowsAsync<ArgumentNullException>(() => _emailService.SendEmailAsync(null, subject, body));
         }
 
         [Fact]
         public async Task SendEmailAsync_ShouldThrowArgumentNullException_WhenSubjectIsNull()
         {
-            // Arrange
             var to = "furkanbtng@gmail.com";
             var body = "Test Body";
-
-            // Act & Assert
             await Assert.ThrowsAsync<ArgumentNullException>(() => _emailService.SendEmailAsync(to, null, body));
         }
 
         [Fact]
         public async Task SendEmailAsync_ShouldThrowArgumentNullException_WhenBodyIsNull()
         {
-            // Arrange
             var to = "furkanbtng@gmail.com";
             var subject = "Test Subject";
-
-            // Act & Assert
             await Assert.ThrowsAsync<ArgumentNullException>(() => _emailService.SendEmailAsync(to, subject, null));
         }
     }
