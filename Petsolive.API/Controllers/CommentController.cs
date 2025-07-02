@@ -31,6 +31,8 @@ public class CommentController : ControllerBase
     [Authorize]
     public async Task<IActionResult> Add([FromBody] CommentDto dto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest();
         var entity = _mapper.Map<Comment>(dto);
         await _serviceManager.CommentService.AddCommentAsync(entity);
         return Ok();
