@@ -21,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Petsolive.API\Petsolive.API.csproj" />
       <ProjectReference Include="..\PetSoLive.Business\PetSoLive.Business.csproj" />
       <ProjectReference Include="..\PetSoLive.Core\PetSoLive.Core.csproj" />
       <ProjectReference Include="..\PetSoLive.Data\PetSoLive.Data.csproj" />
@@ -28,6 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="UnitTests\APITests\Controllers\" />
       <Folder Include="UnitTests\CoreTests\" />
     </ItemGroup>
 
