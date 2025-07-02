@@ -10,7 +10,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-// User -> UserDto (şifre alanını ignore et)
+        // User -> UserDto
         CreateMap<User, UserDto>()
             .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src =>
                 src.DateOfBirth != default
@@ -28,7 +28,7 @@ public class MappingProfile : Profile
                     : (DateTime?)null
             ));
 
-        // UserDto -> User (şifre alanını ignore et)
+        // UserDto -> User
         CreateMap<UserDto, User>()
             .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
             .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src =>
@@ -49,7 +49,7 @@ public class MappingProfile : Profile
 
         // Pet <-> PetDto
         CreateMap<Pet, PetDto>().ReverseMap()
-            .ForMember(dest => dest.Id, opt => opt.Ignore()) // Create işlemlerinde Id'yi ignore et
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.AdoptionRequests, opt => opt.Ignore())
             .ForMember(dest => dest.PetOwners, opt => opt.Ignore());
 
@@ -65,11 +65,22 @@ public class MappingProfile : Profile
         CreateMap<Veterinarian, VeterinarianDto>()
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
-            .ReverseMap()
+            .ForMember(dest => dest.AppliedDate, opt => opt.MapFrom(src =>
+                src.AppliedDate != default
+                    ? DateTime.SpecifyKind(src.AppliedDate, DateTimeKind.Utc)
+                    : default(DateTime)
+            ));
+
+        CreateMap<VeterinarianDto, Veterinarian>()
             .ForMember(dest => dest.User, opt => opt.Ignore())
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<VeterinarianStatus>(src.Status)))
             .ForMember(dest => dest.Comments, opt => opt.Ignore())
-            .ForMember(dest => dest.Id, opt => opt.Ignore());
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.AppliedDate, opt => opt.MapFrom(src =>
+                src.AppliedDate.Kind == DateTimeKind.Utc
+                    ? src.AppliedDate
+                    : DateTime.SpecifyKind(src.AppliedDate, DateTimeKind.Utc)
+            ));
 
         // Admin <-> AdminDto
         CreateMap<Admin, AdminDto>()
@@ -104,12 +115,22 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.EmergencyLevel, opt => opt.MapFrom(src => src.EmergencyLevel.ToString()))
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src =>
+                src.CreatedAt != default
+                    ? DateTime.SpecifyKind(src.CreatedAt, DateTimeKind.Utc)
+                    : default(DateTime)
+            ))
             .ReverseMap()
             .ForMember(dest => dest.User, opt => opt.Ignore())
             .ForMember(dest => dest.EmergencyLevel, opt => opt.MapFrom(src => Enum.Parse<EmergencyLevel>(src.EmergencyLevel)))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<HelpRequestStatus>(src.Status)))
             .ForMember(dest => dest.Comments, opt => opt.Ignore())
-            .ForMember(dest => dest.Id, opt => opt.Ignore());
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src =>
+                src.CreatedAt.Kind == DateTimeKind.Utc
+                    ? src.CreatedAt
+                    : DateTime.SpecifyKind(src.CreatedAt, DateTimeKind.Utc)
+            ));
 
         // Comment <-> CommentDto
         CreateMap<Comment, CommentDto>()
@@ -124,22 +145,29 @@ public class MappingProfile : Profile
         // LostPetAd <-> LostPetAdDto
         CreateMap<LostPetAd, LostPetAdDto>()
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username))
+            .ForMember(dest => dest.LastSeenDate, opt => opt.MapFrom(src =>
+                src.LastSeenDate != default
+                    ? DateTime.SpecifyKind(src.LastSeenDate, DateTimeKind.Utc)
+                    : default(DateTime)
+            ))
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src =>
+                src.CreatedAt != default
+                    ? DateTime.SpecifyKind(src.CreatedAt, DateTimeKind.Utc)
+                    : default(DateTime)
+            ))
             .ReverseMap()
             .ForMember(dest => dest.User, opt => opt.Ignore())
-            .ForMember(dest => dest.Id, opt => opt.Ignore());
-
-            // LostPetAdDto -> LostPetAd
-CreateMap<LostPetAdDto, LostPetAd>()
-    .ForMember(dest => dest.User, opt => opt.Ignore())
-    .ForMember(dest => dest.Id, opt => opt.Ignore())
-    .ForMember(dest => dest.LastSeenDate, opt => opt.MapFrom(src =>
-        src.LastSeenDate.Kind == DateTimeKind.Utc
-            ? src.LastSeenDate
-            : DateTime.SpecifyKind(src.LastSeenDate, DateTimeKind.Utc)))
-    .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src =>
-        src.CreatedAt.Kind == DateTimeKind.Utc
-            ? src.CreatedAt
-            : DateTime.SpecifyKind(src.CreatedAt, DateTimeKind.Utc)));
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.LastSeenDate, opt => opt.MapFrom(src =>
+                src.LastSeenDate.Kind == DateTimeKind.Utc
+                    ? src.LastSeenDate
+                    : DateTime.SpecifyKind(src.LastSeenDate, DateTimeKind.Utc)
+            ))
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src =>
+                src.CreatedAt.Kind == DateTimeKind.Utc
+                    ? src.CreatedAt
+                    : DateTime.SpecifyKind(src.CreatedAt, DateTimeKind.Utc)
+            ));
 
         // AuthDto -> User (for login)
         CreateMap<AuthDto, User>()
