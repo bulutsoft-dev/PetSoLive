@@ -29,7 +29,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="IntegrationTests\APITests\MiddlewareTests\" />
       <Folder Include="UnitTests\APITests\Controllers\" />
+      <Folder Include="UnitTests\APITests\Helpers\" />
       <Folder Include="UnitTests\CoreTests\" />
     </ItemGroup>
 
