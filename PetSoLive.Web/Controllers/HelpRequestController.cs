@@ -71,6 +71,7 @@ public class HelpRequestController : Controller
             return RedirectToAction("Index");
         }
 
+        ViewBag.User = user;
         return View(helpRequest);
     }
 
@@ -252,24 +253,22 @@ public class HelpRequestController : Controller
     [HttpGet]
     public async Task<IActionResult> EditComment(int id)
     {
-        var comment = await _serviceManager.CommentService.GetCommentByIdAsync(id);
-        if (comment == null)
-        {
-            return NotFound();
-        }
-
         var username = HttpContext.Session.GetString("Username");
         if (string.IsNullOrEmpty(username))
         {
             return RedirectToAction("Login", "Account");
         }
-
         var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
-        if (user == null || comment.UserId != user.Id)
+        if (user == null)
         {
-            return Unauthorized();
+            return RedirectToAction("Login", "Account");
         }
-
+        var comment = await _serviceManager.CommentService.GetCommentByIdAsync(id);
+        if (comment == null)
+        {
+            return NotFound();
+        }
+        ViewBag.User = user;
         return View(comment);
     }
 
