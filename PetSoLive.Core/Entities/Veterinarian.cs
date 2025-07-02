@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using PetSoLive.Core.Enums;
 
 namespace PetSoLive.Core.Entities
