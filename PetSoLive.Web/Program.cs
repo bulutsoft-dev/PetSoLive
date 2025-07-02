@@ -51,6 +51,8 @@ builder.Services.AddSession(options =>
 });
 
 // Add services to the container
+builder.Services.AddTransient<System.Net.Mail.SmtpClient>();
+builder.Services.AddScoped<ISmtpClient, SmtpClientWrapper>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 builder.Services.AddScoped<IAdoptionService, AdoptionService>();
