@@ -45,7 +45,11 @@ public class MappingProfile : Profile
                 src.LastLoginDate.HasValue
                     ? DateTime.SpecifyKind(src.LastLoginDate.Value, DateTimeKind.Utc)
                     : (DateTime?)null
-            ));
+            ))
+            .ForMember(dest => dest.PetOwners, opt => opt.Ignore())
+            .ForMember(dest => dest.AdoptionRequests, opt => opt.Ignore())
+            .ForMember(dest => dest.HelpRequests, opt => opt.Ignore())
+            .ForMember(dest => dest.Comments, opt => opt.Ignore());
 
         // Pet <-> PetDto
         CreateMap<Pet, PetDto>().ReverseMap()
@@ -184,7 +188,11 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Roles, opt => opt.Ignore())
             .ForMember(dest => dest.City, opt => opt.Ignore())
             .ForMember(dest => dest.District, opt => opt.Ignore())
-            .ForMember(dest => dest.Id, opt => opt.Ignore());
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.PetOwners, opt => opt.Ignore())
+            .ForMember(dest => dest.AdoptionRequests, opt => opt.Ignore())
+            .ForMember(dest => dest.HelpRequests, opt => opt.Ignore())
+            .ForMember(dest => dest.Comments, opt => opt.Ignore());
 
         // RegisterDto -> User (for registration)
         CreateMap<RegisterDto, User>()
@@ -198,11 +206,16 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.CreatedDate, opt => opt.Ignore())
             .ForMember(dest => dest.LastLoginDate, opt => opt.Ignore())
             .ForMember(dest => dest.IsActive, opt => opt.Ignore())
-            .ForMember(dest => dest.Roles, opt => opt.Ignore());
+            .ForMember(dest => dest.Roles, opt => opt.Ignore())
+            .ForMember(dest => dest.PetOwners, opt => opt.Ignore())
+            .ForMember(dest => dest.AdoptionRequests, opt => opt.Ignore())
+            .ForMember(dest => dest.HelpRequests, opt => opt.Ignore())
+            .ForMember(dest => dest.Comments, opt => opt.Ignore());
 
         // AuthResponseDto <-> User (for login response)
         CreateMap<User, AuthResponseDto>()
-            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src));
+            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src))
+            .ForMember(dest => dest.Token, opt => opt.Ignore());
 
         // LostPetAdFilterDto: Sadece filtreleme için, entity map gerekmez.
     }
