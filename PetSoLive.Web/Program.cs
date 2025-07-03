@@ -12,13 +12,21 @@ using PetSoLive.Data.Repositories;
 using PetSoLive.Infrastructure.Repositories;
 using SmtpSettings = PetSoLive.Core.Entities.SmtpSettings;
 
+// .env dosyasını builder'dan önce yükle
+Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
+
+// SMTP environment variable'larını logla
+Console.WriteLine($"SMTP_HOST: {Environment.GetEnvironmentVariable("SMTP_HOST")}");
+Console.WriteLine($"SMTP_PORT: {Environment.GetEnvironmentVariable("SMTP_PORT")}");
+Console.WriteLine($"SMTP_USERNAME: {Environment.GetEnvironmentVariable("SMTP_USERNAME")}");
+Console.WriteLine($"SMTP_PASSWORD: {Environment.GetEnvironmentVariable("SMTP_PASSWORD")}");
+Console.WriteLine($"SMTP_FROM_EMAIL: {Environment.GetEnvironmentVariable("SMTP_FROM_EMAIL")}");
+Console.WriteLine($"SMTP_ENABLE_SSL: {Environment.GetEnvironmentVariable("SMTP_ENABLE_SSL")}");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
-// Load environment variables from the .env file
-Env.Load();
 
 // SMTP Settings
 var smtpSettings = new SmtpSettings
@@ -32,6 +40,20 @@ var smtpSettings = new SmtpSettings
 };
 
 builder.Services.AddSingleton(smtpSettings);
+
+// SmtpClient'ı ayarlarla birlikte DI'ya ekle
+builder.Services.AddTransient<System.Net.Mail.SmtpClient>(sp =>
+{
+    var smtp = sp.GetRequiredService<SmtpSettings>();
+    var client = new System.Net.Mail.SmtpClient
+    {
+        Host = smtp.Host,
+        Port = smtp.Port,
+        EnableSsl = smtp.EnableSsl,
+        Credentials = new System.Net.NetworkCredential(smtp.Username, smtp.Password)
+    };
+    return client;
+});
 
 // PostgreSQL Database Connection String
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
@@ -51,7 +73,6 @@ builder.Services.AddSession(options =>
 });
 
 // Add services to the container
-builder.Services.AddTransient<System.Net.Mail.SmtpClient>();
 builder.Services.AddScoped<ISmtpClient, SmtpClientWrapper>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
