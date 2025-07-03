@@ -43,4 +43,9 @@ public class AdoptionService : IAdoptionService
     {
         return await _adoptionRepository.GetAdoptionRequestByUserAndPetAsync(userId, petId);
     }
+
+    public async Task<Adoption?> GetAdoptionByPetAndUserAsync(int petId, int userId)
+    {
+        return await _adoptionRepository.GetAdoptionByPetAndUserAsync(petId, userId);
+    }
 }

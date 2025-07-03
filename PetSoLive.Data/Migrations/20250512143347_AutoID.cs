@@ -10,7 +10,8 @@ namespace PetSoLive.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
+            // Adoptions tablosunun Id sequence'ını düzelt
+            migrationBuilder.Sql("SELECT setval('\"Adoptions_Id_seq\"', (SELECT MAX(\"Id\") FROM \"Adoptions\"));");
         }
 
         /// <inheritdoc />

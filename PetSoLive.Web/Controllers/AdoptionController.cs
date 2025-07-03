@@ -27,6 +27,9 @@ public class AdoptionController : Controller
         return View(pets);
     }
 
+
+
+
     public async Task<IActionResult> Adopt(int petId)
     {
         var username = HttpContext.Session.GetString("Username");
@@ -192,17 +195,21 @@ public class AdoptionController : Controller
             }
         }
 
-        var adoption = new Adoption
+        var existingAdoption = await _serviceManager.AdoptionService.GetAdoptionByPetAndUserAsync(petId, adoptionRequest.UserId);
+        if (existingAdoption == null)
         {
-            PetId = petId,
-            UserId = adoptionRequest.UserId,
-            AdoptionDate = DateTime.UtcNow,
-            Status = AdoptionStatus.Approved,
-            Pet = pet,
-            User = adoptionRequest.User
-        };
+            var adoption = new Adoption
+            {
+                PetId = petId,
+                UserId = adoptionRequest.UserId,
+                AdoptionDate = DateTime.UtcNow,
+                Status = AdoptionStatus.Approved,
+                Pet = pet,
+                User = adoptionRequest.User
+            };
 
-        await _serviceManager.AdoptionService.CreateAdoptionAsync(adoption);
+            await _serviceManager.AdoptionService.CreateAdoptionAsync(adoption);
+        }
 
         return RedirectToAction("Index");
     }

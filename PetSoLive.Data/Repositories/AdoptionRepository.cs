@@ -59,5 +59,11 @@ namespace PetSoLive.Data
                 .Where(ar => ar.PetId == petId && ar.Status == AdoptionStatus.Pending)
                 .ToListAsync();
         }
+
+        public async Task<Adoption?> GetAdoptionByPetAndUserAsync(int petId, int userId)
+        {
+            return await _context.Adoptions
+                .FirstOrDefaultAsync(a => a.PetId == petId && a.UserId == userId);
+        }
     }
 }
