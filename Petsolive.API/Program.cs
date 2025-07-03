@@ -4,9 +4,10 @@ using System.Text;
 using DotNetEnv;
 using Petsolive.API.Extensions;
 
-var builder = WebApplication.CreateBuilder(args);
-
+// .env dosyasını en başta yükle
 Env.Load();
+
+var builder = WebApplication.CreateBuilder(args);
 
 var jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
 var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
