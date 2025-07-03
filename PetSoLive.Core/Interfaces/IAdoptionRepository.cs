@@ -12,5 +12,6 @@ namespace PetSoLive.Core.Interfaces
         Task<bool> IsPetAlreadyAdoptedAsync(int petId);
         Task<AdoptionRequest?> GetAdoptionRequestByUserAndPetAsync(int userId, int petId);
         Task<List<AdoptionRequest>> GetPendingRequestsByPetIdAsync(int petId);
+        Task<Adoption?> GetAdoptionByPetAndUserAsync(int petId, int userId);
     }
 }
