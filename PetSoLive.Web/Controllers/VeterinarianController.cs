@@ -45,6 +45,8 @@ namespace PetSoLive.Web.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            ViewBag.UserId = user.Id;
+
             var existingApplication = await _serviceManager.VeterinarianService.GetByUserIdAsync(user.Id);
             if (existingApplication != null)
             {
