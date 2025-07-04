@@ -24,6 +24,19 @@
         }
 
         <form method="post">
+            @if (ViewBag.UserId != null)
+            {
+                <input type="hidden" name="userId" value="@ViewBag.UserId" />
+            }
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <div>@error.ErrorMessage</div>
+                    }
+                </div>
+            }
             <div class="form-group">
                 <label for="qualifications">@Localizer["Qualifications"]</label>
                 <input type="text" class="form-control" id="qualifications" name="qualifications" required />
