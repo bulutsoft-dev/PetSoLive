@@ -104,6 +104,8 @@ public class HelpRequestController : Controller
         {
             ViewBag.CanEditOrDeleteComment = comments.Where(c => c.UserId == user.Id).Select(c => c.Id).ToList();
         }
+        var approvedVets = await _serviceManager.VeterinarianService.GetAllVeterinariansAsync();
+        ViewBag.ApprovedVeterinarianUserIds = approvedVets.Select(v => v.UserId).ToList();
         return View(helpRequest);
     }
 
@@ -233,16 +235,13 @@ public class HelpRequestController : Controller
             return NotFound();
         }
 
-        var veterinarian = await _serviceManager.VeterinarianService.GetByUserIdAsync(user.Id);
-        int? veterinarianId = veterinarian?.Id;
-
         var comment = new Comment
         {
             Content = content,
             CreatedAt = DateTime.UtcNow,
             HelpRequestId = helpRequest.Id,
             UserId = user.Id,
-            VeterinarianId = veterinarianId
+            VeterinarianId = null
         };
 
         await _serviceManager.CommentService.AddCommentAsync(comment);
@@ -302,9 +301,7 @@ public class HelpRequestController : Controller
 
         existingComment.Content = content;
         existingComment.CreatedAt = DateTime.UtcNow;
-
-        var veterinarian = await _serviceManager.VeterinarianService.GetByUserIdAsync(user.Id);
-        existingComment.VeterinarianId = veterinarian?.Id;
+        existingComment.VeterinarianId = null;
 
         await _serviceManager.CommentService.UpdateCommentAsync(existingComment);
 
