@@ -81,7 +81,7 @@
                 @foreach (var comment in Model.Comments)
                 {
                     <li class="list-group-item">
-                        @if (comment.VeterinarianId.HasValue)
+                        @if (ViewBag.ApprovedVeterinarianUserIds != null && ((List<int>)ViewBag.ApprovedVeterinarianUserIds).Contains(comment.UserId))
                         {
                             <strong class="text-info">@Localizer["VeterinarianBadge"]</strong>
                         }

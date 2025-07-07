@@ -104,6 +104,8 @@ public class HelpRequestController : Controller
         {
             ViewBag.CanEditOrDeleteComment = comments.Where(c => c.UserId == user.Id).Select(c => c.Id).ToList();
         }
+        var approvedVets = await _serviceManager.VeterinarianService.GetAllVeterinariansAsync();
+        ViewBag.ApprovedVeterinarianUserIds = approvedVets.Select(v => v.UserId).ToList();
         return View(helpRequest);
     }
 
