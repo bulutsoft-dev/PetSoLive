@@ -100,7 +100,7 @@ public class MappingProfile : Profile
             .ReverseMap()
             .ForMember(dest => dest.Pet, opt => opt.Ignore())
             .ForMember(dest => dest.User, opt => opt.Ignore())
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<AdoptionStatus>(src.Status)))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<AdoptionStatus>(src.Status, true)))
             .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         // AdoptionRequest <-> AdoptionRequestDto
@@ -111,7 +111,7 @@ public class MappingProfile : Profile
             .ReverseMap()
             .ForMember(dest => dest.Pet, opt => opt.Ignore())
             .ForMember(dest => dest.User, opt => opt.Ignore())
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<AdoptionStatus>(src.Status)))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<AdoptionStatus>(src.Status, true)))
             .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         // HelpRequest <-> HelpRequestDto
