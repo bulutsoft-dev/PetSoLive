@@ -4,6 +4,8 @@ using AutoMapper;
 using Petsolive.API.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Petsolive.API;
+using PetSoLive.Data;
 
 namespace Petsolive.API.Controllers;
 
@@ -13,11 +15,13 @@ public class AdoptionRequestController : ControllerBase
 {
     private readonly IServiceManager _serviceManager;
     private readonly IMapper _mapper;
+    private readonly ApplicationDbContext _context;
 
-    public AdoptionRequestController(IServiceManager serviceManager, IMapper mapper)
+    public AdoptionRequestController(IServiceManager serviceManager, IMapper mapper, ApplicationDbContext context)
     {
         _serviceManager = serviceManager;
         _mapper = mapper;
+        _context = context;
     }
 
     [HttpGet("{id}")]
@@ -51,7 +55,12 @@ public class AdoptionRequestController : ControllerBase
             var entity = _mapper.Map<PetSoLive.Core.Entities.AdoptionRequest>(dto);
             entity.Id = 0; // Yeni kayıt için
             entity.Status = PetSoLive.Core.Enums.AdoptionStatus.Pending;
-            entity.RequestDate = DateTime.UtcNow;
+            // RequestDate UTC olarak işaretle
+            if (entity.RequestDate.Kind != DateTimeKind.Utc)
+                entity.RequestDate = DateTime.SpecifyKind(entity.RequestDate, DateTimeKind.Utc);
+            // Eğer hiç set edilmemişse, DateTime.UtcNow kullan
+            if (entity.RequestDate == default)
+                entity.RequestDate = DateTime.UtcNow;
 
             await _serviceManager.AdoptionService.CreateAdoptionRequestAsync(entity);
             return Ok();
@@ -74,15 +83,14 @@ public class AdoptionRequestController : ControllerBase
     [Authorize]
     public async Task<IActionResult> Approve(int id)
     {
-        using var transaction = await HttpContext.RequestServices.GetService<Microsoft.EntityFrameworkCore.DbContext>()?.Database.BeginTransactionAsync();
+        using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            // Navigation property'lerle birlikte çek
-            var context = (Microsoft.EntityFrameworkCore.DbContext)HttpContext.RequestServices.GetService(typeof(Microsoft.EntityFrameworkCore.DbContext));
-            var request = await context.Set<PetSoLive.Core.Entities.AdoptionRequest>()
+            var request = await _context.AdoptionRequests
                 .Include(r => r.User)
                 .Include(r => r.Pet)
                 .FirstOrDefaultAsync(r => r.Id == id);
+
             if (request == null)
                 return NotFound();
 
@@ -93,37 +101,45 @@ public class AdoptionRequestController : ControllerBase
                 return BadRequest(new { error = "AdoptionRequest'in User veya Pet ilişkisi eksik (null). Lütfen başvurunun ilişkili kullanıcı ve pet ile birlikte geldiğinden emin olun." });
 
             request.Status = PetSoLive.Core.Enums.AdoptionStatus.Approved;
-            await _serviceManager.AdoptionRequestService.UpdateAdoptionRequestAsync(request);
+            // RequestDate UTC olarak işaretle
+            if (request.RequestDate.Kind != DateTimeKind.Utc)
+                request.RequestDate = DateTime.SpecifyKind(request.RequestDate, DateTimeKind.Utc);
+            _context.AdoptionRequests.Update(request);
 
-            // Diğer tüm başvuruları reddet
-            var allRequests = await _serviceManager.AdoptionRequestService.GetAdoptionRequestsByPetIdAsync(request.PetId);
+            // Diğer başvuruları reddet
+            var allRequests = await _context.AdoptionRequests
+                .Where(r => r.PetId == request.PetId && r.Id != id && r.Status == PetSoLive.Core.Enums.AdoptionStatus.Pending)
+                .ToListAsync();
             foreach (var r in allRequests)
             {
-                if (r.Id != id && r.Status == PetSoLive.Core.Enums.AdoptionStatus.Pending)
-                {
-                    r.Status = PetSoLive.Core.Enums.AdoptionStatus.Rejected;
-                    await _serviceManager.AdoptionRequestService.UpdateAdoptionRequestAsync(r);
-                }
+                r.Status = PetSoLive.Core.Enums.AdoptionStatus.Rejected;
+                // RequestDate UTC olarak işaretle
+                if (r.RequestDate.Kind != DateTimeKind.Utc)
+                    r.RequestDate = DateTime.SpecifyKind(r.RequestDate, DateTimeKind.Utc);
+                _context.AdoptionRequests.Update(r);
             }
 
-            // Adoption tablosuna kayıt ekle
+            // Adoption tablosuna kayıt eklemeden önce UTC olarak işaretle
+            var adoptionDate = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
             var adoption = new PetSoLive.Core.Entities.Adoption
             {
                 PetId = request.PetId,
                 UserId = request.UserId,
-                AdoptionDate = DateTime.UtcNow,
+                AdoptionDate = adoptionDate,
                 Status = PetSoLive.Core.Enums.AdoptionStatus.Approved
             };
-            await _serviceManager.AdoptionService.CreateAdoptionAsync(adoption);
+            // AdoptionDate UTC olarak işaretle (ekstra güvenlik)
+            if (adoption.AdoptionDate.Kind != DateTimeKind.Utc)
+                adoption.AdoptionDate = DateTime.SpecifyKind(adoption.AdoptionDate, DateTimeKind.Utc);
+            _context.Adoptions.Add(adoption);
 
-            if (transaction != null)
-                await transaction.CommitAsync();
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
             return Ok();
         }
         catch (Exception ex)
         {
-            if (transaction != null)
-                await transaction.RollbackAsync();
+            await transaction.RollbackAsync();
             return StatusCode(500, new { error = ex.Message });
         }
     }

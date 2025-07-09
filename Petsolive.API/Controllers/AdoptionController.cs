@@ -36,6 +36,11 @@ public class AdoptionController : ControllerBase
             return BadRequest();
 
         var adoption = _mapper.Map<Adoption>(adoptionDto);
+        // AdoptionDate UTC olarak işaretle
+        if (adoption.AdoptionDate.Kind != DateTimeKind.Utc)
+            adoption.AdoptionDate = DateTime.SpecifyKind(adoption.AdoptionDate, DateTimeKind.Utc);
+        if (adoption.AdoptionDate == default)
+            adoption.AdoptionDate = DateTime.UtcNow;
         await _serviceManager.AdoptionService.CreateAdoptionAsync(adoption);
         return Ok();
     }
