@@ -43,6 +43,9 @@ public class PetController : ControllerBase
     {
         petDto.Id = 0; // Ensure Id is not set
         var pet = _mapper.Map<Pet>(petDto);
+        // DateOfBirth UTC olarak işaretle
+        if (pet.DateOfBirth.Kind != DateTimeKind.Utc)
+            pet.DateOfBirth = DateTime.SpecifyKind(pet.DateOfBirth, DateTimeKind.Utc);
         await _serviceManager.PetService.CreatePetAsync(pet);
 
         // JWT'den userId al
@@ -52,11 +55,12 @@ public class PetController : ControllerBase
         int userId = int.Parse(userIdClaim.Value);
 
         // PetOwner kaydı oluştur
+        var ownershipDate = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
         var petOwner = new PetOwner
         {
             PetId = pet.Id,
             UserId = userId,
-            OwnershipDate = DateTime.UtcNow
+            OwnershipDate = ownershipDate
         };
         await _serviceManager.PetService.AssignPetOwnerAsync(petOwner);
 
@@ -71,6 +75,9 @@ public class PetController : ControllerBase
             return BadRequest("PetDto cannot be null.");
 
         var pet = _mapper.Map<Pet>(petDto);
+        // DateOfBirth UTC olarak işaretle
+        if (pet.DateOfBirth.Kind != DateTimeKind.Utc)
+            pet.DateOfBirth = DateTime.SpecifyKind(pet.DateOfBirth, DateTimeKind.Utc);
 
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
         if (userIdClaim == null)
