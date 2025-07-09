@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using PetSoLive.Core.Interfaces;
 using AutoMapper;
 using Petsolive.API.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Petsolive.API.Controllers;
 
@@ -35,5 +36,21 @@ public class AdoptionRequestController : ControllerBase
 
         var dtos = requests.Select(r => _mapper.Map<AdoptionRequestDto>(r));
         return Ok(dtos);
+    }
+
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> Create([FromBody] AdoptionRequestDto dto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest();
+
+        var entity = _mapper.Map<PetSoLive.Core.Entities.AdoptionRequest>(dto);
+        entity.Id = 0; // Yeni kayıt için
+        entity.Status = PetSoLive.Core.Enums.AdoptionStatus.Pending;
+        entity.RequestDate = DateTime.UtcNow;
+
+        await _serviceManager.AdoptionService.CreateAdoptionRequestAsync(entity);
+        return Ok();
     }
 }
