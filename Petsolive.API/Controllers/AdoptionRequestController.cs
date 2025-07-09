@@ -3,6 +3,7 @@ using PetSoLive.Core.Interfaces;
 using AutoMapper;
 using Petsolive.API.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Petsolive.API.Controllers;
 
@@ -76,7 +77,12 @@ public class AdoptionRequestController : ControllerBase
         using var transaction = await HttpContext.RequestServices.GetService<Microsoft.EntityFrameworkCore.DbContext>()?.Database.BeginTransactionAsync();
         try
         {
-            var request = await _serviceManager.AdoptionRequestService.GetAdoptionRequestByIdAsync(id);
+            // Navigation property'lerle birlikte çek
+            var context = (Microsoft.EntityFrameworkCore.DbContext)HttpContext.RequestServices.GetService(typeof(Microsoft.EntityFrameworkCore.DbContext));
+            var request = await context.Set<PetSoLive.Core.Entities.AdoptionRequest>()
+                .Include(r => r.User)
+                .Include(r => r.Pet)
+                .FirstOrDefaultAsync(r => r.Id == id);
             if (request == null)
                 return NotFound();
 
@@ -97,8 +103,6 @@ public class AdoptionRequestController : ControllerBase
                 {
                     r.Status = PetSoLive.Core.Enums.AdoptionStatus.Rejected;
                     await _serviceManager.AdoptionRequestService.UpdateAdoptionRequestAsync(r);
-                    // İsteğe bağlı: Red maili gönder
-                    // await _serviceManager.EmailService.SendEmailAsync(r.User.Email, "Adoption Request Rejected", "Your request was rejected.");
                 }
             }
 
@@ -111,9 +115,6 @@ public class AdoptionRequestController : ControllerBase
                 Status = PetSoLive.Core.Enums.AdoptionStatus.Approved
             };
             await _serviceManager.AdoptionService.CreateAdoptionAsync(adoption);
-
-            // Onay maili gönder
-            // await _serviceManager.EmailService.SendEmailAsync(request.User.Email, "Adoption Request Approved", "Your request was approved!");
 
             if (transaction != null)
                 await transaction.CommitAsync();
