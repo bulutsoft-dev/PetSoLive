@@ -83,6 +83,9 @@ public class AdoptionRequestController : ControllerBase
             if (request.Status == PetSoLive.Core.Enums.AdoptionStatus.Approved)
                 return BadRequest(new { error = "Request is already approved." });
 
+            if (request.User == null || request.Pet == null)
+                return BadRequest(new { error = "AdoptionRequest'in User veya Pet ilişkisi eksik (null). Lütfen başvurunun ilişkili kullanıcı ve pet ile birlikte geldiğinden emin olun." });
+
             request.Status = PetSoLive.Core.Enums.AdoptionStatus.Approved;
             await _serviceManager.AdoptionRequestService.UpdateAdoptionRequestAsync(request);
 
