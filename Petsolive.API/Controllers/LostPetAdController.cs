@@ -44,6 +44,15 @@ public class LostPetAdController : ControllerBase
 
         dto.Id = 0; // Id'yi sıfırla, veritabanı otomatik versin
         var entity = _mapper.Map<LostPetAd>(dto);
+        // LastSeenDate ve CreatedAt UTC olarak işaretle
+        if (entity.LastSeenDate.Kind != DateTimeKind.Utc)
+            entity.LastSeenDate = DateTime.SpecifyKind(entity.LastSeenDate, DateTimeKind.Utc);
+        if (entity.LastSeenDate == default)
+            entity.LastSeenDate = DateTime.UtcNow;
+        if (entity.CreatedAt.Kind != DateTimeKind.Utc)
+            entity.CreatedAt = DateTime.SpecifyKind(entity.CreatedAt, DateTimeKind.Utc);
+        if (entity.CreatedAt == default)
+            entity.CreatedAt = DateTime.UtcNow;
         await _serviceManager.LostPetAdService.CreateLostPetAdAsync(entity, dto.LastSeenCity, dto.LastSeenDistrict);
         return Ok();
     }
@@ -57,6 +66,11 @@ public class LostPetAdController : ControllerBase
 
         var entity = _mapper.Map<LostPetAd>(dto);
         entity.Id = id;
+        // LastSeenDate ve CreatedAt UTC olarak işaretle
+        if (entity.LastSeenDate.Kind != DateTimeKind.Utc)
+            entity.LastSeenDate = DateTime.SpecifyKind(entity.LastSeenDate, DateTimeKind.Utc);
+        if (entity.CreatedAt.Kind != DateTimeKind.Utc)
+            entity.CreatedAt = DateTime.SpecifyKind(entity.CreatedAt, DateTimeKind.Utc);
         await _serviceManager.LostPetAdService.UpdateLostPetAdAsync(entity);
         return NoContent();
     }

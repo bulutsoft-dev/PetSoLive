@@ -34,6 +34,11 @@ public class CommentController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest();
         var entity = _mapper.Map<Comment>(dto);
+        // CreatedAt UTC olarak işaretle
+        if (entity.CreatedAt.Kind != DateTimeKind.Utc)
+            entity.CreatedAt = DateTime.SpecifyKind(entity.CreatedAt, DateTimeKind.Utc);
+        if (entity.CreatedAt == default)
+            entity.CreatedAt = DateTime.UtcNow;
         await _serviceManager.CommentService.AddCommentAsync(entity);
         return Ok();
     }
