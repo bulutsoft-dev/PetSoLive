@@ -44,6 +44,13 @@ public class UserController : ControllerBase
     {
         var user = _mapper.Map<PetSoLive.Core.Entities.User>(userDto);
         user.Id = id;
+        // DateTime alanlarını UTC olarak işaretle
+        if (user.DateOfBirth.Kind != DateTimeKind.Utc)
+            user.DateOfBirth = DateTime.SpecifyKind(user.DateOfBirth, DateTimeKind.Utc);
+        if (user.CreatedDate.Kind != DateTimeKind.Utc)
+            user.CreatedDate = DateTime.SpecifyKind(user.CreatedDate, DateTimeKind.Utc);
+        if (user.LastLoginDate.HasValue && user.LastLoginDate.Value.Kind != DateTimeKind.Utc)
+            user.LastLoginDate = DateTime.SpecifyKind(user.LastLoginDate.Value, DateTimeKind.Utc);
         await _serviceManager.UserService.UpdateUserAsync(user);
         return NoContent();
     }

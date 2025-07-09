@@ -32,6 +32,11 @@ public class VeterinarianController : ControllerBase
     {
         var vet = await _serviceManager.VeterinarianService.RegisterVeterinarianAsync(
             vetDto.UserId, vetDto.Qualifications, vetDto.ClinicAddress, vetDto.ClinicPhoneNumber);
+        // AppliedDate UTC olarak işaretle
+        if (vet.AppliedDate.Kind != DateTimeKind.Utc)
+            vet.AppliedDate = DateTime.SpecifyKind(vet.AppliedDate, DateTimeKind.Utc);
+        if (vet.AppliedDate == default)
+            vet.AppliedDate = DateTime.UtcNow;
         return Ok(_mapper.Map<VeterinarianDto>(vet));
     }
 

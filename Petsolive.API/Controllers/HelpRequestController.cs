@@ -43,6 +43,11 @@ public class HelpRequestController : ControllerBase
             return BadRequest();
         dto.Id = 0; // Id'yi sıfırla, veritabanı otomatik versin
         var entity = _mapper.Map<HelpRequest>(dto);
+        // CreatedAt UTC olarak işaretle
+        if (entity.CreatedAt.Kind != DateTimeKind.Utc)
+            entity.CreatedAt = DateTime.SpecifyKind(entity.CreatedAt, DateTimeKind.Utc);
+        if (entity.CreatedAt == default)
+            entity.CreatedAt = DateTime.UtcNow;
         await _serviceManager.HelpRequestService.CreateHelpRequestAsync(entity);
         return Ok();
     }
@@ -55,6 +60,9 @@ public class HelpRequestController : ControllerBase
             return BadRequest();
         var entity = _mapper.Map<HelpRequest>(dto);
         entity.Id = id;
+        // CreatedAt UTC olarak işaretle
+        if (entity.CreatedAt.Kind != DateTimeKind.Utc)
+            entity.CreatedAt = DateTime.SpecifyKind(entity.CreatedAt, DateTimeKind.Utc);
         await _serviceManager.HelpRequestService.UpdateHelpRequestAsync(entity);
         return NoContent();
     }
