@@ -148,25 +148,36 @@ public class AdoptionRequestController : ControllerBase
     [Authorize]
     public async Task<IActionResult> Reject(int id)
     {
+        using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            var request = await _serviceManager.AdoptionRequestService.GetAdoptionRequestByIdAsync(id);
+            var request = await _context.AdoptionRequests
+                .Include(r => r.User)
+                .Include(r => r.Pet)
+                .FirstOrDefaultAsync(r => r.Id == id);
+
             if (request == null)
                 return NotFound();
 
             if (request.Status == PetSoLive.Core.Enums.AdoptionStatus.Rejected)
                 return BadRequest(new { error = "Request is already rejected." });
 
+            if (request.User == null || request.Pet == null)
+                return BadRequest(new { error = "AdoptionRequest'in User veya Pet ilişkisi eksik (null). Lütfen başvurunun ilişkili kullanıcı ve pet ile birlikte geldiğinden emin olun." });
+
             request.Status = PetSoLive.Core.Enums.AdoptionStatus.Rejected;
-            await _serviceManager.AdoptionRequestService.UpdateAdoptionRequestAsync(request);
+            // RequestDate UTC olarak işaretle
+            if (request.RequestDate.Kind != DateTimeKind.Utc)
+                request.RequestDate = DateTime.SpecifyKind(request.RequestDate, DateTimeKind.Utc);
+            _context.AdoptionRequests.Update(request);
 
-            // Red maili gönder
-            // await _serviceManager.EmailService.SendEmailAsync(request.User.Email, "Adoption Request Rejected", "Your request was rejected.");
-
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
             return Ok();
         }
         catch (Exception ex)
         {
+            await transaction.RollbackAsync();
             return StatusCode(500, new { error = ex.Message });
         }
     }
