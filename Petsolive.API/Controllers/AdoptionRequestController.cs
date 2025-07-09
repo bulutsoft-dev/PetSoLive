@@ -45,12 +45,27 @@ public class AdoptionRequestController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest();
 
-        var entity = _mapper.Map<PetSoLive.Core.Entities.AdoptionRequest>(dto);
-        entity.Id = 0; // Yeni kayıt için
-        entity.Status = PetSoLive.Core.Enums.AdoptionStatus.Pending;
-        entity.RequestDate = DateTime.UtcNow;
+        try
+        {
+            var entity = _mapper.Map<PetSoLive.Core.Entities.AdoptionRequest>(dto);
+            entity.Id = 0; // Yeni kayıt için
+            entity.Status = PetSoLive.Core.Enums.AdoptionStatus.Pending;
+            entity.RequestDate = DateTime.UtcNow;
 
-        await _serviceManager.AdoptionService.CreateAdoptionRequestAsync(entity);
-        return Ok();
+            await _serviceManager.AdoptionService.CreateAdoptionRequestAsync(entity);
+            return Ok();
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = ex.Message });
+        }
     }
 }
