@@ -61,7 +61,10 @@ public class CommentController : ControllerBase
         if (existingComment == null)
             return NotFound();
         // Kullanıcı kontrolü (sadece kendi yorumunu düzenleyebilir)
-        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+        var userIdClaim = User.Claims.FirstOrDefault(c =>
+            c.Type == "UserId" ||
+            c.Type == "sub" ||
+            c.Type == System.Security.Claims.ClaimTypes.NameIdentifier);
         if (userIdClaim == null || existingComment.UserId.ToString() != userIdClaim.Value)
             return Unauthorized();
         if (string.IsNullOrWhiteSpace(dto.Content))
