@@ -50,4 +50,31 @@ public class CommentController : ControllerBase
         await _serviceManager.CommentService.DeleteCommentAsync(id);
         return NoContent();
     }
+
+    [HttpPut("{id}")]
+    [Authorize]
+    public async Task<IActionResult> Edit(int id, [FromBody] CommentDto dto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        var existingComment = await _serviceManager.CommentService.GetCommentByIdAsync(id);
+        if (existingComment == null)
+            return NotFound();
+        // Kullanıcı kontrolü (sadece kendi yorumunu düzenleyebilir)
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+        if (userIdClaim == null || existingComment.UserId.ToString() != userIdClaim.Value)
+            return Unauthorized();
+        if (string.IsNullOrWhiteSpace(dto.Content))
+        {
+            ModelState.AddModelError(nameof(dto.Content), "Content cannot be empty.");
+            return BadRequest(ModelState);
+        }
+        existingComment.Content = dto.Content;
+        existingComment.CreatedAt = DateTime.UtcNow;
+        if (existingComment.CreatedAt.Kind != DateTimeKind.Utc)
+            existingComment.CreatedAt = DateTime.SpecifyKind(existingComment.CreatedAt, DateTimeKind.Utc);
+        // Diğer alanlar güncellenmek istenirse eklenebilir
+        await _serviceManager.CommentService.UpdateCommentAsync(existingComment);
+        return Ok(_mapper.Map<CommentDto>(existingComment));
+    }
 }
