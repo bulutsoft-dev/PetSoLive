@@ -2,7 +2,7 @@ using PetSoLive.Core.Entities;
 
 public class EmailHelper
 {
-    private const string CssLink = "<link rel='stylesheet' type='text/css' href='https://yourdomain.com/path/to/email.css'>";
+    private const string CssLink = "<link rel='stylesheet' type='text/css' href='https://www.petsolive.com.tr/css/email.css'>";
 
     public string GenerateAdoptionRequestEmailBody(User user, Pet pet, AdoptionRequest adoptionRequest)
     {

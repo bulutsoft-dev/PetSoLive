@@ -5,6 +5,7 @@ using Petsolive.API.DTOs;
 using PetSoLive.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using PetSoLive.Core;
 
 namespace Petsolive.API.Controllers;
 
@@ -64,6 +65,16 @@ public class PetController : ControllerBase
         };
         await _serviceManager.PetService.AssignPetOwnerAsync(petOwner);
 
+        // --- EMAIL ---
+        var user = await _serviceManager.UserService.GetUserByIdAsync(userId);
+        var emailHelper = new EmailHelper();
+        if (user != null)
+        {
+            var body = emailHelper.GeneratePetCreationEmailBody(user, pet);
+            await _serviceManager.EmailService.SendEmailAsync(user.Email, "Your Pet Has Been Created", body);
+        }
+        // --- EMAIL END ---
+
         return CreatedAtAction(nameof(GetById), new { id = pet.Id }, _mapper.Map<PetDto>(pet));
     }
 
@@ -91,6 +102,21 @@ public class PetController : ControllerBase
             return Forbid("Bu petin sahibi değilsiniz veya petin sahibi yok.");
 
         await _serviceManager.PetService.UpdatePetAsync(id, pet, userId);
+
+        // --- EMAIL ---
+        // Bu pet için başvuru yapan kullanıcılara güncelleme e-postası gönder
+        var adoptionRequests = await _serviceManager.AdoptionRequestService.GetAdoptionRequestsByPetIdAsync(id);
+        var emailHelper = new EmailHelper();
+        foreach (var request in adoptionRequests)
+        {
+            if (request.User != null)
+            {
+                var body = emailHelper.GeneratePetUpdateEmailBody(request.User, pet);
+                await _serviceManager.EmailService.SendEmailAsync(request.User.Email, "Pet Information Updated", body);
+            }
+        }
+        // --- EMAIL END ---
+
         return NoContent();
     }
 
@@ -108,6 +134,21 @@ public class PetController : ControllerBase
         var hasOwner = await _serviceManager.PetService.IsUserOwnerOfPetAsync(id, userId);
         if (!hasOwner)
             return StatusCode(403, "Bu petin sahibi değilsiniz veya petin sahibi yok.");
+
+        // --- EMAIL ---
+        // Bu pet için başvuru yapan kullanıcılara silinme e-postası gönder
+        var adoptionRequests = await _serviceManager.AdoptionRequestService.GetAdoptionRequestsByPetIdAsync(id);
+        var pet = await _serviceManager.PetService.GetPetByIdAsync(id);
+        var emailHelper = new EmailHelper();
+        foreach (var request in adoptionRequests)
+        {
+            if (request.User != null)
+            {
+                var body = emailHelper.GeneratePetDeletionEmailBody(request.User, pet);
+                await _serviceManager.EmailService.SendEmailAsync(request.User.Email, "Pet Deleted", body);
+            }
+        }
+        // --- EMAIL END ---
 
         // Sadece peti sil, owner kaydını service veya cascade ile sil
         await _serviceManager.PetService.DeletePetAsync(id, userId);
