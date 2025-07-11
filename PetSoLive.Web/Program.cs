@@ -12,8 +12,23 @@ using PetSoLive.Data.Repositories;
 using PetSoLive.Infrastructure.Repositories;
 using SmtpSettings = PetSoLive.Core.Entities.SmtpSettings;
 
-// .env dosyasını builder'dan önce yükle
+// .env dosyasını yükle
 Env.Load();
+// SMTP debug logu
+var smtpHost = Environment.GetEnvironmentVariable("SMTP_HOST");
+var smtpPort = Environment.GetEnvironmentVariable("SMTP_PORT");
+var smtpUser = Environment.GetEnvironmentVariable("SMTP_USERNAME");
+var smtpFrom = Environment.GetEnvironmentVariable("SMTP_FROM_EMAIL");
+var smtpSsl = Environment.GetEnvironmentVariable("SMTP_ENABLE_SSL");
+Console.WriteLine($"[SMTP DEBUG][WEB] Host: {smtpHost}");
+Console.WriteLine($"[SMTP DEBUG][WEB] Port: {smtpPort}");
+Console.WriteLine($"[SMTP DEBUG][WEB] Username: {smtpUser}");
+Console.WriteLine($"[SMTP DEBUG][WEB] FromEmail: {smtpFrom}");
+Console.WriteLine($"[SMTP DEBUG][WEB] EnableSsl: {smtpSsl}");
+if (string.IsNullOrWhiteSpace(smtpHost) || string.IsNullOrWhiteSpace(smtpUser) || string.IsNullOrWhiteSpace(smtpFrom))
+{
+    throw new Exception("[SMTP DEBUG][WEB] SMTP ayarları eksik! Lütfen .env dosyanızı ve environment variable'larınızı kontrol edin.");
+}
 
 var builder = WebApplication.CreateBuilder(args);
 

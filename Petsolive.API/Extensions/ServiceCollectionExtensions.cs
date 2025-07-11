@@ -77,6 +77,16 @@ public static class ServiceCollectionExtensions
             FromEmail = Environment.GetEnvironmentVariable("SMTP_FROM_EMAIL")!,
             EnableSsl = bool.TryParse(Environment.GetEnvironmentVariable("SMTP_ENABLE_SSL"), out var enableSsl) && enableSsl
         };
+        // DEBUG: SMTP ayarlarını logla
+        Console.WriteLine($"[SMTP DEBUG] Host: {smtpSettings.Host}");
+        Console.WriteLine($"[SMTP DEBUG] Port: {smtpSettings.Port}");
+        Console.WriteLine($"[SMTP DEBUG] Username: {smtpSettings.Username}");
+        Console.WriteLine($"[SMTP DEBUG] FromEmail: {smtpSettings.FromEmail}");
+        Console.WriteLine($"[SMTP DEBUG] EnableSsl: {smtpSettings.EnableSsl}");
+        if (string.IsNullOrWhiteSpace(smtpSettings.Host) || string.IsNullOrWhiteSpace(smtpSettings.Username) || string.IsNullOrWhiteSpace(smtpSettings.Password) || string.IsNullOrWhiteSpace(smtpSettings.FromEmail))
+        {
+            throw new Exception("[SMTP DEBUG] SMTP ayarları eksik! Lütfen .env dosyanızı ve environment variable'larınızı kontrol edin.");
+        }
         services.AddSingleton(smtpSettings);
 
         return services;
