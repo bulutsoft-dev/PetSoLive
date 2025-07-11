@@ -19,12 +19,15 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
     {
         private readonly Mock<IServiceManager> _serviceManagerMock;
         private readonly Mock<IMapper> _mapperMock;
+        private readonly Mock<IEmailService> _emailServiceMock;
         private readonly PetController _controller;
 
         public PetControllerTests()
         {
             _serviceManagerMock = new Mock<IServiceManager>();
             _mapperMock = new Mock<IMapper>();
+            _emailServiceMock = new Mock<IEmailService>();
+            _serviceManagerMock.SetupGet(s => s.EmailService).Returns(_emailServiceMock.Object);
             _controller = new PetController(_serviceManagerMock.Object, _mapperMock.Object);
         }
 
@@ -120,6 +123,22 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
         }
 
         [Fact]
+        public async Task Create_SendsEmailToOwner()
+        {
+            var petDto = new PetDto { Id = 0 };
+            var pet = new Pet { Id = 1 };
+            SetUser(5);
+            var user = new User { Id = 5, Email = "owner@mail.com" };
+            _mapperMock.Setup(m => m.Map<Pet>(petDto)).Returns(pet);
+            _serviceManagerMock.Setup(s => s.PetService.CreatePetAsync(pet)).Returns(Task.CompletedTask);
+            _serviceManagerMock.Setup(s => s.PetService.AssignPetOwnerAsync(It.IsAny<PetOwner>())).Returns(Task.CompletedTask);
+            _serviceManagerMock.Setup(s => s.UserService.GetUserByIdAsync(5)).ReturnsAsync(user);
+            _mapperMock.Setup(m => m.Map<PetDto>(pet)).Returns(new PetDto { Id = 1 });
+            var result = await _controller.Create(petDto);
+            _emailServiceMock.Verify(e => e.SendEmailAsync("owner@mail.com", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
         public async Task Update_ReturnsNoContent_OnSuccess()
         {
             int id = 1;
@@ -172,6 +191,26 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
         }
 
         [Fact]
+        public async Task Update_SendsEmailToAdoptionRequestUsers()
+        {
+            int id = 1;
+            var petDto = new PetDto { Id = id };
+            var pet = new Pet { Id = id };
+            SetUser(5);
+            var adoptionRequests = new List<AdoptionRequest> {
+                new AdoptionRequest { User = new User { Email = "user1@mail.com" } },
+                new AdoptionRequest { User = new User { Email = "user2@mail.com" } }
+            };
+            _mapperMock.Setup(m => m.Map<Pet>(petDto)).Returns(pet);
+            _serviceManagerMock.Setup(s => s.PetService.IsUserOwnerOfPetAsync(id, 5)).ReturnsAsync(true);
+            _serviceManagerMock.Setup(s => s.PetService.UpdatePetAsync(id, pet, 5)).Returns(Task.CompletedTask);
+            _serviceManagerMock.Setup(s => s.AdoptionRequestService.GetAdoptionRequestsByPetIdAsync(id)).ReturnsAsync(adoptionRequests);
+            var result = await _controller.Update(id, petDto);
+            _emailServiceMock.Verify(e => e.SendEmailAsync("user1@mail.com", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            _emailServiceMock.Verify(e => e.SendEmailAsync("user2@mail.com", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
         public async Task Delete_ReturnsNoContent_OnSuccess()
         {
             int id = 1;
@@ -212,6 +251,25 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
 
             var unauthorized = Assert.IsType<UnauthorizedObjectResult>(result);
             Assert.Equal("Kullanıcı kimliği bulunamadı.", unauthorized.Value);
+        }
+
+        [Fact]
+        public async Task Delete_SendsEmailToAdoptionRequestUsers()
+        {
+            int id = 1;
+            SetUser(5);
+            var adoptionRequests = new List<AdoptionRequest> {
+                new AdoptionRequest { User = new User { Email = "user1@mail.com" } },
+                new AdoptionRequest { User = new User { Email = "user2@mail.com" } }
+            };
+            var pet = new Pet { Id = id };
+            _serviceManagerMock.Setup(s => s.PetService.IsUserOwnerOfPetAsync(id, 5)).ReturnsAsync(true);
+            _serviceManagerMock.Setup(s => s.PetService.DeletePetAsync(id, 5)).Returns(Task.CompletedTask);
+            _serviceManagerMock.Setup(s => s.AdoptionRequestService.GetAdoptionRequestsByPetIdAsync(id)).ReturnsAsync(adoptionRequests);
+            _serviceManagerMock.Setup(s => s.PetService.GetPetByIdAsync(id)).ReturnsAsync(pet);
+            var result = await _controller.Delete(id);
+            _emailServiceMock.Verify(e => e.SendEmailAsync("user1@mail.com", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            _emailServiceMock.Verify(e => e.SendEmailAsync("user2@mail.com", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
     }
 } 
