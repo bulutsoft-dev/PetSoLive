@@ -14,11 +14,13 @@ public class HelpRequestController : ControllerBase
 {
     private readonly IServiceManager _serviceManager;
     private readonly IMapper _mapper;
+    private readonly Petsolive.API.Helpers.ImgBBHelper _imgBBHelper;
 
-    public HelpRequestController(IServiceManager serviceManager, IMapper mapper)
+    public HelpRequestController(IServiceManager serviceManager, IMapper mapper, Petsolive.API.Helpers.ImgBBHelper imgBBHelper)
     {
         _serviceManager = serviceManager;
         _mapper = mapper;
+        _imgBBHelper = imgBBHelper;
     }
 
     [HttpGet]
@@ -38,12 +40,21 @@ public class HelpRequestController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> Create([FromBody] HelpRequestDto dto)
+    public async Task<IActionResult> Create([FromForm] HelpRequestDto dto, IFormFile image)
     {
         if (!ModelState.IsValid)
             return BadRequest();
         dto.Id = 0; // Id'yi sıfırla, veritabanı otomatik versin
         var entity = _mapper.Map<HelpRequest>(dto);
+        // Resim varsa ImgBB'ye yükle ve url'yi ata
+        if (image != null)
+        {
+            using var ms = new MemoryStream();
+            await image.CopyToAsync(ms);
+            var imageBytes = ms.ToArray();
+            var imageUrl = await _imgBBHelper.UploadImageAsync(imageBytes);
+            entity.ImageUrl = imageUrl;
+        }
         // CreatedAt UTC olarak işaretle
         if (entity.CreatedAt.Kind != DateTimeKind.Utc)
             entity.CreatedAt = DateTime.SpecifyKind(entity.CreatedAt, DateTimeKind.Utc);
@@ -71,12 +82,21 @@ public class HelpRequestController : ControllerBase
 
     [HttpPut("{id}")]
     [Authorize]
-    public async Task<IActionResult> Update(int id, [FromBody] HelpRequestDto dto)
+    public async Task<IActionResult> Update(int id, [FromForm] HelpRequestDto dto, IFormFile image)
     {
         if (!ModelState.IsValid)
             return BadRequest();
         var entity = _mapper.Map<HelpRequest>(dto);
         entity.Id = id;
+        // Resim varsa ImgBB'ye yükle ve url'yi ata
+        if (image != null)
+        {
+            using var ms = new MemoryStream();
+            await image.CopyToAsync(ms);
+            var imageBytes = ms.ToArray();
+            var imageUrl = await _imgBBHelper.UploadImageAsync(imageBytes);
+            entity.ImageUrl = imageUrl;
+        }
         // CreatedAt UTC olarak işaretle
         if (entity.CreatedAt.Kind != DateTimeKind.Utc)
             entity.CreatedAt = DateTime.SpecifyKind(entity.CreatedAt, DateTimeKind.Utc);

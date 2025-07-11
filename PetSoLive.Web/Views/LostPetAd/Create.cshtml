@@ -10,7 +10,7 @@
     <h2 class="lostpet-title">@ViewData["Title"]</h2>
 
     <div class="lostpet-container">
-        <form asp-action="Create" method="post">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
             @if (TempData["SuccessMessage"] != null)
             {
                 <div class="alert alert-success">
@@ -59,8 +59,8 @@
             </div>
 
             <div class="form-group">
-                <label for="ImageUrl">@Localizer["ImageUrl"]</label>
-                <input type="url" class="form-control" id="ImageUrl" name="ImageUrl" placeholder="@Localizer["EnterImageUrl"]" required />
+                <label for="image">@Localizer["ImageUpload"]</label>
+                <input type="file" class="form-control" id="image" name="image" accept="image/*" />
             </div>
 
             <button type="submit" class="btn-lostpet">@Localizer["CreateButton"]</button>

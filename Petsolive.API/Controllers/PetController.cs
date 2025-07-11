@@ -15,11 +15,13 @@ public class PetController : ControllerBase
 {
     private readonly IServiceManager _serviceManager;
     private readonly IMapper _mapper;
+    private readonly Petsolive.API.Helpers.ImgBBHelper _imgBBHelper;
 
-    public PetController(IServiceManager serviceManager, IMapper mapper)
+    public PetController(IServiceManager serviceManager, IMapper mapper, Petsolive.API.Helpers.ImgBBHelper imgBBHelper)
     {
         _serviceManager = serviceManager;
         _mapper = mapper;
+        _imgBBHelper = imgBBHelper;
     }
 
     [HttpGet]
@@ -40,13 +42,24 @@ public class PetController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<ActionResult<PetDto>> Create([FromBody] PetDto petDto)
+    public async Task<ActionResult<PetDto>> Create([FromForm] PetDto petDto, IFormFile image)
     {
         petDto.Id = 0; // Ensure Id is not set
         var pet = _mapper.Map<Pet>(petDto);
         // DateOfBirth UTC olarak işaretle
         if (pet.DateOfBirth.Kind != DateTimeKind.Utc)
             pet.DateOfBirth = DateTime.SpecifyKind(pet.DateOfBirth, DateTimeKind.Utc);
+
+        // Resim varsa ImgBB'ye yükle ve url'yi ata
+        if (image != null)
+        {
+            using var ms = new MemoryStream();
+            await image.CopyToAsync(ms);
+            var imageBytes = ms.ToArray();
+            var imageUrl = await _imgBBHelper.UploadImageAsync(imageBytes);
+            pet.ImageUrl = imageUrl;
+        }
+
         await _serviceManager.PetService.CreatePetAsync(pet);
 
         // JWT'den userId al

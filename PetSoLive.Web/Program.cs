@@ -70,6 +70,10 @@ builder.Services.AddTransient<System.Net.Mail.SmtpClient>(sp =>
     return client;
 });
 
+// ImgBBHelper'ı DI container'a ekle
+var imgbbApiKey = Environment.GetEnvironmentVariable("IMGBB_API_KEY");
+builder.Services.AddSingleton(new PetSoLive.Web.Helpers.ImgBBHelper(imgbbApiKey));
+
 // PostgreSQL Database Connection String
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

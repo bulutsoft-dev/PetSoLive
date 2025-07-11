@@ -35,6 +35,10 @@ builder.Services.AddAuthentication(options =>
 var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 builder.Services.AddPetSoLiveDependencies(connectionString);
 
+// ImgBBHelper'ı DI container'a ekle
+var imgbbApiKey = Environment.GetEnvironmentVariable("IMGBB_API_KEY");
+builder.Services.AddSingleton(new Petsolive.API.Helpers.ImgBBHelper(imgbbApiKey));
+
 // *** Eksik olan satır ***
 builder.Services.AddControllers();
 
