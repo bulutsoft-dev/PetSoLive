@@ -36,6 +36,7 @@ namespace PetSoLive.Business.Services
             if (string.IsNullOrEmpty(body)) throw new ArgumentNullException(nameof(body));
 
             var mail = new MailMessage(_settings.FromEmail, to, subject, body);
+            mail.IsBodyHtml = true;
             await _smtpClient.SendMailAsync(mail);
         }
     }

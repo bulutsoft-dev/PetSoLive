@@ -350,38 +350,80 @@ public class EmailHelper
     public string GenerateNewLostPetAdEmailBody(LostPetAd lostPetAd, User user)
     {
         return $@"
-            A new lost pet ad has been posted.
-            Pet Name: {lostPetAd.PetName}
-            Location: {lostPetAd.LastSeenCity}, {lostPetAd.LastSeenDistrict}
-            Description: {lostPetAd.Description}
-            Posted by: {user.Username} ({user.Email})
-            Contact: {user.PhoneNumber}
-        ";
+        <html>
+        <head>
+            {CssLink}
+        </head>
+        <body>
+            <div class='email-container'>
+                <h2 class='header'>A new lost pet ad has been posted.</h2>
+                <ul class='details-list'>
+                    <li><strong>Pet Name:</strong> {lostPetAd.PetName}</li>
+                    <li><strong>Location:</strong> {lostPetAd.LastSeenCity}, {lostPetAd.LastSeenDistrict}</li>
+                    <li><strong>Description:</strong> {lostPetAd.Description}</li>
+                    <li><strong>Posted by:</strong> {user.Username} ({user.Email})</li>
+                    <li><strong>Contact:</strong> {user.PhoneNumber}</li>
+                </ul>
+                <div class='footer'>
+                    <p>Best regards,</p>
+                    <p>The PetSoLive Team</p>
+                </div>
+            </div>
+        </body>
+        </html>";
     }
 
     // Kayıp ilanı güncellenince gönderilecek e-posta içeriği
     public string GenerateUpdatedLostPetAdEmailBody(LostPetAd lostPetAd, User user)
     {
         return $@"
-            The lost pet ad has been updated.
-            Pet Name: {lostPetAd.PetName}
-            Location: {lostPetAd.LastSeenCity}, {lostPetAd.LastSeenDistrict}
-            Description: {lostPetAd.Description}
-            Posted by: {user.Username} ({user.Email})
-            Contact: {user.PhoneNumber}
-        ";
+        <html>
+        <head>
+            {CssLink}
+        </head>
+        <body>
+            <div class='email-container'>
+                <h2 class='header'>The lost pet ad has been updated.</h2>
+                <ul class='details-list'>
+                    <li><strong>Pet Name:</strong> {lostPetAd.PetName}</li>
+                    <li><strong>Location:</strong> {lostPetAd.LastSeenCity}, {lostPetAd.LastSeenDistrict}</li>
+                    <li><strong>Description:</strong> {lostPetAd.Description}</li>
+                    <li><strong>Posted by:</strong> {user.Username} ({user.Email})</li>
+                    <li><strong>Contact:</strong> {user.PhoneNumber}</li>
+                </ul>
+                <div class='footer'>
+                    <p>Best regards,</p>
+                    <p>The PetSoLive Team</p>
+                </div>
+            </div>
+        </body>
+        </html>";
     }
 
     // Kayıp ilanı silindiğinde gönderilecek e-posta içeriği
     public string GenerateDeletedLostPetAdEmailBody(LostPetAd lostPetAd, User user)
     {
         return $@"
-            A lost pet ad has been deleted.
-            Pet Name: {lostPetAd.PetName}
-            Location: {lostPetAd.LastSeenCity}, {lostPetAd.LastSeenDistrict}
-            Description: {lostPetAd.Description}
-            Posted by: {user.Username} ({user.Email})
-            Contact: {user.PhoneNumber}
-        ";
+        <html>
+        <head>
+            {CssLink}
+        </head>
+        <body>
+            <div class='email-container'>
+                <h2 class='header'>A lost pet ad has been deleted.</h2>
+                <ul class='details-list'>
+                    <li><strong>Pet Name:</strong> {lostPetAd.PetName}</li>
+                    <li><strong>Location:</strong> {lostPetAd.LastSeenCity}, {lostPetAd.LastSeenDistrict}</li>
+                    <li><strong>Description:</strong> {lostPetAd.Description}</li>
+                    <li><strong>Posted by:</strong> {user.Username} ({user.Email})</li>
+                    <li><strong>Contact:</strong> {user.PhoneNumber}</li>
+                </ul>
+                <div class='footer'>
+                    <p>Best regards,</p>
+                    <p>The PetSoLive Team</p>
+                </div>
+            </div>
+        </body>
+        </html>";
     }
 }
