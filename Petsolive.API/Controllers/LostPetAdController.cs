@@ -4,6 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using PetSoLive.API.DTOs;
 using PetSoLive.Core.Entities;
+using PetSoLive.Core;
 
 namespace Petsolive.API.Controllers;
 
@@ -54,6 +55,17 @@ public class LostPetAdController : ControllerBase
         if (entity.CreatedAt == default)
             entity.CreatedAt = DateTime.UtcNow;
         await _serviceManager.LostPetAdService.CreateLostPetAdAsync(entity, dto.LastSeenCity, dto.LastSeenDistrict);
+
+        // --- EMAIL ---
+        var user = await _serviceManager.UserService.GetUserByIdAsync(entity.UserId);
+        var emailHelper = new EmailHelper();
+        if (user != null)
+        {
+            var body = emailHelper.GenerateNewLostPetAdEmailBody(entity, user);
+            await _serviceManager.EmailService.SendEmailAsync(user.Email, "Lost Pet Ad Created", body);
+        }
+        // --- EMAIL END ---
+
         return Ok();
     }
 
@@ -72,6 +84,17 @@ public class LostPetAdController : ControllerBase
         if (entity.CreatedAt.Kind != DateTimeKind.Utc)
             entity.CreatedAt = DateTime.SpecifyKind(entity.CreatedAt, DateTimeKind.Utc);
         await _serviceManager.LostPetAdService.UpdateLostPetAdAsync(entity);
+
+        // --- EMAIL ---
+        var user = await _serviceManager.UserService.GetUserByIdAsync(entity.UserId);
+        var emailHelper = new EmailHelper();
+        if (user != null)
+        {
+            var body = emailHelper.GenerateUpdatedLostPetAdEmailBody(entity, user);
+            await _serviceManager.EmailService.SendEmailAsync(user.Email, "Lost Pet Ad Updated", body);
+        }
+        // --- EMAIL END ---
+
         return NoContent();
     }
 
@@ -81,7 +104,18 @@ public class LostPetAdController : ControllerBase
     {
         var ad = await _serviceManager.LostPetAdService.GetLostPetAdByIdAsync(id);
         if (ad == null) return NotFound();
+        var user = ad.UserId != 0 ? await _serviceManager.UserService.GetUserByIdAsync(ad.UserId) : null;
         await _serviceManager.LostPetAdService.DeleteLostPetAdAsync(ad);
+
+        // --- EMAIL ---
+        var emailHelper = new EmailHelper();
+        if (user != null)
+        {
+            var body = emailHelper.GenerateDeletedLostPetAdEmailBody(ad, user);
+            await _serviceManager.EmailService.SendEmailAsync(user.Email, "Lost Pet Ad Deleted", body);
+        }
+        // --- EMAIL END ---
+
         return NoContent();
     }
 }

@@ -4,7 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Petsolive.API.DTOs;
 using PetSoLive.Core.Entities;
-using PetSoLive.Core.Helpers;
+using PetSoLive.Core;
 
 namespace Petsolive.API.Controllers;
 

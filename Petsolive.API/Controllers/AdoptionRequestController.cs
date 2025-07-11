@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Petsolive.API;
 using PetSoLive.Data;
 using PetSoLive.Core.Entities;
-using PetSoLive.Core.Helpers;
+using PetSoLive.Core;
 
 namespace Petsolive.API.Controllers;
 

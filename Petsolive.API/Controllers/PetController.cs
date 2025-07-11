@@ -5,7 +5,7 @@ using Petsolive.API.DTOs;
 using PetSoLive.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using PetSoLive.Core.Helpers;
+using PetSoLive.Core;
 
 namespace Petsolive.API.Controllers;
 
