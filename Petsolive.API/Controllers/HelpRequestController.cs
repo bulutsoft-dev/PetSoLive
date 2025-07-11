@@ -4,6 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Petsolive.API.DTOs;
 using PetSoLive.Core.Entities;
+using PetSoLive.Core.Helpers;
 
 namespace Petsolive.API.Controllers;
 
@@ -49,6 +50,22 @@ public class HelpRequestController : ControllerBase
         if (entity.CreatedAt == default)
             entity.CreatedAt = DateTime.UtcNow;
         await _serviceManager.HelpRequestService.CreateHelpRequestAsync(entity);
+
+        // --- EMAIL ---
+        // Tüm onaylı veterinerlere e-posta gönder
+        var veterinarians = await _serviceManager.VeterinarianService.GetAllVeterinariansAsync();
+        var user = await _serviceManager.UserService.GetUserByIdAsync(entity.UserId);
+        var emailHelper = new EmailHelper();
+        foreach (var vet in veterinarians)
+        {
+            if (vet.User != null)
+            {
+                var body = emailHelper.GenerateVeterinarianNotificationEmailBody(entity, user);
+                await _serviceManager.EmailService.SendEmailAsync(vet.User.Email, "New Help Request: Animal in Need!", body);
+            }
+        }
+        // --- EMAIL END ---
+
         return Ok();
     }
 
@@ -64,6 +81,22 @@ public class HelpRequestController : ControllerBase
         if (entity.CreatedAt.Kind != DateTimeKind.Utc)
             entity.CreatedAt = DateTime.SpecifyKind(entity.CreatedAt, DateTimeKind.Utc);
         await _serviceManager.HelpRequestService.UpdateHelpRequestAsync(entity);
+
+        // --- EMAIL ---
+        // Tüm onaylı veterinerlere güncelleme e-postası gönder
+        var veterinarians = await _serviceManager.VeterinarianService.GetAllVeterinariansAsync();
+        var user = await _serviceManager.UserService.GetUserByIdAsync(entity.UserId);
+        var emailHelper = new EmailHelper();
+        foreach (var vet in veterinarians)
+        {
+            if (vet.User != null)
+            {
+                var body = emailHelper.GenerateEditHelpRequestEmailBody(entity, user);
+                await _serviceManager.EmailService.SendEmailAsync(vet.User.Email, "Help Request Updated: Animal in Need!", body);
+            }
+        }
+        // --- EMAIL END ---
+
         return NoContent();
     }
 
@@ -71,7 +104,28 @@ public class HelpRequestController : ControllerBase
     [Authorize]
     public async Task<IActionResult> Delete(int id)
     {
+        // Silmeden önce ilgili help request'i ve user'ı çek
+        var entity = await _serviceManager.HelpRequestService.GetHelpRequestByIdAsync(id);
+        var user = entity != null ? await _serviceManager.UserService.GetUserByIdAsync(entity.UserId) : null;
         await _serviceManager.HelpRequestService.DeleteHelpRequestAsync(id);
+
+        // --- EMAIL ---
+        // Tüm onaylı veterinerlere silinme e-postası gönder
+        if (entity != null && user != null)
+        {
+            var veterinarians = await _serviceManager.VeterinarianService.GetAllVeterinariansAsync();
+            var emailHelper = new EmailHelper();
+            foreach (var vet in veterinarians)
+            {
+                if (vet.User != null)
+                {
+                    var body = emailHelper.GenerateDeleteHelpRequestEmailBody(entity, user);
+                    await _serviceManager.EmailService.SendEmailAsync(vet.User.Email, "Help Request Deleted: Animal in Need!", body);
+                }
+            }
+        }
+        // --- EMAIL END ---
+
         return NoContent();
     }
 }
