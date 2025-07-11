@@ -9,12 +9,14 @@ public class LostPetAdController : Controller
 {
     private readonly IServiceManager _serviceManager;
     private readonly IStringLocalizer<LostPetAdController> _localizer;
+    private readonly PetSoLive.Web.Helpers.ImgBBHelper _imgBBHelper;
 
     // Constructor Dependency Injection
-    public LostPetAdController(IServiceManager serviceManager, IStringLocalizer<LostPetAdController> localizer)
+    public LostPetAdController(IServiceManager serviceManager, IStringLocalizer<LostPetAdController> localizer, PetSoLive.Web.Helpers.ImgBBHelper imgBBHelper)
     {
         _serviceManager = serviceManager ?? throw new ArgumentNullException(nameof(serviceManager));
         _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
+        _imgBBHelper = imgBBHelper;
     }
 
     // Oturum kontrolü metodu
@@ -56,7 +58,7 @@ public class LostPetAdController : Controller
     // Kayıp ilanı oluşturma işlemi
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(LostPetAd lostPetAd, string city, string district)
+    public async Task<IActionResult> Create(LostPetAd lostPetAd, string city, string district, IFormFile image)
     {
         var redirectResult = RedirectToLoginIfNotLoggedIn();
         if (redirectResult != null) return redirectResult;
@@ -76,11 +78,18 @@ public class LostPetAdController : Controller
         var user = await _serviceManager.UserService.GetUserByUsernameAsync(username);
         lostPetAd.UserId = user.Id;
 
-        // Kaybolan ilanı kaydedelim
+        // Resim varsa ImgBB'ye yükle ve url'yi ata
+        if (image != null)
+        {
+            using var ms = new MemoryStream();
+            await image.CopyToAsync(ms);
+            var imageBytes = ms.ToArray();
+            var imageUrl = await _imgBBHelper.UploadImageAsync(imageBytes);
+            lostPetAd.ImageUrl = imageUrl;
+        }
         await _serviceManager.LostPetAdService.CreateLostPetAdAsync(lostPetAd, city, district);
 
         TempData["SuccessMessage"] = _localizer["AdCreatedSuccess"]?.Value ?? "The lost pet ad has been created successfully, and notifications have been sent.";
-
         return RedirectToAction("Index");
     }
 

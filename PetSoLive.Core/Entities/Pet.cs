@@ -15,7 +15,7 @@ namespace PetSoLive.Core.Entities
         public string VaccinationStatus { get; set; }
         public string MicrochipId { get; set; }
         public bool? IsNeutered { get; set; }
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
 
         public ICollection<AdoptionRequest> AdoptionRequests { get; set; } = new List<AdoptionRequest>();
         public ICollection<PetOwner> PetOwners { get; set; } = new List<PetOwner>();

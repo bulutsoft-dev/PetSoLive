@@ -14,11 +14,13 @@ public class LostPetAdController : ControllerBase
 {
     private readonly IServiceManager _serviceManager;
     private readonly IMapper _mapper;
+    private readonly Petsolive.API.Helpers.ImgBBHelper _imgBBHelper;
 
-    public LostPetAdController(IServiceManager serviceManager, IMapper mapper)
+    public LostPetAdController(IServiceManager serviceManager, IMapper mapper, Petsolive.API.Helpers.ImgBBHelper imgBBHelper)
     {
         _serviceManager = serviceManager;
         _mapper = mapper;
+        _imgBBHelper = imgBBHelper;
     }
 
     [HttpGet]
@@ -38,13 +40,22 @@ public class LostPetAdController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> Create([FromBody] LostPetAdDto dto)
+    public async Task<IActionResult> Create([FromForm] LostPetAdDto dto, IFormFile image)
     {
         if (!ModelState.IsValid)
             return BadRequest();
 
         dto.Id = 0; // Id'yi sıfırla, veritabanı otomatik versin
         var entity = _mapper.Map<LostPetAd>(dto);
+        // Resim varsa ImgBB'ye yükle ve url'yi ata
+        if (image != null)
+        {
+            using var ms = new MemoryStream();
+            await image.CopyToAsync(ms);
+            var imageBytes = ms.ToArray();
+            var imageUrl = await _imgBBHelper.UploadImageAsync(imageBytes);
+            entity.ImageUrl = imageUrl;
+        }
         // LastSeenDate ve CreatedAt UTC olarak işaretle
         if (entity.LastSeenDate.Kind != DateTimeKind.Utc)
             entity.LastSeenDate = DateTime.SpecifyKind(entity.LastSeenDate, DateTimeKind.Utc);
@@ -71,13 +82,22 @@ public class LostPetAdController : ControllerBase
 
     [HttpPut("{id}")]
     [Authorize]
-    public async Task<IActionResult> Update(int id, [FromBody] LostPetAdDto dto)
+    public async Task<IActionResult> Update(int id, [FromForm] LostPetAdDto dto, IFormFile image)
     {
         if (!ModelState.IsValid)
             return BadRequest();
 
         var entity = _mapper.Map<LostPetAd>(dto);
         entity.Id = id;
+        // Resim varsa ImgBB'ye yükle ve url'yi ata
+        if (image != null)
+        {
+            using var ms = new MemoryStream();
+            await image.CopyToAsync(ms);
+            var imageBytes = ms.ToArray();
+            var imageUrl = await _imgBBHelper.UploadImageAsync(imageBytes);
+            entity.ImageUrl = imageUrl;
+        }
         // LastSeenDate ve CreatedAt UTC olarak işaretle
         if (entity.LastSeenDate.Kind != DateTimeKind.Utc)
             entity.LastSeenDate = DateTime.SpecifyKind(entity.LastSeenDate, DateTimeKind.Utc);

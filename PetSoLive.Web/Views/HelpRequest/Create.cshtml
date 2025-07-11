@@ -100,9 +100,8 @@
                 <!-- Resim URL -->
                 <div class="col-md-6 mb-3">
                     <div class="form-group">
-                        <label for="ImageUrl">@Localizer["ImageUrlLabel"]</label>
-                        <input asp-for="ImageUrl" class="form-control" id="ImageUrl" type="url" />
-                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                        <label for="image">@Localizer["ImageUploadLabel"]</label>
+                        <input class="form-control" id="image" name="image" type="file" accept="image/*" />
                     </div>
                 </div>
 

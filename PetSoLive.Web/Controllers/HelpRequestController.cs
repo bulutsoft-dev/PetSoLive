@@ -10,11 +10,13 @@ public class HelpRequestController : Controller
 {
     private readonly IServiceManager _serviceManager;
     private readonly IStringLocalizer<HelpRequestController> _localizer;
+    private readonly PetSoLive.Web.Helpers.ImgBBHelper _imgBBHelper;
 
-    public HelpRequestController(IServiceManager serviceManager, IStringLocalizer<HelpRequestController> localizer)
+    public HelpRequestController(IServiceManager serviceManager, IStringLocalizer<HelpRequestController> localizer, PetSoLive.Web.Helpers.ImgBBHelper imgBBHelper)
     {
         _serviceManager = serviceManager ?? throw new ArgumentNullException(nameof(serviceManager));
         _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
+        _imgBBHelper = imgBBHelper;
     }
 
     [HttpGet]
@@ -40,7 +42,7 @@ public class HelpRequestController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(HelpRequest helpRequest)
+    public async Task<IActionResult> Create(HelpRequest helpRequest, IFormFile image)
     {
         var username = HttpContext.Session.GetString("Username");
         if (string.IsNullOrEmpty(username))
@@ -60,6 +62,15 @@ public class HelpRequestController : Controller
 
         if (ModelState.IsValid)
         {
+            // Resim varsa ImgBB'ye yükle ve url'yi ata
+            if (image != null)
+            {
+                using var ms = new MemoryStream();
+                await image.CopyToAsync(ms);
+                var imageBytes = ms.ToArray();
+                var imageUrl = await _imgBBHelper.UploadImageAsync(imageBytes);
+                helpRequest.ImageUrl = imageUrl;
+            }
             await _serviceManager.HelpRequestService.CreateHelpRequestAsync(helpRequest);
 
             var veterinarians = await _serviceManager.VeterinarianService.GetAllVeterinariansAsync();

@@ -9,11 +9,13 @@ namespace PetSoLive.Web.Controllers
     {
         private readonly IServiceManager _serviceManager;
         private readonly IStringLocalizer<PetController> _localizer;
+        private readonly PetSoLive.Web.Helpers.ImgBBHelper _imgBBHelper;
 
-        public PetController(IServiceManager serviceManager, IStringLocalizer<PetController> localizer)
+        public PetController(IServiceManager serviceManager, IStringLocalizer<PetController> localizer, PetSoLive.Web.Helpers.ImgBBHelper imgBBHelper)
         {
             _serviceManager = serviceManager ?? throw new ArgumentNullException(nameof(serviceManager));
             _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
+            _imgBBHelper = imgBBHelper;
         }
 
         private async Task<User> GetLoggedInUserAsync()
@@ -42,7 +44,7 @@ namespace PetSoLive.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Pet pet)
+        public async Task<IActionResult> Create(Pet pet, IFormFile image)
         {
             var loginRedirect = RedirectToLoginIfNotLoggedIn();
             if (loginRedirect != null) return loginRedirect;
@@ -56,6 +58,15 @@ namespace PetSoLive.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                // Resim varsa ImgBB'ye yükle ve url'yi ata
+                if (image != null)
+                {
+                    using var ms = new MemoryStream();
+                    await image.CopyToAsync(ms);
+                    var imageBytes = ms.ToArray();
+                    var imageUrl = await _imgBBHelper.UploadImageAsync(imageBytes);
+                    pet.ImageUrl = imageUrl;
+                }
                 await _serviceManager.PetService.CreatePetAsync(pet);
 
                 var petOwner = new PetOwner
@@ -64,7 +75,6 @@ namespace PetSoLive.Web.Controllers
                     UserId = user.Id,
                     OwnershipDate = DateTime.UtcNow
                 };
-
                 await _serviceManager.PetService.AssignPetOwnerAsync(petOwner);
 
                 TempData["SuccessMessage"] = _localizer["PetCreatedSuccess"].Value;

@@ -15,5 +15,5 @@ public class PetDto
     public string VaccinationStatus { get; set; }
     public string MicrochipId { get; set; }
     public bool? IsNeutered { get; set; }
-    public string ImageUrl { get; set; }
+    public string? ImageUrl { get; set; }
 }
