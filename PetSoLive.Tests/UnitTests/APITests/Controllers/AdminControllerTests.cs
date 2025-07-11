@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using PetSoLive.Data;
 
 namespace PetSoLive.Tests.UnitTests.APITests.Controllers
 {
@@ -13,13 +14,15 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
     {
         private readonly Mock<IServiceManager> _serviceManagerMock;
         private readonly Mock<IMapper> _mapperMock;
+        private readonly Mock<ApplicationDbContext> _dbContextMock;
         private readonly AdminController _controller;
 
         public AdminControllerTests()
         {
             _serviceManagerMock = new Mock<IServiceManager>();
             _mapperMock = new Mock<IMapper>();
-            _controller = new AdminController(_serviceManagerMock.Object, _mapperMock.Object);
+            _dbContextMock = new Mock<ApplicationDbContext>();
+            _controller = new AdminController(_serviceManagerMock.Object, _mapperMock.Object, _dbContextMock.Object);
         }
 
         [Fact]

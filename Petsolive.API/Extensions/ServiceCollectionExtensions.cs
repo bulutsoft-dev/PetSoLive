@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Services;
 using PetSoLive.Infrastructure.Repositories;
+using System.Net;
+using System.Net.Mail;
 
 namespace Petsolive.API.Extensions;
 
@@ -43,8 +45,17 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IHelpRequestService, HelpRequestService>();
         services.AddScoped<ILostPetAdService, LostPetAdService>();
         
-        // Register SmtpClient for DI
-        services.AddTransient<System.Net.Mail.SmtpClient>();
+        // Register SmtpClient for DI (with configuration!)
+        services.AddTransient<SmtpClient>(provider =>
+        {
+            var smtpSettings = provider.GetRequiredService<SmtpSettings>();
+            var client = new SmtpClient(smtpSettings.Host, smtpSettings.Port)
+            {
+                EnableSsl = smtpSettings.EnableSsl,
+                Credentials = new NetworkCredential(smtpSettings.Username, smtpSettings.Password)
+            };
+            return client;
+        });
         // Register ISmtpClient for DI
         services.AddScoped<ISmtpClient, SmtpClientWrapper>();
         

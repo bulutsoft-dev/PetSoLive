@@ -16,12 +16,15 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
     {
         private readonly Mock<IServiceManager> _serviceManagerMock;
         private readonly Mock<IMapper> _mapperMock;
+        private readonly Mock<IEmailService> _emailServiceMock;
         private readonly LostPetAdController _controller;
 
         public LostPetAdControllerTests()
         {
             _serviceManagerMock = new Mock<IServiceManager>();
             _mapperMock = new Mock<IMapper>();
+            _emailServiceMock = new Mock<IEmailService>();
+            _serviceManagerMock.SetupGet(s => s.EmailService).Returns(_emailServiceMock.Object);
             _controller = new LostPetAdController(_serviceManagerMock.Object, _mapperMock.Object);
         }
 
@@ -118,6 +121,19 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
         }
 
         [Fact]
+        public async Task Create_SendsEmailToUser()
+        {
+            var dto = new LostPetAdDto { Id = 0, LastSeenCity = "City", LastSeenDistrict = "District", UserId = 2 };
+            var entity = new LostPetAd { Id = 1, UserId = 2 };
+            var user = new User { Id = 2, Email = "user@mail.com" };
+            _mapperMock.Setup(m => m.Map<LostPetAd>(dto)).Returns(entity);
+            _serviceManagerMock.Setup(s => s.LostPetAdService.CreateLostPetAdAsync(entity, dto.LastSeenCity, dto.LastSeenDistrict)).Returns(Task.CompletedTask);
+            _serviceManagerMock.Setup(s => s.UserService.GetUserByIdAsync(2)).ReturnsAsync(user);
+            var result = await _controller.Create(dto);
+            _emailServiceMock.Verify(e => e.SendEmailAsync("user@mail.com", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
         public async Task Update_ReturnsNoContent_OnSuccess()
         {
             // Arrange
@@ -164,6 +180,20 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
         }
 
         [Fact]
+        public async Task Update_SendsEmailToUser()
+        {
+            int id = 1;
+            var dto = new LostPetAdDto { Id = id, UserId = 2 };
+            var entity = new LostPetAd { Id = id, UserId = 2 };
+            var user = new User { Id = 2, Email = "user@mail.com" };
+            _mapperMock.Setup(m => m.Map<LostPetAd>(dto)).Returns(entity);
+            _serviceManagerMock.Setup(s => s.LostPetAdService.UpdateLostPetAdAsync(entity)).Returns(Task.CompletedTask);
+            _serviceManagerMock.Setup(s => s.UserService.GetUserByIdAsync(2)).ReturnsAsync(user);
+            var result = await _controller.Update(id, dto);
+            _emailServiceMock.Verify(e => e.SendEmailAsync("user@mail.com", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
         public async Task Delete_ReturnsNoContent_OnSuccess()
         {
             // Arrange
@@ -204,6 +234,19 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
 
             // Act & Assert
             await Assert.ThrowsAsync<Exception>(() => _controller.Delete(id));
+        }
+
+        [Fact]
+        public async Task Delete_SendsEmailToUser()
+        {
+            int id = 1;
+            var ad = new LostPetAd { Id = id, UserId = 2 };
+            var user = new User { Id = 2, Email = "user@mail.com" };
+            _serviceManagerMock.Setup(s => s.LostPetAdService.GetLostPetAdByIdAsync(id)).ReturnsAsync(ad);
+            _serviceManagerMock.Setup(s => s.LostPetAdService.DeleteLostPetAdAsync(ad)).Returns(Task.CompletedTask);
+            _serviceManagerMock.Setup(s => s.UserService.GetUserByIdAsync(2)).ReturnsAsync(user);
+            var result = await _controller.Delete(id);
+            _emailServiceMock.Verify(e => e.SendEmailAsync("user@mail.com", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
     }
 } 
