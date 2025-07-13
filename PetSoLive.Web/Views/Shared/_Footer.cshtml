@@ -1,0 +1,64 @@
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+<footer class="petsolive-footer pro-footer pt-5 pb-0">
+    <div class="container-xl">
+        <div class="row g-4 align-items-start text-center text-lg-start mb-0 pb-0">
+            <!-- Kurumsal -->
+            <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-0">
+                <div class="footer-title mb-3">@Localizer["Corporate"]</div>
+                <ul class="footer-link-list">
+                    <li><a href="#">@Localizer["About"]</a></li>
+                    <li><a href="#">@Localizer["Board"]</a></li>
+                    <li><a href="#">@Localizer["PresidentMessage"]</a></li>
+                    <li><a href="#">@Localizer["Regulation"]</a></li>
+                    <li><a href="#">@Localizer["AccountNumbers"]</a></li>
+                    <li><a href="#">@Localizer["FAQ"]</a></li>
+                </ul>
+            </div>
+            <!-- Orta: Logo ve açıklama -->
+            <div class="col-lg-4 col-md-12 col-12 d-flex flex-column align-items-center justify-content-center mb-4 mb-lg-0">
+                <img src="~/logo.png" alt="PetSoLive Logo" style="height:54px;width:auto;" class="mb-2" />
+                <div class="footer-center-title mb-2">PetSoLive</div>
+                <div class="footer-center-desc">@Localizer["footerDescriptionContent"]</div>
+            </div>
+            <!-- Faaliyetlerimiz -->
+            <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-0">
+                <div class="footer-title mb-3">@Localizer["OurActivities"]</div>
+                <ul class="footer-link-list align-items-lg-end">
+                    <li><a href="#">@Localizer["FoodDistribution"]</a></li>
+                    <li><a href="#">@Localizer["StreetHotFood"]</a></li>
+                    <li><a href="#">@Localizer["HomeHotFood"]</a></li>
+                    <li><a href="#">@Localizer["PhotoGallery"]</a></li>
+                    <li><a href="#">@Localizer["Videos"]</a></li>
+                    <li><a href="#">@Localizer["Contact"]</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom-row d-flex flex-column flex-md-row justify-content-between align-items-center pt-3 mt-4 border-0 gap-3">
+            <div class="d-flex align-items-center gap-3 mb-2 mb-md-0">
+                <a href="#" target="_blank" title="Twitter" rel="noopener" class="footer-social-icon"><i class="bi bi-twitter"></i></a>
+                <a href="#" target="_blank" title="Facebook" rel="noopener" class="footer-social-icon"><i class="bi bi-facebook"></i></a>
+                <a href="#" target="_blank" title="Instagram" rel="noopener" class="footer-social-icon"><i class="bi bi-instagram"></i></a>
+            </div>
+            <div class="footer-copyright text-light small opacity-75 text-center flex-grow-1">
+                &copy; 2025 PetSoLive - BulutSoft @Localizer["All rights reserved."]
+            </div>
+            <div class="d-flex align-items-center justify-content-center">
+                @{
+                    var footerCurrentCulture = CultureInfo.CurrentCulture.Name;
+                    var footerNewCulture = footerCurrentCulture == "en-US" ? "tr-TR" : "en-US";
+                    var footerFlag = footerCurrentCulture switch
+                    {
+                        "en-US" => "🇺🇸",
+                        "tr-TR" => "🇹🇷",
+                        _ => "🌐"
+                    };
+                }
+                <a href="@Url.Action("SetLanguage", "Home", new { culture = footerNewCulture, returnUrl = Context.Request.Path })" class="footer-language-link ms-2">
+                    <i class="bi bi-translate"></i> @footerFlag @Localizer["Swicth"]
+                </a>
+            </div>
+        </div>
+    </div>
+</footer> 
