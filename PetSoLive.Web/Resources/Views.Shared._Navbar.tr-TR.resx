@@ -3,20 +3,20 @@
   <data name="PetSoLive" xml:space="preserve">
     <value>PetSoLive</value>
   </data>
-  <data name="PetSoLive Description" xml:space="preserve">
-    <value>PetSoLive, evcil hayvan severler için güvenli ve destekleyici bir topluluk oluşturmayı, evlat edinme fırsatları, kaybolan evcil hayvan ilanları ve yardım talepleri gibi değerli kaynaklar sunmayı amaçlamaktadır.</value>
+  <data name="Toggle Navigation" xml:space="preserve">
+    <value>Navigasyonu Aç/Kapat</value>
   </data>
   <data name="Home" xml:space="preserve">
-    <value>Anasayfa</value>
+    <value>Ana Sayfa</value>
   </data>
   <data name="About" xml:space="preserve">
-    <value>Hakkımızda</value>
+    <value>Hakkında</value>
   </data>
   <data name="Adoption" xml:space="preserve">
-    <value>Evlat Edinme</value>
+    <value>Sahiplenme</value>
   </data>
   <data name="Lost Pet Ads" xml:space="preserve">
-    <value>Kayıp Hayvan İlanları</value>
+    <value>Kayıp Pet İlanları</value>
   </data>
   <data name="Help Requests" xml:space="preserve">
     <value>Yardım Talepleri</value>
@@ -27,53 +27,20 @@
   <data name="Register" xml:space="preserve">
     <value>Kayıt Ol</value>
   </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Hoş Geldin</value>
+  </data>
+  <data name="Veterinarians" xml:space="preserve">
+    <value>Veterinerler</value>
+  </data>
+  <data name="Veterinarian Register" xml:space="preserve">
+    <value>Veteriner Kaydı</value>
+  </data>
   <data name="Logout" xml:space="preserve">
     <value>Çıkış Yap</value>
   </data>
-  <data name="Veterinarians Management" xml:space="preserve">
-    <value>Veteriner Yönetimi</value>
-  </data>
-  <data name="Veterinarian Register" xml:space="preserve">
-    <value>Veteriner Kayıt</value>
-  </data>
-  <data name="Welcome" xml:space="preserve">
-    <value>Hoş Geldiniz</value>
-  </data>
-  <data name="All rights reserved." xml:space="preserve">
-    <value>Tüm hakları saklıdır.</value>
-  </data>
-  <data name="Email" xml:space="preserve">
-    <value>E-posta</value>
-  </data>
-  <data name="Phone" xml:space="preserve">
-    <value>Telefon</value>
-  </data>
-  <data name="Address" xml:space="preserve">
-    <value>Adres</value>
-  </data>
-  <data name="About PetSoLive" xml:space="preserve">
-    <value>PetSoLive Hakkında</value>
-  </data>
-  <data name="Quick Links" xml:space="preserve">
-    <value>Hızlı Linkler</value>
-  </data>
-  <data name="Contact Us" xml:space="preserve">
-    <value>Bize Ulaşın</value>
-  </data>
-  <data name="footerDescription" xml:space="preserve">
-    <value>PetSoLive Hakkında</value>
-  </data>
-  <data name="footerDescriptionContent" xml:space="preserve">
-    <value>PetSoLive, evcil hayvan severler için sıcak bir topluluk kurmayı, evlat edinme fırsatları, kayıp evcil hayvan ilanları ve yardım talepleri gibi değerli kaynaklarla bu topluluğu desteklemeyi hedefliyor.</value>
-  </data>
-  <data name="About Us" xml:space="preserve">
-    <value>Biz Kimiz?</value>
-  </data>
   <data name="Swicth" xml:space="preserve">
-    <value>İngilizce'ye Geç</value>
-  </data> 
-  <data name="Account" xml:space="preserve">
-    <value>Hesap</value>
+    <value>Dili Değiştir</value>
   </data>
   <data name="Active Users" xml:space="preserve">
     <value>Aktif Kullanıcılar</value>
@@ -162,4 +129,4 @@
   <data name="Wind" xml:space="preserve">
     <value>Rüzgar</value>
   </data>
-</root>
+</root> 

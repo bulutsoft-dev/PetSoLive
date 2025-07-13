@@ -49,8 +49,4 @@
         </Content>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Resources\Shared\" />
-    </ItemGroup>
-
 </Project>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="About PetSoLive" xml:space="preserve">
+    <value>About PetSoLive</value>
+  </data>
+  <data name="PetSoLive Description" xml:space="preserve">
+    <value>PetSoLive is a comprehensive platform dedicated to helping pets find loving homes and reuniting lost pets with their families. We connect pet owners, adopters, and veterinarians in a caring community.</value>
+  </data>
+  <data name="Quick Links" xml:space="preserve">
+    <value>Quick Links</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Adoption" xml:space="preserve">
+    <value>Adoption</value>
+  </data>
+  <data name="Lost Pet Ads" xml:space="preserve">
+    <value>Lost Pet Ads</value>
+  </data>
+  <data name="Help Requests" xml:space="preserve">
+    <value>Help Requests</value>
+  </data>
+  <data name="Contact Us" xml:space="preserve">
+    <value>Contact Us</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="All rights reserved." xml:space="preserve">
+    <value>All rights reserved.</value>
+  </data>
+  <data name="Swicth" xml:space="preserve">
+    <value>Switch Language</value>
+  </data>
+</root> 

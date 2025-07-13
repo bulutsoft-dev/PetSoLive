@@ -3,8 +3,8 @@
   <data name="PetSoLive" xml:space="preserve">
     <value>PetSoLive</value>
   </data>
-  <data name="PetSoLive Description" xml:space="preserve">
-    <value>PetSoLive is dedicated to creating a community for pet lovers, providing resources for adoption, lost pet ads, and help requests.</value>
+  <data name="Toggle Navigation" xml:space="preserve">
+    <value>Toggle Navigation</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Home</value>
@@ -27,53 +27,20 @@
   <data name="Register" xml:space="preserve">
     <value>Register</value>
   </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+  <data name="Welcome" xml:space="preserve">
+    <value>Welcome</value>
   </data>
-  <data name="Veterinarians Management" xml:space="preserve">
-    <value>Veterinarians Management</value>
+  <data name="Veterinarians" xml:space="preserve">
+    <value>Veterinarians</value>
   </data>
   <data name="Veterinarian Register" xml:space="preserve">
     <value>Veterinarian Register</value>
   </data>
-  <data name="Welcome" xml:space="preserve">
-    <value>Welcome</value>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
   </data>
-  <data name="All rights reserved." xml:space="preserve">
-    <value>All rights reserved.</value>
-  </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
-  </data>
-  <data name="Address" xml:space="preserve">
-    <value>Address</value>
-  </data>
-  <data name="About PetSoLive" xml:space="preserve">
-    <value>About PetSoLive</value>
-  </data>
-  <data name="Quick Links" xml:space="preserve">
-    <value>Quick Links</value>
-  </data>
-  <data name="Contact Us" xml:space="preserve">
-    <value>Contact Us</value>
-  </data>
-  <data name="footerDescription" xml:space="preserve">
-    <value>About PetSoLive</value>
-  </data>
-  <data name="footerDescriptionContent" xml:space="preserve">
-    <value>PetSoLive is dedicated to creating a community for pet lovers, providing resources for adoption, lost pet ads, and help requests.</value>
-  </data>
-  <data name="About Us" xml:space="preserve">
-    <value>About Us</value>
-  </data>  
   <data name="Swicth" xml:space="preserve">
-    <value>Switch to Turkish</value>
-  </data>
-  <data name="Account" xml:space="preserve">
-    <value>Account</value>
+    <value>Switch Language</value>
   </data>
   <data name="Active Users" xml:space="preserve">
     <value>Active Users</value>
@@ -162,4 +129,4 @@
   <data name="Wind" xml:space="preserve">
     <value>Wind</value>
   </data>
-</root>
+</root> 
