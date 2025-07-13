@@ -8,10 +8,10 @@
 }
 
 <div class="adoption-container">
-    <!-- Tab Navigation -->
+    <!-- Enhanced Tab Navigation -->
     <div class="tab-navigation">
         <button class="tab-button active" data-tab="all">
-            <i class="fas fa-paw"></i> @Localizer["AllPets"]
+            <i class="fas fa-th-large"></i> @Localizer["AllPets"]
         </button>
         <button class="tab-button" data-tab="available">
             <i class="fas fa-home"></i> @Localizer["AvailablePets"]
@@ -21,11 +21,18 @@
         </button>
     </div>
 
-    <!-- Filter Section -->
+    <!-- Enhanced Filter Section -->
     <div class="filter-section">
+        <div class="filter-header">
+            <h4><i class="fas fa-filter"></i> @Localizer["FilterPets"]</h4>
+            <p>@Localizer["FilterDescription"]</p>
+        </div>
+        
         <div class="filter-controls">
             <div class="filter-group">
-                <label for="speciesFilter">@Localizer["Species"]:</label>
+                <label for="speciesFilter">
+                    <i class="fas fa-paw"></i> @Localizer["Species"]:
+                </label>
                 <select id="speciesFilter" class="form-control">
                     <option value="">@Localizer["AllSpecies"]</option>
                     <option value="Dog">🐕 @Localizer["Dog"]</option>
@@ -39,7 +46,38 @@
             </div>
             
             <div class="filter-group">
-                <label for="ageFilter">@Localizer["Age"]:</label>
+                <label for="breedFilter">
+                    <i class="fas fa-tag"></i> @Localizer["Breed"]:
+                </label>
+                <select id="breedFilter" class="form-control">
+                    <option value="">@Localizer["AllBreeds"]</option>
+                    <!-- Dog Breeds -->
+                    <option value="Golden Retriever" data-species="Dog">Golden Retriever</option>
+                    <option value="Labrador" data-species="Dog">Labrador</option>
+                    <option value="German Shepherd" data-species="Dog">German Shepherd</option>
+                    <option value="Bulldog" data-species="Dog">Bulldog</option>
+                    <option value="Poodle" data-species="Dog">Poodle</option>
+                    <option value="Beagle" data-species="Dog">Beagle</option>
+                    <option value="Rottweiler" data-species="Dog">Rottweiler</option>
+                    <option value="Husky" data-species="Dog">Husky</option>
+                    <!-- Cat Breeds -->
+                    <option value="Persian" data-species="Cat">Persian</option>
+                    <option value="Siamese" data-species="Cat">Siamese</option>
+                    <option value="Maine Coon" data-species="Cat">Maine Coon</option>
+                    <option value="British Shorthair" data-species="Cat">British Shorthair</option>
+                    <option value="Ragdoll" data-species="Cat">Ragdoll</option>
+                    <option value="Bengal" data-species="Cat">Bengal</option>
+                    <option value="Sphynx" data-species="Cat">Sphynx</option>
+                    <!-- Other Breeds -->
+                    <option value="Mixed" data-species="All">Mixed</option>
+                    <option value="Unknown" data-species="All">Unknown</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="ageFilter">
+                    <i class="fas fa-birthday-cake"></i> @Localizer["Age"]:
+                </label>
                 <select id="ageFilter" class="form-control">
                     <option value="">@Localizer["AllAges"]</option>
                     <option value="Young">@Localizer["Young"]</option>
@@ -49,17 +87,49 @@
             </div>
             
             <div class="filter-group">
-                <label for="genderFilter">@Localizer["Gender"]:</label>
+                <label for="ageRangeFilter">
+                    <i class="fas fa-calendar-alt"></i> @Localizer["AgeRange"]:
+                </label>
+                <div class="range-inputs">
+                    <input type="number" id="minAge" class="form-control" placeholder="@Localizer["MinAge"]" min="0" max="20">
+                    <span class="range-separator">-</span>
+                    <input type="number" id="maxAge" class="form-control" placeholder="@Localizer["MaxAge"]" min="0" max="20">
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <label for="genderFilter">
+                    <i class="fas fa-venus-mars"></i> @Localizer["Gender"]:
+                </label>
                 <select id="genderFilter" class="form-control">
                     <option value="">@Localizer["AllGenders"]</option>
                     <option value="Male">@Localizer["Male"]</option>
                     <option value="Female">@Localizer["Female"]</option>
                 </select>
             </div>
+            
+            <div class="filter-group">
+                <label for="neuteredFilter">
+                    <i class="fas fa-heart"></i> @Localizer["NeuteredStatus"]:
+                </label>
+                <select id="neuteredFilter" class="form-control">
+                    <option value="">@Localizer["AllNeuteredStatus"]</option>
+                    <option value="Neutered">@Localizer["Neutered"]</option>
+                    <option value="NotNeutered">@Localizer["NotNeutered"]</option>
+                    <option value="Unknown">@Localizer["Unknown"]</option>
+                </select>
+            </div>
         </div>
         
         <div class="search-box">
             <input type="text" id="searchInput" class="form-control" placeholder="@Localizer["SearchPets"]" />
+        </div>
+        
+        <div class="filter-actions">
+            <button type="button" id="clearFilters" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-times"></i> @Localizer["ClearFilters"]
+            </button>
+            <span class="filter-results" id="filterResults"></span>
         </div>
     </div>
 
@@ -100,6 +170,7 @@
                 
                 <div class="pet-card @(isAdopted == true ? "adopted" : "available")" 
                      data-species="@pet.Species" data-age="@pet.Age" data-gender="@pet.Gender" data-adopted="@isAdopted"
+                     data-breed="@pet.Breed" data-neutered="@GetNeuteredStatus(pet)"
                      data-tab="available">
                     
                     <!-- Adoption Status Badge -->
@@ -190,6 +261,7 @@
                 
                 <div class="pet-card @(isAdopted == true ? "adopted" : "available")" 
                      data-species="@pet.Species" data-age="@pet.Age" data-gender="@pet.Gender" data-adopted="@isAdopted"
+                     data-breed="@pet.Breed" data-neutered="@GetNeuteredStatus(pet)"
                      data-tab="adopted">
                     
                     <!-- Adoption Status Badge -->
@@ -278,12 +350,19 @@
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
     const speciesFilter = document.getElementById('speciesFilter');
+    const breedFilter = document.getElementById('breedFilter');
     const ageFilter = document.getElementById('ageFilter');
+    const ageRangeFilter = document.getElementById('ageRangeFilter');
+    const minAgeInput = document.getElementById('minAge');
+    const maxAgeInput = document.getElementById('maxAge');
     const genderFilter = document.getElementById('genderFilter');
+    const neuteredFilter = document.getElementById('neuteredFilter');
     const petsGrid = document.getElementById('petsGrid');
     const petCards = document.querySelectorAll('.pet-card');
     const sectionHeaders = document.querySelectorAll('.section-header');
     const tabButtons = document.querySelectorAll('.tab-button');
+    const clearFiltersBtn = document.getElementById('clearFilters');
+    const filterResults = document.getElementById('filterResults');
     
     let currentTab = 'all';
 
@@ -323,8 +402,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function filterPets() {
         const searchTerm = searchInput.value.toLowerCase();
         const selectedSpecies = speciesFilter.value;
+        const selectedBreed = breedFilter.value;
         const selectedAge = ageFilter.value;
+        const selectedAgeRange = { min: parseInt(minAgeInput.value) || 0, max: parseInt(maxAgeInput.value) || 20 };
         const selectedGender = genderFilter.value;
+        const selectedNeutered = neuteredFilter.value;
+
+        let visibleCount = 0;
 
         petCards.forEach(card => {
             // Skip cards that don't match current tab
@@ -341,15 +425,43 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const matchesSearch = petName.includes(searchTerm) || petDescription.includes(searchTerm);
             const matchesSpecies = !selectedSpecies || petSpecies === selectedSpecies;
+            const matchesBreed = !selectedBreed || card.dataset.breed === selectedBreed;
             const matchesAge = !selectedAge || getAgeCategory(petAge) === selectedAge;
+            const matchesAgeRange = petAge >= selectedAgeRange.min && petAge <= selectedAgeRange.max;
             const matchesGender = !selectedGender || petGender === selectedGender;
+            const matchesNeutered = !selectedNeutered || card.dataset.neutered === selectedNeutered;
 
-            if (matchesSearch && matchesSpecies && matchesAge && matchesGender) {
+            if (matchesSearch && matchesSpecies && matchesBreed && matchesAge && matchesAgeRange && matchesGender && matchesNeutered) {
                 card.style.display = 'block';
+                visibleCount++;
             } else {
                 card.style.display = 'none';
             }
         });
+
+        // Update filter results
+        updateFilterResults(visibleCount);
+    }
+
+    function updateFilterResults(visibleCount) {
+        const totalCount = petCards.length;
+        if (visibleCount === totalCount) {
+            filterResults.textContent = '';
+        } else {
+            filterResults.textContent = `${visibleCount} of ${totalCount} pets shown`;
+        }
+    }
+
+    function clearAllFilters() {
+        searchInput.value = '';
+        speciesFilter.value = '';
+        breedFilter.value = '';
+        ageFilter.value = '';
+        minAgeInput.value = '';
+        maxAgeInput.value = '';
+        genderFilter.value = '';
+        neuteredFilter.value = '';
+        filterPets();
     }
 
     function getAgeCategory(age) {
@@ -368,8 +480,42 @@ document.addEventListener('DOMContentLoaded', function() {
     // Filter event listeners
     searchInput.addEventListener('input', filterPets);
     speciesFilter.addEventListener('change', filterPets);
+    breedFilter.addEventListener('change', filterPets);
     ageFilter.addEventListener('change', filterPets);
+    minAgeInput.addEventListener('input', filterPets);
+    maxAgeInput.addEventListener('input', filterPets);
     genderFilter.addEventListener('change', filterPets);
+    neuteredFilter.addEventListener('change', filterPets);
+    
+    // Species filter change handler for breed filtering
+    speciesFilter.addEventListener('change', function() {
+        const selectedSpecies = this.value;
+        const breedOptions = breedFilter.querySelectorAll('option');
+        
+        breedOptions.forEach(option => {
+            if (option.value === '') {
+                option.style.display = 'block'; // Always show "All Breeds"
+                return;
+            }
+            
+            const optionSpecies = option.dataset.species;
+            if (selectedSpecies === '' || optionSpecies === 'All' || optionSpecies === selectedSpecies) {
+                option.style.display = 'block';
+            } else {
+                option.style.display = 'none';
+            }
+        });
+        
+        // Reset breed filter when species changes
+        breedFilter.value = '';
+        filterPets();
+    });
+    
+    // Clear filters button
+    clearFiltersBtn.addEventListener('click', clearAllFilters);
+    
+    // Initial filter
+    filterPets();
 });
 </script>
 
@@ -386,5 +532,10 @@ document.addEventListener('DOMContentLoaded', function() {
             "Hamster" => "🐹",
             _ => "🐾"
         };
+    }
+
+    private string GetNeuteredStatus(PetSoLive.Core.Entities.Pet pet)
+    {
+        return pet.IsNeutered == true ? "Neutered" : "NotNeutered";
     }
 }

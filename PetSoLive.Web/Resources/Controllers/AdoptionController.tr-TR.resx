@@ -1,119 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <data name="YourNameLabel" xml:space="preserve">
-    <value>Adınız</value>
-  </data>
-  <data name="YourEmailLabel" xml:space="preserve">
-    <value>E-postanız</value>
-  </data>
-  <data name="YourPhoneLabel" xml:space="preserve">
-    <value>Telefon Numaranız</value>
-  </data>
-  <data name="YourAddressLabel" xml:space="preserve">
-    <value>Adresiniz</value>
-  </data>
-  <data name="YourDateOfBirthLabel" xml:space="preserve">
-    <value>Doğum Tarihiniz</value>
-  </data>
-  <data name="MessageLabel" xml:space="preserve">
-    <value>Mesaj</value>
-  </data>
-  <data name="MessagePlaceholder" xml:space="preserve">
-    <value>Pet sahibine mesaj yazın</value>
-  </data>
-  <data name="RegisteredNameHelp" xml:space="preserve">
-    <value>Kayıtlı adınız.</value>
-  </data>
-  <data name="RegisteredEmailHelp" xml:space="preserve">
-    <value>Kayıtlı e-posta adresiniz.</value>
-  </data>
-  <data name="UpdatePhoneHelp" xml:space="preserve">
-    <value>Telefon numaranızı güncelleyin</value>
-  </data>
-  <data name="RegisteredAddressHelp" xml:space="preserve">
-    <value>Kayıtlı adresiniz.</value>
-  </data>
-  <data name="RegisteredDateOfBirthHelp" xml:space="preserve">
-    <value>Kayıtlı doğum tarihiniz.</value>
-  </data>
-  <data name="SubmitAdoptionButton" xml:space="preserve">
-    <value>Sahiplenme Talebi Gönder</value>
-  </data>
-
-  <!-- AdoptionController.tr.resx -->
-  <data name="AlreadySubmittedRequest" xml:space="preserve">
-  <value>Bu pet için zaten bir sahiplenme talebi gönderdiniz!</value>
-</data>
-  <data name="GoToPetDetails" xml:space="preserve">
-  <value>Pet Detaylarına Git</value>
-</data>
-
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1"><value>Blue</value></data>
+    <data name="Bitmap1"><value>[base64 mime encoded binary data]</value></data>
+    <data name="Icon1"><value>[base64 mime encoded binary data]</value></data>
+                
+  -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
   <data name="AvailablePetsTitle" xml:space="preserve">
-  <value>Sahiplendirilecek Petler</value>
-</data>
-  <data name="SearchPlaceholder" xml:space="preserve">
-  <value>İsim veya cins ara...</value>
-</data>
-  <data name="CreateNewPetButton" xml:space="preserve">
-  <value>Yeni Pet Oluştur</value>
-</data>
-  <data name="Years" xml:space="preserve">
-  <value>yaş</value>
-</data>
-  <data name="ViewDetailsButton" xml:space="preserve">
-  <value>Detayları Gör</value>
-</data>
-  <!-- Aşağıdakiler önceki cevaplarda eklenmiş olmalı -->
-  <data name="GenderMale" xml:space="preserve">
-  <value>Erkek</value>
-</data>
-  <data name="GenderFemale" xml:space="preserve">
-  <value>Dişi</value>
-</data>
+    <value>Sahiplenmek İçin Mevcut Evcil Hayvanlar</value>
+  </data>
+  <data name="AllPets" xml:space="preserve">
+    <value>Tüm Evcil Hayvanlar</value>
+  </data>
+  <data name="AvailablePets" xml:space="preserve">
+    <value>Mevcut</value>
+  </data>
+  <data name="AdoptedPets" xml:space="preserve">
+    <value>Sahiplenildi</value>
+  </data>
+  <data name="FilterPets" xml:space="preserve">
+    <value>Evcil Hayvanları Filtrele</value>
+  </data>
+  <data name="FilterDescription" xml:space="preserve">
+    <value>Mükemmel arkadaşınızı bulmak için aşağıdaki filtreleri kullanın</value>
+  </data>
   <data name="Species" xml:space="preserve">
     <value>Tür</value>
   </data>
-  <data name="Breed" xml:space="preserve">
-    <value>Irk</value>
-  </data>
-  <data name="Gender" xml:space="preserve">
-    <value>Cinsiyet</value>
-  </data>
-  <data name="MinAge" xml:space="preserve">
-    <value>Min Yaş</value>
-  </data>
-  <data name="MaxAge" xml:space="preserve">
-    <value>Maks Yaş</value>
-  </data>
-  <data name="Color" xml:space="preserve">
-    <value>Renk</value>
-  </data>
-  <data name="AdoptionStatus" xml:space="preserve">
-    <value>Sahiplenme Durumu</value>
-  </data>
-  <data name="Available" xml:space="preserve">
-    <value>Uygun</value>
-  </data>
-  <data name="Adopted" xml:space="preserve">
-    <value>Sahiplenildi</value>
-  </data>
-  <data name="FilterButton" xml:space="preserve">
-    <value>Filtrele</value>
-  </data>
-  <data name="Neutered" xml:space="preserve">
-    <value>Kısırlaştırılmış</value>
-  </data>
-  <data name="All" xml:space="preserve">
-    <value>Tümü</value>
-  </data>
-  <data name="Waiting" xml:space="preserve">
-    <value>Bekliyor</value>
-  </data>
-  <data name="NoPetsFound" xml:space="preserve">
-    <value>Kriterlerinize uygun evcil hayvan bulunamadı.</value>
-  </data>
-
-  <!-- New localization keys for the simplified adoption page -->
   <data name="AllSpecies" xml:space="preserve">
     <value>Tüm Türler</value>
   </data>
@@ -145,13 +133,16 @@
     <value>Tüm Yaşlar</value>
   </data>
   <data name="Young" xml:space="preserve">
-    <value>Genç</value>
+    <value>Genç (0-2 yaş)</value>
   </data>
   <data name="Adult" xml:space="preserve">
-    <value>Yetişkin</value>
+    <value>Yetişkin (3-7 yaş)</value>
   </data>
   <data name="Senior" xml:space="preserve">
-    <value>Yaşlı</value>
+    <value>Yaşlı (8+ yaş)</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Cinsiyet</value>
   </data>
   <data name="AllGenders" xml:space="preserve">
     <value>Tüm Cinsiyetler</value>
@@ -163,7 +154,34 @@
     <value>Dişi</value>
   </data>
   <data name="SearchPets" xml:space="preserve">
-    <value>Pet ara...</value>
+    <value>İsim veya açıklamaya göre evcil hayvan ara...</value>
+  </data>
+  <data name="ClearFilters" xml:space="preserve">
+    <value>Filtreleri Temizle</value>
+  </data>
+  <data name="AvailablePetsSection" xml:space="preserve">
+    <value>Mevcut Evcil Hayvanlar</value>
+  </data>
+  <data name="AvailablePetsDescription" xml:space="preserve">
+    <value>Bu evcil hayvanlar kalıcı evlerini arıyor</value>
+  </data>
+  <data name="AdoptedPetsSection" xml:space="preserve">
+    <value>Yakın Zamanda Sahiplenilenler</value>
+  </data>
+  <data name="AdoptedPetsDescription" xml:space="preserve">
+    <value>Bu evcil hayvanlar sevgi dolu ailelerini buldu</value>
+  </data>
+  <data name="Adopted" xml:space="preserve">
+    <value>Sahiplenildi</value>
+  </data>
+  <data name="Available" xml:space="preserve">
+    <value>Mevcut</value>
+  </data>
+  <data name="Years" xml:space="preserve">
+    <value>yaşında</value>
+  </data>
+  <data name="Breed" xml:space="preserve">
+    <value>Irk</value>
   </data>
   <data name="ViewDetails" xml:space="preserve">
     <value>Detayları Gör</value>
@@ -171,32 +189,100 @@
   <data name="Adopt" xml:space="preserve">
     <value>Sahiplen</value>
   </data>
-  <data name="NoPetsAvailable" xml:space="preserve">
-    <value>Şu anda sahiplendirilecek pet bulunmuyor.</value>
-  </data>
   <data name="AlreadyAdopted" xml:space="preserve">
     <value>Zaten Sahiplenildi</value>
   </data>
-  <data name="AvailablePetsSection" xml:space="preserve">
-    <value>Uygun Petler</value>
+  <data name="NoPetsAvailable" xml:space="preserve">
+    <value>Şu anda mevcut evcil hayvan yok. Lütfen daha sonra tekrar kontrol edin!</value>
   </data>
-  <data name="AvailablePetsDescription" xml:space="preserve">
-    <value>Bu petler sevgi dolu bir yuva arıyor. Sahiplenme sürecini başlatmak için "Sahiplen" butonuna tıklayın.</value>
+  <data name="AllBreeds" xml:space="preserve">
+    <value>Tüm Irklar</value>
   </data>
-  <data name="AdoptedPetsSection" xml:space="preserve">
-    <value>Yakın Zamanda Sahiplenilenler</value>
+  <data name="AgeRange" xml:space="preserve">
+    <value>Yaş Aralığı</value>
   </data>
-  <data name="AdoptedPetsDescription" xml:space="preserve">
-    <value>Bu petler sonsuz yuvalarını buldu. Yeni ailelerine tebrikler!</value>
+  <data name="MinAge" xml:space="preserve">
+    <value>Min Yaş</value>
   </data>
-  <data name="AllPets" xml:space="preserve">
-    <value>Tüm Petler</value>
+  <data name="MaxAge" xml:space="preserve">
+    <value>Maks Yaş</value>
   </data>
-  <data name="AvailablePets" xml:space="preserve">
-    <value>Uygun Petler</value>
+  <data name="Size" xml:space="preserve">
+    <value>Boyut</value>
   </data>
-  <data name="AdoptedPets" xml:space="preserve">
-    <value>Sahiplenilmiş Petler</value>
+  <data name="AllSizes" xml:space="preserve">
+    <value>Tüm Boyutlar</value>
   </data>
-
+  <data name="Small" xml:space="preserve">
+    <value>Küçük</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Orta</value>
+  </data>
+  <data name="Large" xml:space="preserve">
+    <value>Büyük</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Renk</value>
+  </data>
+  <data name="AllColors" xml:space="preserve">
+    <value>Tüm Renkler</value>
+  </data>
+  <data name="Black" xml:space="preserve">
+    <value>Siyah</value>
+  </data>
+  <data name="White" xml:space="preserve">
+    <value>Beyaz</value>
+  </data>
+  <data name="Brown" xml:space="preserve">
+    <value>Kahverengi</value>
+  </data>
+  <data name="Golden" xml:space="preserve">
+    <value>Altın</value>
+  </data>
+  <data name="Gray" xml:space="preserve">
+    <value>Gri</value>
+  </data>
+  <data name="Orange" xml:space="preserve">
+    <value>Turuncu</value>
+  </data>
+  <data name="MixedColor" xml:space="preserve">
+    <value>Karışık Renk</value>
+  </data>
+  <data name="NeuteredStatus" xml:space="preserve">
+    <value>Kısırlaştırma Durumu</value>
+  </data>
+  <data name="AllNeuteredStatus" xml:space="preserve">
+    <value>Tüm Kısırlaştırma Durumları</value>
+  </data>
+  <data name="Neutered" xml:space="preserve">
+    <value>Kısırlaştırılmış</value>
+  </data>
+  <data name="NotNeutered" xml:space="preserve">
+    <value>Kısırlaştırılmamış</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Bilinmiyor</value>
+  </data>
+  <data name="SpecialNeeds" xml:space="preserve">
+    <value>Özel İhtiyaçlar</value>
+  </data>
+  <data name="AllSpecialNeeds" xml:space="preserve">
+    <value>Tüm Özel İhtiyaç Durumları</value>
+  </data>
+  <data name="HasSpecialNeeds" xml:space="preserve">
+    <value>Özel İhtiyaçları Var</value>
+  </data>
+  <data name="NoSpecialNeeds" xml:space="preserve">
+    <value>Özel İhtiyaçları Yok</value>
+  </data>
+  <data name="Vaccinated" xml:space="preserve">
+    <value>Aşılı</value>
+  </data>
+  <data name="AllVaccinatedStatus" xml:space="preserve">
+    <value>Tüm Aşı Durumları</value>
+  </data>
+  <data name="NotVaccinated" xml:space="preserve">
+    <value>Aşısız</value>
+  </data>
 </root>
