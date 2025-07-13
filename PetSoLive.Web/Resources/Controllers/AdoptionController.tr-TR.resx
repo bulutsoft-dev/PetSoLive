@@ -70,4 +70,112 @@
   <data name="GenderFemale" xml:space="preserve">
   <value>Dişi</value>
 </data>
+  <data name="Species" xml:space="preserve">
+    <value>Tür</value>
+  </data>
+  <data name="Breed" xml:space="preserve">
+    <value>Irk</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Cinsiyet</value>
+  </data>
+  <data name="MinAge" xml:space="preserve">
+    <value>Min Yaş</value>
+  </data>
+  <data name="MaxAge" xml:space="preserve">
+    <value>Maks Yaş</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Renk</value>
+  </data>
+  <data name="AdoptionStatus" xml:space="preserve">
+    <value>Sahiplenme Durumu</value>
+  </data>
+  <data name="Available" xml:space="preserve">
+    <value>Uygun</value>
+  </data>
+  <data name="Adopted" xml:space="preserve">
+    <value>Sahiplenildi</value>
+  </data>
+  <data name="FilterButton" xml:space="preserve">
+    <value>Filtrele</value>
+  </data>
+  <data name="Neutered" xml:space="preserve">
+    <value>Kısırlaştırılmış</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Tümü</value>
+  </data>
+  <data name="Waiting" xml:space="preserve">
+    <value>Bekliyor</value>
+  </data>
+  <data name="NoPetsFound" xml:space="preserve">
+    <value>Kriterlerinize uygun evcil hayvan bulunamadı.</value>
+  </data>
+
+  <!-- New localization keys for the simplified adoption page -->
+  <data name="AllSpecies" xml:space="preserve">
+    <value>Tüm Türler</value>
+  </data>
+  <data name="Dog" xml:space="preserve">
+    <value>Köpek</value>
+  </data>
+  <data name="Cat" xml:space="preserve">
+    <value>Kedi</value>
+  </data>
+  <data name="Bird" xml:space="preserve">
+    <value>Kuş</value>
+  </data>
+  <data name="Fish" xml:space="preserve">
+    <value>Balık</value>
+  </data>
+  <data name="Rabbit" xml:space="preserve">
+    <value>Tavşan</value>
+  </data>
+  <data name="Hamster" xml:space="preserve">
+    <value>Hamster</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Diğer</value>
+  </data>
+  <data name="Age" xml:space="preserve">
+    <value>Yaş</value>
+  </data>
+  <data name="AllAges" xml:space="preserve">
+    <value>Tüm Yaşlar</value>
+  </data>
+  <data name="Young" xml:space="preserve">
+    <value>Genç</value>
+  </data>
+  <data name="Adult" xml:space="preserve">
+    <value>Yetişkin</value>
+  </data>
+  <data name="Senior" xml:space="preserve">
+    <value>Yaşlı</value>
+  </data>
+  <data name="AllGenders" xml:space="preserve">
+    <value>Tüm Cinsiyetler</value>
+  </data>
+  <data name="Male" xml:space="preserve">
+    <value>Erkek</value>
+  </data>
+  <data name="Female" xml:space="preserve">
+    <value>Dişi</value>
+  </data>
+  <data name="SearchPets" xml:space="preserve">
+    <value>Pet ara...</value>
+  </data>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>Detayları Gör</value>
+  </data>
+  <data name="Adopt" xml:space="preserve">
+    <value>Sahiplen</value>
+  </data>
+  <data name="NoPetsAvailable" xml:space="preserve">
+    <value>Şu anda sahiplendirilecek pet bulunmuyor.</value>
+  </data>
+  <data name="AlreadyAdopted" xml:space="preserve">
+    <value>Zaten Sahiplenildi</value>
+  </data>
+
 </root>

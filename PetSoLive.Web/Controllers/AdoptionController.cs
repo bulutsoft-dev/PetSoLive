@@ -3,6 +3,7 @@ using Microsoft.Extensions.Localization;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Enums;
 using PetSoLive.Core.Interfaces;
+using PetSoLive.Core.DTOs;
 
 namespace PetSoLive.Web.Controllers;
 
@@ -23,8 +24,44 @@ public class AdoptionController : Controller
     public async Task<IActionResult> Index()
     {
         var pets = await _serviceManager.PetService.GetAllPetsAsync();
+        
+        // Check adoption status for each pet and sort them
+        var petsWithAdoptionStatus = new List<object>();
+        foreach (var pet in pets)
+        {
+            var isAdopted = await _serviceManager.AdoptionService.IsPetAlreadyAdoptedAsync(pet.Id);
+            petsWithAdoptionStatus.Add(new { Pet = pet, IsAdopted = isAdopted });
+        }
+        
+        // Sort: Available pets first, then adopted pets
+        var sortedPets = petsWithAdoptionStatus
+            .OrderBy(p => ((dynamic)p).IsAdopted)
+            .ToList();
+        
         ViewData["Title"] = _localizer["AvailablePetsTitle"];
-        return View(pets);
+        return View(sortedPets);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> FilteredIndex([FromQuery] PetFilterDto filter)
+    {
+        var pets = await _serviceManager.PetService.GetFilteredPetsAsync(filter);
+        
+        // Check adoption status for each pet and sort them
+        var petsWithAdoptionStatus = new List<object>();
+        foreach (var pet in pets)
+        {
+            var isAdopted = await _serviceManager.AdoptionService.IsPetAlreadyAdoptedAsync(pet.Id);
+            petsWithAdoptionStatus.Add(new { Pet = pet, IsAdopted = isAdopted });
+        }
+        
+        // Sort: Available pets first, then adopted pets
+        var sortedPets = petsWithAdoptionStatus
+            .OrderBy(p => ((dynamic)p).IsAdopted)
+            .ToList();
+        
+        ViewData["Title"] = _localizer["AvailablePetsTitle"];
+        return View("Index", sortedPets);
     }
 
 

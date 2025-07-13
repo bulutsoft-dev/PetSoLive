@@ -1,5 +1,6 @@
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Core.Entities;
+using PetSoLive.Core.DTOs;
 
 public class PetService : IPetService
 {
@@ -96,5 +97,32 @@ public class PetService : IPetService
     {
         await _petOwnerRepository.DeleteAsync(petId, userId);
         await _petOwnerRepository.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<Pet>> GetFilteredPetsAsync(PetFilterDto filter)
+    {
+        var pets = await _petRepository.GetAllAsync();
+        var query = pets.AsQueryable();
+        if (!string.IsNullOrEmpty(filter.Species))
+            query = query.Where(p => p.Species == filter.Species);
+        if (!string.IsNullOrEmpty(filter.Breed))
+            query = query.Where(p => p.Breed == filter.Breed);
+        if (!string.IsNullOrEmpty(filter.Gender))
+            query = query.Where(p => p.Gender == filter.Gender);
+        if (filter.MinAge.HasValue)
+            query = query.Where(p => p.Age >= filter.MinAge);
+        if (filter.MaxAge.HasValue)
+            query = query.Where(p => p.Age <= filter.MaxAge);
+        if (!string.IsNullOrEmpty(filter.Color))
+            query = query.Where(p => p.Color == filter.Color);
+        if (filter.IsAdopted.HasValue)
+        {
+            // Adopted kontrolü: Pet'in Adoption tablosunda kaydı var mı ve status Approved mı?
+            if (filter.IsAdopted.Value)
+                query = query.Where(p => p.AdoptionRequests.Any(a => a.Status == PetSoLive.Core.Enums.AdoptionStatus.Approved));
+            else
+                query = query.Where(p => !p.AdoptionRequests.Any(a => a.Status == PetSoLive.Core.Enums.AdoptionStatus.Approved));
+        }
+        return query.ToList();
     }
 }

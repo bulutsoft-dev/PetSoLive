@@ -71,4 +71,112 @@
   <data name="GenderFemale" xml:space="preserve">
   <value>Female</value>
 </data>
+  <data name="Species" xml:space="preserve">
+    <value>Species</value>
+  </data>
+  <data name="Breed" xml:space="preserve">
+    <value>Breed</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Gender</value>
+  </data>
+  <data name="MinAge" xml:space="preserve">
+    <value>Min Age</value>
+  </data>
+  <data name="MaxAge" xml:space="preserve">
+    <value>Max Age</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="AdoptionStatus" xml:space="preserve">
+    <value>Adoption Status</value>
+  </data>
+  <data name="Available" xml:space="preserve">
+    <value>Available</value>
+  </data>
+  <data name="Adopted" xml:space="preserve">
+    <value>Adopted</value>
+  </data>
+  <data name="FilterButton" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Neutered" xml:space="preserve">
+    <value>Neutered</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Waiting" xml:space="preserve">
+    <value>Waiting</value>
+  </data>
+  <data name="NoPetsFound" xml:space="preserve">
+    <value>No pets found matching your criteria.</value>
+  </data>
+
+  <!-- New localization keys for the simplified adoption page -->
+  <data name="AllSpecies" xml:space="preserve">
+    <value>All Species</value>
+  </data>
+  <data name="Dog" xml:space="preserve">
+    <value>Dog</value>
+  </data>
+  <data name="Cat" xml:space="preserve">
+    <value>Cat</value>
+  </data>
+  <data name="Bird" xml:space="preserve">
+    <value>Bird</value>
+  </data>
+  <data name="Fish" xml:space="preserve">
+    <value>Fish</value>
+  </data>
+  <data name="Rabbit" xml:space="preserve">
+    <value>Rabbit</value>
+  </data>
+  <data name="Hamster" xml:space="preserve">
+    <value>Hamster</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Age" xml:space="preserve">
+    <value>Age</value>
+  </data>
+  <data name="AllAges" xml:space="preserve">
+    <value>All Ages</value>
+  </data>
+  <data name="Young" xml:space="preserve">
+    <value>Young</value>
+  </data>
+  <data name="Adult" xml:space="preserve">
+    <value>Adult</value>
+  </data>
+  <data name="Senior" xml:space="preserve">
+    <value>Senior</value>
+  </data>
+  <data name="AllGenders" xml:space="preserve">
+    <value>All Genders</value>
+  </data>
+  <data name="Male" xml:space="preserve">
+    <value>Male</value>
+  </data>
+  <data name="Female" xml:space="preserve">
+    <value>Female</value>
+  </data>
+  <data name="SearchPets" xml:space="preserve">
+    <value>Search pets...</value>
+  </data>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>View Details</value>
+  </data>
+  <data name="Adopt" xml:space="preserve">
+    <value>Adopt</value>
+  </data>
+  <data name="NoPetsAvailable" xml:space="preserve">
+    <value>No pets available for adoption at the moment.</value>
+  </data>
+  <data name="AlreadyAdopted" xml:space="preserve">
+    <value>Already Adopted</value>
+  </data>
+
 </root>
