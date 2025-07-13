@@ -1,48 +1,43 @@
 @using System.Globalization
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
-<footer class="petsolive-footer pro-footer pt-5 pb-0">
-    <div class="container-xl">
-        <div class="row g-4 align-items-start text-center text-lg-start mb-0 pb-0">
-            <!-- Kurumsal -->
-            <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-0">
-                <div class="footer-title mb-3">@Localizer["Corporate"]</div>
-                <ul class="footer-link-list">
-                    <li><a href="#">@Localizer["About"]</a></li>
-                    <li><a href="#">@Localizer["Board"]</a></li>
-                    <li><a href="#">@Localizer["PresidentMessage"]</a></li>
-                    <li><a href="#">@Localizer["Regulation"]</a></li>
-                    <li><a href="#">@Localizer["AccountNumbers"]</a></li>
-                    <li><a href="#">@Localizer["FAQ"]</a></li>
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <!-- About Section -->
+            <div class="col-md-4 mb-4">
+                <h5 class="text-uppercase fw-bold">@Localizer["About PetSoLive"]</h5>
+                <p>
+                    @Localizer["PetSoLive Description"]
+                </p>
+            </div>
+            <!-- Quick Links Section -->
+            <div class="col-md-4 mb-4">
+                <h5 class="text-uppercase fw-bold">@Localizer["Quick Links"]</h5>
+                <ul class="list-unstyled">
+                    <li><a href="@Url.Action("Index", "Home")"><i class="bi bi-house-door-fill"></i> @Localizer["Home"]</a></li>
+                    <li><a href="@Url.Action("About", "Home")"><i class="bi bi-info-circle-fill"></i> @Localizer["About"]</a></li>
+                    <li><a href="@Url.Action("Index", "Adoption")"><i class="bi bi-clipboard-heart-fill"></i> @Localizer["Adoption"]</a></li>
+                    <li><a href="@Url.Action("Index", "LostPetAd")"><i class="bi bi-bookmark-heart-fill"></i> @Localizer["Lost Pet Ads"]</a></li>
+                    <li><a href="@Url.Action("Index", "HelpRequest")"><i class="bi bi-chat-square-heart-fill"></i> @Localizer["Help Requests"]</a></li>
                 </ul>
             </div>
-            <!-- Orta: Logo ve açıklama -->
-            <div class="col-lg-4 col-md-12 col-12 d-flex flex-column align-items-center justify-content-center mb-4 mb-lg-0">
-                <img src="~/logo.png" alt="PetSoLive Logo" style="height:54px;width:auto;" class="mb-2" />
-                <div class="footer-center-title mb-2">PetSoLive</div>
-                <div class="footer-center-desc">@Localizer["footerDescriptionContent"]</div>
-            </div>
-            <!-- Faaliyetlerimiz -->
-            <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-0">
-                <div class="footer-title mb-3">@Localizer["OurActivities"]</div>
-                <ul class="footer-link-list align-items-lg-end">
-                    <li><a href="#">@Localizer["FoodDistribution"]</a></li>
-                    <li><a href="#">@Localizer["StreetHotFood"]</a></li>
-                    <li><a href="#">@Localizer["HomeHotFood"]</a></li>
-                    <li><a href="#">@Localizer["PhotoGallery"]</a></li>
-                    <li><a href="#">@Localizer["Videos"]</a></li>
-                    <li><a href="#">@Localizer["Contact"]</a></li>
-                </ul>
+            <!-- Contact Section -->
+            <div class="col-md-4 mb-4">
+                <h5 class="text-uppercase fw-bold">@Localizer["Contact Us"]</h5>
+                <p><i class="bi bi-envelope"></i> <strong>@Localizer["Email"]:</strong> petsolivesoft@gmail.com</p>
+                <p><i class="bi bi-geo-alt"></i> <strong>@Localizer["Address"]:</strong> Muradiye, Manisa, Turkey</p>
             </div>
         </div>
-        <div class="footer-bottom-row d-flex flex-column flex-md-row justify-content-between align-items-center pt-3 mt-4 border-0 gap-3">
-            <div class="d-flex align-items-center gap-3 mb-2 mb-md-0">
-                <a href="#" target="_blank" title="Twitter" rel="noopener" class="footer-social-icon"><i class="bi bi-twitter"></i></a>
-                <a href="#" target="_blank" title="Facebook" rel="noopener" class="footer-social-icon"><i class="bi bi-facebook"></i></a>
-                <a href="#" target="_blank" title="Instagram" rel="noopener" class="footer-social-icon"><i class="bi bi-instagram"></i></a>
-            </div>
-            <div class="footer-copyright text-light small opacity-75 text-center flex-grow-1">
-                &copy; 2025 PetSoLive - BulutSoft @Localizer["All rights reserved."]
+    </div>
+
+    <div class="footer-bottom">
+        <div class="container d-flex justify-content-between align-items-center">
+            <p class="mb-0">&copy; 2025 PetSoLive - BulutSoft @Localizer["All rights reserved."]</p>
+            <div class="social-links">
+                <a href="https://x.com/Bulutsoftdev?t=HkM3f1Q8QGRR4JHnCTCzzQ&s=09" class="me-3" target="_blank" title="Bulutsoftdev X"><i class="bi bi-twitter"></i></a>
+                <a href="https://x.com/PetSoLive?t=XVLdwcMK-ObxiWQD7P34Tg&s=09" class="me-3" target="_blank" title="PetSoLive X"><i class="bi bi-twitter"></i></a>
+                <a href="https://www.linkedin.com/company/bulutsoft-dev/" target="_blank" title="Bulutsoft-dev LinkedIn"><i class="bi bi-linkedin"></i></a>
             </div>
             <div class="d-flex align-items-center justify-content-center">
                 @{

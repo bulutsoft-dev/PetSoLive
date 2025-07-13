@@ -69,11 +69,10 @@
   <data name="About Us" xml:space="preserve">
     <value>Biz Kimiz?</value>
   </data>
-
   <data name="Swicth" xml:space="preserve">
-    <value>Türkçe</value>
-</data> 
+    <value>İngilizce'ye Geç</value>
+  </data> 
   <data name="Account" xml:space="preserve">
     <value>Hesap</value>
-</data>
+  </data>
 </root>
