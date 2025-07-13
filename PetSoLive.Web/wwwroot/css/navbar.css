@@ -1,10 +1,11 @@
 .navbar {
-    background: linear-gradient(135deg, var(--petsolive-primary) 0%, var(--petsolive-secondary) 100%) !important;
+    background: var(--petsolive-primary) !important;
     padding: 0.75rem 2rem;
     box-shadow: 0 4px 12px rgba(30, 136, 229, 0.2);
     transition: background-color 0.3s ease, padding 0.3s ease;
     border-radius: 0 0 12px 12px;
     backdrop-filter: blur(10px);
+    border-bottom: 3px solid var(--petsolive-primary);
 }
 
     .navbar:hover {
@@ -13,7 +14,7 @@
     }
 
     .navbar .navbar-brand {
-        color: #ffffff !important;
+        color: var(--petsolive-footer-text) !important;
         font-weight: 700;
         font-size: 1.5rem;
         transition: color 0.3s ease;
@@ -23,12 +24,12 @@
     }
 
         .navbar .navbar-brand:hover {
-            color: #e3f2fd !important;
+            color: var(--petsolive-footer-link-hover) !important;
             transform: scale(1.02);
         }
 
     .navbar .nav-link {
-        color: #ffffff !important;
+        color: var(--petsolive-footer-text) !important;
         margin-left: 2rem;
         font-weight: 500;
         transition: color 0.3s ease, border-bottom 0.3s ease, transform 0.3s ease;
@@ -45,7 +46,7 @@
         }
 
         .navbar .nav-link:hover {
-            color: #e3f2fd !important;
+            color: var(--petsolive-footer-link-hover) !important;
             background-color: rgba(255, 255, 255, 0.1);
             border-bottom: 2px solid #ffffff;
             transform: translateY(-2px);
@@ -79,7 +80,7 @@
     .theme-toggle-btn {
         background: none;
         border: none;
-        color: #ffffff !important;
+        color: var(--petsolive-footer-text) !important;
         margin-left: 2rem;
         font-weight: 500;
         transition: color 0.3s ease, border-bottom 0.3s ease, transform 0.3s ease;
@@ -91,7 +92,7 @@
     }
 
     .theme-toggle-btn:hover {
-        color: #e3f2fd !important;
+        color: var(--petsolive-footer-link-hover) !important;
         background-color: rgba(255, 255, 255, 0.1);
         border-bottom: 2px solid #ffffff;
         transform: translateY(-2px);

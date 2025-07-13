@@ -1,8 +1,8 @@
 .footer {
-    background: var(--petsolive-footer-bg);
+    background: var(--petsolive-primary);
+    border-top: 3px solid var(--petsolive-bg);
     color: var(--petsolive-footer-text);
     margin-top: auto;
-    border-top: 3px solid var(--petsolive-footer-border);
     font-family: 'Roboto', sans-serif;
     padding: 2rem 0 0 0;
     transition: background-color 0.3s ease;
@@ -107,11 +107,11 @@
 }
 
 .footer-bottom {
-    border-top: 1.5px solid var(--petsolive-footer-border);
+    border-top: 1.5px solid var(--petsolive-bg);
     margin-top: 2rem;
     padding: 1rem 0;
     font-size: 0.9rem;
-    background: var(--petsolive-footer-bg);
+    background: var(--petsolive-primary);
     color: var(--petsolive-footer-text);
     backdrop-filter: blur(10px);
     border-radius: 12px 12px 0 0;
