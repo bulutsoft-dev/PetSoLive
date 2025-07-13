@@ -359,6 +359,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Setup theme
     const savedTheme = petSoLiveUI.getTheme();
     petSoLiveUI.setTheme(savedTheme);
+    updateThemeIcons();
     
     // Add scroll to top button
     const scrollToTopBtn = document.createElement('button');
@@ -396,3 +397,26 @@ window.hideLoading = () => {
         petSoLiveUI.hideLoading();
     }
 };
+
+// Theme toggle function for global access
+window.toggleTheme = () => {
+    if (petSoLiveUI) {
+        petSoLiveUI.toggleTheme();
+        updateThemeIcons();
+    }
+};
+
+// Update theme icons based on current theme
+function updateThemeIcons() {
+    const currentTheme = petSoLiveUI ? petSoLiveUI.getTheme() : 'light';
+    const darkIcons = document.querySelectorAll('.theme-icon-dark');
+    const lightIcons = document.querySelectorAll('.theme-icon-light');
+    
+    if (currentTheme === 'dark') {
+        darkIcons.forEach(icon => icon.style.display = 'none');
+        lightIcons.forEach(icon => icon.style.display = 'inline-block');
+    } else {
+        darkIcons.forEach(icon => icon.style.display = 'inline-block');
+        lightIcons.forEach(icon => icon.style.display = 'none');
+    }
+}

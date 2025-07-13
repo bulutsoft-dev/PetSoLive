@@ -224,4 +224,46 @@
   <data name="Young" xml:space="preserve">
     <value>Young</value>
   </data>
+  <data name="Age" xml:space="preserve">
+    <value>Age</value>
+  </data>
+  <data name="AgeRange" xml:space="preserve">
+    <value>Age Range</value>
+  </data>
+  <data name="Breed" xml:space="preserve">
+    <value>Breed</value>
+  </data>
+  <data name="Years" xml:space="preserve">
+    <value>Years</value>
+  </data>
+  <data name="Adopted" xml:space="preserve">
+    <value>Adopted</value>
+  </data>
+  <data name="Available" xml:space="preserve">
+    <value>Available</value>
+  </data>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>View Details</value>
+  </data>
+  <data name="Adopt" xml:space="preserve">
+    <value>Adopt</value>
+  </data>
+  <data name="AlreadyAdopted" xml:space="preserve">
+    <value>Already Adopted</value>
+  </data>
+  <data name="NoPetsAvailable" xml:space="preserve">
+    <value>No pets available for adoption at the moment.</value>
+  </data>
+  <data name="Adult" xml:space="preserve">
+    <value>Adult</value>
+  </data>
+  <data name="Shown" xml:space="preserve">
+    <value>shown</value>
+  </data>
+  <data name="Of" xml:space="preserve">
+    <value>of</value>
+  </data>
+  <data name="Pets" xml:space="preserve">
+    <value>pets</value>
+  </data>
 </root>

@@ -847,3 +847,222 @@
     }
 }
 
+/* Dark Mode Support */
+[data-theme="dark"] .adoption-container {
+    background: #1a1a1a;
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .filter-sidebar {
+    background: #2d2d2d;
+    border-color: #404040;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] .sidebar-header {
+    background: #333333;
+    border-color: #404040;
+}
+
+[data-theme="dark"] .sidebar-header h4 {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .filter-section {
+    border-color: #404040;
+    background: #2d2d2d;
+}
+
+[data-theme="dark"] .filter-section:hover {
+    border-color: #007bff;
+    box-shadow: 0 1px 4px rgba(0,123,255,0.2);
+}
+
+[data-theme="dark"] .filter-section-header {
+    background: #333333;
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .filter-section-header:hover {
+    background: #404040;
+}
+
+[data-theme="dark"] .filter-section-header h5 {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .filter-options,
+[data-theme="dark"] .age-range-inputs {
+    background: #2d2d2d;
+}
+
+[data-theme="dark"] .filter-option {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .filter-option:hover {
+    background: #404040;
+}
+
+[data-theme="dark"] .filter-option input[type="radio"]:checked + span {
+    color: #007bff;
+}
+
+[data-theme="dark"] .range-input-group input {
+    background: #333333;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .range-input-group input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+}
+
+[data-theme="dark"] .range-input-group label {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .search-input {
+    background: #333333;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+}
+
+[data-theme="dark"] .search-input::placeholder {
+    color: #888888;
+}
+
+[data-theme="dark"] .clear-search-btn {
+    color: #888888;
+}
+
+[data-theme="dark"] .clear-search-btn:hover {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .active-filter-tag {
+    background: #404040;
+    color: #e0e0e0;
+    border-color: #555555;
+}
+
+[data-theme="dark"] .active-filter-tag:hover {
+    background: #555555;
+}
+
+[data-theme="dark"] .active-filter-tag .remove-filter {
+    color: #888888;
+}
+
+[data-theme="dark"] .active-filter-tag .remove-filter:hover {
+    color: #ff4444;
+}
+
+[data-theme="dark"] .tab-navigation {
+    background: #2d2d2d;
+    border-color: #404040;
+}
+
+[data-theme="dark"] .tab-button {
+    background: #333333;
+    color: #e0e0e0;
+    border-color: #404040;
+}
+
+[data-theme="dark"] .tab-button:hover {
+    background: #404040;
+    color: #ffffff;
+}
+
+[data-theme="dark"] .tab-button.active {
+    background: #007bff;
+    color: #ffffff;
+    border-color: #007bff;
+}
+
+[data-theme="dark"] .pet-card {
+    background: #2d2d2d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .pet-card:hover {
+    border-color: #007bff;
+    box-shadow: 0 4px 12px rgba(0,123,255,0.2);
+}
+
+[data-theme="dark"] .pet-name {
+    color: #ffffff;
+}
+
+[data-theme="dark"] .pet-species {
+    color: #cccccc;
+}
+
+[data-theme="dark"] .detail-label {
+    color: #888888;
+}
+
+[data-theme="dark"] .detail-value {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .pet-description p {
+    color: #cccccc;
+}
+
+[data-theme="dark"] .btn-outline-primary {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+[data-theme="dark"] .btn-outline-primary:hover {
+    background: #007bff;
+    color: #ffffff;
+}
+
+[data-theme="dark"] .btn-primary {
+    background: #007bff;
+    border-color: #007bff;
+    color: #ffffff;
+}
+
+[data-theme="dark"] .btn-primary:hover {
+    background: #0056b3;
+    border-color: #0056b3;
+}
+
+[data-theme="dark"] .btn-secondary {
+    background: #6c757d;
+    border-color: #6c757d;
+    color: #ffffff;
+}
+
+[data-theme="dark"] .btn-secondary:disabled {
+    background: #495057;
+    border-color: #495057;
+    color: #888888;
+}
+
+[data-theme="dark"] .no-pets-message {
+    color: #888888;
+}
+
+[data-theme="dark"] .adoption-status-badge .badge {
+    color: #ffffff;
+}
+
+[data-theme="dark"] .available-badge {
+    background: #28a745;
+}
+
+[data-theme="dark"] .adopted-badge {
+    background: #6c757d;
+}
+

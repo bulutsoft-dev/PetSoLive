@@ -224,4 +224,46 @@
   <data name="Young" xml:space="preserve">
     <value>Genç</value>
   </data>
+  <data name="Age" xml:space="preserve">
+    <value>Yaş</value>
+  </data>
+  <data name="AgeRange" xml:space="preserve">
+    <value>Yaş Aralığı</value>
+  </data>
+  <data name="Breed" xml:space="preserve">
+    <value>Irk</value>
+  </data>
+  <data name="Years" xml:space="preserve">
+    <value>Yaş</value>
+  </data>
+  <data name="Adopted" xml:space="preserve">
+    <value>Sahiplenildi</value>
+  </data>
+  <data name="Available" xml:space="preserve">
+    <value>Mevcut</value>
+  </data>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>Detayları Görüntüle</value>
+  </data>
+  <data name="Adopt" xml:space="preserve">
+    <value>Sahiplen</value>
+  </data>
+  <data name="AlreadyAdopted" xml:space="preserve">
+    <value>Zaten Sahiplenildi</value>
+  </data>
+  <data name="NoPetsAvailable" xml:space="preserve">
+    <value>Şu anda sahiplenmek için evcil hayvan bulunmuyor.</value>
+  </data>
+  <data name="Adult" xml:space="preserve">
+    <value>Yetişkin</value>
+  </data>
+  <data name="Shown" xml:space="preserve">
+    <value>gösteriliyor</value>
+  </data>
+  <data name="Of" xml:space="preserve">
+    <value>/</value>
+  </data>
+  <data name="Pets" xml:space="preserve">
+    <value>evcil hayvan</value>
+  </data>
 </root>

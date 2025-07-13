@@ -277,7 +277,10 @@
                     <button type="button" id="clearFilters" class="btn btn-outline-secondary">
                         <i class="fas fa-times"></i> @Localizer["ClearFilters"]
                     </button>
-                    <div class="filter-results" id="filterResults"></div>
+                    <div class="filter-results" id="filterResults" 
+                         data-shown-text="@Localizer["Shown"]" 
+                         data-of-text="@Localizer["Of"]" 
+                         data-pets-text="@Localizer["Pets"]"></div>
                 </div>
             </div>
         </div>
@@ -334,7 +337,7 @@
                              data-breed="@pet.Breed" data-neutered="@GetNeuteredStatus(pet)" data-name="@pet.Name"
                              data-description="@(string.IsNullOrEmpty(pet.Description) ? "" : pet.Description)"
                              data-species-text="@Localizer[pet.Species]" data-gender-text="@Localizer[pet.Gender]"
-                             data-tab="available">
+                             data-tab="@(isAdopted == true ? "adopted" : "available")">
                             
                             <!-- Adoption Status Badge -->
                             <div class="adoption-status-badge">
@@ -422,7 +425,7 @@
                              data-breed="@pet.Breed" data-neutered="@GetNeuteredStatus(pet)" data-name="@pet.Name"
                              data-description="@(string.IsNullOrEmpty(pet.Description) ? "" : pet.Description)"
                              data-species-text="@Localizer[pet.Species]" data-gender-text="@Localizer[pet.Gender]"
-                             data-tab="adopted">
+                             data-tab="@(isAdopted == true ? "adopted" : "available")">
                             
                             <!-- Adoption Status Badge -->
                             <div class="adoption-status-badge">
@@ -510,22 +513,20 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Sidebar elements
+        // Global variables
+        let currentTab = 'all';
+        let activeFilters = new Map();
+        
+        // DOM elements
         const filterSidebar = document.getElementById('filterSidebar');
         const filterSectionHeaders = document.querySelectorAll('.filter-section-header');
-        const filterOptions = document.querySelectorAll('.filter-options');
-        const collapseIcons = document.querySelectorAll('.collapse-icon');
         const clearFiltersBtn = document.getElementById('clearFilters');
         const filterResults = document.getElementById('filterResults');
         const clearSectionBtns = document.querySelectorAll('.clear-section-btn');
-        
-        // Search elements
         const searchInput = document.getElementById('searchInput');
         const clearSearchBtn = document.getElementById('clearSearch');
         const activeFiltersContainer = document.getElementById('activeFilters');
-        
-        let currentTab = 'all';
-        let activeFilters = new Map();
+        const tabButtons = document.querySelectorAll('.tab-button');
 
         // Independent Collapse/Expand functionality
         filterSectionHeaders.forEach(header => {
@@ -673,15 +674,13 @@
             currentTab = tabName;
             
             // Update tab button states
-            document.querySelectorAll('.tab-button').forEach(button => {
+            tabButtons.forEach(button => {
                 if (button.dataset.tab === tabName) {
                     button.classList.add('active');
                 } else {
                     button.classList.remove('active');
                 }
             });
-            
-            // Show/hide cards based on tab (section headers removed)
             
             // Reapply filters after tab switch
             updateActiveFilters();
@@ -691,48 +690,29 @@
         function updateActiveFilters() {
             activeFilters.clear();
             
-            // Check search term
-            if (searchInput.value.trim()) {
-                activeFilters.set('search', searchInput.value.trim());
-            }
+            // Get all current filter values
+            const filters = {
+                search: searchInput.value.trim(),
+                species: document.querySelector('input[name="species"]:checked')?.value || '',
+                breed: document.querySelector('input[name="breed"]:checked')?.value || '',
+                age: document.querySelector('input[name="age"]:checked')?.value || '',
+                minAge: document.getElementById('minAge').value,
+                maxAge: document.getElementById('maxAge').value,
+                gender: document.querySelector('input[name="gender"]:checked')?.value || '',
+                neutered: document.querySelector('input[name="neutered"]:checked')?.value || ''
+            };
             
-            // Check species filter
-            const selectedSpecies = document.querySelector('input[name="species"]:checked')?.value;
-            if (selectedSpecies && selectedSpecies !== '') {
-                activeFilters.set('species', selectedSpecies);
-            }
-            
-            // Check breed filter
-            const selectedBreed = document.querySelector('input[name="breed"]:checked')?.value;
-            if (selectedBreed && selectedBreed !== '') {
-                activeFilters.set('breed', selectedBreed);
-            }
-            
-            // Check age filter
-            const selectedAge = document.querySelector('input[name="age"]:checked')?.value;
-            if (selectedAge && selectedAge !== '') {
-                activeFilters.set('age', selectedAge);
-            }
-            
-            // Check age range filter
-            const minAge = document.getElementById('minAge').value;
-            const maxAge = document.getElementById('maxAge').value;
-            if (minAge || maxAge) {
-                const rangeText = minAge && maxAge ? `${minAge}-${maxAge}` : minAge || maxAge;
+            // Add active filters to the map
+            if (filters.search) activeFilters.set('search', filters.search);
+            if (filters.species && filters.species !== '') activeFilters.set('species', filters.species);
+            if (filters.breed && filters.breed !== '') activeFilters.set('breed', filters.breed);
+            if (filters.age && filters.age !== '') activeFilters.set('age', filters.age);
+            if (filters.minAge || filters.maxAge) {
+                const rangeText = filters.minAge && filters.maxAge ? `${filters.minAge}-${filters.maxAge}` : filters.minAge || filters.maxAge;
                 activeFilters.set('ageRange', rangeText);
             }
-            
-            // Check gender filter
-            const selectedGender = document.querySelector('input[name="gender"]:checked')?.value;
-            if (selectedGender && selectedGender !== '') {
-                activeFilters.set('gender', selectedGender);
-            }
-            
-            // Check neutered filter
-            const selectedNeutered = document.querySelector('input[name="neutered"]:checked')?.value;
-            if (selectedNeutered && selectedNeutered !== '') {
-                activeFilters.set('neutered', selectedNeutered);
-            }
+            if (filters.gender && filters.gender !== '') activeFilters.set('gender', filters.gender);
+            if (filters.neutered && filters.neutered !== '') activeFilters.set('neutered', filters.neutered);
             
             displayActiveFilters();
         }
@@ -827,130 +807,60 @@
             filterPets();
         }
 
+        // Main filter function
         function filterPets() {
-            const searchTerm = searchInput.value.toLowerCase().trim();
-            const selectedSpecies = document.querySelector('input[name="species"]:checked')?.value || '';
-            const selectedBreed = document.querySelector('input[name="breed"]:checked')?.value || '';
-            const selectedAge = document.querySelector('input[name="age"]:checked')?.value || '';
-            const minAgeInput = document.getElementById('minAge').value;
-            const maxAgeInput = document.getElementById('maxAge').value;
-            const selectedGender = document.querySelector('input[name="gender"]:checked')?.value || '';
-            const selectedNeutered = document.querySelector('input[name="neutered"]:checked')?.value || '';
-
-            // Check if any filters are active (exclude empty values which represent "All" options)
-            const hasActiveFilters = searchTerm || 
-                (selectedSpecies && selectedSpecies !== '') || 
-                (selectedBreed && selectedBreed !== '') || 
-                (selectedAge && selectedAge !== '') || 
-                minAgeInput || 
-                maxAgeInput || 
-                (selectedGender && selectedGender !== '') || 
-                (selectedNeutered && selectedNeutered !== '');
+            // Get all filter values
+            const filters = {
+                search: searchInput.value.toLowerCase().trim(),
+                species: document.querySelector('input[name="species"]:checked')?.value || '',
+                breed: document.querySelector('input[name="breed"]:checked')?.value || '',
+                age: document.querySelector('input[name="age"]:checked')?.value || '',
+                minAge: document.getElementById('minAge').value,
+                maxAge: document.getElementById('maxAge').value,
+                gender: document.querySelector('input[name="gender"]:checked')?.value || '',
+                neutered: document.querySelector('input[name="neutered"]:checked')?.value || ''
+            };
 
             let visibleCount = 0;
+            const allPets = document.querySelectorAll('.pet-card');
 
-            document.querySelectorAll('.pet-card').forEach(card => {
-                // Skip cards that don't match current tab
-                if (currentTab !== 'all' && card.dataset.tab !== currentTab) {
+            allPets.forEach(card => {
+                // Get pet data from card attributes
+                const petData = {
+                    name: card.dataset.name?.toLowerCase() || '',
+                    species: card.dataset.species || '',
+                    breed: card.dataset.breed || '',
+                    age: parseInt(card.dataset.age) || 0,
+                    gender: card.dataset.gender || '',
+                    neutered: card.dataset.neutered || '',
+                    description: card.dataset.description || '',
+                    speciesText: card.dataset.speciesText || '',
+                    genderText: card.dataset.genderText || '',
+                    tab: card.dataset.tab || '',
+                    adopted: card.dataset.adopted || 'false'
+                };
+
+                // Check if pet matches current tab
+                const matchesTab = currentTab === 'all' || petData.tab === currentTab;
+                if (!matchesTab) {
                     card.style.display = 'none';
                     return;
                 }
 
-                // If no filters are active, show all cards for current tab
-                if (!hasActiveFilters) {
-                    card.style.display = 'block';
-                    visibleCount++;
-                    return;
-                }
+                // Check all filters
+                const filterResults = {
+                    search: checkSearchFilter(petData, filters.search),
+                    species: checkSpeciesFilter(petData, filters.species),
+                    breed: checkBreedFilter(petData, filters.breed),
+                    age: checkAgeFilter(petData, filters.age),
+                    ageRange: checkAgeRangeFilter(petData, filters.minAge, filters.maxAge),
+                    gender: checkGenderFilter(petData, filters.gender),
+                    neutered: checkNeuteredFilter(petData, filters.neutered)
+                };
 
-                const petName = card.dataset.name?.toLowerCase() || '';
-                const petSpecies = card.dataset.species || '';
-                const petBreed = card.dataset.breed || '';
-                const petAge = parseInt(card.dataset.age) || 0;
-                const petGender = card.dataset.gender || '';
-                const petNeutered = card.dataset.neutered || '';
-                const petDescription = card.dataset.description || '';
-                const petSpeciesText = card.dataset.speciesText || '';
-                const petGenderText = card.dataset.genderText || '';
+                // Show pet if ALL filters pass
+                const shouldShow = Object.values(filterResults).every(result => result === true);
 
-                // Check search term - search through all content
-                let matchesSearch = true;
-                if (searchTerm) {
-                    const searchableContent = [
-                        petName,
-                        petSpecies,
-                        petBreed,
-                        petSpeciesText,
-                        petGenderText,
-                        petDescription
-                    ].join(' ').toLowerCase();
-                    matchesSearch = searchableContent.includes(searchTerm);
-                }
-                
-                // Check species filter
-                let matchesSpecies = true;
-                if (selectedSpecies) {
-                    matchesSpecies = petSpecies === selectedSpecies;
-                }
-                
-                // Check breed filter
-                let matchesBreed = true;
-                if (selectedBreed) {
-                    matchesBreed = petBreed === selectedBreed;
-                }
-                
-                // Check age filter (Young/Adult/Senior categories)
-                let matchesAge = true;
-                if (selectedAge) {
-                    const age = petAge;
-                    if (selectedAge === 'Young') {
-                        matchesAge = age <= 2;
-                    } else if (selectedAge === 'Adult') {
-                        matchesAge = age > 2 && age <= 7;
-                    } else if (selectedAge === 'Senior') {
-                        matchesAge = age > 7;
-                    }
-                }
-                
-                // Check age range filter (min/max age inputs)
-                let matchesAgeRange = true;
-                if (minAgeInput || maxAgeInput) {
-                    const minAge = minAgeInput ? parseInt(minAgeInput) : 0;
-                    const maxAge = maxAgeInput ? parseInt(maxAgeInput) : 20;
-                    
-                    if (minAgeInput && maxAgeInput) {
-                        // Both min and max specified
-                        matchesAgeRange = petAge >= minAge && petAge <= maxAge;
-                    } else if (minAgeInput) {
-                        // Only min specified
-                        matchesAgeRange = petAge >= minAge;
-                    } else if (maxAgeInput) {
-                        // Only max specified
-                        matchesAgeRange = petAge <= maxAge;
-                    }
-                }
-                
-                // Check gender filter
-                let matchesGender = true;
-                if (selectedGender) {
-                    matchesGender = petGender === selectedGender;
-                }
-                
-                // Check neutered filter
-                let matchesNeutered = true;
-                if (selectedNeutered) {
-                    matchesNeutered = petNeutered === selectedNeutered;
-                }
-
-                // Show/hide card based on ALL filters (AND logic)
-                const shouldShow = matchesSearch && matchesSpecies && matchesBreed && matchesAge && matchesAgeRange && matchesGender && matchesNeutered;
-                
-                // Debug logging for troubleshooting multiple filters
-                if (hasActiveFilters) {
-                    console.log(`Pet: ${petName}, Tab: ${card.dataset.tab}, CurrentTab: ${currentTab}, Filters: Search="${searchTerm}", Species="${selectedSpecies}", Breed="${selectedBreed}", Age="${selectedAge}", AgeRange="${minAgeInput}-${maxAgeInput}", Gender="${selectedGender}", Neutered="${selectedNeutered}"`);
-                    console.log(`Matches: Search=${matchesSearch}, Species=${matchesSpecies}, Breed=${matchesBreed}, Age=${matchesAge}, AgeRange=${matchesAgeRange}, Gender=${matchesGender}, Neutered=${matchesNeutered}, Show=${shouldShow}`);
-                }
-                
                 if (shouldShow) {
                     card.style.display = 'block';
                     visibleCount++;
@@ -962,17 +872,150 @@
             updateFilterResults(visibleCount);
         }
 
-        function updateFilterResults(visibleCount) {
-            const totalCount = document.querySelectorAll('.pet-card').length;
-            if (visibleCount === totalCount) {
-                filterResults.textContent = '';
-            } else {
-                filterResults.textContent = `${visibleCount} of ${totalCount} pets shown`;
+        // Individual filter check functions
+        function checkSearchFilter(petData, searchTerm) {
+            if (!searchTerm) return true;
+            
+            const searchableContent = [
+                petData.name,
+                petData.species,
+                petData.breed,
+                petData.speciesText,
+                petData.genderText,
+                petData.description
+            ].join(' ').toLowerCase();
+            
+            return searchableContent.includes(searchTerm);
+        }
+
+        function checkSpeciesFilter(petData, selectedSpecies) {
+            if (!selectedSpecies || selectedSpecies === '') return true;
+            return petData.species === selectedSpecies;
+        }
+
+        function checkBreedFilter(petData, selectedBreed) {
+            if (!selectedBreed || selectedBreed === '') return true;
+            return petData.breed === selectedBreed;
+        }
+
+        function checkAgeFilter(petData, selectedAge) {
+            if (!selectedAge || selectedAge === '') return true;
+            
+            const age = petData.age;
+            switch (selectedAge) {
+                case 'Young': return age <= 2;
+                case 'Adult': return age > 2 && age <= 7;
+                case 'Senior': return age > 7;
+                default: return true;
             }
         }
 
-        // Clear filters functionality
-        clearFiltersBtn.addEventListener('click', function() {
+        function checkAgeRangeFilter(petData, minAge, maxAge) {
+            if (!minAge && !maxAge) return true;
+            
+            const age = petData.age;
+            const min = minAge ? parseInt(minAge) : 0;
+            const max = maxAge ? parseInt(maxAge) : 20;
+            
+            if (minAge && maxAge) {
+                return age >= min && age <= max;
+            } else if (minAge) {
+                return age >= min;
+            } else if (maxAge) {
+                return age <= max;
+            }
+            
+            return true;
+        }
+
+        function checkGenderFilter(petData, selectedGender) {
+            if (!selectedGender || selectedGender === '') return true;
+            return petData.gender === selectedGender;
+        }
+
+        function checkNeuteredFilter(petData, selectedNeutered) {
+            if (!selectedNeutered || selectedNeutered === '') return true;
+            return petData.neutered === selectedNeutered;
+        }
+
+        function updateFilterResults(visibleCount) {
+            // Count total pets for current tab only
+            let totalCount = 0;
+            document.querySelectorAll('.pet-card').forEach(card => {
+                if (currentTab === 'all' || card.dataset.tab === currentTab) {
+                    totalCount++;
+                }
+            });
+            
+            if (visibleCount === totalCount) {
+                filterResults.textContent = '';
+            } else {
+                // Get localized text from data attributes or use default
+                const shownText = filterResults.dataset.shownText || 'shown';
+                const ofText = filterResults.dataset.ofText || 'of';
+                const petsText = filterResults.dataset.petsText || 'pets';
+                filterResults.textContent = `${visibleCount} ${ofText} ${totalCount} ${petsText} ${shownText}`;
+            }
+        }
+
+        // Event Listeners
+        function initializeEventListeners() {
+            // Clear filters button
+            clearFiltersBtn.addEventListener('click', clearAllFilters);
+            
+            // Tab buttons
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+            
+            // Search input
+            searchInput.addEventListener('input', function() {
+                clearSearchBtn.style.display = this.value ? 'block' : 'none';
+                updateActiveFilters();
+                filterPets();
+            });
+            
+            // Clear search button
+            clearSearchBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                this.style.display = 'none';
+                updateActiveFilters();
+                filterPets();
+            });
+            
+            // Age range inputs
+            document.getElementById('minAge').addEventListener('input', function() {
+                updateActiveFilters();
+                filterPets();
+            });
+            
+            document.getElementById('maxAge').addEventListener('input', function() {
+                updateActiveFilters();
+                filterPets();
+            });
+            
+            // Radio button filters
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    updateActiveFilters();
+                    filterPets();
+                });
+            });
+            
+            // Species filter change (for breed filtering)
+            document.querySelectorAll('input[name="species"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    updateBreedOptions(this.value);
+                    updateActiveFilters();
+                    filterPets();
+                });
+            });
+        }
+
+        // Clear all filters
+        function clearAllFilters() {
             // Clear radio buttons
             document.querySelectorAll('input[type="radio"]').forEach(radio => {
                 radio.checked = false;
@@ -991,83 +1034,89 @@
 
             updateActiveFilters();
             filterPets();
-        });
+        }
 
-        // Tab button event listeners
-        document.querySelectorAll('.tab-button').forEach(button => {
-            button.addEventListener('click', function() {
-                switchTab(this.dataset.tab);
-            });
-        });
-
-        // Filter event listeners
-        document.getElementById('minAge').addEventListener('input', function() {
-            updateActiveFilters();
-            filterPets();
-        });
-        document.getElementById('maxAge').addEventListener('input', function() {
-            updateActiveFilters();
-            filterPets();
-        });
-        
-        // Radio button event listeners
-        document.querySelectorAll('input[type="radio"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                updateActiveFilters();
-                filterPets();
-            });
-        });
-
-        // Initialize filters
-        updateActiveFilters();
-        filterPets();
-        
-        // Test function for debugging filters
-        window.testFilters = function() {
-            const searchTerm = searchInput.value.toLowerCase().trim();
-            const selectedSpecies = document.querySelector('input[name="species"]:checked')?.value || '';
-            const selectedBreed = document.querySelector('input[name="breed"]:checked')?.value || '';
-            const selectedAge = document.querySelector('input[name="age"]:checked')?.value || '';
-            const minAgeInput = document.getElementById('minAge').value;
-            const maxAgeInput = document.getElementById('maxAge').value;
-            const selectedGender = document.querySelector('input[name="gender"]:checked')?.value || '';
-            const selectedNeutered = document.querySelector('input[name="neutered"]:checked')?.value || '';
-
-            const hasActiveFilters = searchTerm || 
-                (selectedSpecies && selectedSpecies !== '') || 
-                (selectedBreed && selectedBreed !== '') || 
-                (selectedAge && selectedAge !== '') || 
-                minAgeInput || 
-                maxAgeInput || 
-                (selectedGender && selectedGender !== '') || 
-                (selectedNeutered && selectedNeutered !== '');
-
-            console.log('Testing filters...');
-            console.log('Current tab:', currentTab);
-            console.log('Active filters:', hasActiveFilters);
-            console.log('Search term:', searchTerm);
-            console.log('Selected species:', selectedSpecies);
-            console.log('Selected breed:', selectedBreed);
-            console.log('Selected age:', selectedAge);
-            console.log('Min age:', minAgeInput);
-            console.log('Max age:', maxAgeInput);
-            console.log('Selected gender:', selectedGender);
-            console.log('Selected neutered:', selectedNeutered);
+        // Update breed options based on species selection
+        function updateBreedOptions(selectedSpecies) {
+            const breedOptions = document.querySelectorAll('#breedFilter .filter-option');
             
-            // Test a specific pet card
-            const firstCard = document.querySelector('.pet-card');
-            if (firstCard) {
-                console.log('First pet card data:', {
-                    name: firstCard.dataset.name,
-                    species: firstCard.dataset.species,
-                    breed: firstCard.dataset.breed,
-                    age: firstCard.dataset.age,
-                    gender: firstCard.dataset.gender,
-                    neutered: firstCard.dataset.neutered,
-                    tab: firstCard.dataset.tab
-                });
+            // Reset breed selection when species changes
+            if (selectedSpecies !== '') {
+                document.querySelector('input[name="breed"][value=""]').checked = true;
             }
+            
+            breedOptions.forEach(option => {
+                const dataSpecies = option.dataset.species;
+                if (dataSpecies && dataSpecies !== 'All') {
+                    if (selectedSpecies === '' || selectedSpecies === dataSpecies) {
+                        option.style.display = 'block';
+                    } else {
+                        option.style.display = 'none';
+                    }
+                } else {
+                    // Show "All" and "Mixed"/"Unknown" options always
+                    option.style.display = 'block';
+                }
+            });
+        }
+
+        // Initialize everything
+        function initialize() {
+            initializeEventListeners();
+            updateActiveFilters();
+            filterPets();
+        }
+
+        // Start the application
+        initialize();
+        
+        // Debug function for testing filters
+        window.debugFilters = function() {
+            console.log('=== Filter Debug ===');
+            console.log('Current Tab:', currentTab);
+            
+            const filters = {
+                search: searchInput.value,
+                species: document.querySelector('input[name="species"]:checked')?.value,
+                breed: document.querySelector('input[name="breed"]:checked')?.value,
+                age: document.querySelector('input[name="age"]:checked')?.value,
+                minAge: document.getElementById('minAge').value,
+                maxAge: document.getElementById('maxAge').value,
+                gender: document.querySelector('input[name="gender"]:checked')?.value,
+                neutered: document.querySelector('input[name="neutered"]:checked')?.value
+            };
+            
+            console.log('Active Filters:', filters);
+            
+            // Count pets by tab
+            const allPets = document.querySelectorAll('.pet-card');
+            const availablePets = document.querySelectorAll('.pet-card[data-tab="available"]');
+            const adoptedPets = document.querySelectorAll('.pet-card[data-tab="adopted"]');
+            const visiblePets = document.querySelectorAll('.pet-card[style*="block"]');
+            
+            console.log(`Total Pets: ${allPets.length}`);
+            console.log(`Available Pets: ${availablePets.length}`);
+            console.log(`Adopted Pets: ${adoptedPets.length}`);
+            console.log(`Visible Pets: ${visiblePets.length}`);
+            
+            // Show first few pets for debugging
+            allPets.forEach((pet, index) => {
+                if (index < 3) { // Show first 3 pets
+                    console.log(`Pet ${index + 1}:`, {
+                        name: pet.dataset.name,
+                        species: pet.dataset.species,
+                        breed: pet.dataset.breed,
+                        age: pet.dataset.age,
+                        gender: pet.dataset.gender,
+                        neutered: pet.dataset.neutered,
+                        tab: pet.dataset.tab,
+                        adopted: pet.dataset.adopted,
+                        visible: pet.style.display !== 'none'
+                    });
+                }
+            });
         };
+
     });
 </script>
 
