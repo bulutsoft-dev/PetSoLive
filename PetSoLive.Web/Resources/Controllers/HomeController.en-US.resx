@@ -13,6 +13,73 @@
   <data name="Explore Adoptions" xml:space="preserve">
     <value>Explore Adoptions</value>
   </data>
+  
+  <!-- Dashboard Statistics -->
+  <data name="PlatformStatistics" xml:space="preserve">
+    <value>Platform Statistics</value>
+  </data>
+  <data name="TotalPets" xml:space="preserve">
+    <value>Total Pets</value>
+  </data>
+  <data name="AdoptedPets" xml:space="preserve">
+    <value>Adopted Pets</value>
+  </data>
+  <data name="ActiveUsers" xml:space="preserve">
+    <value>Active Users</value>
+  </data>
+  <data name="LostPetsFound" xml:space="preserve">
+    <value>Lost Pets Found</value>
+  </data>
+  
+  <!-- Recent Activity -->
+  <data name="RecentActivity" xml:space="preserve">
+    <value>Recent Activity</value>
+  </data>
+  <data name="NewAdoption" xml:space="preserve">
+    <value>New Adoption</value>
+  </data>
+  <data name="LunaAdopted" xml:space="preserve">
+    <value>Luna the Golden Retriever found her forever home!</value>
+  </data>
+  <data name="LostPetFound" xml:space="preserve">
+    <value>Lost Pet Found</value>
+  </data>
+  <data name="MaxFound" xml:space="preserve">
+    <value>Max the cat was reunited with his family!</value>
+  </data>
+  <data name="HelpRequest" xml:space="preserve">
+    <value>Help Request</value>
+  </data>
+  <data name="VetAssistance" xml:space="preserve">
+    <value>Veterinary assistance provided for emergency case.</value>
+  </data>
+  <data name="2HoursAgo" xml:space="preserve">
+    <value>2 hours ago</value>
+  </data>
+  <data name="5HoursAgo" xml:space="preserve">
+    <value>5 hours ago</value>
+  </data>
+  <data name="1DayAgo" xml:space="preserve">
+    <value>1 day ago</value>
+  </data>
+  
+  <!-- Quick Actions -->
+  <data name="QuickActions" xml:space="preserve">
+    <value>Quick Actions</value>
+  </data>
+  <data name="AddPet" xml:space="preserve">
+    <value>Add Pet</value>
+  </data>
+  <data name="SearchPets" xml:space="preserve">
+    <value>Search Pets</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  
   <data name="AdoptPet" xml:space="preserve">
     <value>Adopt a Pet</value>
   </data>

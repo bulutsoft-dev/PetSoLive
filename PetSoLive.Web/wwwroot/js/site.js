@@ -1,248 +1,338 @@
 ﻿// PetSoLive - Enhanced JavaScript
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize all components
-    initializeSmoothScrolling();
-    initializeLoadingAnimations();
-    initializeInteractiveElements();
-    initializeFormEnhancements();
-    initializeToastNotifications();
-    initializeLazyLoading();
-    initializeScrollAnimations();
-});
-
-// Smooth Scrolling
-function initializeSmoothScrolling() {
-    const links = document.querySelectorAll('a[href^="#"]');
-    
-    links.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
-}
-
-// Loading Animations
-function initializeLoadingAnimations() {
-    // Show loading spinner for form submissions
-    const forms = document.querySelectorAll('form');
-    
-    forms.forEach(form => {
-        form.addEventListener('submit', function() {
-            const submitBtn = this.querySelector('button[type="submit"]');
-            if (submitBtn) {
-                const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<span class="loading-spinner"></span> Gönderiliyor...';
-                submitBtn.disabled = true;
-                
-                // Re-enable button after 5 seconds as fallback
-                setTimeout(() => {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }, 5000);
-            }
-        });
-    });
-}
-
-// Interactive Elements
-function initializeInteractiveElements() {
-    // Enhanced card interactions
-    const cards = document.querySelectorAll('.card');
-    
-    cards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-8px) scale(1.02)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-    });
-    
-    // Enhanced button interactions
-    const buttons = document.querySelectorAll('.btn');
-    
-    buttons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            // Create ripple effect
-            const ripple = document.createElement('span');
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-            
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
-            ripple.classList.add('ripple');
-            
-            this.appendChild(ripple);
-            
-            setTimeout(() => {
-                ripple.remove();
-            }, 600);
-        });
-    });
-}
-
-// Form Enhancements
-function initializeFormEnhancements() {
-    // Real-time form validation
-    const inputs = document.querySelectorAll('input, textarea, select');
-    
-    inputs.forEach(input => {
-        input.addEventListener('blur', function() {
-            validateField(this);
-        });
-        
-        input.addEventListener('input', function() {
-            if (this.classList.contains('is-invalid')) {
-                validateField(this);
-            }
-        });
-    });
-    
-    // Auto-resize textareas
-    const textareas = document.querySelectorAll('textarea');
-    textareas.forEach(textarea => {
-        textarea.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = this.scrollHeight + 'px';
-        });
-    });
-}
-
-// Field validation
-function validateField(field) {
-    const value = field.value.trim();
-    const fieldName = field.name;
-    let isValid = true;
-    let errorMessage = '';
-    
-    // Remove existing validation classes
-    field.classList.remove('is-valid', 'is-invalid');
-    
-    // Validation rules
-    switch (fieldName) {
-        case 'email':
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (value && !emailRegex.test(value)) {
-                isValid = false;
-                errorMessage = 'Geçerli bir email adresi giriniz.';
-            }
-            break;
-            
-        case 'password':
-            if (value && value.length < 6) {
-                isValid = false;
-                errorMessage = 'Şifre en az 6 karakter olmalıdır.';
-            }
-            break;
-            
-        case 'username':
-            if (value && value.length < 3) {
-                isValid = false;
-                errorMessage = 'Kullanıcı adı en az 3 karakter olmalıdır.';
-            }
-            break;
-            
-        case 'phone':
-            const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
-            if (value && !phoneRegex.test(value)) {
-                isValid = false;
-                errorMessage = 'Geçerli bir telefon numarası giriniz.';
-            }
-            break;
+// Modern UI Utilities
+class PetSoLiveUI {
+    constructor() {
+        this.init();
     }
-    
-    // Apply validation classes
-    if (value) {
-        field.classList.add(isValid ? 'is-valid' : 'is-invalid');
-        
-        // Show/hide error message
-        let errorElement = field.parentNode.querySelector('.invalid-feedback');
-        if (!isValid) {
-            if (!errorElement) {
-                errorElement = document.createElement('div');
-                errorElement.className = 'invalid-feedback';
-                field.parentNode.appendChild(errorElement);
+
+    init() {
+        this.setupAnimations();
+        this.setupLoading();
+        this.setupToasts();
+        this.setupTooltips();
+        this.setupFloatingButton();
+        this.setupProgressBars();
+    }
+
+    // Animation Setup
+    setupAnimations() {
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements with animation classes
+        document.querySelectorAll('.card-hover, .stat-card, .timeline-item').forEach(el => {
+            observer.observe(el);
+        });
+    }
+
+    // Loading System
+    setupLoading() {
+        this.showLoading = (message = 'Loading...') => {
+            const overlay = document.createElement('div');
+            overlay.className = 'loading-overlay';
+            overlay.innerHTML = `
+                <div class="loading-content">
+                    <div class="loading-spinner"></div>
+                    <p class="mt-3">${message}</p>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        };
+
+        this.hideLoading = () => {
+            const overlay = document.querySelector('.loading-overlay');
+            if (overlay) {
+                overlay.remove();
             }
-            errorElement.textContent = errorMessage;
-        } else if (errorElement) {
-            errorElement.remove();
+        };
+    }
+
+    // Toast Notification System
+    setupToasts() {
+        this.showToast = (message, type = 'info', duration = 3000) => {
+            const toast = document.createElement('div');
+            toast.className = `toast-modern toast-${type}`;
+            toast.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-${this.getToastIcon(type)} me-2"></i>
+                    <span>${message}</span>
+                    <button class="btn-close ms-auto" onclick="this.parentElement.parentElement.remove()"></button>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Show animation
+            setTimeout(() => toast.classList.add('show'), 100);
+            
+            // Auto remove
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        };
+
+        this.getToastIcon = (type) => {
+            const icons = {
+                success: 'check-circle',
+                error: 'exclamation-circle',
+                warning: 'exclamation-triangle',
+                info: 'info-circle'
+            };
+            return icons[type] || 'info-circle';
+        };
+    }
+
+    // Tooltip System
+    setupTooltips() {
+        document.querySelectorAll('[data-tooltip]').forEach(element => {
+            element.addEventListener('mouseenter', (e) => {
+                const tooltip = document.createElement('div');
+                tooltip.className = 'tooltiptext';
+                tooltip.textContent = e.target.dataset.tooltip;
+                e.target.appendChild(tooltip);
+            });
+
+            element.addEventListener('mouseleave', (e) => {
+                const tooltip = e.target.querySelector('.tooltiptext');
+                if (tooltip) tooltip.remove();
+            });
+        });
+    }
+
+    // Floating Action Button
+    setupFloatingButton() {
+        const fab = document.createElement('button');
+        fab.className = 'fab';
+        fab.innerHTML = '<i class="fas fa-plus"></i>';
+        fab.setAttribute('aria-label', 'Quick Actions');
+        fab.addEventListener('click', () => {
+            this.showQuickActions();
+        });
+        document.body.appendChild(fab);
+    }
+
+    showQuickActions() {
+        const actions = [
+            { icon: 'paw', text: 'Add Pet', action: () => window.location.href = '/Pet/Create' },
+            { icon: 'search', text: 'Search Pets', action: () => window.location.href = '/Adoption' },
+            { icon: 'heart', text: 'Help Request', action: () => window.location.href = '/HelpRequest/Create' },
+            { icon: 'map-marker-alt', text: 'Lost Pets', action: () => window.location.href = '/LostPetAd' }
+        ];
+
+        const modal = document.createElement('div');
+        modal.className = 'modal fade show';
+        modal.style.display = 'block';
+        modal.innerHTML = `
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Quick Actions</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-grid gap-2">
+                            ${actions.map(action => `
+                                <button class="btn btn-outline-primary d-flex align-items-center gap-2" onclick="petSoLiveUI.executeAction('${action.text}')">
+                                    <i class="fas fa-${action.icon}"></i>
+                                    ${action.text}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Close on backdrop click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    }
+
+    executeAction(actionName) {
+        const actions = {
+            'Add Pet': () => window.location.href = '/Pet/Create',
+            'Search Pets': () => window.location.href = '/Adoption',
+            'Help Request': () => window.location.href = '/HelpRequest/Create',
+            'Lost Pets': () => window.location.href = '/LostPetAd'
+        };
+        
+        if (actions[actionName]) {
+            actions[actionName]();
         }
     }
-}
 
-// Toast Notifications
-function initializeToastNotifications() {
-    // Create toast container if it doesn't exist
-    if (!document.querySelector('.toast-container')) {
-        const toastContainer = document.createElement('div');
-        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
-        toastContainer.style.zIndex = '9999';
-        document.body.appendChild(toastContainer);
+    // Progress Bar System
+    setupProgressBars() {
+        this.updateProgress = (selector, percentage) => {
+            const progressBar = document.querySelector(selector);
+            if (progressBar) {
+                const fill = progressBar.querySelector('.progress-fill');
+                if (fill) {
+                    fill.style.width = `${percentage}%`;
+                }
+            }
+        };
     }
-}
 
-// Show toast notification
-function showToast(message, type = 'info', duration = 5000) {
-    const toastContainer = document.querySelector('.toast-container');
-    const toastId = 'toast-' + Date.now();
-    
-    const toastHtml = `
-        <div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <i class="bi bi-${getToastIcon(type)} me-2"></i>
-                <strong class="me-auto">PetSoLive</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                ${message}
-            </div>
-        </div>
-    `;
-    
-    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
-    
-    const toastElement = document.getElementById(toastId);
-    const toast = new bootstrap.Toast(toastElement, {
-        autohide: true,
-        delay: duration
-    });
-    
-    toast.show();
-    
-    // Auto remove from DOM after hiding
-    toastElement.addEventListener('hidden.bs.toast', function() {
-        this.remove();
-    });
-}
-
-function getToastIcon(type) {
-    switch (type) {
-        case 'success': return 'check-circle-fill';
-        case 'error': return 'exclamation-triangle-fill';
-        case 'warning': return 'exclamation-triangle-fill';
-        case 'info': 
-        default: return 'info-circle-fill';
+    // Utility Functions
+    debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
     }
-}
 
-// Lazy Loading for Images
-function initializeLazyLoading() {
-    const images = document.querySelectorAll('img[data-src]');
-    
-    if ('IntersectionObserver' in window) {
+    throttle(func, limit) {
+        let inThrottle;
+        return function() {
+            const args = arguments;
+            const context = this;
+            if (!inThrottle) {
+                func.apply(context, args);
+                inThrottle = true;
+                setTimeout(() => inThrottle = false, limit);
+            }
+        };
+    }
+
+    // Form Validation
+    validateForm(formElement) {
+        const inputs = formElement.querySelectorAll('input[required], select[required], textarea[required]');
+        let isValid = true;
+
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                this.showFieldError(input, 'This field is required');
+                isValid = false;
+            } else {
+                this.clearFieldError(input);
+            }
+        });
+
+        return isValid;
+    }
+
+    showFieldError(field, message) {
+        this.clearFieldError(field);
+        field.classList.add('is-invalid');
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'invalid-feedback';
+        errorDiv.textContent = message;
+        field.parentNode.appendChild(errorDiv);
+    }
+
+    clearFieldError(field) {
+        field.classList.remove('is-invalid');
+        const errorDiv = field.parentNode.querySelector('.invalid-feedback');
+        if (errorDiv) {
+            errorDiv.remove();
+        }
+    }
+
+    // Data Fetching with Loading
+    async fetchWithLoading(url, options = {}) {
+        this.showLoading();
+        try {
+            const response = await fetch(url, options);
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            this.showToast('An error occurred while loading data', 'error');
+            throw error;
+        } finally {
+            this.hideLoading();
+        }
+    }
+
+    // Local Storage Utilities
+    setLocalStorage(key, value) {
+        try {
+            localStorage.setItem(key, JSON.stringify(value));
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+        }
+    }
+
+    getLocalStorage(key, defaultValue = null) {
+        try {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : defaultValue;
+        } catch (error) {
+            console.error('Error reading from localStorage:', error);
+            return defaultValue;
+        }
+    }
+
+    // Theme Management
+    setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        this.setLocalStorage('theme', theme);
+    }
+
+    getTheme() {
+        return this.getLocalStorage('theme', 'light');
+    }
+
+    toggleTheme() {
+        const currentTheme = this.getTheme();
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        this.setTheme(newTheme);
+    }
+
+    // Responsive Utilities
+    isMobile() {
+        return window.innerWidth <= 768;
+    }
+
+    isTablet() {
+        return window.innerWidth > 768 && window.innerWidth <= 1024;
+    }
+
+    isDesktop() {
+        return window.innerWidth > 1024;
+    }
+
+    // Scroll Utilities
+    smoothScrollTo(element) {
+        element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+
+    scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    // Image Loading
+    lazyLoadImages() {
+        const images = document.querySelectorAll('img[data-src]');
         const imageObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -253,192 +343,56 @@ function initializeLazyLoading() {
                 }
             });
         });
-        
+
         images.forEach(img => imageObserver.observe(img));
-    } else {
-        // Fallback for older browsers
-        images.forEach(img => {
-            img.src = img.dataset.src;
-            img.classList.remove('lazy');
-        });
     }
 }
 
-// Scroll Animations
-function initializeScrollAnimations() {
-    const animatedElements = document.querySelectorAll('.animate-on-scroll');
+// Initialize UI when DOM is loaded
+let petSoLiveUI;
+document.addEventListener('DOMContentLoaded', function() {
+    petSoLiveUI = new PetSoLiveUI();
     
-    if ('IntersectionObserver' in window) {
-        const animationObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animated');
-                }
-            });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        });
-        
-        animatedElements.forEach(el => animationObserver.observe(el));
-    }
-}
-
-// Utility Functions
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-function throttle(func, limit) {
-    let inThrottle;
-    return function() {
-        const args = arguments;
-        const context = this;
-        if (!inThrottle) {
-            func.apply(context, args);
-            inThrottle = true;
-            setTimeout(() => inThrottle = false, limit);
+    // Initialize lazy loading
+    petSoLiveUI.lazyLoadImages();
+    
+    // Setup theme
+    const savedTheme = petSoLiveUI.getTheme();
+    petSoLiveUI.setTheme(savedTheme);
+    
+    // Add scroll to top button
+    const scrollToTopBtn = document.createElement('button');
+    scrollToTopBtn.className = 'btn btn-primary position-fixed';
+    scrollToTopBtn.style.cssText = 'bottom: 100px; right: 30px; z-index: 999; display: none; border-radius: 50%; width: 50px; height: 50px;';
+    scrollToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+    scrollToTopBtn.addEventListener('click', () => petSoLiveUI.scrollToTop());
+    document.body.appendChild(scrollToTopBtn);
+    
+    // Show/hide scroll to top button
+    window.addEventListener('scroll', petSoLiveUI.throttle(() => {
+        if (window.pageYOffset > 300) {
+            scrollToTopBtn.style.display = 'block';
+        } else {
+            scrollToTopBtn.style.display = 'none';
         }
-    };
-}
+    }, 100));
+});
 
-// Search functionality
-function initializeSearch() {
-    const searchInput = document.querySelector('.search-input');
-    if (searchInput) {
-        const debouncedSearch = debounce(function(query) {
-            // Implement search logic here
-            console.log('Searching for:', query);
-        }, 300);
-        
-        searchInput.addEventListener('input', function() {
-            debouncedSearch(this.value);
-        });
+// Global utility functions
+window.showToast = (message, type, duration) => {
+    if (petSoLiveUI) {
+        petSoLiveUI.showToast(message, type, duration);
     }
-}
-
-// Initialize search if search input exists
-if (document.querySelector('.search-input')) {
-    initializeSearch();
-}
-
-// Export functions for global use
-window.PetSoLive = {
-    showToast,
-    debounce,
-    throttle
 };
 
-// Add CSS for new features
-const additionalStyles = `
-    .ripple {
-        position: absolute;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.6);
-        transform: scale(0);
-        animation: ripple-animation 0.6s linear;
-        pointer-events: none;
+window.showLoading = (message) => {
+    if (petSoLiveUI) {
+        petSoLiveUI.showLoading(message);
     }
-    
-    @keyframes ripple-animation {
-        to {
-            transform: scale(4);
-            opacity: 0;
-        }
-    }
-    
-    .animate-on-scroll {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: all 0.6s ease;
-    }
-    
-    .animate-on-scroll.animated {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    
-    .lazy {
-        opacity: 0;
-        transition: opacity 0.3s;
-    }
-    
-    .lazy.loaded {
-        opacity: 1;
-    }
-    
-    .toast-container {
-        z-index: 9999;
-    }
-    
-    .form-control.is-valid {
-        border-color: var(--petsolive-success);
-        box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.25);
-    }
-    
-    .form-control.is-invalid {
-        border-color: var(--petsolive-danger);
-        box-shadow: 0 0 0 0.2rem rgba(239, 68, 68, 0.25);
-    }
-    
-    .invalid-feedback {
-        display: block;
-        color: var(--petsolive-danger);
-        font-size: 0.875rem;
-        margin-top: 0.25rem;
-    }
-`;
+};
 
-// Inject additional styles
-const styleSheet = document.createElement('style');
-styleSheet.textContent = additionalStyles;
-document.head.appendChild(styleSheet);
-
-// Theme toggle functionality
-function toggleTheme() {
-    const html = document.documentElement;
-    const currentTheme = html.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
-    html.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    
-    // Update button icons
-    const darkIcon = document.querySelector('.theme-icon-dark');
-    const lightIcon = document.querySelector('.theme-icon-light');
-    
-    if (newTheme === 'dark') {
-        darkIcon.style.display = 'none';
-        lightIcon.style.display = 'inline';
-    } else {
-        darkIcon.style.display = 'inline';
-        lightIcon.style.display = 'none';
+window.hideLoading = () => {
+    if (petSoLiveUI) {
+        petSoLiveUI.hideLoading();
     }
-}
-
-// Initialize theme on page load
-document.addEventListener('DOMContentLoaded', function() {
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    const html = document.documentElement;
-    html.setAttribute('data-theme', savedTheme);
-    
-    // Update button icons based on current theme
-    const darkIcon = document.querySelector('.theme-icon-dark');
-    const lightIcon = document.querySelector('.theme-icon-light');
-    
-    if (savedTheme === 'dark') {
-        darkIcon.style.display = 'none';
-        lightIcon.style.display = 'inline';
-    } else {
-        darkIcon.style.display = 'inline';
-        lightIcon.style.display = 'none';
-    }
-});
+};

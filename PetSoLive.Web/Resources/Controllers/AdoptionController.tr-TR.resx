@@ -22,6 +22,44 @@
     <data name="Bitmap1"><value>[base64 mime encoded binary data]</value></data>
     <data name="Icon1"><value>[base64 mime encoded binary data]</value></data>
                 
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or MIME type. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    MIME type set to the FQDN of the class.
+    
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1"><value>Blue</value></data>
+    <data name="Bitmap1"><value>[base64 mime encoded binary data]</value></data>
+    <data name="Icon1"><value>[base64 mime encoded binary data]</value></data>
+                
+    Note that the MIME type for the binary data is not stored in the 
+    XML, but is stored in the TypeConverter class that handles the data.
+    
+    Examples:
+    
+    ... Mime type for a class that handles serialization/deserialization of this data ...
+    <data name="Icon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\..\Application\icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    </data>
+                
+    ... 2.0 format for a string that gets converted to a string[] ...
+    <data name="StringArray1" type="System.String[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <value>a;b;c;d;e</value>
+    </data>
+    
+    ... 2.0 format for a byte[] that gets converted to a MemoryStream ...
+    <data name="Stream1" type="System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" mimetype="application/octet-stream">
+        <value>[base64 mime encoded binary data]</value>
+    </data>
+                
+    ... 2.0 format for a bitmap that gets converted to a Bitmap object ...
+    <data name="Bitmap1" type="System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/octet-stream">
+        <value>[base64 mime encoded binary data]</value>
+    </data>
   -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -81,208 +119,109 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AvailablePetsTitle" xml:space="preserve">
-    <value>Sahiplenmek İçin Mevcut Evcil Hayvanlar</value>
-  </data>
-  <data name="AllPets" xml:space="preserve">
-    <value>Tüm Evcil Hayvanlar</value>
-  </data>
-  <data name="AvailablePets" xml:space="preserve">
-    <value>Mevcut</value>
-  </data>
   <data name="AdoptedPets" xml:space="preserve">
-    <value>Sahiplenildi</value>
-  </data>
-  <data name="FilterPets" xml:space="preserve">
-    <value>Evcil Hayvanları Filtrele</value>
-  </data>
-  <data name="FilterDescription" xml:space="preserve">
-    <value>Mükemmel arkadaşınızı bulmak için aşağıdaki filtreleri kullanın</value>
-  </data>
-  <data name="Species" xml:space="preserve">
-    <value>Tür</value>
-  </data>
-  <data name="AllSpecies" xml:space="preserve">
-    <value>Tüm Türler</value>
-  </data>
-  <data name="Dog" xml:space="preserve">
-    <value>Köpek</value>
-  </data>
-  <data name="Cat" xml:space="preserve">
-    <value>Kedi</value>
-  </data>
-  <data name="Bird" xml:space="preserve">
-    <value>Kuş</value>
-  </data>
-  <data name="Fish" xml:space="preserve">
-    <value>Balık</value>
-  </data>
-  <data name="Rabbit" xml:space="preserve">
-    <value>Tavşan</value>
-  </data>
-  <data name="Hamster" xml:space="preserve">
-    <value>Hamster</value>
-  </data>
-  <data name="Other" xml:space="preserve">
-    <value>Diğer</value>
-  </data>
-  <data name="Age" xml:space="preserve">
-    <value>Yaş</value>
+    <value>Sahiplenilmiş Evcil Hayvanlar</value>
   </data>
   <data name="AllAges" xml:space="preserve">
     <value>Tüm Yaşlar</value>
   </data>
-  <data name="Young" xml:space="preserve">
-    <value>Genç (0-2 yaş)</value>
-  </data>
-  <data name="Adult" xml:space="preserve">
-    <value>Yetişkin (3-7 yaş)</value>
-  </data>
-  <data name="Senior" xml:space="preserve">
-    <value>Yaşlı (8+ yaş)</value>
-  </data>
-  <data name="Gender" xml:space="preserve">
-    <value>Cinsiyet</value>
+  <data name="AllBreeds" xml:space="preserve">
+    <value>Tüm Irklar</value>
   </data>
   <data name="AllGenders" xml:space="preserve">
     <value>Tüm Cinsiyetler</value>
   </data>
+  <data name="AllNeuteredStatus" xml:space="preserve">
+    <value>Tüm Kısırlaştırma Durumları</value>
+  </data>
+  <data name="AllPets" xml:space="preserve">
+    <value>Tüm Evcil Hayvanlar</value>
+  </data>
+  <data name="AllSpecies" xml:space="preserve">
+    <value>Tüm Türler</value>
+  </data>
+  <data name="AvailablePets" xml:space="preserve">
+    <value>Mevcut Evcil Hayvanlar</value>
+  </data>
+  <data name="AvailablePetsTitle" xml:space="preserve">
+    <value>Sahiplenmek İçin Mevcut Evcil Hayvanlar</value>
+  </data>
+  <data name="Bird" xml:space="preserve">
+    <value>Kuş</value>
+  </data>
+  <data name="Cat" xml:space="preserve">
+    <value>Kedi</value>
+  </data>
+  <data name="ClearFilter" xml:space="preserve">
+    <value>Filtreyi Temizle</value>
+  </data>
+  <data name="ClearFilters" xml:space="preserve">
+    <value>Tüm Filtreleri Temizle</value>
+  </data>
+  <data name="ClearSearch" xml:space="preserve">
+    <value>Aramayı Temizle</value>
+</data>
+  <data name="Dog" xml:space="preserve">
+    <value>Köpek</value>
+</data>
+  <data name="Female" xml:space="preserve">
+  <value>Dişi</value>
+</data>
+  <data name="FilterPets" xml:space="preserve">
+    <value>Evcil Hayvanları Filtrele</value>
+  </data>
+  <data name="Fish" xml:space="preserve">
+    <value>Balık</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Cinsiyet</value>
+  </data>
+  <data name="Hamster" xml:space="preserve">
+    <value>Hamster</value>
+  </data>
   <data name="Male" xml:space="preserve">
     <value>Erkek</value>
   </data>
-  <data name="Female" xml:space="preserve">
-    <value>Dişi</value>
-  </data>
-  <data name="SearchPets" xml:space="preserve">
-    <value>İsim veya açıklamaya göre evcil hayvan ara...</value>
-  </data>
-  <data name="ClearFilters" xml:space="preserve">
-    <value>Filtreleri Temizle</value>
-  </data>
-  <data name="AvailablePetsSection" xml:space="preserve">
-    <value>Mevcut Evcil Hayvanlar</value>
-  </data>
-  <data name="AvailablePetsDescription" xml:space="preserve">
-    <value>Bu evcil hayvanlar kalıcı evlerini arıyor</value>
-  </data>
-  <data name="AdoptedPetsSection" xml:space="preserve">
-    <value>Yakın Zamanda Sahiplenilenler</value>
-  </data>
-  <data name="AdoptedPetsDescription" xml:space="preserve">
-    <value>Bu evcil hayvanlar sevgi dolu ailelerini buldu</value>
-  </data>
-  <data name="Adopted" xml:space="preserve">
-    <value>Sahiplenildi</value>
-  </data>
-  <data name="Available" xml:space="preserve">
-    <value>Mevcut</value>
-  </data>
-  <data name="Years" xml:space="preserve">
-    <value>yaşında</value>
-  </data>
-  <data name="Breed" xml:space="preserve">
-    <value>Irk</value>
-  </data>
-  <data name="ViewDetails" xml:space="preserve">
-    <value>Detayları Gör</value>
-  </data>
-  <data name="Adopt" xml:space="preserve">
-    <value>Sahiplen</value>
-  </data>
-  <data name="AlreadyAdopted" xml:space="preserve">
-    <value>Zaten Sahiplenildi</value>
-  </data>
-  <data name="NoPetsAvailable" xml:space="preserve">
-    <value>Şu anda mevcut evcil hayvan yok. Lütfen daha sonra tekrar kontrol edin!</value>
-  </data>
-  <data name="AllBreeds" xml:space="preserve">
-    <value>Tüm Irklar</value>
-  </data>
-  <data name="AgeRange" xml:space="preserve">
-    <value>Yaş Aralığı</value>
+  <data name="MaxAge" xml:space="preserve">
+    <value>Maksimum Yaş</value>
   </data>
   <data name="MinAge" xml:space="preserve">
-    <value>Min Yaş</value>
-  </data>
-  <data name="MaxAge" xml:space="preserve">
-    <value>Maks Yaş</value>
-  </data>
-  <data name="Size" xml:space="preserve">
-    <value>Boyut</value>
-  </data>
-  <data name="AllSizes" xml:space="preserve">
-    <value>Tüm Boyutlar</value>
-  </data>
-  <data name="Small" xml:space="preserve">
-    <value>Küçük</value>
-  </data>
-  <data name="Medium" xml:space="preserve">
-    <value>Orta</value>
-  </data>
-  <data name="Large" xml:space="preserve">
-    <value>Büyük</value>
-  </data>
-  <data name="Color" xml:space="preserve">
-    <value>Renk</value>
-  </data>
-  <data name="AllColors" xml:space="preserve">
-    <value>Tüm Renkler</value>
-  </data>
-  <data name="Black" xml:space="preserve">
-    <value>Siyah</value>
-  </data>
-  <data name="White" xml:space="preserve">
-    <value>Beyaz</value>
-  </data>
-  <data name="Brown" xml:space="preserve">
-    <value>Kahverengi</value>
-  </data>
-  <data name="Golden" xml:space="preserve">
-    <value>Altın</value>
-  </data>
-  <data name="Gray" xml:space="preserve">
-    <value>Gri</value>
-  </data>
-  <data name="Orange" xml:space="preserve">
-    <value>Turuncu</value>
-  </data>
-  <data name="MixedColor" xml:space="preserve">
-    <value>Karışık Renk</value>
-  </data>
-  <data name="NeuteredStatus" xml:space="preserve">
-    <value>Kısırlaştırma Durumu</value>
-  </data>
-  <data name="AllNeuteredStatus" xml:space="preserve">
-    <value>Tüm Kısırlaştırma Durumları</value>
+    <value>Minimum Yaş</value>
   </data>
   <data name="Neutered" xml:space="preserve">
     <value>Kısırlaştırılmış</value>
   </data>
+  <data name="NeuteredStatus" xml:space="preserve">
+    <value>Kısırlaştırma Durumu</value>
+  </data>
   <data name="NotNeutered" xml:space="preserve">
     <value>Kısırlaştırılmamış</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Diğer</value>
+  </data>
+  <data name="Rabbit" xml:space="preserve">
+    <value>Tavşan</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Ara</value>
+  </data>
+  <data name="SearchPets" xml:space="preserve">
+    <value>Evcil hayvan ara...</value>
+  </data>
+  <data name="SearchAllContent" xml:space="preserve">
+    <value>isim, ırk, tür, açıklama</value>
+  </data>
+  <data name="Senior" xml:space="preserve">
+    <value>Yaşlı</value>
+  </data>
+  <data name="Species" xml:space="preserve">
+    <value>Tür</value>
   </data>
   <data name="Unknown" xml:space="preserve">
     <value>Bilinmiyor</value>
   </data>
-  <data name="SpecialNeeds" xml:space="preserve">
-    <value>Özel İhtiyaçlar</value>
-  </data>
-  <data name="AllSpecialNeeds" xml:space="preserve">
-    <value>Tüm Özel İhtiyaç Durumları</value>
-  </data>
-  <data name="HasSpecialNeeds" xml:space="preserve">
-    <value>Özel İhtiyaçları Var</value>
-  </data>
-  <data name="NoSpecialNeeds" xml:space="preserve">
-    <value>Özel İhtiyaçları Yok</value>
-  </data>
-  <data name="Vaccinated" xml:space="preserve">
-    <value>Aşılı</value>
-  </data>
-  <data name="AllVaccinatedStatus" xml:space="preserve">
-    <value>Tüm Aşı Durumları</value>
-  </data>
-  <data name="NotVaccinated" xml:space="preserve">
-    <value>Aşısız</value>
+  <data name="Young" xml:space="preserve">
+    <value>Genç</value>
   </data>
 </root>

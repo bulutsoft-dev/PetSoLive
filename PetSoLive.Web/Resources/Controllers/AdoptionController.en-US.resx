@@ -22,6 +22,44 @@
     <data name="Bitmap1"><value>[base64 mime encoded binary data]</value></data>
     <data name="Icon1"><value>[base64 mime encoded binary data]</value></data>
                 
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or MIME type. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    MIME type set to the FQDN of the class.
+    
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1"><value>Blue</value></data>
+    <data name="Bitmap1"><value>[base64 mime encoded binary data]</value></data>
+    <data name="Icon1"><value>[base64 mime encoded binary data]</value></data>
+                
+    Note that the MIME type for the binary data is not stored in the 
+    XML, but is stored in the TypeConverter class that handles the data.
+    
+    Examples:
+    
+    ... Mime type for a class that handles serialization/deserialization of this data ...
+    <data name="Icon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+        <value>..\..\Application\icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    </data>
+                
+    ... 2.0 format for a string that gets converted to a string[] ...
+    <data name="StringArray1" type="System.String[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+        <value>a;b;c;d;e</value>
+    </data>
+    
+    ... 2.0 format for a byte[] that gets converted to a MemoryStream ...
+    <data name="Stream1" type="System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" mimetype="application/octet-stream">
+        <value>[base64 mime encoded binary data]</value>
+    </data>
+                
+    ... 2.0 format for a bitmap that gets converted to a Bitmap object ...
+    <data name="Bitmap1" type="System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/octet-stream">
+        <value>[base64 mime encoded binary data]</value>
+    </data>
   -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -81,208 +119,109 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AvailablePetsTitle" xml:space="preserve">
-    <value>Available Pets for Adoption</value>
-  </data>
-  <data name="AllPets" xml:space="preserve">
-    <value>All Pets</value>
-  </data>
-  <data name="AvailablePets" xml:space="preserve">
-    <value>Available</value>
-  </data>
   <data name="AdoptedPets" xml:space="preserve">
-    <value>Adopted</value>
-  </data>
-  <data name="FilterPets" xml:space="preserve">
-    <value>Filter Pets</value>
-  </data>
-  <data name="FilterDescription" xml:space="preserve">
-    <value>Use the filters below to find your perfect companion</value>
-  </data>
-  <data name="Species" xml:space="preserve">
-    <value>Species</value>
-  </data>
-  <data name="AllSpecies" xml:space="preserve">
-    <value>All Species</value>
-  </data>
-  <data name="Dog" xml:space="preserve">
-    <value>Dog</value>
-  </data>
-  <data name="Cat" xml:space="preserve">
-    <value>Cat</value>
-  </data>
-  <data name="Bird" xml:space="preserve">
-    <value>Bird</value>
-  </data>
-  <data name="Fish" xml:space="preserve">
-    <value>Fish</value>
-  </data>
-  <data name="Rabbit" xml:space="preserve">
-    <value>Rabbit</value>
-  </data>
-  <data name="Hamster" xml:space="preserve">
-    <value>Hamster</value>
-  </data>
-  <data name="Other" xml:space="preserve">
-    <value>Other</value>
-  </data>
-  <data name="Age" xml:space="preserve">
-    <value>Age</value>
+    <value>Adopted Pets</value>
   </data>
   <data name="AllAges" xml:space="preserve">
     <value>All Ages</value>
   </data>
-  <data name="Young" xml:space="preserve">
-    <value>Young (0-2 years)</value>
-  </data>
-  <data name="Adult" xml:space="preserve">
-    <value>Adult (3-7 years)</value>
-  </data>
-  <data name="Senior" xml:space="preserve">
-    <value>Senior (8+ years)</value>
-  </data>
-  <data name="Gender" xml:space="preserve">
-    <value>Gender</value>
+  <data name="AllBreeds" xml:space="preserve">
+    <value>All Breeds</value>
   </data>
   <data name="AllGenders" xml:space="preserve">
     <value>All Genders</value>
   </data>
-  <data name="Male" xml:space="preserve">
-    <value>Male</value>
+  <data name="AllNeuteredStatus" xml:space="preserve">
+    <value>All Neutered Status</value>
+  </data>
+  <data name="AllPets" xml:space="preserve">
+    <value>All Pets</value>
+  </data>
+  <data name="AllSpecies" xml:space="preserve">
+    <value>All Species</value>
+  </data>
+  <data name="AvailablePets" xml:space="preserve">
+    <value>Available Pets</value>
+  </data>
+  <data name="AvailablePetsTitle" xml:space="preserve">
+    <value>Available Pets for Adoption</value>
+  </data>
+  <data name="Bird" xml:space="preserve">
+    <value>Bird</value>
+  </data>
+  <data name="Cat" xml:space="preserve">
+    <value>Cat</value>
+  </data>
+  <data name="ClearFilter" xml:space="preserve">
+    <value>Clear Filter</value>
+  </data>
+  <data name="ClearFilters" xml:space="preserve">
+    <value>Clear All Filters</value>
+  </data>
+  <data name="ClearSearch" xml:space="preserve">
+    <value>Clear Search</value>
+  </data>
+  <data name="Dog" xml:space="preserve">
+    <value>Dog</value>
   </data>
   <data name="Female" xml:space="preserve">
     <value>Female</value>
   </data>
-  <data name="SearchPets" xml:space="preserve">
-    <value>Search pets by name or description...</value>
+  <data name="FilterPets" xml:space="preserve">
+    <value>Filter Pets</value>
   </data>
-  <data name="ClearFilters" xml:space="preserve">
-    <value>Clear Filters</value>
+  <data name="Fish" xml:space="preserve">
+    <value>Fish</value>
   </data>
-  <data name="AvailablePetsSection" xml:space="preserve">
-    <value>Available Pets</value>
+  <data name="Gender" xml:space="preserve">
+    <value>Gender</value>
   </data>
-  <data name="AvailablePetsDescription" xml:space="preserve">
-    <value>These pets are looking for their forever homes</value>
+  <data name="Hamster" xml:space="preserve">
+    <value>Hamster</value>
   </data>
-  <data name="AdoptedPetsSection" xml:space="preserve">
-    <value>Recently Adopted</value>
-  </data>
-  <data name="AdoptedPetsDescription" xml:space="preserve">
-    <value>These pets have found their loving families</value>
-  </data>
-  <data name="Adopted" xml:space="preserve">
-    <value>Adopted</value>
-  </data>
-  <data name="Available" xml:space="preserve">
-    <value>Available</value>
-  </data>
-  <data name="Years" xml:space="preserve">
-    <value>years</value>
-  </data>
-  <data name="Breed" xml:space="preserve">
-    <value>Breed</value>
-  </data>
-  <data name="ViewDetails" xml:space="preserve">
-    <value>View Details</value>
-  </data>
-  <data name="Adopt" xml:space="preserve">
-    <value>Adopt</value>
-  </data>
-  <data name="AlreadyAdopted" xml:space="preserve">
-    <value>Already Adopted</value>
-  </data>
-  <data name="NoPetsAvailable" xml:space="preserve">
-    <value>No pets available at the moment. Please check back later!</value>
-  </data>
-  <data name="AllBreeds" xml:space="preserve">
-    <value>All Breeds</value>
-  </data>
-  <data name="AgeRange" xml:space="preserve">
-    <value>Age Range</value>
-  </data>
-  <data name="MinAge" xml:space="preserve">
-    <value>Min Age</value>
+  <data name="Male" xml:space="preserve">
+    <value>Male</value>
   </data>
   <data name="MaxAge" xml:space="preserve">
     <value>Max Age</value>
   </data>
-  <data name="Size" xml:space="preserve">
-    <value>Size</value>
-  </data>
-  <data name="AllSizes" xml:space="preserve">
-    <value>All Sizes</value>
-  </data>
-  <data name="Small" xml:space="preserve">
-    <value>Small</value>
-  </data>
-  <data name="Medium" xml:space="preserve">
-    <value>Medium</value>
-  </data>
-  <data name="Large" xml:space="preserve">
-    <value>Large</value>
-  </data>
-  <data name="Color" xml:space="preserve">
-    <value>Color</value>
-  </data>
-  <data name="AllColors" xml:space="preserve">
-    <value>All Colors</value>
-  </data>
-  <data name="Black" xml:space="preserve">
-    <value>Black</value>
-  </data>
-  <data name="White" xml:space="preserve">
-    <value>White</value>
-  </data>
-  <data name="Brown" xml:space="preserve">
-    <value>Brown</value>
-  </data>
-  <data name="Golden" xml:space="preserve">
-    <value>Golden</value>
-  </data>
-  <data name="Gray" xml:space="preserve">
-    <value>Gray</value>
-  </data>
-  <data name="Orange" xml:space="preserve">
-    <value>Orange</value>
-  </data>
-  <data name="MixedColor" xml:space="preserve">
-    <value>Mixed Color</value>
-  </data>
-  <data name="NeuteredStatus" xml:space="preserve">
-    <value>Neutered Status</value>
-  </data>
-  <data name="AllNeuteredStatus" xml:space="preserve">
-    <value>All Neutered Status</value>
+  <data name="MinAge" xml:space="preserve">
+    <value>Min Age</value>
   </data>
   <data name="Neutered" xml:space="preserve">
     <value>Neutered</value>
   </data>
+  <data name="NeuteredStatus" xml:space="preserve">
+    <value>Neutered Status</value>
+  </data>
   <data name="NotNeutered" xml:space="preserve">
     <value>Not Neutered</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Rabbit" xml:space="preserve">
+    <value>Rabbit</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchPets" xml:space="preserve">
+    <value>Search pets...</value>
+  </data>
+  <data name="SearchAllContent" xml:space="preserve">
+    <value>name, breed, species, description</value>
+  </data>
+  <data name="Senior" xml:space="preserve">
+    <value>Senior</value>
+  </data>
+  <data name="Species" xml:space="preserve">
+    <value>Species</value>
   </data>
   <data name="Unknown" xml:space="preserve">
     <value>Unknown</value>
   </data>
-  <data name="SpecialNeeds" xml:space="preserve">
-    <value>Special Needs</value>
-  </data>
-  <data name="AllSpecialNeeds" xml:space="preserve">
-    <value>All Special Needs</value>
-  </data>
-  <data name="HasSpecialNeeds" xml:space="preserve">
-    <value>Has Special Needs</value>
-  </data>
-  <data name="NoSpecialNeeds" xml:space="preserve">
-    <value>No Special Needs</value>
-  </data>
-  <data name="Vaccinated" xml:space="preserve">
-    <value>Vaccinated</value>
-  </data>
-  <data name="AllVaccinatedStatus" xml:space="preserve">
-    <value>All Vaccinated Status</value>
-  </data>
-  <data name="NotVaccinated" xml:space="preserve">
-    <value>Not Vaccinated</value>
+  <data name="Young" xml:space="preserve">
+    <value>Young</value>
   </data>
 </root>
