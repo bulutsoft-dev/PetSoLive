@@ -401,3 +401,44 @@ const additionalStyles = `
 const styleSheet = document.createElement('style');
 styleSheet.textContent = additionalStyles;
 document.head.appendChild(styleSheet);
+
+// Theme toggle functionality
+function toggleTheme() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    
+    // Update button icons
+    const darkIcon = document.querySelector('.theme-icon-dark');
+    const lightIcon = document.querySelector('.theme-icon-light');
+    
+    if (newTheme === 'dark') {
+        darkIcon.style.display = 'none';
+        lightIcon.style.display = 'inline';
+    } else {
+        darkIcon.style.display = 'inline';
+        lightIcon.style.display = 'none';
+    }
+}
+
+// Initialize theme on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    const html = document.documentElement;
+    html.setAttribute('data-theme', savedTheme);
+    
+    // Update button icons based on current theme
+    const darkIcon = document.querySelector('.theme-icon-dark');
+    const lightIcon = document.querySelector('.theme-icon-light');
+    
+    if (savedTheme === 'dark') {
+        darkIcon.style.display = 'none';
+        lightIcon.style.display = 'inline';
+    } else {
+        darkIcon.style.display = 'inline';
+        lightIcon.style.display = 'none';
+    }
+});
