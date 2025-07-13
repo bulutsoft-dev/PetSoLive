@@ -135,6 +135,53 @@
     background-color: #8E44AD; /* Purple for informational badges */
 }
 
+/* Karanlık tema desteği */
+[data-theme="dark"] .about-container {
+    background-color: #181c23;
+    box-shadow: 0 4px 24px rgba(16, 21, 27, 0.25);
+}
+[data-theme="dark"] .about-container h2,
+[data-theme="dark"] .about-container h3 {
+    color: #e3f2fd;
+}
+[data-theme="dark"] .about-container p,
+[data-theme="dark"] .about-container ul li {
+    color: #b3c6e0;
+}
+[data-theme="dark"] .about-container ul li::before {
+    color: #90caf9;
+}
+[data-theme="dark"] .about-container .btn {
+    background-color: #1E88E5;
+    color: #fff;
+}
+[data-theme="dark"] .about-container .btn:hover {
+    background-color: #1565C0;
+}
+[data-theme="dark"] .about-container .card {
+    background-color: #23272f;
+    box-shadow: 0 8px 32px rgba(16, 21, 27, 0.18);
+}
+[data-theme="dark"] .about-container .card-title {
+    color: #e3f2fd;
+}
+[data-theme="dark"] .about-container .card-text {
+    color: #b3c6e0;
+}
+[data-theme="dark"] .about-container .badge-success {
+    background-color: #43A047;
+}
+[data-theme="dark"] .about-container .badge-danger {
+    background-color: #E53935;
+}
+[data-theme="dark"] .about-container .badge-warning {
+    background-color: #FB8C00;
+    color: #23272f;
+}
+[data-theme="dark"] .about-container .badge-info {
+    background-color: #8E24AA;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
     .about-container {
