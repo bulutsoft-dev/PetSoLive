@@ -178,5 +178,26 @@
   <data name="AlreadyAdopted" xml:space="preserve">
     <value>Already Adopted</value>
   </data>
+  <data name="AvailablePetsSection" xml:space="preserve">
+    <value>Available Pets</value>
+  </data>
+  <data name="AvailablePetsDescription" xml:space="preserve">
+    <value>These pets are looking for a loving home. Click "Adopt" to start the adoption process.</value>
+  </data>
+  <data name="AdoptedPetsSection" xml:space="preserve">
+    <value>Recently Adopted</value>
+  </data>
+  <data name="AdoptedPetsDescription" xml:space="preserve">
+    <value>These pets have found their forever homes. Congratulations to their new families!</value>
+  </data>
+  <data name="AllPets" xml:space="preserve">
+    <value>All Pets</value>
+  </data>
+  <data name="AvailablePets" xml:space="preserve">
+    <value>Available Pets</value>
+  </data>
+  <data name="AdoptedPets" xml:space="preserve">
+    <value>Adopted Pets</value>
+  </data>
 
 </root>

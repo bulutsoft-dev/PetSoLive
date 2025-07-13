@@ -177,5 +177,26 @@
   <data name="AlreadyAdopted" xml:space="preserve">
     <value>Zaten Sahiplenildi</value>
   </data>
+  <data name="AvailablePetsSection" xml:space="preserve">
+    <value>Uygun Petler</value>
+  </data>
+  <data name="AvailablePetsDescription" xml:space="preserve">
+    <value>Bu petler sevgi dolu bir yuva arıyor. Sahiplenme sürecini başlatmak için "Sahiplen" butonuna tıklayın.</value>
+  </data>
+  <data name="AdoptedPetsSection" xml:space="preserve">
+    <value>Yakın Zamanda Sahiplenilenler</value>
+  </data>
+  <data name="AdoptedPetsDescription" xml:space="preserve">
+    <value>Bu petler sonsuz yuvalarını buldu. Yeni ailelerine tebrikler!</value>
+  </data>
+  <data name="AllPets" xml:space="preserve">
+    <value>Tüm Petler</value>
+  </data>
+  <data name="AvailablePets" xml:space="preserve">
+    <value>Uygun Petler</value>
+  </data>
+  <data name="AdoptedPets" xml:space="preserve">
+    <value>Sahiplenilmiş Petler</value>
+  </data>
 
 </root>

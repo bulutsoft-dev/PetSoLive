@@ -8,6 +8,19 @@
 }
 
 <div class="adoption-container">
+    <!-- Tab Navigation -->
+    <div class="tab-navigation">
+        <button class="tab-button active" data-tab="all">
+            <i class="fas fa-paw"></i> @Localizer["AllPets"]
+        </button>
+        <button class="tab-button" data-tab="available">
+            <i class="fas fa-home"></i> @Localizer["AvailablePets"]
+        </button>
+        <button class="tab-button" data-tab="adopted">
+            <i class="fas fa-heart"></i> @Localizer["AdoptedPets"]
+        </button>
+    </div>
+
     <!-- Filter Section -->
     <div class="filter-section">
         <div class="filter-controls">
@@ -52,84 +65,204 @@
 
     <!-- Pets Grid -->
     <div class="pets-grid" id="petsGrid">
-        @foreach (dynamic petData in Model)
-        {
-            var pet = petData.Pet as PetSoLive.Core.Entities.Pet;
-            var isAdopted = petData.IsAdopted as bool?;
+        @{
+            var availablePets = new List<object>();
+            var adoptedPets = new List<object>();
             
-            <div class="pet-card @(isAdopted == true ? "adopted" : "available")" 
-                 data-species="@pet.Species" data-age="@pet.Age" data-gender="@pet.Gender" data-adopted="@isAdopted">
+            foreach (dynamic petData in Model)
+            {
+                var pet = petData.Pet as PetSoLive.Core.Entities.Pet;
+                var isAdopted = petData.IsAdopted as bool?;
                 
-                <!-- Adoption Status Badge -->
-                <div class="adoption-status-badge">
-                    @if (isAdopted == true)
-                    {
-                        <span class="badge adopted-badge">
-                            <i class="fas fa-heart"></i> @Localizer["Adopted"]
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="badge available-badge">
-                            <i class="fas fa-home"></i> @Localizer["Available"]
-                        </span>
-                    }
-                </div>
-                
-                <div class="pet-image-container">
-                    <img src="@(string.IsNullOrEmpty(pet.ImageUrl) ? "/lib/bg.png" : pet.ImageUrl)" 
-                         alt="@pet.Name" 
-                         class="pet-image"
-                         onclick="window.location.href='@Url.Action("Details", "Pet", new { id = pet.Id })'" />
-                </div>
-                
-                <div class="pet-info">
-                    <div class="pet-header">
-                        <h3 class="pet-name">@pet.Name</h3>
-                        <span class="pet-species">@GetSpeciesEmoji(pet.Species) @Localizer[pet.Species]</span>
-                    </div>
-                    
-                    <div class="pet-details">
-                        <div class="detail-item">
-                            <span class="detail-label">@Localizer["Age"]:</span>
-                            <span class="detail-value">@pet.Age @Localizer["Years"]</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">@Localizer["Gender"]:</span>
-                            <span class="detail-value">@Localizer[pet.Gender]</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">@Localizer["Breed"]:</span>
-                            <span class="detail-value">@pet.Breed</span>
-                        </div>
-                    </div>
-                    
-                    @if (!string.IsNullOrEmpty(pet.Description))
-                    {
-                        <div class="pet-description">
-                            <p>@(pet.Description.Length > 100 ? pet.Description.Substring(0, 100) + "..." : pet.Description)</p>
-                        </div>
-                    }
-                </div>
-                
-                <div class="pet-actions">
-                    <a href="@Url.Action("Details", "Pet", new { id = pet.Id })" class="btn btn-outline-primary btn-sm">
-                        <i class="fas fa-eye"></i> @Localizer["ViewDetails"]
-                    </a>
-                    @if (isAdopted != true)
-                    {
-                        <a href="@Url.Action("Adopt", "Adoption", new { petId = pet.Id })" class="btn btn-primary btn-sm">
-                            <i class="fas fa-heart"></i> @Localizer["Adopt"]
-                        </a>
-                    }
-                    else
-                    {
-                        <button class="btn btn-secondary btn-sm" disabled>
-                            <i class="fas fa-check"></i> @Localizer["AlreadyAdopted"]
-                        </button>
-                    }
-                </div>
+                if (isAdopted == true)
+                {
+                    adoptedPets.Add(petData);
+                }
+                else
+                {
+                    availablePets.Add(petData);
+                }
+            }
+        }
+        
+        <!-- Available Pets Section -->
+        @if (availablePets.Any())
+        {
+            <div class="section-header available-section" data-tab="available">
+                <h3>🏠 @Localizer["AvailablePetsSection"]</h3>
+                <p>@Localizer["AvailablePetsDescription"]</p>
             </div>
+            
+            @foreach (dynamic petData in availablePets)
+            {
+                var pet = petData.Pet as PetSoLive.Core.Entities.Pet;
+                var isAdopted = petData.IsAdopted as bool?;
+                
+                <div class="pet-card @(isAdopted == true ? "adopted" : "available")" 
+                     data-species="@pet.Species" data-age="@pet.Age" data-gender="@pet.Gender" data-adopted="@isAdopted"
+                     data-tab="available">
+                    
+                    <!-- Adoption Status Badge -->
+                    <div class="adoption-status-badge">
+                        @if (isAdopted == true)
+                        {
+                            <span class="badge adopted-badge">
+                                <i class="fas fa-heart"></i> @Localizer["Adopted"]
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge available-badge">
+                                <i class="fas fa-home"></i> @Localizer["Available"]
+                            </span>
+                        }
+                    </div>
+                    
+                    <div class="pet-image-container">
+                        <img src="@(string.IsNullOrEmpty(pet.ImageUrl) ? "/lib/bg.png" : pet.ImageUrl)" 
+                             alt="@pet.Name" 
+                             class="pet-image"
+                             onclick="window.location.href='@Url.Action("Details", "Pet", new { id = pet.Id })'" />
+                    </div>
+                    
+                    <div class="pet-info">
+                        <div class="pet-header">
+                            <h3 class="pet-name">@pet.Name</h3>
+                            <span class="pet-species">@GetSpeciesEmoji(pet.Species) @Localizer[pet.Species]</span>
+                        </div>
+                        
+                        <div class="pet-details">
+                            <div class="detail-item">
+                                <span class="detail-label">@Localizer["Age"]:</span>
+                                <span class="detail-value">@pet.Age @Localizer["Years"]</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">@Localizer["Gender"]:</span>
+                                <span class="detail-value">@Localizer[pet.Gender]</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">@Localizer["Breed"]:</span>
+                                <span class="detail-value">@pet.Breed</span>
+                            </div>
+                        </div>
+                        
+                        @if (!string.IsNullOrEmpty(pet.Description))
+                        {
+                            <div class="pet-description">
+                                <p>@(pet.Description.Length > 100 ? pet.Description.Substring(0, 100) + "..." : pet.Description)</p>
+                            </div>
+                        }
+                    </div>
+                    
+                    <div class="pet-actions">
+                        <a href="@Url.Action("Details", "Pet", new { id = pet.Id })" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-eye"></i> @Localizer["ViewDetails"]
+                        </a>
+                        @if (isAdopted != true)
+                        {
+                            <a href="@Url.Action("Adopt", "Adoption", new { petId = pet.Id })" class="btn btn-primary btn-sm">
+                                <i class="fas fa-heart"></i> @Localizer["Adopt"]
+                            </a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="fas fa-check"></i> @Localizer["AlreadyAdopted"]
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+        }
+        
+        <!-- Adopted Pets Section -->
+        @if (adoptedPets.Any())
+        {
+            <div class="section-header adopted-section" data-tab="adopted">
+                <h3>❤️ @Localizer["AdoptedPetsSection"]</h3>
+                <p>@Localizer["AdoptedPetsDescription"]</p>
+            </div>
+            
+            @foreach (dynamic petData in adoptedPets)
+            {
+                var pet = petData.Pet as PetSoLive.Core.Entities.Pet;
+                var isAdopted = petData.IsAdopted as bool?;
+                
+                <div class="pet-card @(isAdopted == true ? "adopted" : "available")" 
+                     data-species="@pet.Species" data-age="@pet.Age" data-gender="@pet.Gender" data-adopted="@isAdopted"
+                     data-tab="adopted">
+                    
+                    <!-- Adoption Status Badge -->
+                    <div class="adoption-status-badge">
+                        @if (isAdopted == true)
+                        {
+                            <span class="badge adopted-badge">
+                                <i class="fas fa-heart"></i> @Localizer["Adopted"]
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge available-badge">
+                                <i class="fas fa-home"></i> @Localizer["Available"]
+                            </span>
+                        }
+                    </div>
+                    
+                    <div class="pet-image-container">
+                        <img src="@(string.IsNullOrEmpty(pet.ImageUrl) ? "/lib/bg.png" : pet.ImageUrl)" 
+                             alt="@pet.Name" 
+                             class="pet-image"
+                             onclick="window.location.href='@Url.Action("Details", "Pet", new { id = pet.Id })'" />
+                    </div>
+                    
+                    <div class="pet-info">
+                        <div class="pet-header">
+                            <h3 class="pet-name">@pet.Name</h3>
+                            <span class="pet-species">@GetSpeciesEmoji(pet.Species) @Localizer[pet.Species]</span>
+                        </div>
+                        
+                        <div class="pet-details">
+                            <div class="detail-item">
+                                <span class="detail-label">@Localizer["Age"]:</span>
+                                <span class="detail-value">@pet.Age @Localizer["Years"]</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">@Localizer["Gender"]:</span>
+                                <span class="detail-value">@Localizer[pet.Gender]</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">@Localizer["Breed"]:</span>
+                                <span class="detail-value">@pet.Breed</span>
+                            </div>
+                        </div>
+                        
+                        @if (!string.IsNullOrEmpty(pet.Description))
+                        {
+                            <div class="pet-description">
+                                <p>@(pet.Description.Length > 100 ? pet.Description.Substring(0, 100) + "..." : pet.Description)</p>
+                            </div>
+                        }
+                    </div>
+                    
+                    <div class="pet-actions">
+                        <a href="@Url.Action("Details", "Pet", new { id = pet.Id })" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-eye"></i> @Localizer["ViewDetails"]
+                        </a>
+                        @if (isAdopted != true)
+                        {
+                            <a href="@Url.Action("Adopt", "Adoption", new { petId = pet.Id })" class="btn btn-primary btn-sm">
+                                <i class="fas fa-heart"></i> @Localizer["Adopt"]
+                            </a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <i class="fas fa-check"></i> @Localizer["AlreadyAdopted"]
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
         }
     </div>
     
@@ -149,6 +282,43 @@ document.addEventListener('DOMContentLoaded', function() {
     const genderFilter = document.getElementById('genderFilter');
     const petsGrid = document.getElementById('petsGrid');
     const petCards = document.querySelectorAll('.pet-card');
+    const sectionHeaders = document.querySelectorAll('.section-header');
+    const tabButtons = document.querySelectorAll('.tab-button');
+    
+    let currentTab = 'all';
+
+    function switchTab(tabName) {
+        currentTab = tabName;
+        
+        // Update tab button states
+        tabButtons.forEach(button => {
+            if (button.dataset.tab === tabName) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        });
+        
+        // Show/hide section headers and cards based on tab
+        sectionHeaders.forEach(header => {
+            if (tabName === 'all' || header.dataset.tab === tabName) {
+                header.style.display = 'block';
+            } else {
+                header.style.display = 'none';
+            }
+        });
+        
+        petCards.forEach(card => {
+            if (tabName === 'all' || card.dataset.tab === tabName) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+        
+        // Reapply filters after tab switch
+        filterPets();
+    }
 
     function filterPets() {
         const searchTerm = searchInput.value.toLowerCase();
@@ -157,6 +327,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedGender = genderFilter.value;
 
         petCards.forEach(card => {
+            // Skip cards that don't match current tab
+            if (currentTab !== 'all' && card.dataset.tab !== currentTab) {
+                card.style.display = 'none';
+                return;
+            }
+            
             const petName = card.querySelector('.pet-name').textContent.toLowerCase();
             const petSpecies = card.dataset.species;
             const petAge = parseInt(card.dataset.age);
@@ -182,6 +358,14 @@ document.addEventListener('DOMContentLoaded', function() {
         return 'Senior';
     }
 
+    // Tab button event listeners
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            switchTab(this.dataset.tab);
+        });
+    });
+
+    // Filter event listeners
     searchInput.addEventListener('input', filterPets);
     speciesFilter.addEventListener('change', filterPets);
     ageFilter.addEventListener('change', filterPets);
