@@ -40,6 +40,9 @@
   <data name="Get Help" xml:space="preserve">
     <value>Get Help Now</value>
   </data>
+  <data name="ContactUsButton" xml:space="preserve">
+    <value>Contact Us</value>
+  </data>
 
   <!-- About.cshtml -->
   <data name="AboutUsTitle" xml:space="preserve">
