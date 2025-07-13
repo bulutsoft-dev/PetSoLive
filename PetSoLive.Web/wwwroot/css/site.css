@@ -41,92 +41,9 @@ main {
     margin-bottom: 60px;
 }
 
-.navbar {
-    background-color: var(--petsolive-primary) !important;
-    padding: 0.75rem 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, padding 0.3s ease;
-    border-radius: 0 0 12px 12px;
-}
+/* Navbar styles moved to navbar.css */
 
-    .navbar:hover {
-        padding: 1rem 2.5rem;
-    }
-
-    .navbar .navbar-brand {
-        color: #ffffff !important;
-        font-weight: 700;
-        font-size: 1.5rem;
-        transition: color 0.3s ease;
-        display: flex;
-        align-items: center;
-    }
-
-        .navbar .navbar-brand:hover {
-            color: #d1eaff !important;
-        }
-
-    .navbar .nav-link {
-        color: #ffffff !important;
-        margin-left: 2rem;
-        font-weight: 500;
-        transition: color 0.3s ease, border-bottom 0.3s ease, transform 0.3s ease;
-        display: flex;
-        align-items: center;
-    }
-
-        .navbar .nav-link i {
-            margin-right: 0.5rem;
-            font-size: 1.2rem;
-            transition: color 0.3s ease;
-        }
-
-        .navbar .nav-link:hover {
-            color: #d1eaff !important;
-            border-bottom: 2px solid #ffffff;
-            transform: translateY(-2px);
-        }
-
-            .navbar .nav-link:hover i {
-                color: #d1eaff;
-            }
-
-    .navbar .navbar-toggler {
-        border-color: #ffffff;
-        transition: border-color 0.3s ease;
-    }
-
-        .navbar .navbar-toggler:hover {
-            border-color: #d1eaff;
-        }
-
-    .navbar .navbar-toggler-icon {
-        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-        transition: background-image 0.3s ease;
-    }
-
-    .navbar .navbar-toggler:hover .navbar-toggler-icon {
-        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28229, 229, 53, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-    }
-
-.footer {
-    color: var(--petsolive-dark);
-    font-size: 0.9rem;
-    padding: 20px 0;
-    border-top: 1px solid #e0e0e0;
-    text-align: center;
-    position: relative;
-    z-index: 10;
-}
-
-    .footer a {
-        color: var(--petsolive-primary);
-        text-decoration: none;
-    }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
+/* Footer styles moved to footer.css */
 
 .btn {
     font-family: 'Roboto', sans-serif;
@@ -144,10 +61,10 @@ main {
     color: #ffffff;
 }
 
-    .btn-primary:hover {
-        background-color: #1565C0;
-        border-color: #0D47A1;
-    }
+.btn-primary:hover {
+    background-color: #1565C0;
+    border-color: #0D47A1;
+}
 
 .btn-secondary {
     background-color: var(--petsolive-secondary);
@@ -155,10 +72,10 @@ main {
     color: #ffffff;
 }
 
-    .btn-secondary:hover {
-        background-color: #1E88E5;
-        border-color: #1565C0;
-    }
+.btn-secondary:hover {
+    background-color: #1E88E5;
+    border-color: #1565C0;
+}
 
 .btn-success {
     background-color: var(--petsolive-success);
@@ -166,10 +83,10 @@ main {
     color: #ffffff;
 }
 
-    .btn-success:hover {
-        background-color: #2E7D32;
-        border-color: #1B5E20;
-    }
+.btn-success:hover {
+    background-color: #2E7D32;
+    border-color: #1B5E20;
+}
 
 .btn-danger {
     background-color: var(--petsolive-danger);
@@ -177,10 +94,10 @@ main {
     color: #ffffff;
 }
 
-    .btn-danger:hover {
-        background-color: #C62828;
-        border-color: #B71C1C;
-    }
+.btn-danger:hover {
+    background-color: #C62828;
+    border-color: #B71C1C;
+}
 
 .btn-warning {
     background-color: var(--petsolive-warning);
@@ -188,10 +105,10 @@ main {
     color: #212121;
 }
 
-    .btn-warning:hover {
-        background-color: #F57C00;
-        border-color: #EF6C00;
-    }
+.btn-warning:hover {
+    background-color: #F57C00;
+    border-color: #EF6C00;
+}
 
 .btn-info {
     background-color: var(--petsolive-info);
@@ -199,10 +116,10 @@ main {
     color: #ffffff;
 }
 
-    .btn-info:hover {
-        background-color: #6A1B9A;
-        border-color: #4A148C;
-    }
+.btn-info:hover {
+    background-color: #6A1B9A;
+    border-color: #4A148C;
+}
 
 .form-control {
     border-radius: 6px;
@@ -213,10 +130,10 @@ main {
     width: 100%;
 }
 
-    .form-control:focus {
-        border-color: var(--petsolive-primary);
-        box-shadow: 0 0 0 0.1rem rgba(30, 136, 229, 0.25);
-    }
+.form-control:focus {
+    border-color: var(--petsolive-primary);
+    box-shadow: 0 0 0 0.1rem rgba(30, 136, 229, 0.25);
+}
 
 .alert {
     margin: 1rem auto;
@@ -257,10 +174,10 @@ main {
     background-color: #ffffff;
 }
 
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    }
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
 
 .card-img-top {
     border-radius: 8px 8px 0 0;
@@ -304,20 +221,6 @@ main {
 }
 
 @media (max-width: 768px) {
-    .navbar {
-        padding: 0.75rem 1rem;
-        border-radius: 0;
-    }
-
-        .navbar .nav-link {
-            margin-left: 1rem;
-            font-size: 0.95rem;
-        }
-
-            .navbar .nav-link i {
-                margin-right: 0.3rem;
-            }
-
     .card-img-top {
         height: 150px;
     }

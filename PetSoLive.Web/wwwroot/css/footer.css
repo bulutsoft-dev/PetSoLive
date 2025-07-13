@@ -1,62 +1,156 @@
-/* Footer Styles */
-.footer {
-    background-color:  var(--petsolive-primary);
-    color: #ffffff; /* White text color */
-    padding: 20px 0;
-    margin-top: auto; /* Ensure footer sticks to the bottom */
+/* Modern, Düzgün ve Sade Footer */
+.petsolive-footer.pro-footer {
+    background: linear-gradient(135deg, var(--petsolive-primary) 0%, var(--petsolive-secondary) 100%);
+    color: #fff;
+    margin-top: auto;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-family: 'Roboto', sans-serif;
 }
-
-.footer h5 {
-    color: #ffffff; /* White color for headings */
-    margin-bottom: 15px;
+.footer-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 1.1rem;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.08);
 }
-
-.footer a {
-    color: #ffffff; /* White color for links */
-    text-decoration: none; /* Remove underline */
-}
-
-.footer a:hover {
-    color: #007bff; /* Change color on hover */
-}
-
-.footer ul {
-    list-style-type: none; /* Remove bullet points */
-    padding-left: 0;
-}
-
-.footer ul li {
-    margin-bottom: 10px;
-}
-
-.footer-bottom {
-    background-color: var(--petsolive-secondary);
-    padding: 10px 0;
-    text-align: center;
-}
-
-.footer-bottom p {
+.footer-link-list {
+    list-style: none;
+    padding: 0;
     margin: 0;
-    color: #ffffff; /* White text color */
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
 }
-
-.social-links a {
-    color: #ffffff; /* White color for social icons */
-    margin: 0 10px;
-    font-size: 1.2rem;
+.footer-link-list li {
+    margin: 0;
 }
-
-.social-links a:hover {
-    color: #007bff; /* Change color on hover */
+.footer-link-list a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 400;
+    opacity: 0.92;
+    transition: color 0.2s, opacity 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
 }
-
-/* Ensure the footer is always at the bottom */
+.footer-link-list a:hover {
+    color: #d1eaff;
+    opacity: 1;
+    text-decoration: underline;
+}
+.footer-center-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+.footer-center-desc {
+    color: #e3f2fd;
+    font-size: 1rem;
+    font-weight: 400;
+    max-width: 340px;
+    margin: 0 auto;
+    line-height: 1.6;
+    opacity: 0.92;
+}
+.footer-bottom-row {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin-top: 2.2rem;
+    padding-top: 1.1rem;
+    font-size: 0.98rem;
+    background: rgba(255,255,255,0.01);
+}
+.footer-social-icon {
+    color: #fff;
+    font-size: 1.35rem;
+    opacity: 0.85;
+    transition: color 0.2s, opacity 0.2s;
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+}
+.footer-social-icon:hover {
+    color: #d1eaff;
+    opacity: 1;
+}
+.footer-language-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    opacity: 0.92;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.2s, opacity 0.2s;
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+.footer-language-link:hover {
+    color: #d1eaff;
+    opacity: 1;
+    text-decoration: underline;
+}
+.footer-copyright {
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+.petsolive-footer img {
+    transition: all 0.4s ease;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+.petsolive-footer img:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15)) brightness(1.05);
+}
+@media (max-width: 991px) {
+    .footer-title, .footer-center-title {
+        text-align: center;
+    }
+    .footer-link-list {
+        align-items: center !important;
+    }
+    .footer-bottom-row {
+        flex-direction: column !important;
+        gap: 1.2rem !important;
+        text-align: center;
+    }
+}
+@media (max-width: 576px) {
+    .footer-title, .footer-center-title {
+        font-size: 1.05rem;
+    }
+    .footer-link-list a, .footer-center-desc {
+        font-size: 0.95rem;
+    }
+    .footer-social-icon {
+        font-size: 1.1rem;
+    }
+    .footer-bottom-row {
+        font-size: 0.93rem;
+        padding-top: 0.7rem;
+    }
+}
 body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
-
 .container {
     flex: 1;
+}
+.petsolive-footer ::selection {
+    background-color: rgba(255,255,255,0.2);
+    color: #ffffff;
 }

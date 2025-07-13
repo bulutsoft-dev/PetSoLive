@@ -32,32 +32,32 @@
     border-radius: 30px;
 }
 
-    .hero-content h1 {
-        font-size: 3rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-    }
+.hero-content h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
 
-    .hero-content p {
-        font-size: 1.2rem;
-        margin-bottom: 2rem;
-    }
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
 
-    .hero-content .btn-hero-cta {
-        background-color: var(--petsolive-secondary);
-        color: #fff;
-        padding: 0.75rem 1.5rem;
-        border-radius: 30px;
-        font-size: 1.1rem;
-        font-weight: 500;
-        transition: background-color 0.3s ease;
-        text-decoration: none;
-    }
+.hero-content .btn-hero-cta {
+    background-color: var(--petsolive-secondary);
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
 
-        .hero-content .btn-hero-cta:hover {
-            background-color: var(--petsolive-primary);
-            color: #fff;
-        }
+.hero-content .btn-hero-cta:hover {
+    background-color: var(--petsolive-primary);
+    color: #fff;
+}
 
 .info-section {
     display: flex;
@@ -78,29 +78,29 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-    .info-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    }
+.info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
 
-    .info-card .icon-big {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-        color: var(--petsolive-primary);
-    }
+.info-card .icon-big {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--petsolive-primary);
+}
 
-    .info-card h3 {
-        font-size: 1.5rem;
-        margin-bottom: 0.5rem;
-        color: var(--petsolive-dark);
-        text-align: center;
-        color: cornflowerblue;
-    }
+.info-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--petsolive-dark);
+    text-align: center;
+    color: cornflowerblue;
+}
 
-    .info-card p {
-        font-size: 1rem;
-        color: #555;
-    }
+.info-card p {
+    font-size: 1rem;
+    color: #555;
+}
 
 @media (max-width: 768px) {
     .home-hero {
