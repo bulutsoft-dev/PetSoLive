@@ -68,6 +68,61 @@ main {
 
 /* Footer styles moved to footer.css */
 
+body, html {
+    background-color: var(--petsolive-bg) !important;
+    color: var(--petsolive-text) !important;
+}
+
+.card, .info-card, .modal-content {
+    background-color: var(--petsolive-light) !important;
+    color: var(--petsolive-text) !important;
+    border: 1px solid var(--petsolive-secondary);
+}
+
+[data-theme="dark"] .card, [data-theme="dark"] .info-card, [data-theme="dark"] .modal-content {
+    background-color: #23272f !important;
+    color: #e3f2fd !important;
+    border: 1px solid #1E88E5;
+}
+[data-theme="dark"] .info-card,
+[data-theme="dark"] .card {
+    background-color: #23272f !important;
+    color: #e3f2fd !important;
+    border: 1px solid #1E88E5;
+}
+[data-theme="dark"] .info-card h1,
+[data-theme="dark"] .info-card h3,
+[data-theme="dark"] .info-card p,
+[data-theme="dark"] .info-card a,
+[data-theme="dark"] .info-card .btn,
+[data-theme="dark"] .info-card .lead {
+    color: #e3f2fd !important;
+}
+[data-theme="dark"] .home-hero,
+[data-theme="dark"] .home-hero-overlay {
+    background: linear-gradient(120deg, #10151b 80%, #23272f 100%) !important;
+}
+[data-theme="dark"] .hero-content,
+[data-theme="dark"] .hero-content h1,
+[data-theme="dark"] .hero-content p,
+[data-theme="dark"] .hero-content a,
+[data-theme="dark"] .hero-content .btn,
+[data-theme="dark"] .hero-content .lead {
+    color: #e3f2fd !important;
+    text-shadow: 0 2px 8px #10151b;
+}
+[data-theme="dark"] .btn-primary,
+[data-theme="dark"] .btn {
+    background-color: #1E88E5 !important;
+    color: #fff !important;
+    border-color: #1E88E5 !important;
+}
+[data-theme="dark"] .btn-primary:hover,
+[data-theme="dark"] .btn:hover {
+    background-color: #1565C0 !important;
+    color: #fff !important;
+}
+
 .btn {
     font-family: 'Roboto', sans-serif;
     transition: background-color 0.3s ease, transform 0.2s ease;
@@ -76,6 +131,8 @@ main {
     padding: 0.6rem 1.2rem;
     cursor: pointer;
     font-size: 1rem;
+    background-color: var(--petsolive-primary);
+    color: #fff;
 }
 
 .btn-primary {
@@ -142,6 +199,11 @@ main {
 .btn-info:hover {
     background-color: #6A1B9A;
     border-color: #4A148C;
+}
+
+[data-theme="dark"] .btn {
+    background-color: #1E88E5;
+    color: #fff;
 }
 
 .form-control {
@@ -241,6 +303,74 @@ main {
 
 .badge-info {
     background-color: var(--petsolive-info);
+}
+
+.modal-header, .modal-footer {
+    background: transparent;
+    border: none;
+}
+
+[data-theme="dark"] .modal-header, [data-theme="dark"] .modal-footer {
+    background: transparent;
+    border: none;
+}
+
+/* Google Play Modal Gelişmiş Stilleri */
+#googlePlayModal .modal-content {
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px rgba(30,136,229,0.15);
+    background: var(--petsolive-light);
+    transition: background 0.3s;
+}
+[data-theme="dark"] #googlePlayModal .modal-content {
+    background: #23272f;
+    color: #e3f2fd;
+}
+#googlePlayModal .modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+#googlePlayModal .modal-title {
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+#googlePlayModal img[alt="Uygulama Ekran Görüntüsü"] {
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 12px rgba(30,136,229,0.10);
+}
+#googlePlayModal ul {
+    padding-left: 1.2rem;
+    font-size: 1rem;
+    color: var(--petsolive-text);
+}
+[data-theme="dark"] #googlePlayModal ul {
+    color: #b3c6e0;
+}
+#googlePlayModal .form-check-label {
+    font-size: 0.95rem;
+    color: var(--petsolive-text);
+}
+[data-theme="dark"] #googlePlayModal .form-check-label {
+    color: #b3c6e0;
+}
+#googlePlayModal .form-check-input:checked {
+    background-color: var(--petsolive-primary);
+    border-color: var(--petsolive-primary);
+}
+@media (max-width: 576px) {
+    #googlePlayModal .modal-dialog {
+        margin: 0;
+        max-width: 100vw;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+    }
+    #googlePlayModal .modal-content {
+        border-radius: 0;
+        min-height: 100vh;
+        padding: 1rem;
+    }
 }
 
 @media (max-width: 768px) {

@@ -37,6 +37,45 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
     @await Html.PartialAsync("_Navbar")
+    <!-- Theme Toggle Button -->
+    <div class="position-fixed end-0 bottom-0 p-3" style="z-index: 1050;">
+        <button id="themeToggleBtn" class="btn btn-secondary shadow" onclick="toggleTheme()" title="Tema Değiştir">
+            <i class="bi bi-moon-fill theme-icon-dark"></i>
+            <i class="bi bi-sun-fill theme-icon-light" style="display:none;"></i>
+        </button>
+    </div>
+    <!-- Google Play Modal -->
+    <div class="modal fade" id="googlePlayModal" tabindex="-1" aria-labelledby="googlePlayModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-2 p-md-4">
+          <div class="modal-header border-0 pb-0">
+            <div class="d-flex align-items-center gap-2">
+              <img src="/wwwroot/logo.png" alt="PetSoLive Logo" style="width:48px;height:48px;">
+              <h5 class="modal-title mb-0" id="googlePlayModalLabel">PetSoLive Mobil Uygulaması!</h5>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+          </div>
+          <div class="modal-body text-center">
+            <img src="https://play-lh.googleusercontent.com/4QwQw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw=w2560-h1440" alt="Uygulama Ekran Görüntüsü" class="img-fluid rounded shadow mb-3" style="max-height:200px;object-fit:cover;">
+            <p class="lead">PetSoLive artık Google Play'de! Mobil uygulamamızı indirerek daha hızlı ve kolay erişim sağlayabilirsiniz.</p>
+            <ul class="text-start mx-auto mb-3" style="max-width:350px;">
+              <li>Bildirimlerle anında güncellemeler</li>
+              <li>Kolay ve hızlı yardım talebi</li>
+              <li>Kayıp ve sahiplendirme ilanlarına mobil erişim</li>
+            </ul>
+            <a href="https://play.google.com/store/apps/details?id=com.petsolive.petsolive" target="_blank">
+              <img src="https://play.google.com/intl/en_us/badges/static/images/badges/tr_badge_web_generic.png" alt="Google Play'den indirin" style="max-width: 250px;"/>
+            </a>
+            <div class="form-check mt-3">
+              <input class="form-check-input" type="checkbox" value="" id="dontShowAgainCheckbox">
+              <label class="form-check-label" for="dontShowAgainCheckbox">
+                Bir daha gösterme
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="container pt-3 flex-grow-1">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -46,6 +85,28 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+      // Google Play Modal otomatik açılış (her oturumda bir kez veya bir daha gösterme seçili değilse)
+      document.addEventListener('DOMContentLoaded', function() {
+        var dontShow = localStorage.getItem('googlePlayModalDontShow');
+        if (!dontShow && !localStorage.getItem('googlePlayModalShown')) {
+          var modal = new bootstrap.Modal(document.getElementById('googlePlayModal'));
+          modal.show();
+          localStorage.setItem('googlePlayModalShown', 'true');
+        }
+        // Checkbox kontrolü
+        var checkbox = document.getElementById('dontShowAgainCheckbox');
+        if (checkbox) {
+          checkbox.addEventListener('change', function() {
+            if (this.checked) {
+              localStorage.setItem('googlePlayModalDontShow', 'true');
+            } else {
+              localStorage.removeItem('googlePlayModalDontShow');
+            }
+          });
+        }
+      });
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

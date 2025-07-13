@@ -272,4 +272,13 @@
   <data name="Wind" xml:space="preserve">
     <value>Rüzgar</value>
   </data>
+  <data name="PlayStoreModalTitle" xml:space="preserve">
+    <value>PetSoLive Mobil Uygulaması Yayında!</value>
+  </data>
+  <data name="PlayStoreModalLead" xml:space="preserve">
+    <value>PetSoLive artık Google Play'de! Mobil uygulamamızı indirerek daha hızlı ve kolay erişim sağlayabilirsiniz.</value>
+  </data>
+  <data name="PlayStoreModalButtonText" xml:space="preserve">
+    <value>Google Play'den İndir</value>
+  </data>
 </root>

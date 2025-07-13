@@ -16,20 +16,30 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(30, 136, 229, 0.5);
+    background-color: rgba(30, 136, 229, 0.5); /* aydınlık mod */
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 30px;
+    z-index: 1;
 }
-
+[data-theme="dark"] .home-hero-overlay {
+    background-color: rgba(16, 21, 27, 0.12); /* çok daha şeffaf, bg.png daha aydınlık görünür */
+}
 .hero-content {
+    position: relative;
+    z-index: 2;
     text-align: center;
     max-width: 600px;
     margin: 0 auto;
     padding: 1rem;
-    color: #fff;
+    color: #212121;
     border-radius: 30px;
+    background: rgba(255,255,255,0.15);
+}
+[data-theme="dark"] .hero-content {
+    color: #e3f2fd;
+    background: rgba(30, 136, 229, 0.10);
 }
 
 .hero-content h1 {
@@ -84,9 +94,9 @@
 }
 
 .info-card .icon-big {
-    font-size: 3rem;
+    font-size: 2.5rem;
     margin-bottom: 1rem;
-    color: var(--petsolive-primary);
+    color: #1E88E5;
 }
 
 .info-card h3 {
@@ -146,4 +156,52 @@
     background-color: var(--petsolive-primary);
     color: #fff;
     text-decoration: none;
+}
+
+.hero-content,
+.hero-content h1,
+.hero-content p,
+.hero-content a,
+.hero-content .btn,
+.hero-content .lead {
+    text-shadow: none;
+}
+
+[data-theme="dark"] .home-hero,
+[data-theme="dark"] .home-hero-overlay {
+    background: linear-gradient(120deg, #10151b 80%, #23272f 100%) !important;
+}
+[data-theme="dark"] .hero-content,
+[data-theme="dark"] .hero-content h1,
+[data-theme="dark"] .hero-content p,
+[data-theme="dark"] .hero-content a,
+[data-theme="dark"] .hero-content .btn,
+[data-theme="dark"] .hero-content .lead {
+    color: #e3f2fd !important;
+    text-shadow: 0 2px 8px #10151b;
+}
+[data-theme="dark"] .info-card,
+[data-theme="dark"] .info-card h3,
+[data-theme="dark"] .info-card p,
+[data-theme="dark"] .info-card a,
+[data-theme="dark"] .info-card .btn,
+[data-theme="dark"] .info-card .lead {
+    color: #e3f2fd !important;
+}
+[data-theme="dark"] .info-card {
+    background-color: #23272f !important;
+    border: 1px solid #1E88E5;
+}
+[data-theme="dark"] .icon-big, [data-theme="dark"] .bi {
+    color: #90caf9 !important;
+    filter: drop-shadow(0 2px 6px #10151b);
+}
+[data-theme="dark"] .home-hero {
+    background-image: url('/lib/bg.png');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(1.25) contrast(1.22);
+}
+[data-theme="dark"] .home-hero-overlay {
+    background: rgba(16,21,27,0.15); /* çok hafif koyu overlay */
 }

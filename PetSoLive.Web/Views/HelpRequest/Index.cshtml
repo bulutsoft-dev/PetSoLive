@@ -16,20 +16,34 @@
 <div class="helprequest-page">
     <h1 class="helprequest-title">@ViewData["Title"]</h1>
 
-    <div class="container">
-        <div class="row mb-3">
-            <div class="col-12">
-                <a class="btn btn-success btn-lg" href="@Url.Action("Create", "HelpRequest")">
-                    @Localizer["CreateNewHelpRequestButton"]
-                </a>
-            </div>
+    @* Tema geçiş butonu *@
+    <div class="row mb-3">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <button id="theme-toggle" class="btn btn-secondary" type="button">
+                <span id="theme-toggle-text">Karanlık Moda Geç</span>
+            </button>
+            <a href="https://play.google.com/store/apps/details?id=com.petsolive.petsolive" target="_blank">
+                <img src="https://play.google.com/intl/en_us/badges/static/images/badges/tr_badge_web_generic.png"
+                     alt="Google Play'den İndir"
+                     style="height:60px; margin-right: 10px;" />
+            </a>
+            <span style="font-size:1.1em; font-weight:500;">PetSoLive mobil uygulaması ile yardım taleplerini kolayca oluşturun, kayıp ilanlarını takip edin ve topluluğumuzla her an iletişimde kalın!</span>
         </div>
+    </div>
 
+    <div class="container">
         <div class="row">
             @foreach (var helpRequest in Model)
             {
+                var emergencyIcon = helpRequest.EmergencyLevel switch
+                {
+                    EmergencyLevel.High => "<i class='fas fa-exclamation-triangle text-danger'></i>",
+                    EmergencyLevel.Medium => "<i class='fas fa-exclamation-circle text-warning'></i>",
+                    EmergencyLevel.Low => "<i class='fas fa-info-circle text-info'></i>",
+                    _ => "<i class='fas fa-question-circle text-secondary'></i>"
+                };
                 <div class="col-md-4 mb-4">
-                    <div class="helprequest-card shadow-lg">
+                    <div class="helprequest-card shadow-lg" style="border-left: 6px solid @(helpRequest.EmergencyLevel == EmergencyLevel.High ? "#E53935" : helpRequest.EmergencyLevel == EmergencyLevel.Medium ? "#FB8C00" : "#1E88E5")">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5>
@@ -37,6 +51,7 @@
                                        class="card-title text-dark">@helpRequest.Title</a>
                                 </h5>
                                 <span class="badge badge-pill badge-warning">
+                                    @Html.Raw(emergencyIcon)
                                     @Localizer[$"EmergencyLevel{helpRequest.EmergencyLevel}"]
                                 </span>
                             </div>
@@ -96,3 +111,26 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/4e7b8e7e2a.js" crossorigin="anonymous"></script>
+    <script>
+        // Tema geçişi
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeToggleText = document.getElementById('theme-toggle-text');
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            themeToggleText.textContent = theme === 'dark' ? 'Aydınlık Moda Geç' : 'Karanlık Moda Geç';
+        }
+        themeToggle.addEventListener('click', function () {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+        });
+        // Sayfa yüklenince tema kontrolü
+        (function () {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) setTheme(savedTheme);
+        })();
+    </script>
+}

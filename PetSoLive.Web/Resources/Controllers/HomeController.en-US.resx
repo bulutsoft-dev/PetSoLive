@@ -177,6 +177,15 @@
   <data name="IoTIntegration" xml:space="preserve">
     <value>IoT Integration: Integration with smart devices like GPS trackers and health monitors to improve pet care and tracking.</value>
   </data>
+  <data name="PlayStoreModalTitle" xml:space="preserve">
+    <value>PetSoLive Mobile App is Live!</value>
+  </data>
+  <data name="PlayStoreModalLead" xml:space="preserve">
+    <value>PetSoLive is now on Google Play! Download our mobile app for faster and easier access.</value>
+  </data>
+  <data name="PlayStoreModalButtonText" xml:space="preserve">
+    <value>Get it on Google Play</value>
+  </data>
   <data name="Conclusion" xml:space="preserve">
     <value>Conclusion</value>
   </data>
