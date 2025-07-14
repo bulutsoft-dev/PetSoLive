@@ -7,96 +7,117 @@
     Layout = "_Layout";
 }
 
-<div class="about-container about-list">
-    <div>
-        <div class="card shadow-sm animate-on-scroll mb-4">
-            <div class="card-body">
-                <h2 class="card-title mb-3"><i class="bi bi-info-circle-fill me-2 text-primary"></i>@Localizer["AboutPetSoLive"]</h2>
-                <p class="card-text">@Localizer["AboutDescription"]</p>
+<div class="about-container container py-3" style="max-width:1100px;">
+    <!-- HERO SECTION (Sade) -->
+    <div class="row align-items-center mb-3 g-2">
+        <div class="col-md-2 text-center">
+            <img src="/logo.png" alt="PetSoLive Logo" class="rounded-circle shadow" style="width:60px;height:60px;object-fit:cover;">
+        </div>
+        <div class="col-md-10">
+            <h1 class="fw-bold mb-1 text-primary" style="font-size:1.5rem;line-height:1.2;">@Localizer["AboutUsTitle"]</h1>
+            <p class="mb-2" style="font-size:1rem;line-height:1.4;">@Localizer["AboutUsDescription"]</p>
+        </div>
+    </div>
+
+    <!-- MISSION & VISION yan yana -->
+    <div class="row g-2 mb-2">
+        <div class="col-md-6">
+            <div class="p-3 border rounded-3 bg-white h-100">
+                <h3 class="fw-bold text-success mb-1" style="font-size:1.05rem;">@Localizer["MissionTitle"]</h3>
+                <p class="mb-0">@Localizer["MissionDesc"]</p>
             </div>
         </div>
-        <div class="card shadow-sm animate-on-scroll mb-4">
-            <div class="card-body">
-                <h3 class="card-title mb-3"><i class="bi bi-bullseye me-2 text-success"></i>@Localizer["OurMission"]</h3>
-                <p class="card-text">@Localizer["MissionText"]</p>
+        <div class="col-md-6">
+            <div class="p-3 border rounded-3 bg-white h-100">
+                <h3 class="fw-bold text-info mb-1" style="font-size:1.05rem;">@Localizer["VisionTitle"]</h3>
+                <p class="mb-0">@Localizer["VisionDesc"]</p>
             </div>
         </div>
-        <div class="card shadow-sm animate-on-scroll mb-4">
-            <div class="card-body">
-                <h3 class="card-title mb-3"><i class="bi bi-gift-fill me-2 text-warning"></i>@Localizer["WhatWeOffer"]</h3>
-                <p class="card-text">@Localizer["OfferList"]</p>
-                <ul class="mb-0">
-                    <li><span class="badge bg-primary me-2"><i class="bi bi-heart-fill"></i></span>@Localizer["AdoptionStories"]</li>
-                    <li><span class="badge bg-info me-2"><i class="bi bi-search"></i></span>@Localizer["LostPetAds"]</li>
-                    <li><span class="badge bg-danger me-2"><i class="bi bi-exclamation-triangle-fill"></i></span>@Localizer["EmergencyHelp"]</li>
-                    <li><span class="badge bg-success me-2"><i class="bi bi-chat-dots-fill"></i></span>@Localizer["VeterinaryAdvice"]</li>
-                    <li><span class="badge bg-secondary me-2"><i class="bi bi-person-badge-fill"></i></span>@Localizer["PetProfiles"]</li>
-                    <li><span class="badge bg-dark me-2"><i class="bi bi-bell-fill"></i></span>@Localizer["RealTimeNotifications"]</li>
+    </div>
+
+    <!-- HOW IT WORKS yan yana -->
+    <div class="row g-1 mb-2">
+        <div class="col-6 col-lg-3">
+            <div class="p-2 border rounded-3 bg-light h-100 text-center">
+                <div class="fs-6 text-primary"><i class="bi bi-person-plus-fill"></i></div>
+                <div class="fw-bold" style="font-size:0.98rem;">@Localizer["Step1Title"]</div>
+                <div class="small">@Localizer["Step1Desc"]</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="p-2 border rounded-3 bg-light h-100 text-center">
+                <div class="fs-6 text-success"><i class="bi bi-search-heart"></i></div>
+                <div class="fw-bold" style="font-size:0.98rem;">@Localizer["Step2Title"]</div>
+                <div class="small">@Localizer["Step2Desc"]</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="p-2 border rounded-3 bg-light h-100 text-center">
+                <div class="fs-6 text-warning"><i class="bi bi-chat-dots"></i></div>
+                <div class="fw-bold" style="font-size:0.98rem;">@Localizer["Step3Title"]</div>
+                <div class="small">@Localizer["Step3Desc"]</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="p-2 border rounded-3 bg-light h-100 text-center">
+                <div class="fs-6 text-danger"><i class="bi bi-heart"></i></div>
+                <div class="fw-bold" style="font-size:0.98rem;">@Localizer["Step4Title"]</div>
+                <div class="small">@Localizer["Step4Desc"]</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WHAT WE OFFER & WHY CHOOSE US yan yana (tamamen benzer kutu/kart yapısı) -->
+    <div class="row g-2 mb-2">
+        <div class="col-md-6">
+            <div class="p-3 border rounded-3 bg-white shadow-sm h-100 d-flex flex-column justify-content-center">
+                <h3 class="fw-bold text-primary mb-2" style="font-size:1.05rem;">@Localizer["WhatWeOfferTitle"]</h3>
+                <p class="mb-2">@Localizer["WhatWeOfferDesc"]</p>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2 d-flex align-items-start"><span class="badge bg-primary me-2"><i class="bi bi-heart-fill"></i></span><div><span class="fw-bold">@Localizer["AdoptionStories"]</span><div class="small">@Localizer["AdoptionStoriesDesc"]</div></div></li>
+                    <li class="mb-2 d-flex align-items-start"><span class="badge bg-info me-2"><i class="bi bi-search"></i></span><div><span class="fw-bold">@Localizer["LostPetAds"]</span><div class="small">@Localizer["LostPetAdsDesc"]</div></div></li>
+                    <li class="mb-2 d-flex align-items-start"><span class="badge bg-danger me-2"><i class="bi bi-exclamation-triangle-fill"></i></span><div><span class="fw-bold">@Localizer["EmergencyHelp"]</span><div class="small">@Localizer["EmergencyHelpDesc"]</div></div></li>
+                    <li class="mb-2 d-flex align-items-start"><span class="badge bg-success me-2"><i class="bi bi-chat-dots-fill"></i></span><div><span class="fw-bold">@Localizer["VeterinaryAdvice"]</span><div class="small">@Localizer["VeterinaryAdviceDesc"]</div></div></li>
+                    <li class="mb-2 d-flex align-items-start"><span class="badge bg-secondary me-2"><i class="bi bi-person-badge-fill"></i></span><div><span class="fw-bold">@Localizer["PetProfiles"]</span><div class="small">@Localizer["PetProfilesDesc"]</div></div></li>
+                    <li class="d-flex align-items-start"><span class="badge bg-dark me-2"><i class="bi bi-bell-fill"></i></span><div><span class="fw-bold">@Localizer["RealTimeNotifications"]</span><div class="small">@Localizer["RealTimeNotificationsDesc"]</div></div></li>
                 </ul>
             </div>
         </div>
-        <div class="card shadow-sm animate-on-scroll mb-4">
-            <div class="card-body">
-                <h3 class="card-title mb-3"><i class="bi bi-star-fill me-2 text-warning"></i>@Localizer["WhyChoose"]</h3>
-                <p class="card-text">@Localizer["WhyChooseText"]</p>
-                <ul class="mb-0">
-                    <li>@Localizer["FindLostPets"]</li>
-                    <li>@Localizer["EmergencyServices"]</li>
-                    <li>@Localizer["StreamlineAdoption"]</li>
-                    <li>@Localizer["ShareExperiences"]</li>
-                    <li>@Localizer["SupportWelfare"]</li>
+        <div class="col-md-6">
+            <div class="p-3 border rounded-3 bg-white shadow-sm h-100 d-flex flex-column justify-content-center">
+                <h3 class="fw-bold text-primary mb-2" style="font-size:1.05rem;">@Localizer["WhyChooseUsTitle"]</h3>
+                <p class="mb-2">@Localizer["WhyChooseUsDesc"]</p>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2 d-flex align-items-start"><span class="badge bg-primary me-2"><i class="bi bi-shield-check"></i></span><div><span class="fw-bold">@Localizer["WhyChooseUs1"]</span><div class="small">@Localizer["WhyChooseUs1Desc"]</div></div></li>
+                    <li class="mb-2 d-flex align-items-start"><span class="badge bg-info me-2"><i class="bi bi-lightbulb"></i></span><div><span class="fw-bold">@Localizer["WhyChooseUs2"]</span><div class="small">@Localizer["WhyChooseUs2Desc"]</div></div></li>
+                    <li class="mb-2 d-flex align-items-start"><span class="badge bg-danger me-2"><i class="bi bi-bolt"></i></span><div><span class="fw-bold">@Localizer["WhyChooseUs3"]</span><div class="small">@Localizer["WhyChooseUs3Desc"]</div></div></li>
+                    <li class="mb-2 d-flex align-items-start"><span class="badge bg-success me-2"><i class="bi bi-people"></i></span><div><span class="fw-bold">@Localizer["WhyChooseUs4"]</span><div class="small">@Localizer["WhyChooseUs4Desc"]</div></div></li>
+                    <li class="mb-2 d-flex align-items-start"><span class="badge bg-secondary me-2"><i class="bi bi-heart"></i></span><div><span class="fw-bold">@Localizer["WhyChooseUs5"]</span><div class="small">@Localizer["WhyChooseUs5Desc"]</div></div></li>
+                    <li class="d-flex align-items-start"><span class="badge bg-dark me-2"><i class="bi bi-award"></i></span><div><span class="fw-bold">@Localizer["WhyChooseUs6"]</span><div class="small">@Localizer["WhyChooseUs6Desc"]</div></div></li>
                 </ul>
             </div>
         </div>
-        <div class="card shadow-sm animate-on-scroll mb-4">
-            <div class="card-body">
-                <h3 class="card-title mb-3"><i class="bi bi-eye-fill me-2 text-info"></i>@Localizer["OurVision"]</h3>
-                <p class="card-text">@Localizer["VisionText"]</p>
-            </div>
-        </div>
-        <div class="card shadow-sm animate-on-scroll mb-4">
-            <div class="card-body d-flex align-items-center">
-                <div class="me-3">
-                    <img src="/logo.png" alt="PetSoLive Logo" class="rounded-circle shadow" style="width:56px;height:56px;object-fit:cover;">
-                </div>
+    </div>
+
+    <!-- TEAM + CONCLUSION yan yana (daha açıklamalı) -->
+    <div class="row g-2 mt-1 align-items-stretch">
+        <div class="col-md-6">
+            <div class="p-3 border rounded-3 bg-light h-100 d-flex align-items-center">
+                <img src="/logo.png" alt="PetSoLive Logo" class="rounded-circle shadow me-2" style="width:38px;height:38px;object-fit:cover;">
                 <div>
-                    <h3 class="card-title mb-1"><i class="bi bi-person-fill me-2 text-secondary"></i>@Localizer["ProjectDevelopers"]</h3>
-                    <p class="mb-1">@Localizer["DevelopersText"]</p>
-                    <ul class="mb-0">
-                        <li><strong>@Localizer["FurkanBulut"]</strong>: <span class="badge bg-primary">@Localizer["FurkanBulutRole"]</span></li>
-                    </ul>
+                    <h5 class="fw-bold text-secondary mb-0" style="font-size:0.98rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;">
+                        @Localizer["Bulutsoft"] <span class="badge bg-primary">@Localizer["BulutsoftRole"]</span>
+                    </h5>
+                    <div class="small text-muted" style="font-size:0.92rem;max-width:220px;">
+                        @Localizer["BulutsoftDesc"]
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="card shadow-sm animate-on-scroll mb-4">
-            <div class="card-body">
-                <h3 class="card-title mb-3"><i class="bi bi-gear-fill me-2 text-dark"></i>@Localizer["HowItWorks"]</h3>
-                <p class="card-text">@Localizer["WorksText"]</p>
-                <ul class="mb-0">
-                    <li><strong>@Localizer["Frontend"]</strong>: @Localizer["FrontendTech"]</li>
-                    <li><strong>@Localizer["Backend"]</strong>: @Localizer["BackendTech"]</li>
-                    <li><strong>@Localizer["Database"]</strong>: @Localizer["DatabaseTech"]</li>
-                </ul>
-            </div>
-        </div>
-        <div class="card shadow-sm animate-on-scroll mb-4">
-            <div class="card-body">
-                <h3 class="card-title mb-3"><i class="bi bi-lightbulb-fill me-2 text-warning"></i>@Localizer["FutureDevelopments"]</h3>
-                <p class="card-text">@Localizer["FutureText"]</p>
-                <ul class="mb-0">
-                    <li><span class="badge bg-success me-2"><i class="bi bi-phone-fill"></i></span>@Localizer["MobileApp"]</li>
-                    <li><span class="badge bg-info me-2"><i class="bi bi-cpu-fill"></i></span>@Localizer["AIRecommendations"]</li>
-                    <li><span class="badge bg-danger me-2"><i class="bi bi-camera-video-fill"></i></span>@Localizer["VideoConsultations"]</li>
-                    <li><span class="badge bg-primary me-2"><i class="bi bi-people-fill"></i></span>@Localizer["CommunityForums"]</li>
-                    <li><span class="badge bg-warning text-dark me-2"><i class="bi bi-broadcast"></i></span>@Localizer["IoTIntegration"]</li>
-                </ul>
-            </div>
-        </div>
-        <div class="card shadow-sm animate-on-scroll mb-2">
-            <div class="card-body text-center">
-                <h3 class="card-title mb-3"><i class="bi bi-emoji-smile-fill me-2 text-success"></i>@Localizer["Conclusion"]</h3>
-                <p class="card-text">@Localizer["ConclusionText"]</p>
-                <a href="mailto:petsolivedev@gmail.com" class="btn btn-primary mt-2"><i class="bi bi-envelope-fill me-2"></i>@Localizer["ContactUsButton"]</a>
+        <div class="col-md-6">
+            <div class="p-3 border rounded-3 bg-primary text-white h-100 d-flex flex-column justify-content-center align-items-center">
+                <h5 class="fw-bold mb-1"><i class="bi bi-emoji-smile-fill me-2"></i>@Localizer["ConclusionTitle"]</h5>
+                <div class="mb-1" style="font-size:0.98rem;">@Localizer["ConclusionText"]</div>
             </div>
         </div>
     </div>
@@ -104,7 +125,6 @@
 
 @section Scripts {
     <script>
-        // Basit fade-in animasyonu
         document.addEventListener('DOMContentLoaded', function () {
             const elements = document.querySelectorAll('.animate-on-scroll');
             elements.forEach((el, i) => {
@@ -118,4 +138,5 @@
             });
         });
     </script>
+    <link rel="stylesheet" href="/css/about.css" />
 }

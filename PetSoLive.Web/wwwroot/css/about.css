@@ -1,150 +1,136 @@
-/* Base styles for the about-container */
+/* Kompakt ve yan yana grid/flex kartlar için güncellenmiş stiller */
 .about-container {
-    background-color: #ffffff; /* White background for clean design */
-    border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    padding: 2.5rem;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 1.2rem 0.5rem;
+    margin-top: 1.2rem;
+    margin-bottom: 1.2rem;
+    max-width: 1100px;
+    word-break: break-word;
 }
 
-/* Hover effect for smoother shadow and slight movement */
-.about-container:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+.about-container * {
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
-/* Headings */
-.about-container h2, .about-container h3 {
+.about-container h1, .about-container h2, .about-container h3, .about-container h4, .about-container h5 {
     font-weight: 700;
-    color: #2C3E50; /* Darker text for headings for contrast */
-    margin-bottom: 1.5rem;
+    color: #1976d2;
+    margin-bottom: 0.7rem;
+    line-height: 1.2;
+    font-size: 1.2rem;
 }
 
-/* Paragraphs styling for better readability */
-.about-container p {
-    font-size: 1.1rem;
-    line-height: 1.7;
-    color: #34495E; /* Softer dark color for text */
-    margin-bottom: 1.8rem;
+.about-container p, .about-container .card-text, .about-container ul li {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #34495E;
+    margin-bottom: 0.7rem;
 }
 
-/* Unordered list styling */
 .about-container ul {
     list-style: none;
     padding: 0;
-    margin-bottom: 2rem;
+    margin-bottom: 0.7rem;
 }
 
-/* List item styling with custom bullets */
 .about-container ul li {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: #34495E; /* Matching text color for consistency */
-    margin-bottom: 1rem;
-    padding-left: 1.8rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #34495E;
+    margin-bottom: 0.5rem;
+    padding-left: 1.2rem;
     position: relative;
 }
 
-/* Custom bullet color */
 .about-container ul li::before {
     content: "•";
     position: absolute;
     left: 0;
-    color: #2980B9; /* Bright blue for bullets to match the primary color */
+    color: #1976d2;
     font-weight: bold;
 }
 
-/* Button styling */
 .about-container .btn {
-    font-size: 1.1rem;
-    padding: 0.8rem 1.6rem;
-    background-color: #2980B9; /* Primary color for buttons */
-    color: #ffffff;
-    border-radius: 8px;
+    font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+    background-color: #1976d2;
+    color: #fff;
+    border-radius: 7px;
     text-align: center;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    transition: background-color 0.2s, transform 0.2s;
     text-decoration: none;
     display: inline-block;
+    margin-bottom: 0.2rem;
 }
 
-/* Button hover effect */
 .about-container .btn:hover {
-    background-color: #1565C0; /* Slightly darker blue */
-    transform: translateY(-3px);
+    background-color: #1565C0;
+    color: #fff;
+    transform: translateY(-2px);
 }
 
-/* Card styles for content blocks */
-.about-container .card {
-    border-radius: 16px;
-    background-color: #f9f9f9; /* Light background for cards */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    margin-bottom: 2.5rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+.about-container .border, .about-container .rounded-3 {
+    border-radius: 16px !important;
+    border: 1px solid #e3f2fd !important;
+    box-shadow: 0 2px 12px rgba(25, 118, 210, 0.07) !important;
+    transition: box-shadow 0.25s, transform 0.18s;
+}
+.about-container .border:hover, .about-container .rounded-3:hover {
+    box-shadow: 0 6px 24px rgba(25, 118, 210, 0.13) !important;
+    transform: translateY(-2px) scale(1.012);
 }
 
-/* Hover effect for cards */
-.about-container .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+.about-container .shadow-sm {
+    box-shadow: 0 1px 6px rgba(30, 136, 229, 0.06) !important;
 }
 
-/* Card content padding */
-.about-container .card-body {
-    padding: 2rem;
+.about-container .bg-white, .about-container .bg-light {
+    background: linear-gradient(135deg, #f8fafc 60%, #e3f2fd 100%) !important;
+}
+[data-theme="dark"] .about-container .bg-white, [data-theme="dark"] .about-container .bg-light {
+    background: linear-gradient(135deg, #23272f 60%, #181c23 100%) !important;
 }
 
-/* Card title styling */
-.about-container .card-title {
-    font-weight: 700;
-    color: #2C3E50; /* Dark color for the card title */
-    margin-bottom: 1.25rem;
+.about-container .bg-primary {
+    background: #1976d2 !important;
 }
 
-/* Card text content */
-.about-container .card-text {
-    font-size: 1.1rem;
-    color: #34495E;
-    line-height: 1.7;
-}
+.about-container .text-primary { color: #1976d2 !important; }
+.about-container .text-success { color: #43a047 !important; }
+.about-container .text-info { color: #00bcd4 !important; }
+.about-container .text-warning { color: #fbc02d !important; }
+.about-container .text-secondary { color: #616161 !important; }
 
-/* Badge styling */
 .about-container .badge {
-    font-size: 1rem;
-    padding: 0.5rem 0.75rem;
-    border-radius: 8px;
-    color: #ffffff;
-    margin-right: 0.75rem;
+    font-size: 0.95rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 7px;
+    color: #fff;
+    margin-right: 0.5rem;
 }
+.about-container .badge.bg-primary { background-color: #1976d2; }
+.about-container .badge.bg-success { background-color: #43A047; }
+.about-container .badge.bg-danger { background-color: #E53935; }
+.about-container .badge.bg-warning { background-color: #FB8C00; color: #23272f; }
+.about-container .badge.bg-info { background-color: #00bcd4; }
+.about-container .badge.bg-secondary { background-color: #757575; }
+.about-container .badge.bg-dark { background-color: #26334d; }
 
-/* Specific badge colors */
-.about-container .badge-success {
-    background-color: #27AE60; /* Green for success */
-}
-
-.about-container .badge-danger {
-    background-color: #E74C3C; /* Red for danger */
-}
-
-.about-container .badge-warning {
-    background-color: #F39C12; /* Yellow for warnings */
-}
-
-.about-container .badge-info {
-    background-color: #8E44AD; /* Purple for informational badges */
-}
-
-/* Karanlık tema desteği */
 [data-theme="dark"] .about-container {
-    background-color: #181c23;
-    box-shadow: 0 4px 24px rgba(16, 21, 27, 0.25);
+    background: none;
 }
+[data-theme="dark"] .about-container h1,
 [data-theme="dark"] .about-container h2,
-[data-theme="dark"] .about-container h3 {
+[data-theme="dark"] .about-container h3,
+[data-theme="dark"] .about-container h4,
+[data-theme="dark"] .about-container h5 {
     color: #e3f2fd;
 }
 [data-theme="dark"] .about-container p,
+[data-theme="dark"] .about-container .card-text,
 [data-theme="dark"] .about-container ul li {
     color: #b3c6e0;
 }
@@ -158,156 +144,87 @@
 [data-theme="dark"] .about-container .btn:hover {
     background-color: #1565C0;
 }
-[data-theme="dark"] .about-container .card {
-    background-color: #23272f;
-    box-shadow: 0 8px 32px rgba(16, 21, 27, 0.18);
+[data-theme="dark"] .about-container .bg-white {
+    background: #181c23 !important;
 }
-[data-theme="dark"] .about-container .card-title {
-    color: #e3f2fd;
+[data-theme="dark"] .about-container .bg-light {
+    background: #23272f !important;
 }
-[data-theme="dark"] .about-container .card-text {
-    color: #b3c6e0;
+[data-theme="dark"] .about-container .bg-primary {
+    background: #1976d2 !important;
 }
-[data-theme="dark"] .about-container .badge-success {
-    background-color: #43A047;
+[data-theme="dark"] .about-container .badge.bg-primary { background-color: #1976d2; color: #fff; }
+[data-theme="dark"] .about-container .badge.bg-success { background-color: #43a047; color: #fff; }
+[data-theme="dark"] .about-container .badge.bg-danger { background-color: #e53935; color: #fff; }
+[data-theme="dark"] .about-container .badge.bg-warning { background-color: #ffb300; color: #23272f; }
+[data-theme="dark"] .about-container .badge.bg-info { background-color: #00bcd4; color: #fff; }
+[data-theme="dark"] .about-container .badge.bg-secondary { background-color: #757575; color: #fff; }
+[data-theme="dark"] .about-container .badge.bg-dark { background-color: #26334d; color: #fff; }
+
+/* --- MODERN UI GELİŞTİRMELERİ --- */
+.about-container h1, .about-container h2, .about-container h3, .about-container h4, .about-container h5 {
+    letter-spacing: 0.01em;
+    text-shadow: 0 1px 2px rgba(25, 118, 210, 0.04);
+    transition: color 0.2s;
 }
-[data-theme="dark"] .about-container .badge-danger {
-    background-color: #E53935;
-}
-[data-theme="dark"] .about-container .badge-warning {
-    background-color: #FB8C00;
-    color: #23272f;
-}
-[data-theme="dark"] .about-container .badge-info {
-    background-color: #8E24AA;
+.about-container h1:hover, .about-container h2:hover, .about-container h3:hover {
+    color: #1565C0 !important;
 }
 
-/* Liste gibi yukarıdan aşağı sıralama ve kart arası boşluk */
-.about-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    padding-left: 0;
-    padding-right: 0;
+.about-container .fs-6 i, .about-container .badge i {
+    transition: transform 0.18s, color 0.18s;
 }
-/* Kart arka planı ve kenarları sayfa ile daha uyumlu */
-.about-list .card {
-    background: linear-gradient(135deg, #fafdff 80%, #e3f2fd 100%);
-    border: 1.5px solid #e3f2fd;
-    box-shadow: 0 2px 12px rgba(30, 136, 229, 0.07);
-    border-radius: 20px;
-    margin-bottom: 0.5rem;
+.about-container .fs-6 i:hover, .about-container .badge i:hover {
+    transform: scale(1.18) rotate(-8deg);
+    color: #1976d2 !important;
 }
-[data-theme="dark"] .about-list .card {
-    background: #10151b;
-    border: 1.5px solid #0d223a;
-    box-shadow: 0 4px 32px rgba(30, 136, 229, 0.28);
+
+.about-container .p-2, .about-container .p-3 {
+    transition: background 0.18s, box-shadow 0.18s;
 }
-[data-theme="dark"] .about-list .card-title,
-[data-theme="dark"] .about-list .card-title i {
-    color: #fff !important;
+
+.about-container .row.g-2 > [class^="col-"], .about-container .row.g-1 > [class^="col-"] {
+    margin-bottom: 0.7rem;
 }
-[data-theme="dark"] .about-list .card-text {
-    color: #e3f2fd !important;
-}
-[data-theme="dark"] .about-list ul li {
-    color: #b3c6e0;
-}
-[data-theme="dark"] .about-list ul li::before {
-    color: #90caf9;
-}
-[data-theme="dark"] .about-list .badge.bg-primary {
-    background-color: #1976d2;
-    color: #fff;
-}
-[data-theme="dark"] .about-list .badge.bg-info {
-    background-color: #00bcd4;
-    color: #fff;
-}
-[data-theme="dark"] .about-list .badge.bg-danger {
-    background-color: #e53935;
-    color: #fff;
-}
-[data-theme="dark"] .about-list .badge.bg-success {
-    background-color: #43a047;
-    color: #fff;
-}
-[data-theme="dark"] .about-list .badge.bg-secondary {
-    background-color: #757575;
-    color: #fff;
-}
-[data-theme="dark"] .about-list .badge.bg-dark {
-    background-color: #26334d;
-    color: #fff;
-}
-[data-theme="dark"] .about-list .badge.bg-warning {
-    background-color: #ffb300;
-    color: #23272f;
-}
-[data-theme="dark"] .about-list .bi,
-[data-theme="dark"] .about-list i {
-    color: #90caf9 !important;
-    filter: drop-shadow(0 2px 6px #10151b);
-}
-.about-list .card-body {
-    padding: 2rem 2.2rem;
-    border-radius: 20px;
-}
+
 @media (max-width: 768px) {
-    .about-list .card-body {
-        padding: 1.2rem 0.7rem;
+    .about-container .row.g-2 > [class^="col-"], .about-container .row.g-1 > [class^="col-"] {
+        margin-bottom: 1.2rem;
     }
 }
-/* Kart hover efekti */
-.about-list .card:hover {
-    box-shadow: 0 8px 32px rgba(30, 136, 229, 0.18);
-    transform: translateY(-3px) scale(1.01);
+
+.about-container .small {
+    font-size: 0.97rem;
+    color: #6c757d;
 }
-/* Animasyon için başlangıç değerleri */
-.animate-on-scroll {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s, transform 0.6s;
+[data-theme="dark"] .about-container .small {
+    color: #b3c6e0;
 }
 
-/* Mobile responsiveness */
+/* --- SON --- */
+
+/* Responsive grid/flex ayarları */
+@media (max-width: 992px) {
+    .about-container .row > [class^="col-"] {
+        margin-bottom: 1.2rem;
+    }
+}
 @media (max-width: 768px) {
     .about-container {
-        padding: 2rem;
+        padding: 0.7rem 0.2rem;
     }
-
-    .about-container h2 {
-        font-size: 1.75rem;
-    }
-
-    .about-container h3 {
-        font-size: 1.5rem;
-    }
-
-    .about-container p {
+    .about-container h1, .about-container h2, .about-container h3, .about-container h4, .about-container h5 {
         font-size: 1rem;
     }
-
     .about-container .btn {
-        font-size: 1rem;
-        padding: 0.75rem 1.4rem;
+        font-size: 0.95rem;
+        padding: 0.5rem 1rem;
     }
-
-    .about-container .card-body {
-        padding: 1.5rem;
+    .about-container .rounded-3, .about-container .border {
+        border-radius: 8px !important;
     }
 }
-
-/* Geliştirici/Logo görseli için stil */
-.about-list .card-body img.rounded-circle {
-    background: #fff;
-    border: 2.5px solid #e3f2fd;
-    box-shadow: 0 2px 8px rgba(30,136,229,0.10);
-    padding: 2px;
-    transition: border 0.3s, box-shadow 0.3s, background 0.3s;
-}
-[data-theme="dark"] .about-list .card-body img.rounded-circle {
-    background: #181c23;
-    border: 2.5px solid #1E88E5;
-    box-shadow: 0 2px 12px rgba(30,136,229,0.22);
+.about-container img.rounded-circle {
+    max-width: 100%;
+    height: auto;
 }
