@@ -654,37 +654,40 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  padding: 5px 12px;
   border-radius: 6px;
   font-size: 0.85rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  color: #334155;
+  box-shadow: none;
   z-index: 2;
 }
 
 .status-pending {
-  background: linear-gradient(135deg, #fef3c7, #fde68a);
-  color: #92400e;
-  border: 1px solid #fcd34d;
+  background: #fef9c3;
+  color: #b45309;
+  border-color: #fde68a;
 }
 
 .status-rejected {
-  background: linear-gradient(135deg, #fee2e2, #fecaca);
+  background: #fee2e2;
   color: #b91c1c;
-  border: 1px solid #f87171;
+  border-color: #fecaca;
 }
 
 .status-approved {
-  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
-  color: #065f46;
-  border: 1px solid #34d399;
+  background: #d1fae5;
+  color: #047857;
+  border-color: #a7f3d0;
 }
 
 .status-icon {
   font-size: 1rem;
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+  filter: none;
 }
 
 .status-text {
