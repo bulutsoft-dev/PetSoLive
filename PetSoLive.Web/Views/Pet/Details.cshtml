@@ -5,202 +5,264 @@
 @inject IStringLocalizer<PetController> Localizer
 @{
     ViewData["Title"] = Localizer["PetDetailsTitle"];
+    var isAdopted = ViewBag.Adoption != null;
+    var isOwner = ViewBag.IsOwner == true;
+    var isLoggedIn = ViewBag.IsUserLoggedIn == true;
 }
 
 @{
     Layout = "_Layout";
 }
 
-<div class="container my-5">
-    <!-- Pet Details Section -->
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-lg">
-                <div class="row g-0">
-                    <!-- Pet Image -->
-                    <div class="col-md-5">
-                        <img src="@Model.ImageUrl" class="img-fluid rounded-start" alt="@Model.Name" style="object-fit: cover; height: 100%;">
-                    </div>
-                    <!-- Pet Info -->
-                    <div class="col-md-7">
-                        <div class="card-body">
-                            <h3 class="card-title text-primary">@Model.Name</h3>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>@Localizer["SpeciesLabel"]</strong> <span class="badge bg-secondary">@Model.Species</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>@Localizer["BreedLabel"]</strong> @Model.Breed
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>@Localizer["AgeLabel"]</strong> @Model.Age @Localizer["Years"]
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>@Localizer["GenderLabel"]</strong> @Model.Gender
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>@Localizer["WeightLabel"]</strong> @Model.Weight @Localizer["Kg"]
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>@Localizer["ColorLabel"]</strong> <span class="badge bg-light text-dark">@Model.Color</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>@Localizer["DateOfBirthLabel"]</strong> @Model.DateOfBirth?.ToString("MM/dd/yyyy")
-                                </li>
-                                <li class="list-group-item">
-                                    <strong>@Localizer["DescriptionLabel"]</strong> <p>@Model.Description</p>
-                                </li>
-                                @if (!string.IsNullOrEmpty(Model.VaccinationStatus))
-                                {
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <strong>@Localizer["VaccinationStatusLabel"]</strong> <span class="badge bg-success">@Model.VaccinationStatus</span>
-                                    </li>
-                                }
-                                @if (!string.IsNullOrEmpty(Model.MicrochipId))
-                                {
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <strong>@Localizer["MicrochipIdLabel"]</strong> @Model.MicrochipId
-                                    </li>
-                                }
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <strong>@Localizer["NeuteredLabel"]</strong>
-                                    <span class="badge bg-@(Model.IsNeutered ? "success" : "danger")">
-                                        @(Model.IsNeutered ? Localizer["Yes"] : Localizer["No"])
-                                    </span>
-                                </li>
-                            </ul>
+@section HeadSection {
+    <link rel="stylesheet" href="~/css/pet-details-custom.css" />
+}
 
-                            @if (ViewBag.Adoption != null)
-                            {
-                                <hr>
-                                <h5 class="text-success">@Localizer["AdoptionDetailsHeading"]</h5>
-                                <p><strong>@Localizer["AdoptedLabel"]</strong> @Localizer["Yes"]</p>
-                                <p><strong>@Localizer["AdoptedByLabel"]</strong> @ViewBag.Adoption.User.Username</p>
-                                <p><strong>@Localizer["AdoptionDateLabel"]</strong> @ViewBag.Adoption.AdoptionDate.ToString("MM/dd/yyyy")</p>
-                            }
-                            else
-                            {
-                                <p><strong>@Localizer["AdoptedLabel"]</strong> <span class="badge bg-danger">@Localizer["No"]</span></p>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="pet-details-card" style="position:relative;">
+    <div style="position:relative;display:flex;justify-content:center;align-items:center;">
+        <img src="@Model.ImageUrl" alt="@Model.Name" class="pet-details-avatar" id="petMainImage" onclick="openPetImageModal()" />
+        <span class="pet-avatar-zoom-icon" onclick="openPetImageModal()" title="Büyüt">
+            <svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' fill='none' viewBox='0 0 24 24'>
+                <path stroke='#2563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M15 3h6m0 0v6m0-6L13 11m-2 10H3m0 0v-6m0 6l8-8'/>
+            </svg>
+        </span>
+    </div>
+    
+    <div class="pet-details-title">@Model.Name</div>
+    <span class="pet-status-badge @(ViewBag.Adoption != null ? "adopted" : "available")">
+        @if (ViewBag.Adoption != null)
+        {
+            <span class="status-icon">✓</span>
+            <span>@Localizer["AdoptedLabel"]</span>
+        }
+        else
+        {
+            <span class="status-icon">♥</span>
+            <span>@Localizer["AvailableLabel"]</span>
+        }
+    </span>
+    
+    <!-- Temel Bilgiler -->
+    <div class="pet-info-section">
+        <div class="section-header">
+            <span class="section-icon">📋</span>
+            <span class="section-title">@Localizer["BasicInfoLabel"]</span>
+        </div>
+        <div class="pet-meta-list">
+            <div class="pet-meta-row"><span class="pet-meta-icon">🐕</span><span class="pet-meta-label">@Localizer["SpeciesLabel"]</span><span class="pet-meta-value">@Model.Species</span></div>
+            <div class="pet-meta-row"><span class="pet-meta-icon">🎭</span><span class="pet-meta-label">@Localizer["GenderLabel"]</span><span class="pet-meta-value">@Model.Gender</span></div>
+            <div class="pet-meta-row"><span class="pet-meta-icon">🎂</span><span class="pet-meta-label">@Localizer["AgeLabel"]</span><span class="pet-meta-value">@Model.Age @Localizer["Years"]</span></div>
+            <div class="pet-meta-row"><span class="pet-meta-icon">🎨</span><span class="pet-meta-label">@Localizer["ColorLabel"]</span><span class="pet-meta-value">@Model.Color</span></div>
         </div>
     </div>
 
-    <!-- Buttons Section -->
-    <div class="row justify-content-center mt-4">
-        <div class="col-lg-8">
-            <div class="card-deck">
-                <!-- Back to Adoption List Button -->
-                <div class="card text-center shadow-sm">
-                    <div class="card-body">
-                        <a asp-controller="Adoption" asp-action="Index" class="btn btn-secondary btn-block">@Localizer["BackToAdoptionList"]</a>
-                    </div>
-                </div>
-
-                <!-- Conditional Buttons -->
-                @if (!ViewBag.IsUserLoggedIn)
-                {
-                    <div class="card text-center shadow-sm">
-                        <div class="card-body">
-                            <a asp-controller="Account" asp-action="Login" class="btn btn-danger btn-block">@Localizer["LoginToAdoptMessage"]</a>
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    @if (ViewBag.Adoption == null && !ViewBag.IsOwner)
-                    {
-                        <!-- Check if user has existing adoption request -->
-                        @if (ViewBag.HasAdoptionRequest == true)
-                        {
-                            <div class="card text-center shadow-sm">
-                                <div class="card-body">
-                                    <a href="#" class="btn btn-secondary btn-block disabled" tabindex="-1" aria-disabled="true">
-                                        @Localizer["AlreadyRequestedMessage"]
-                                    </a>
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="card text-center shadow-sm">
-                                <div class="card-body">
-                                    <a asp-controller="Adoption" asp-action="Adopt" asp-route-petId="@Model.Id" class="btn btn-primary btn-block">@Localizer["AdoptButton"]</a>
-                                </div>
-                            </div>
-                        }
-                    }
-                    @if (ViewBag.IsOwner)
-                    {
-                        @if (ViewBag.Adoption == null)
-                        {
-                            <div class="card text-center shadow-sm">
-                                <div class="card-body">
-                                    <a asp-controller="Pet" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-block">@Localizer["EditButton"]</a>
-                                    <form asp-controller="Pet" asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
-                                        <button type="submit" class="btn btn-danger btn-block mt-2">@Localizer["DeleteButton"]</button>
-                                    </form>
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="card text-center shadow-sm">
-                                <div class="card-body">
-                                    <a href="#" class="btn btn-warning btn-block disabled" tabindex="-1" aria-disabled="true">@Localizer["AlreadyAdoptedMessage"]</a>
-                                </div>
-                            </div>
-                        }
-                    }
-                }
-            </div>
+    <!-- Fiziksel Özellikler -->
+    <div class="pet-info-section">
+        <div class="section-header">
+            <span class="section-icon">⚖️</span>
+            <span class="section-title">@Localizer["PhysicalTraitsLabel"]</span>
+        </div>
+        <div class="pet-meta-list">
+            <div class="pet-meta-row"><span class="pet-meta-icon">🏷️</span><span class="pet-meta-label">@Localizer["BreedLabel"]</span><span class="pet-meta-value">@Model.Breed</span></div>
+            <div class="pet-meta-row"><span class="pet-meta-icon">⚡</span><span class="pet-meta-label">@Localizer["WeightLabel"]</span><span class="pet-meta-value">@Model.Weight @Localizer["Kg"]</span></div>
+            <div class="pet-meta-row"><span class="pet-meta-icon">📅</span><span class="pet-meta-label">@Localizer["DateOfBirthLabel"]</span><span class="pet-meta-value">@Model.DateOfBirth?.ToString("dd.MM.yyyy")</span></div>
+            <div class="pet-meta-row"><span class="pet-meta-icon">🔧</span><span class="pet-meta-label">@Localizer["NeuteredLabel"]</span><span class="pet-meta-value @(Model.IsNeutered ? "value-yes" : "value-no")">@(Model.IsNeutered ? Localizer["Yes"] : Localizer["No"])</span></div>
         </div>
     </div>
 
-    <!-- Adoption Requests Section -->
-    <div class="row justify-content-center mt-4">
-        <div class="col-lg-8">
-            <div class="card shadow-lg">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0">@Localizer["AdoptionRequestsHeading"]</h5>
-                </div>
-                <div class="card-body">
-                    @if (ViewBag.AdoptionRequests != null && ViewBag.AdoptionRequests.Count > 0)
-                    {
-                        <ul class="list-group">
-                            @foreach (var request in ViewBag.AdoptionRequests)
-                            {
-                                <li class="list-group-item mb-3 p-3 shadow-sm">
-                                    <div class="d-flex justify-content-between">
-                                        <strong>@request.User.Username</strong>
-                                        <span class="badge bg-@(request.Status == AdoptionStatus.Pending ? "warning" : (request.Status == AdoptionStatus.Rejected ? "danger" : "success"))">
-                                    @Localizer[$"AdoptionStatus_{request.Status}"]
-                                </span>
-                                    </div>
-                                    <p class="mt-2 text-muted">@request.Message</p>
-                                    <small class="text-secondary">@Localizer["RequestedOn"]: @request.RequestDate.ToString("MM/dd/yyyy")</small>
+    <!-- Sağlık Bilgileri -->
+    @if (!string.IsNullOrEmpty(Model.VaccinationStatus) || !string.IsNullOrEmpty(Model.MicrochipId))
+    {
+        <div class="pet-info-section">
+            <div class="section-header">
+                <span class="section-icon">🏥</span>
+                <span class="section-title">@Localizer["HealthInfoLabel"]</span>
+            </div>
+            <div class="pet-meta-list">
+                @if (!string.IsNullOrEmpty(Model.VaccinationStatus))
+                {
+                    <div class="pet-meta-row"><span class="pet-meta-icon">💉</span><span class="pet-meta-label">@Localizer["VaccinationStatusLabel"]</span><span class="pet-meta-value">@Model.VaccinationStatus</span></div>
+                }
+                @if (!string.IsNullOrEmpty(Model.MicrochipId))
+                {
+                    <div class="pet-meta-row"><span class="pet-meta-icon">🔍</span><span class="pet-meta-label">@Localizer["MicrochipIdLabel"]</span><span class="pet-meta-value">@Model.MicrochipId</span></div>
+                }
+            </div>
+        </div>
+    }
 
-                                    @if (request.Status == AdoptionStatus.Pending && ViewBag.IsOwner)
-                                    {
-                                        <form asp-controller="Adoption" asp-action="ApproveRequest" method="post">
-                                            <input type="hidden" name="adoptionRequestId" value="@request.Id" />
-                                            <input type="hidden" name="petId" value="@Model.Id" />
-                                            <button type="submit" class="btn btn-success mt-2">@Localizer["ApproveButton"]</button>
-                                        </form>
-                                    }
-                                </li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <p class="text-muted">@Localizer["NoAdoptionRequestsMessage"]</p>
-                    }
+    <!-- Açıklama -->
+    @if (!string.IsNullOrEmpty(Model.Description))
+    {
+        <div class="pet-info-section">
+            <div class="section-header">
+                <span class="section-icon">📝</span>
+                <span class="section-title">@Localizer["DescriptionLabel"]</span>
+            </div>
+            <div class="pet-details-desc">
+                @Model.Description
+            </div>
+        </div>
+    }
+
+    <!-- Sahiplenme Bilgisi -->
+    @if (ViewBag.Adoption != null)
+    {
+        <div class="adoption-info-section">
+            <div class="section-header">
+                <span class="section-icon">🏠</span>
+                <span class="section-title">@Localizer["AdoptionInfoLabel"]</span>
+            </div>
+            <div class="adoption-info-content">
+                <div class="adoption-info-item">
+                    <span class="adoption-label">@Localizer["AdoptedByLabel"]</span>
+                    <span class="adoption-value">@ViewBag.Adoption.User.Username</span>
+                </div>
+                <div class="adoption-info-item">
+                    <span class="adoption-label">@Localizer["AdoptionDateLabel"]</span>
+                    <span class="adoption-value">@ViewBag.Adoption.AdoptionDate.ToString("dd.MM.yyyy")</span>
                 </div>
             </div>
+        </div>
+    }
+
+    <div class="pet-details-actions">
+        <a asp-controller="Adoption" asp-action="Index" class="pet-btn pet-btn-secondary">
+            <span class="btn-icon">←</span>
+            @Localizer["BackToAdoptionList"]
+        </a>
+        
+        @if (!ViewBag.IsUserLoggedIn)
+        {
+            <a asp-controller="Account" asp-action="Login" class="pet-btn pet-btn-primary">
+                <span class="btn-icon">🔐</span>
+                @Localizer["LoginToAdoptMessage"]
+            </a>
+        }
+        else if (ViewBag.Adoption == null && !ViewBag.IsOwner)
+        {
+            @if (ViewBag.HasAdoptionRequest == true)
+            {
+                <button class="pet-btn pet-btn-disabled" disabled>
+                    <span class="btn-icon">⏳</span>
+                    @Localizer["AlreadyRequestedMessage"]
+                </button>
+            }
+            else
+            {
+                <button type="button" class="pet-btn pet-btn-success" onclick="document.getElementById('adoptModal').style.display='flex'">
+                    <span class="btn-icon">❤️</span>
+                    @Localizer["AdoptButton"]
+                </button>
+            }
+        }
+        else if (ViewBag.IsOwner && ViewBag.Adoption == null)
+        {
+            <a asp-controller="Pet" asp-action="Edit" asp-route-id="@Model.Id" class="pet-btn pet-btn-warning">
+                <span class="btn-icon">✏️</span>
+                @Localizer["EditButton"]
+            </a>
+            <form asp-controller="Pet" asp-action="Delete" asp-route-id="@Model.Id" method="post" style="display:inline;">
+                <button type="submit" class="pet-btn pet-btn-danger" onclick="return confirm('@Localizer["DeleteConfirmationMessage"]')">
+                    <span class="btn-icon">🗑️</span>
+                    @Localizer["DeleteButton"]
+                </button>
+            </form>
+        }
+        else if (ViewBag.IsOwner && ViewBag.Adoption != null)
+        {
+            <span class="pet-btn pet-btn-disabled" disabled>
+                <span class="btn-icon">✅</span>
+                @Localizer["AlreadyAdoptedMessage"]
+            </span>
+        }
+    </div>
+</div>
+
+<!-- Tam ekran resim modalı -->
+<div class="pet-image-modal-bg" id="petImageModal" style="display:none;">
+    <button class="pet-image-modal-close" onclick="closePetImageModal()">&times;</button>
+    <img src="@Model.ImageUrl" alt="@Model.Name" class="pet-image-modal-img" />
+</div>
+
+<!-- Modal -->
+<div class="pet-details-modal-bg" id="adoptModal" style="display:none;">
+    <div class="pet-details-modal">
+        <div class="pet-details-modal-header">
+            <span class="pet-details-modal-title">@Localizer["AdoptPetTitle"]</span>
+            <button class="pet-details-modal-close" onclick="document.getElementById('adoptModal').style.display='none'">&times;</button>
+        </div>
+        <div>
+            @await Html.PartialAsync("~/Views/Adoption/Adopt.cshtml", (PetSoLive.Core.Entities.User)ViewBag.LoggedInUser)
         </div>
     </div>
 </div>
+
+<!-- Adoption Requests -->
+<div class="pet-adoption-requests">
+    <div class="pet-adoption-requests-title">
+        <span class="requests-icon">📋</span>
+        @Localizer["AdoptionRequestsHeading"]
+    </div>
+    <ul class="pet-adoption-request-list">
+        @if (ViewBag.AdoptionRequests != null && ViewBag.AdoptionRequests.Count > 0)
+        {
+            @foreach (var request in ViewBag.AdoptionRequests)
+            {
+                var isCurrentUser = ViewBag.IsUserLoggedIn && request.User.Username == ViewBag.LoggedInUsername;
+                var avatar = string.IsNullOrEmpty(request.User.Username) ? "?" : request.User.Username.Substring(0,1).ToUpper();
+                <li class="pet-adoption-request-item @(isCurrentUser ? "pet-adoption-request-item-current" : "")">
+                    <span class="pet-request-avatar">@avatar</span>
+                    <div class="request-content">
+                        <div class="request-header">
+                            <span class="request-username">@request.User.Username</span>
+                            @if (isCurrentUser)
+                            {
+                                <span class="request-badge request-badge-own">@Localizer["YourRequest"]</span>
+                            }
+                            <span class="request-badge @(request.Status == AdoptionStatus.Pending ? "request-badge-pending" : (request.Status == AdoptionStatus.Rejected ? "request-badge-rejected" : "request-badge-approved"))">
+                                @Localizer[$"AdoptionStatus_{request.Status}"]
+                            </span>
+                        </div>
+                        <div class="request-date">@Localizer["RequestedOn"]: @request.RequestDate.ToString("MM/dd/yyyy")</div>
+                        <div class="request-message">@request.Message</div>
+                        @if (request.Status == AdoptionStatus.Pending && ViewBag.IsOwner)
+                        {
+                            <form asp-controller="Adoption" asp-action="ApproveRequest" method="post" class="request-action">
+                                <input type="hidden" name="adoptionRequestId" value="@request.Id" />
+                                <input type="hidden" name="petId" value="@Model.Id" />
+                                <button type="submit" class="pet-btn pet-btn-success pet-btn-sm">
+                                    <span class="btn-icon">✅</span>
+                                    @Localizer["ApproveButton"]
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </li>
+            }
+        }
+        else
+        {
+            <li class="no-requests-message">@Localizer["NoAdoptionRequestsMessage"]</li>
+        }
+    </ul>
+</div>
+
+@section Scripts {
+    <script>
+        function openPetImageModal() {
+            document.getElementById('petImageModal').style.display = 'flex';
+        }
+        function closePetImageModal() {
+            document.getElementById('petImageModal').style.display = 'none';
+        }
+        // ESC ile kapama
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closePetImageModal();
+        });
+        // Modal dışında tıklayınca kapama
+        document.getElementById('petImageModal').addEventListener('click', function(e) {
+            if (e.target === this) closePetImageModal();
+        });
+    </script>
+}

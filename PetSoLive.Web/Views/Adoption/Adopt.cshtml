@@ -3,73 +3,77 @@
 @inject IStringLocalizer<AdoptionController> Localizer
 @model PetSoLive.Core.Entities.User
 
-@{
+@if (Model == null)
+{
+    <div class="alert alert-danger">Kullanıcı bilgisi bulunamadı. Lütfen tekrar giriş yapın.</div>
+}
+else
+{
     ViewData["Title"] = Localizer["AdoptPetTitle", ""];
     Layout = "_Layout";
-}
+    @section HeadSection {
+        <link rel="stylesheet" href="~/css/adoption.css" />
+    }
 
-@section HeadSection {
-    <link rel="stylesheet" href="~/css/adoption.css" />
-}
+    <div class="adoption-page">
+        <div class="adoption-container adoption-form">
+            <h2 class="text-center">@Localizer["AdoptPetTitle", ViewData["PetName"]]</h2>
 
-<div class="adoption-page">
-    <div class="adoption-container adoption-form">
-        <h2 class="text-center">@Localizer["AdoptPetTitle", ViewData["PetName"]]</h2>
+            <form method="post" asp-controller="Adoption" asp-action="Adopt" class="needs-validation" novalidate>
+                <input type="hidden" name="PetId" value="@ViewData["PetId"]" />
 
-        <form method="post" asp-controller="Adoption" asp-action="Adopt" class="needs-validation" novalidate>
-            <input type="hidden" name="PetId" value="@ViewData["PetId"]" />
+                <!-- Kullanıcı Adı -->
+                <div class="form-group">
+                    <label for="Name" class="form-label">@Localizer["YourNameLabel"]</label>
+                    <input type="text" class="form-control" id="Name" name="Name" 
+                           value="@Model.Username" readonly />
+                    <div class="form-text">@Localizer["RegisteredNameHelp"]</div>
+                </div>
 
-            <!-- Kullanıcı Adı -->
-            <div class="form-group">
-                <label for="Name" class="form-label">@Localizer["YourNameLabel"]</label>
-                <input type="text" class="form-control" id="Name" name="Name" 
-                       value="@Model.Username" readonly />
-                <div class="form-text">@Localizer["RegisteredNameHelp"]</div>
-            </div>
+                <!-- E-posta -->
+                <div class="form-group">
+                    <label for="Email" class="form-label">@Localizer["YourEmailLabel"]</label>
+                    <input type="email" class="form-control" id="Email" name="Email" 
+                           value="@Model.Email" readonly />
+                    <div class="form-text">@Localizer["RegisteredEmailHelp"]</div>
+                </div>
 
-            <!-- E-posta -->
-            <div class="form-group">
-                <label for="Email" class="form-label">@Localizer["YourEmailLabel"]</label>
-                <input type="email" class="form-control" id="Email" name="Email" 
-                       value="@Model.Email" readonly />
-                <div class="form-text">@Localizer["RegisteredEmailHelp"]</div>
-            </div>
+                <!-- Telefon Numarası -->
+                <div class="form-group">
+                    <label for="Phone" class="form-label">@Localizer["YourPhoneLabel"]</label>
+                    <input type="tel" class="form-control" id="Phone" name="Phone" 
+                           value="@Model.PhoneNumber" required />
+                    <div class="form-text">@Localizer["UpdatePhoneHelp"]</div>
+                </div>
 
-            <!-- Telefon Numarası -->
-            <div class="form-group">
-                <label for="Phone" class="form-label">@Localizer["YourPhoneLabel"]</label>
-                <input type="tel" class="form-control" id="Phone" name="Phone" 
-                       value="@Model.PhoneNumber" required />
-                <div class="form-text">@Localizer["UpdatePhoneHelp"]</div>
-            </div>
+                <!-- Adres -->
+                <div class="form-group">
+                    <label for="Address" class="form-label">@Localizer["YourAddressLabel"]</label>
+                    <input type="text" class="form-control" id="Address" name="Address" 
+                           value="@Model.Address" />
+                    <div class="form-text">@Localizer["RegisteredAddressHelp"]</div>
+                </div>
 
-            <!-- Adres -->
-            <div class="form-group">
-                <label for="Address" class="form-label">@Localizer["YourAddressLabel"]</label>
-                <input type="text" class="form-control" id="Address" name="Address" 
-                       value="@Model.Address" />
-                <div class="form-text">@Localizer["RegisteredAddressHelp"]</div>
-            </div>
+                <!-- Doğum Tarihi -->
+                <div class="form-group">
+                    <label for="DateOfBirth" class="form-label">@Localizer["YourDateOfBirthLabel"]</label>
+                    <input type="date" class="form-control" id="DateOfBirth" name="DateOfBirth" 
+                           value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" />
+                    <div class="form-text">@Localizer["RegisteredDateOfBirthHelp"]</div>
+                </div>
 
-            <!-- Doğum Tarihi -->
-            <div class="form-group">
-                <label for="DateOfBirth" class="form-label">@Localizer["YourDateOfBirthLabel"]</label>
-                <input type="date" class="form-control" id="DateOfBirth" name="DateOfBirth" 
-                       value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" />
-                <div class="form-text">@Localizer["RegisteredDateOfBirthHelp"]</div>
-            </div>
+                <!-- Mesaj -->
+                <div class="form-group">
+                    <label for="Message" class="form-label">@Localizer["MessageLabel"]</label>
+                    <textarea class="form-control" id="Message" name="Message" rows="4" 
+                              placeholder="@Localizer["MessagePlaceholder"]" required></textarea>
+                </div>
 
-            <!-- Mesaj -->
-            <div class="form-group">
-                <label for="Message" class="form-label">@Localizer["MessageLabel"]</label>
-                <textarea class="form-control" id="Message" name="Message" rows="4" 
-                          placeholder="@Localizer["MessagePlaceholder"]" required></textarea>
-            </div>
-
-            <!-- Gönder Butonu -->
-            <div class="text-end">
-                <button type="submit" class="btn-adoption">@Localizer["SubmitAdoptionButton"]</button>
-            </div>
-        </form>
+                <!-- Gönder Butonu -->
+                <div class="text-end">
+                    <button type="submit" class="btn-adoption">@Localizer["SubmitAdoptionButton"]</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+}

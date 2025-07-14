@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="~/css/veterinarian.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/about.css" asp-append-version="true" />
     @RenderSection("HeadSection", required: false)
+    @RenderSection("Styles", required: false)
 </head>
 <body class="d-flex flex-column min-vh-100">
     @await Html.PartialAsync("_Navbar")
