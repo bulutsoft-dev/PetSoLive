@@ -200,7 +200,15 @@
             {
                 var isCurrentUser = ViewBag.IsUserLoggedIn && request.User.Username == ViewBag.LoggedInUsername;
                 var avatar = string.IsNullOrEmpty(request.User.Username) ? "?" : request.User.Username.Substring(0,1).ToUpper();
-                <li class="pet-adoption-request-item @(isCurrentUser ? "pet-adoption-request-item-current" : "")" style="border-left:4px solid @(request.Status == AdoptionStatus.Approved ? "#10b981" : request.Status == AdoptionStatus.Rejected ? "#ef4444" : "#f59e0b");">
+                <li class="pet-adoption-request-item @(isCurrentUser ? "pet-adoption-request-item-current" : "")" style="border-left:4px solid @(request.Status == AdoptionStatus.Approved ? "#10b981" : request.Status == AdoptionStatus.Rejected ? "#ef4444" : "#f59e0b");position:relative;">
+                    <!-- Status Badge - Sağ Üst Köşe -->
+                    <div class="request-status-badge @(request.Status == AdoptionStatus.Pending ? "status-pending" : (request.Status == AdoptionStatus.Rejected ? "status-rejected" : "status-approved"))">
+                        <span class="status-icon">
+                            @(request.Status == AdoptionStatus.Pending ? "⏳" : request.Status == AdoptionStatus.Rejected ? "❌" : "✅")
+                        </span>
+                        <span class="status-text">@Localizer[$"AdoptionStatus_{request.Status}"]</span>
+                    </div>
+                    
                     <span class="pet-request-avatar" style="border:2px solid @(isCurrentUser ? "#8b5cf6" : "#e5e7eb");background:@(request.Status == AdoptionStatus.Approved ? "#d1fae5" : request.Status == AdoptionStatus.Rejected ? "#fee2e2" : "#fef3c7");color:#1e293b;">
                         @avatar
                     </span>
@@ -211,12 +219,6 @@
                             {
                                 <span class="request-badge request-badge-own">@Localizer["YourRequest"]</span>
                             }
-                            <span class="request-badge @(request.Status == AdoptionStatus.Pending ? "request-badge-pending" : (request.Status == AdoptionStatus.Rejected ? "request-badge-rejected" : "request-badge-approved"))">
-                                <span style="font-size:1.1em;vertical-align:middle;">
-                                    @(request.Status == AdoptionStatus.Pending ? "⏳" : request.Status == AdoptionStatus.Rejected ? "❌" : "✅")
-                                </span>
-                                @Localizer[$"AdoptionStatus_{request.Status}"]
-                            </span>
                         </div>
                         <div class="request-date">@Localizer["RequestedOn"]: @request.RequestDate.ToString("MM/dd/yyyy")</div>
                         <div class="request-message">@request.Message</div>
