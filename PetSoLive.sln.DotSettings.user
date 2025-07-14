@@ -50,8 +50,14 @@
 	
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=PetSoLive_002EWeb_002FResources_002FViews_002EHomeController/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=PetSoLive_002EWeb_002FResources_002FViews_002EHomeController/@EntryIndexRemoved">True</s:Boolean>
-	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=PetSoLive_002EWeb_002FResources_002FViews_002EShared_002E_005FFooter/@EntryIndexedValue">True</s:Boolean>
-	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=PetSoLive_002EWeb_002FResources_002FViews_002EShared_002E_005FLayout/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=PetSoLive_002EWeb_002FResources_002FViews_002EShared_002E_005FFooter/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=PetSoLive_002EWeb_002FResources_002FViews_002EShared_002E_005FLayout/@EntryIndexedValue">True</s:Boolean>
+	
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=PetSoLive_002EWeb_002FResources_002FViews_002EShared_002E_005FLayout_002Ecshtml/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=PetSoLive_002EWeb_002FResources_002FViews_002EShared_002E_005FLayout_002Ecshtml/@EntryIndexRemoved">True</s:Boolean>
+	
+	
+	
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=PetSoLive_002EWeb_002FResources_002FViews_002EShared_002E_005FNavbar/@EntryIndexedValue">False</s:Boolean>
 	
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=PetSoLive_002EWeb_002FResources_002FViews_002FShared_002FFooter_002F_005FFooter/@EntryIndexedValue">False</s:Boolean>
@@ -66,6 +72,8 @@
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=PetSoLive_002EWeb_002FResources_002FShared_002F_005FLayout/@EntryIndexRemoved">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=PetSoLive_002EWeb_002FResources_002F_005FLayout/@EntryIndexRemoved">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/Initialized/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/OrderByFullPath/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/ShowComments/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/ShowOnlyErrors/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/ShowOnlyStringResources/@EntryValue">False</s:Boolean>
 	

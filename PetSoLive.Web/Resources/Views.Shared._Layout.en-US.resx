@@ -1,165 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <data name="PetSoLive" xml:space="preserve">
-    <value>PetSoLive</value>
+  <data name="GooglePlayTitle" xml:space="preserve">
+    <value>Google Play</value>
   </data>
-  <data name="PetSoLive Description" xml:space="preserve">
-    <value>PetSoLive is dedicated to creating a community for pet lovers, providing resources for adoption, lost pet ads, and help requests.</value>
+  <data name="GooglePlayModalTitle" xml:space="preserve">
+    <value>PetSoLive Mobile App!</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
   </data>
-  <data name="About" xml:space="preserve">
-    <value>About</value>
+  <data name="GooglePlayModalLead" xml:space="preserve">
+    <value>PetSoLive is now on Google Play! Download our mobile app for faster and easier access.</value>
   </data>
-  <data name="Adoption" xml:space="preserve">
-    <value>Adoption</value>
+  <data name="GooglePlayFeature1" xml:space="preserve">
+    <value>Instant updates with notifications</value>
   </data>
-  <data name="Lost Pet Ads" xml:space="preserve">
-    <value>Lost Pet Ads</value>
+  <data name="GooglePlayFeature2" xml:space="preserve">
+    <value>Easy and fast help requests</value>
   </data>
-  <data name="Help Requests" xml:space="preserve">
-    <value>Help Requests</value>
+  <data name="GooglePlayFeature3" xml:space="preserve">
+    <value>Mobile access to lost and adoption ads</value>
   </data>
-  <data name="Login" xml:space="preserve">
-    <value>Login</value>
+  <data name="GooglePlayDownload" xml:space="preserve">
+    <value>Download on Google Play</value>
   </data>
-  <data name="Register" xml:space="preserve">
-    <value>Register</value>
+  <data name="DontShowAgain" xml:space="preserve">
+    <value>Don't show again</value>
   </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
-  </data>
-  <data name="Veterinarians Management" xml:space="preserve">
-    <value>Veterinarians Management</value>
-  </data>
-  <data name="Veterinarian Register" xml:space="preserve">
-    <value>Veterinarian Register</value>
-  </data>
-  <data name="Welcome" xml:space="preserve">
-    <value>Welcome</value>
-  </data>
-  <data name="All rights reserved." xml:space="preserve">
-    <value>All rights reserved.</value>
-  </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
-  </data>
-  <data name="Address" xml:space="preserve">
-    <value>Address</value>
-  </data>
-  <data name="About PetSoLive" xml:space="preserve">
-    <value>About PetSoLive</value>
-  </data>
-  <data name="Quick Links" xml:space="preserve">
-    <value>Quick Links</value>
-  </data>
-  <data name="Contact Us" xml:space="preserve">
-    <value>Contact Us</value>
-  </data>
-  <data name="footerDescription" xml:space="preserve">
-    <value>About PetSoLive</value>
-  </data>
-  <data name="footerDescriptionContent" xml:space="preserve">
-    <value>PetSoLive is dedicated to creating a community for pet lovers, providing resources for adoption, lost pet ads, and help requests.</value>
-  </data>
-  <data name="About Us" xml:space="preserve">
-    <value>About Us</value>
-  </data>  
-  <data name="Swicth" xml:space="preserve">
-    <value>Switch to Turkish</value>
-  </data>
-  <data name="Account" xml:space="preserve">
-    <value>Account</value>
-  </data>
-  <data name="Active Users" xml:space="preserve">
-    <value>Active Users</value>
-  </data>
-  <data name="Add Pet" xml:space="preserve">
-    <value>Add Pet</value>
-  </data>
-  <data name="Adopt Pet" xml:space="preserve">
-    <value>Adopt Pet</value>
-  </data>
-  <data name="Adoptions" xml:space="preserve">
-    <value>Adoptions</value>
-  </data>
-  <data name="Browse Pets" xml:space="preserve">
-    <value>Browse Pets</value>
-  </data>
-  <data name="Dashboard" xml:space="preserve">
-    <value>Dashboard</value>
-  </data>
-  <data name="Find your new friend" xml:space="preserve">
-    <value>Find your new friend</value>
-  </data>
-  <data name="Get veterinary assistance" xml:space="preserve">
-    <value>Get veterinary assistance</value>
-  </data>
-  <data name="Help find your pet" xml:space="preserve">
-    <value>Help find your pet</value>
-  </data>
-  <data name="Help Request" xml:space="preserve">
-    <value>Help Request</value>
-  </data>
-  <data name="Humidity" xml:space="preserve">
-    <value>Humidity</value>
-  </data>
-  <data name="Lost Pet Found" xml:space="preserve">
-    <value>Lost Pet Found</value>
-  </data>
-  <data name="Lost Pets Found" xml:space="preserve">
-    <value>Lost Pets Found</value>
-  </data>
-  <data name="Luna the cat was reunited with her family!" xml:space="preserve">
-    <value>Luna the cat was reunited with her family!</value>
-  </data>
-  <data name="Manisa, Turkey" xml:space="preserve">
-    <value>Manisa, Turkey</value>
-  </data>
-  <data name="Max the Golden Retriever found a new home!" xml:space="preserve">
-    <value>Max the Golden Retriever found a new home!</value>
-  </data>
-  <data name="New Adoption" xml:space="preserve">
-    <value>New Adoption</value>
-  </data>
-  <data name="New emergency help request from Dr. Smith" xml:space="preserve">
-    <value>New emergency help request from Dr. Smith</value>
-  </data>
-  <data name="Quick Actions" xml:space="preserve">
-    <value>Quick Actions</value>
-  </data>
-  <data name="Recent Activity" xml:space="preserve">
-    <value>Recent Activity</value>
-  </data>
-  <data name="Register your pet" xml:space="preserve">
-    <value>Register your pet</value>
-  </data>
-  <data name="Report Lost Pet" xml:space="preserve">
-    <value>Report Lost Pet</value>
-  </data>
-  <data name="Request Help" xml:space="preserve">
-    <value>Request Help</value>
-  </data>
-  <data name="Sunny" xml:space="preserve">
-    <value>Sunny</value>
-  </data>
-  <data name="Total Pets" xml:space="preserve">
-    <value>Total Pets</value>
-  </data>
-  <data name="Track your pet activities and community engagement" xml:space="preserve">
-    <value>Track your pet activities and community engagement</value>
-  </data>
-  <data name="Weather" xml:space="preserve">
-    <value>Weather</value>
-  </data>
-  <data name="Welcome to PetSoLive Dashboard" xml:space="preserve">
-    <value>Welcome to PetSoLive Dashboard</value>
-  </data>
-  <data name="Wind" xml:space="preserve">
-    <value>Wind</value>
-  </data>
-</root>
+</root> 

@@ -10,7 +10,6 @@ class PetSoLiveUI {
         this.setupLoading();
         this.setupToasts();
         this.setupTooltips();
-        this.setupFloatingButton();
         this.setupProgressBars();
     }
 
@@ -110,73 +109,6 @@ class PetSoLiveUI {
                 if (tooltip) tooltip.remove();
             });
         });
-    }
-
-    // Floating Action Button
-    setupFloatingButton() {
-        const fab = document.createElement('button');
-        fab.className = 'fab';
-        fab.innerHTML = '<i class="fas fa-plus"></i>';
-        fab.setAttribute('aria-label', 'Quick Actions');
-        fab.addEventListener('click', () => {
-            this.showQuickActions();
-        });
-        document.body.appendChild(fab);
-    }
-
-    showQuickActions() {
-        const actions = [
-            { icon: 'paw', text: 'Add Pet', action: () => window.location.href = '/Pet/Create' },
-            { icon: 'search', text: 'Search Pets', action: () => window.location.href = '/Adoption' },
-            { icon: 'heart', text: 'Help Request', action: () => window.location.href = '/HelpRequest/Create' },
-            { icon: 'map-marker-alt', text: 'Lost Pets', action: () => window.location.href = '/LostPetAd' }
-        ];
-
-        const modal = document.createElement('div');
-        modal.className = 'modal fade show';
-        modal.style.display = 'block';
-        modal.innerHTML = `
-            <div class="modal-dialog modal-sm modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Quick Actions</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="d-grid gap-2">
-                            ${actions.map(action => `
-                                <button class="btn btn-outline-primary d-flex align-items-center gap-2" onclick="petSoLiveUI.executeAction('${action.text}')">
-                                    <i class="fas fa-${action.icon}"></i>
-                                    ${action.text}
-                                </button>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        document.body.appendChild(modal);
-        
-        // Close on backdrop click
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.remove();
-            }
-        });
-    }
-
-    executeAction(actionName) {
-        const actions = {
-            'Add Pet': () => window.location.href = '/Pet/Create',
-            'Search Pets': () => window.location.href = '/Adoption',
-            'Help Request': () => window.location.href = '/HelpRequest/Create',
-            'Lost Pets': () => window.location.href = '/LostPetAd'
-        };
-        
-        if (actions[actionName]) {
-            actions[actionName]();
-        }
     }
 
     // Progress Bar System
@@ -361,22 +293,7 @@ document.addEventListener('DOMContentLoaded', function() {
     petSoLiveUI.setTheme(savedTheme);
     updateThemeIcons();
     
-    // Add scroll to top button
-    const scrollToTopBtn = document.createElement('button');
-    scrollToTopBtn.className = 'btn btn-primary position-fixed';
-    scrollToTopBtn.style.cssText = 'bottom: 100px; right: 30px; z-index: 999; display: none; border-radius: 50%; width: 50px; height: 50px;';
-    scrollToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
-    scrollToTopBtn.addEventListener('click', () => petSoLiveUI.scrollToTop());
-    document.body.appendChild(scrollToTopBtn);
-    
-    // Show/hide scroll to top button
-    window.addEventListener('scroll', petSoLiveUI.throttle(() => {
-        if (window.pageYOffset > 300) {
-            scrollToTopBtn.style.display = 'block';
-        } else {
-            scrollToTopBtn.style.display = 'none';
-        }
-    }, 100));
+    // Remove all code related to dynamically creating or showing scrollToTopBtn
 });
 
 // Global utility functions
