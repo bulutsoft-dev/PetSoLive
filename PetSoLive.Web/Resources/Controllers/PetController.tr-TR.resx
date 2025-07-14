@@ -73,41 +73,44 @@
   <data name="PetDetailsTitle" xml:space="preserve">
     <value>Evcil Hayvan Detayları</value>
 </data>
+  <data name="AdoptedLabel" xml:space="preserve">
+    <value>Sahiplendi</value>
+</data>
+  <data name="AvailableLabel" xml:space="preserve">
+    <value>Uygun</value>
+</data>
+  <data name="BasicInfoLabel" xml:space="preserve">
+    <value>Temel Bilgiler</value>
+</data>
   <data name="SpeciesLabel" xml:space="preserve">
     <value>Tür</value>
 </data>
-  <data name="BreedLabel" xml:space="preserve">
-    <value>Irk</value>
+  <data name="GenderLabel" xml:space="preserve">
+    <value>Cinsiyet</value>
 </data>
   <data name="AgeLabel" xml:space="preserve">
     <value>Yaş</value>
 </data>
   <data name="Years" xml:space="preserve">
-    <value>Yıl</value>
+    <value>yıl</value>
 </data>
-  <data name="GenderLabel" xml:space="preserve">
-    <value>Cinsiyet</value>
+  <data name="ColorLabel" xml:space="preserve">
+    <value>Renk</value>
+</data>
+  <data name="PhysicalTraitsLabel" xml:space="preserve">
+    <value>Fiziksel Özellikler</value>
+</data>
+  <data name="BreedLabel" xml:space="preserve">
+    <value>Irk</value>
 </data>
   <data name="WeightLabel" xml:space="preserve">
     <value>Ağırlık</value>
 </data>
   <data name="Kg" xml:space="preserve">
-    <value>Kg</value>
-</data>
-  <data name="ColorLabel" xml:space="preserve">
-    <value>Renk</value>
+    <value>kg</value>
 </data>
   <data name="DateOfBirthLabel" xml:space="preserve">
     <value>Doğum Tarihi</value>
-</data>
-  <data name="DescriptionLabel" xml:space="preserve">
-    <value>Açıklama</value>
-</data>
-  <data name="VaccinationStatusLabel" xml:space="preserve">
-    <value>Aşılama Durumu</value>
-</data>
-  <data name="MicrochipIdLabel" xml:space="preserve">
-    <value>Mikroçip Numarası</value>
 </data>
   <data name="NeuteredLabel" xml:space="preserve">
     <value>Kısırlaştırılmış</value>
@@ -118,53 +121,68 @@
   <data name="No" xml:space="preserve">
     <value>Hayır</value>
 </data>
-  <data name="AdoptionDetailsHeading" xml:space="preserve">
-    <value>Evlat Edinme Detayları</value>
+  <data name="HealthInfoLabel" xml:space="preserve">
+    <value>Sağlık Bilgileri</value>
 </data>
-  <data name="AdoptedLabel" xml:space="preserve">
-    <value>Evlat Edinildi</value>
+  <data name="VaccinationStatusLabel" xml:space="preserve">
+    <value>Aşı Durumu</value>
+</data>
+  <data name="MicrochipIdLabel" xml:space="preserve">
+    <value>Mikroçip No</value>
+</data>
+  <data name="DescriptionLabel" xml:space="preserve">
+    <value>Açıklama</value>
+</data>
+  <data name="AdoptionInfoLabel" xml:space="preserve">
+    <value>Sahiplenme Bilgisi</value>
 </data>
   <data name="AdoptedByLabel" xml:space="preserve">
-    <value>Evlat Edinen Kişi</value>
+    <value>Sahiplenen</value>
 </data>
   <data name="AdoptionDateLabel" xml:space="preserve">
-    <value>Evlat Edinme Tarihi</value>
+    <value>Sahiplenme Tarihi</value>
 </data>
   <data name="BackToAdoptionList" xml:space="preserve">
-    <value>Evlat Edinme Listesine Dön</value>
+    <value>İlanlara Dön</value>
 </data>
   <data name="LoginToAdoptMessage" xml:space="preserve">
-    <value>Evlat Edinmek İçin Giriş Yapın</value>
-</data>
-  <data name="AlreadyRequestedMessage" xml:space="preserve">
-    <value>Bu Evcil Hayvan İçin Zaten Talep Oluşturuldu</value>
+    <value>Sahiplenmek için Giriş Yap</value>
 </data>
   <data name="AdoptButton" xml:space="preserve">
-    <value>Evlat Edin</value>
+    <value>Sahiplen</value>
+</data>
+  <data name="AlreadyRequestedMessage" xml:space="preserve">
+    <value>Talebiniz Alındı</value>
 </data>
   <data name="EditButton" xml:space="preserve">
-    <value> Düzenle</value>
+    <value>Düzenle</value>
 </data>
   <data name="DeleteButton" xml:space="preserve">
     <value>Sil</value>
 </data>
   <data name="AlreadyAdoptedMessage" xml:space="preserve">
-    <value>Bu Evcil Hayvan Zaten Evlat Edinilmiş</value>
+    <value>Zaten Sahiplendi</value>
+</data>
+  <data name="AdoptPetTitle" xml:space="preserve">
+    <value>Evcil Hayvanı Sahiplen</value>
 </data>
   <data name="AdoptionRequestsHeading" xml:space="preserve">
-    <value>Evlat Edinme Talepleri</value>
+    <value>Sahiplenme Talepleri</value>
+</data>
+  <data name="YourRequest" xml:space="preserve">
+    <value>Sizin Talebiniz</value>
 </data>
   <data name="AdoptionStatus_Pending" xml:space="preserve">
-    <value>Bekliyor</value>
+    <value>Beklemede</value>
 </data>
   <data name="AdoptionStatus_Rejected" xml:space="preserve">
     <value>Reddedildi</value>
 </data>
   <data name="AdoptionStatus_Approved" xml:space="preserve">
-    <value>Kabul Edildi</value>
+    <value>Onaylandı</value>
 </data>
   <data name="NoAdoptionRequestsMessage" xml:space="preserve">
-    <value>Henüz Evlat Edinme Talebi Yok</value>
+    <value>Henüz sahiplenme talebi yok.</value>
 </data>
   <data name="RequestedOn" xml:space="preserve">
     <value>Talep Tarihi</value>
@@ -241,5 +259,6 @@
   <data name="FormErrorMessage" xml:space="preserve">
     <value>Form gönderilirken bir hata oluştu. Lütfen tekrar deneyin.</value>
 </data>
+  <data name="ZoomImageTooltip" xml:space="preserve"><value>Büyüt</value></data>
 
 </root>

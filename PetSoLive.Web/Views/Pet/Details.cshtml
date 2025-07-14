@@ -21,15 +21,17 @@
 <div class="pet-details-card" style="position:relative;">
     <div style="position:relative;display:flex;justify-content:center;align-items:center;">
         <img src="@Model.ImageUrl" alt="@Model.Name" class="pet-details-avatar" id="petMainImage" onclick="openPetImageModal()" />
-        <span class="pet-avatar-zoom-icon" onclick="openPetImageModal()" title="Büyüt">
-            <svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' fill='none' viewBox='0 0 24 24'>
+        <span class="pet-avatar-zoom-icon" onclick="openPetImageModal()" title="@Localizer["ZoomImageTooltip"]">
+            <svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' fill='none' viewBox='0 0 24 24' style="filter: drop-shadow(0 2px 4px #3b82f6);">
                 <path stroke='#2563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M15 3h6m0 0v6m0-6L13 11m-2 10H3m0 0v-6m0 6l8-8'/>
             </svg>
         </span>
     </div>
     
-    <div class="pet-details-title">@Model.Name</div>
-    <span class="pet-status-badge @(ViewBag.Adoption != null ? "adopted" : "available")">
+    <div class="pet-details-title" style="letter-spacing:0.5px;text-shadow:0 2px 8px #e0e7ef;display:flex;align-items:center;justify-content:center;gap:8px;">
+        <span style="font-size:1.6em;">🐾</span> @Model.Name
+    </div>
+    <span class="pet-status-badge @(ViewBag.Adoption != null ? "adopted" : "available")" style="box-shadow:0 2px 8px #e0e7ef;">
         @if (ViewBag.Adoption != null)
         {
             <span class="status-icon">✓</span>
@@ -43,9 +45,9 @@
     </span>
     
     <!-- Temel Bilgiler -->
-    <div class="pet-info-section">
+    <div class="pet-info-section" style="margin-bottom:18px;">
         <div class="section-header">
-            <span class="section-icon">📋</span>
+            <span class="section-icon" style="color:#3b82f6;">📋</span>
             <span class="section-title">@Localizer["BasicInfoLabel"]</span>
         </div>
         <div class="pet-meta-list">
@@ -57,9 +59,9 @@
     </div>
 
     <!-- Fiziksel Özellikler -->
-    <div class="pet-info-section">
+    <div class="pet-info-section" style="margin-bottom:18px;">
         <div class="section-header">
-            <span class="section-icon">⚖️</span>
+            <span class="section-icon" style="color:#f59e0b;">⚖️</span>
             <span class="section-title">@Localizer["PhysicalTraitsLabel"]</span>
         </div>
         <div class="pet-meta-list">
@@ -73,9 +75,9 @@
     <!-- Sağlık Bilgileri -->
     @if (!string.IsNullOrEmpty(Model.VaccinationStatus) || !string.IsNullOrEmpty(Model.MicrochipId))
     {
-        <div class="pet-info-section">
+        <div class="pet-info-section" style="margin-bottom:18px;">
             <div class="section-header">
-                <span class="section-icon">🏥</span>
+                <span class="section-icon" style="color:#10b981;">🏥</span>
                 <span class="section-title">@Localizer["HealthInfoLabel"]</span>
             </div>
             <div class="pet-meta-list">
@@ -94,13 +96,13 @@
     <!-- Açıklama -->
     @if (!string.IsNullOrEmpty(Model.Description))
     {
-        <div class="pet-info-section">
+        <div class="pet-info-section" style="box-shadow:0 4px 24px #e0e7ef;">
             <div class="section-header">
-                <span class="section-icon">📝</span>
+                <span class="section-icon" style="color:#8b5cf6;">📝</span>
                 <span class="section-title">@Localizer["DescriptionLabel"]</span>
             </div>
-            <div class="pet-details-desc">
-                @Model.Description
+            <div class="pet-details-desc" style="font-size:1.12em;font-weight:500;letter-spacing:0.2px;">
+                <span style="font-size:1.2em;opacity:0.7;">❝</span> @Model.Description
             </div>
         </div>
     }
@@ -150,10 +152,10 @@
             }
             else
             {
-                <button type="button" class="pet-btn pet-btn-success" onclick="document.getElementById('adoptModal').style.display='flex'">
+                <a asp-controller="Adoption" asp-action="Adopt" asp-route-petId="@Model.Id" class="pet-btn pet-btn-success">
                     <span class="btn-icon">❤️</span>
                     @Localizer["AdoptButton"]
-                </button>
+                </a>
             }
         }
         else if (ViewBag.IsOwner && ViewBag.Adoption == null)
@@ -185,23 +187,10 @@
     <img src="@Model.ImageUrl" alt="@Model.Name" class="pet-image-modal-img" />
 </div>
 
-<!-- Modal -->
-<div class="pet-details-modal-bg" id="adoptModal" style="display:none;">
-    <div class="pet-details-modal">
-        <div class="pet-details-modal-header">
-            <span class="pet-details-modal-title">@Localizer["AdoptPetTitle"]</span>
-            <button class="pet-details-modal-close" onclick="document.getElementById('adoptModal').style.display='none'">&times;</button>
-        </div>
-        <div>
-            @await Html.PartialAsync("~/Views/Adoption/Adopt.cshtml", (PetSoLive.Core.Entities.User)ViewBag.LoggedInUser)
-        </div>
-    </div>
-</div>
-
 <!-- Adoption Requests -->
 <div class="pet-adoption-requests">
     <div class="pet-adoption-requests-title">
-        <span class="requests-icon">📋</span>
+        <span class="requests-icon" style="color:#8b5cf6;">📋</span>
         @Localizer["AdoptionRequestsHeading"]
     </div>
     <ul class="pet-adoption-request-list">
@@ -211,8 +200,10 @@
             {
                 var isCurrentUser = ViewBag.IsUserLoggedIn && request.User.Username == ViewBag.LoggedInUsername;
                 var avatar = string.IsNullOrEmpty(request.User.Username) ? "?" : request.User.Username.Substring(0,1).ToUpper();
-                <li class="pet-adoption-request-item @(isCurrentUser ? "pet-adoption-request-item-current" : "")">
-                    <span class="pet-request-avatar">@avatar</span>
+                <li class="pet-adoption-request-item @(isCurrentUser ? "pet-adoption-request-item-current" : "")" style="border-left:4px solid @(request.Status == AdoptionStatus.Approved ? "#10b981" : request.Status == AdoptionStatus.Rejected ? "#ef4444" : "#f59e0b");">
+                    <span class="pet-request-avatar" style="border:2px solid @(isCurrentUser ? "#8b5cf6" : "#e5e7eb");background:@(request.Status == AdoptionStatus.Approved ? "#d1fae5" : request.Status == AdoptionStatus.Rejected ? "#fee2e2" : "#fef3c7");color:#1e293b;">
+                        @avatar
+                    </span>
                     <div class="request-content">
                         <div class="request-header">
                             <span class="request-username">@request.User.Username</span>
@@ -221,6 +212,9 @@
                                 <span class="request-badge request-badge-own">@Localizer["YourRequest"]</span>
                             }
                             <span class="request-badge @(request.Status == AdoptionStatus.Pending ? "request-badge-pending" : (request.Status == AdoptionStatus.Rejected ? "request-badge-rejected" : "request-badge-approved"))">
+                                <span style="font-size:1.1em;vertical-align:middle;">
+                                    @(request.Status == AdoptionStatus.Pending ? "⏳" : request.Status == AdoptionStatus.Rejected ? "❌" : "✅")
+                                </span>
                                 @Localizer[$"AdoptionStatus_{request.Status}"]
                             </span>
                         </div>

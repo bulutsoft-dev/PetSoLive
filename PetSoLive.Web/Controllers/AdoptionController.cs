@@ -190,6 +190,18 @@ public class AdoptionController : Controller
 
     public async Task<IActionResult> ApproveRequest(int adoptionRequestId, int petId)
     {
+        var username = HttpContext.Session.GetString("Username");
+        if (username == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var currentUser = await _serviceManager.UserService.GetUserByUsernameAsync(username);
+        if (currentUser == null)
+        {
+            return BadRequest("User not found.");
+        }
+
         var adoptionRequest = await _serviceManager.AdoptionRequestService.GetAdoptionRequestByIdAsync(adoptionRequestId);
         if (adoptionRequest == null || adoptionRequest.PetId != petId)
         {
@@ -199,7 +211,7 @@ public class AdoptionController : Controller
         var pet = await _serviceManager.PetService.GetPetByIdAsync(petId);
         var petOwner = pet.PetOwners.FirstOrDefault();
 
-        if (petOwner?.UserId.ToString() != User?.Identity?.Name)
+        if (petOwner?.UserId != currentUser.Id)
         {
             return Unauthorized();
         }
@@ -248,7 +260,7 @@ public class AdoptionController : Controller
             await _serviceManager.AdoptionService.CreateAdoptionAsync(adoption);
         }
 
-        return RedirectToAction("Index");
+        return RedirectToAction("Details", "Pet", new { id = petId });
     }
 
     private async Task SendApprovalEmailAsync(User user, Pet pet)
