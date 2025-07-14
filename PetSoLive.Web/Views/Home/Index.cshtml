@@ -43,59 +43,6 @@
     </div>
 </div>
 
-<!-- Statistics Dashboard -->
-<div class="container my-5">
-    <div class="row g-4 mb-5">
-        <div class="col-12">
-            <h2 class="text-center mb-4">@Localizer["PlatformStatistics"]</h2>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-paw"></i>
-                </div>
-                <div class="stat-content">
-                    <h3 class="stat-number" data-target="150">0</h3>
-                    <p class="stat-label">@Localizer["TotalPets"]</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-heart"></i>
-                </div>
-                <div class="stat-content">
-                    <h3 class="stat-number" data-target="89">0</h3>
-                    <p class="stat-label">@Localizer["AdoptedPets"]</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="stat-content">
-                    <h3 class="stat-number" data-target="1200">0</h3>
-                    <p class="stat-label">@Localizer["ActiveUsers"]</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-search"></i>
-                </div>
-                <div class="stat-content">
-                    <h3 class="stat-number" data-target="45">0</h3>
-                    <p class="stat-label">@Localizer["LostPetsFound"]</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="container my-5">
     <div class="row g-4 justify-content-center mt-1">
         <div class="col-12 col-md-4 d-flex">
@@ -120,72 +67,6 @@
                 <h3>@Localizer["Assistance"]</h3>
                 <p>@Localizer["AssistanceDescription"]</p>
                 <a asp-controller="HelpRequest" asp-action="Index" class="btn btn-primary mt-auto">@Localizer["Get Help"]</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Recent Activity Section -->
-<div class="container my-5">
-    <div class="row">
-        <div class="col-12">
-            <h2 class="text-center mb-4">@Localizer["RecentActivity"]</h2>
-        </div>
-        <div class="col-12 col-lg-8">
-            <div class="activity-timeline">
-                <div class="timeline-item">
-                    <div class="timeline-icon">
-                        <i class="fas fa-heart"></i>
-                    </div>
-                    <div class="timeline-content">
-                        <h4>@Localizer["NewAdoption"]</h4>
-                        <p>@Localizer["LunaAdopted"]</p>
-                        <span class="timeline-time">@Localizer["2HoursAgo"]</span>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <div class="timeline-content">
-                        <h4>@Localizer["LostPetFound"]</h4>
-                        <p>@Localizer["MaxFound"]</p>
-                        <span class="timeline-time">@Localizer["5HoursAgo"]</span>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-icon">
-                        <i class="fas fa-hand-holding-heart"></i>
-                    </div>
-                    <div class="timeline-content">
-                        <h4>@Localizer["HelpRequest"]</h4>
-                        <p>@Localizer["VetAssistance"]</p>
-                        <span class="timeline-time">@Localizer["1DayAgo"]</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-lg-4">
-            <div class="quick-actions">
-                <h4>@Localizer["QuickActions"]</h4>
-                <div class="action-buttons">
-                    <a href="#" class="action-btn">
-                        <i class="fas fa-plus"></i>
-                        <span>@Localizer["AddPet"]</span>
-                    </a>
-                    <a href="#" class="action-btn">
-                        <i class="fas fa-search"></i>
-                        <span>@Localizer["SearchPets"]</span>
-                    </a>
-                    <a href="#" class="action-btn">
-                        <i class="fas fa-bell"></i>
-                        <span>@Localizer["Notifications"]</span>
-                    </a>
-                    <a href="#" class="action-btn">
-                        <i class="fas fa-cog"></i>
-                        <span>@Localizer["Settings"]</span>
-                    </a>
-                </div>
             </div>
         </div>
     </div>
