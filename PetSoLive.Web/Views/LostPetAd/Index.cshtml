@@ -7,6 +7,8 @@
 @{
     ViewData["Title"] = Localizer["Title"];
     Layout = "_Layout";
+    var selectedCity = ViewData["SelectedCity"] as string;
+    var selectedDistrict = ViewData["SelectedDistrict"] as string;
 }
 
 @section HeadSection {
@@ -19,103 +21,13 @@
         <i class="fas fa-plus-circle"></i> @Localizer["CreateNewAd"]
     </a>
     <div class="lostpet-main-flex">
-        <!-- Sol Sidebar Filtre Paneli -->
-        <div class="filter-sidebar" id="filterSidebar">
-            <div class="sidebar-header">
-                <h4><i class="fas fa-filter"></i> @Localizer["FilterLostPets"]</h4>
-            </div>
-            <div class="sidebar-content">
-                <div class="active-filters" id="activeFilters"></div>
-                <!-- Şehir -->
-                <div class="filter-section">
-                    <div class="filter-section-header" data-target="cityFilter">
-                        <h5><i class="fas fa-city"></i> @Localizer["FilterCity"]</h5>
-                        <div class="filter-section-controls">
-                            <button class="clear-section-btn" data-section="city" title="@Localizer["ClearFilter"]"><i class="fas fa-times"></i></button>
-                            <i class="fas fa-chevron-right collapse-icon"></i>
-                        </div>
-                    </div>
-                    <div class="filter-options" id="cityFilter">
-                        <select id="citySelect" class="form-control">
-                            <option value="">@Localizer["AllCities"]</option>
-                            @foreach (var city in ViewData["Cities"] as List<string> ?? new List<string>())
-                            {
-                                <option value="@city">@city</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                <!-- İlçe -->
-                <div class="filter-section">
-                    <div class="filter-section-header" data-target="districtFilter">
-                        <h5><i class="fas fa-map"></i> @Localizer["FilterDistrict"]</h5>
-                        <div class="filter-section-controls">
-                            <button class="clear-section-btn" data-section="district" title="@Localizer["ClearFilter"]"><i class="fas fa-times"></i></button>
-                            <i class="fas fa-chevron-right collapse-icon"></i>
-                        </div>
-                    </div>
-                    <div class="filter-options" id="districtFilter">
-                        <select id="districtSelect" class="form-control">
-                            <option value="">@Localizer["AllDistricts"]</option>
-                            @if (ViewData["Districts"] is List<string> districts)
-                            {
-                                foreach (var district in districts)
-                                {
-                                    <option value="@district">@district</option>
-                                }
-                            }
-                        </select>
-                    </div>
-                </div>
-                <!-- Tarih Aralığı -->
-                <div class="filter-section">
-                    <div class="filter-section-header" data-target="dateRangeFilter">
-                        <h5><i class="fas fa-calendar-alt"></i> @Localizer["DateRange"]</h5>
-                        <div class="filter-section-controls">
-                            <button class="clear-section-btn" data-section="dateRange" title="@Localizer["ClearFilter"]"><i class="fas fa-times"></i></button>
-                            <i class="fas fa-chevron-right collapse-icon"></i>
-                        </div>
-                    </div>
-                    <div class="date-range-inputs" id="dateRangeFilter">
-                        <div class="range-input-group">
-                            <label>@Localizer["MinDate"]</label>
-                            <input type="date" id="minDate" class="form-control" placeholder="@Localizer["MinDate"]" />
-                        </div>
-                        <div class="range-input-group">
-                            <label>@Localizer["MaxDate"]</label>
-                            <input type="date" id="maxDate" class="form-control" placeholder="@Localizer["MaxDate"]" />
-                        </div>
-                    </div>
-                </div>
-                <!-- Durum -->
-                <div class="filter-section">
-                    <div class="filter-section-header" data-target="statusFilter">
-                        <h5><i class="fas fa-circle-exclamation"></i> @Localizer["Status"]</h5>
-                        <div class="filter-section-controls">
-                            <button class="clear-section-btn" data-section="status" title="@Localizer["ClearFilter"]"><i class="fas fa-times"></i></button>
-                            <i class="fas fa-chevron-right collapse-icon"></i>
-                        </div>
-                    </div>
-                    <div class="filter-options" id="statusFilter">
-                        <label class="filter-option"><input type="radio" name="status" value="" checked> <span>@Localizer["AllStatuses"]</span></label>
-                        <label class="filter-option"><input type="radio" name="status" value="Lost"> <span>@Localizer["Lost"]</span></label>
-                        <label class="filter-option"><input type="radio" name="status" value="Found"> <span>@Localizer["Found"]</span></label>
-                    </div>
-                </div>
-                <div class="filter-actions">
-                    <button type="button" id="clearFilters" class="btn btn-outline-secondary">
-                        <i class="fas fa-times"></i> @Localizer["ClearFilters"]
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!-- Sağ Ana İçerik Alanı -->
-        <div class="lostpet-content-area">
+        <!-- Filtre paneli tamamen kaldırıldı -->
+        <div class="lostpet-content-area" style="width:100%;">
             <!-- Boydan boya arama çubuğu -->
             <div class="lostpet-searchbar-full">
                 <div class="lostpet-searchbar-inner">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="searchInput" class="search-input" placeholder="@Localizer["SearchPlaceholder"]" />
+                    <input type="text" id="searchInput" class="search-input" placeholder="İlanlarda isim veya açıklama ile ara..." />
                     <button class="clear-search-btn" id="clearSearch" title="@Localizer["ClearSearch"]"><i class="fas fa-times"></i></button>
                 </div>
             </div>
@@ -134,7 +46,7 @@
                          data-city="@ad.LastSeenCity" data-district="@ad.LastSeenDistrict" 
                          data-date="@ad.LastSeenDate.ToString("yyyy-MM-dd")" data-status="Lost" 
                          data-name="@ad.PetName" data-description="@(ad.Description ?? "")">
-                        <div class="lostpet-card-img-wrap">
+                        <div class="lostpet-card-img-wrap" style="position:relative;">
                             @if (!string.IsNullOrEmpty(ad.ImageUrl))
                             {
                                 <img src="@ad.ImageUrl" alt="@Localizer["PetImage"]" class="lostpet-card-img" />
@@ -143,17 +55,13 @@
                             {
                                 <div class="lostpet-card-placeholder"><i class="fa-solid fa-image fa-2x"></i></div>
                             }
-                            <span class="lostpet-card-status-badge"><i class="fa-solid fa-circle-exclamation"></i> @Localizer["Lost"]</span>
+                            <span class="city-badge">@ad.LastSeenCity</span>
                         </div>
                         <div class="lostpet-card-body">
                             <h5 class="lostpet-card-title"><i class="fa-solid fa-paw"></i> @ad.PetName</h5>
                             <div class="lostpet-card-meta">
                                 <span class="lostpet-card-location"><i class="fa-solid fa-location-dot"></i> @ad.LastSeenLocation</span>
                                 <span class="lostpet-card-date"><i class="fa-solid fa-calendar-days"></i> @ad.LastSeenDate.ToString("dd/MM/yyyy")</span>
-                            </div>
-                            <div class="lostpet-card-city-badges">
-                                <span class="lostpet-card-badge"><i class="fa-solid fa-city"></i> @ad.LastSeenCity</span>
-                                <span class="lostpet-card-badge"><i class="fa-solid fa-map"></i> @ad.LastSeenDistrict</span>
                             </div>
                             <div class="lostpet-card-desc">@((ad.Description?.Length > 80) ? ad.Description.Substring(0, 80) + "..." : ad.Description)</div>
                             <a href="@Url.Action("Details", "LostPetAd", new { id = ad.Id })" class="btn-lostpet-action btn-lostpet-details"><i class="fa-solid fa-eye"></i> @Localizer["ViewDetails"]</a>
@@ -172,4 +80,33 @@
 </div>
 @section Scripts {
     <script src="~/js/lostPetAdFilter.js?v=3.1"></script>
+    <script>
+// Collapsable filtre bölümleri
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.filter-section-header').forEach(function(header) {
+            header.addEventListener('click', function() {
+                const targetId = header.getAttribute('data-target');
+                const target = document.getElementById(targetId);
+                const icon = header.querySelector('.collapse-icon');
+                const expanded = header.getAttribute('aria-expanded') === 'true';
+                if (expanded) {
+                    target.style.display = 'none';
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-right');
+                } else {
+                    target.style.display = 'block';
+                    icon.classList.remove('fa-chevron-right');
+                    icon.classList.add('fa-chevron-down');
+                }
+                header.setAttribute('aria-expanded', !expanded);
+            });
+            header.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    header.click();
+                }
+            });
+        });
+    });
+</script>
 }

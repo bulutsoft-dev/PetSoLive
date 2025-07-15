@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
+using PetSoLive.Core.DTOs;
 
 namespace PetSoLive.Web.Controllers;
 
@@ -94,15 +95,27 @@ public class LostPetAdController : Controller
     }
 
     // GET: /LostPetAd/Index
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string city, string district, string petType, DateTime? datePostedAfter)
     {
-        var lostPetAds = await _serviceManager.LostPetAdService.GetAllLostPetAdsAsync();
+        var filterDto = new LostPetAdFilterDto
+        {
+            City = city,
+            District = district,
+            PetType = petType,
+            DatePostedAfter = datePostedAfter
+        };
+        var lostPetAds = await _serviceManager.LostPetAdService.GetFilteredLostPetAdsAsync(filterDto);
         if (lostPetAds == null)
         {
             TempData["ErrorMessage"] = _localizer["RetrieveAdsError"]?.Value ?? "Could not retrieve lost pet ads. Please try again later.";
             lostPetAds = new List<LostPetAd>();
         }
-
+        ViewData["Cities"] = CityList.Cities;
+        ViewData["Districts"] = !string.IsNullOrEmpty(city) ? CityList.GetDistrictsByCity(city) : new List<string>();
+        ViewData["SelectedCity"] = city;
+        ViewData["SelectedDistrict"] = district;
+        ViewData["SelectedPetType"] = petType;
+        ViewData["SelectedDatePostedAfter"] = datePostedAfter;
         return View(lostPetAds);
     }
 

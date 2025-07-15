@@ -1,4 +1,4 @@
-namespace Petsolive.API.DTOs;
+namespace PetSoLive.Core.DTOs;
 
 public class LostPetAdFilterDto
 {
@@ -6,4 +6,4 @@ public class LostPetAdFilterDto
     public string? District { get; set; }
     public string? PetType { get; set; }
     public DateTime? DatePostedAfter { get; set; }
-}
+} 

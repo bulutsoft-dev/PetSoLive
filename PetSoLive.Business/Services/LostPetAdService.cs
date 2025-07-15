@@ -2,6 +2,7 @@ using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using PetSoLive.Core.DTOs;
 
 public class LostPetAdService : ILostPetAdService
 {
@@ -69,6 +70,11 @@ public class LostPetAdService : ILostPetAdService
     public async Task DeleteLostPetAdAsync(LostPetAd lostPetAd)
     {
         await _lostPetAdRepository.DeleteLostPetAdAsync(lostPetAd);
+    }
+
+    public async Task<IEnumerable<LostPetAd>> GetFilteredLostPetAdsAsync(LostPetAdFilterDto filterDto)
+    {
+        return await _lostPetAdRepository.GetFilteredAsync(filterDto);
     }
 }
 

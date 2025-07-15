@@ -9,9 +9,9 @@
 
 <div class="lostpet-page">
     <div class="lostpet-details-card">
-        <div class="lostpet-image-section">
+        <div class="lostpet-image-section" style="position:relative;">
             <div class="lostpet-image-badge-row">
-                <span class="lostpet-status-badge" title="@Localizer["LostBadgeTooltip"]"><i class="fa-solid fa-circle-exclamation"></i> @Localizer["LostBadge"]</span>
+                <span class="city-badge">@Model.LastSeenCity</span>
             </div>
             @if (!string.IsNullOrEmpty(Model.ImageUrl))
             {
@@ -34,8 +34,6 @@
             <div class="lostpet-meta-list">
                 <div class="lostpet-meta-item"><i class="fa-solid fa-calendar-days"></i> <span>@Localizer["LastSeenDate"]:</span> <b>@Model.LastSeenDate.ToString("dd/MM/yyyy")</b></div>
                 <div class="lostpet-meta-item"><i class="fa-solid fa-location-dot"></i> <span>@Localizer["Location"]:</span> <b>@Model.LastSeenLocation</b></div>
-                <div class="lostpet-meta-item"><i class="fa-solid fa-city"></i> <span>@Localizer["City"]:</span> <b>@Model.User?.City</b></div>
-                <div class="lostpet-meta-item"><i class="fa-solid fa-map"></i> <span>@Localizer["District"]:</span> <b>@Model.User?.District</b></div>
             </div>
             <div class="lostpet-desc-card">
                 <i class="fa-solid fa-align-left"></i> <span>@Localizer["Description"]:</span>

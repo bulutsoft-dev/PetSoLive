@@ -1,6 +1,7 @@
 using PetSoLive.Core.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using PetSoLive.Core.DTOs;
 
 namespace PetSoLive.Core.Interfaces
 {
@@ -11,6 +12,9 @@ namespace PetSoLive.Core.Interfaces
 
         // Tüm kayıp ilanlarını almak için metod
         Task<IEnumerable<LostPetAd>> GetAllAsync();
+
+        // Filtreli kayıp ilanlarını almak için metod
+        Task<IEnumerable<LostPetAd>> GetFilteredAsync(LostPetAdFilterDto filterDto);
 
         // ID'ye göre bir kayıp ilanını almak için metod
         Task<LostPetAd> GetByIdAsync(int id);
