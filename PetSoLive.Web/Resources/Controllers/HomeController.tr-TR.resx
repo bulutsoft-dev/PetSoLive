@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- Home/Index.cshtml -->
-  <data name="Home Page" xml:space="preserve">
-    <value>Ana Sayfa</value>
-  </data>
-  <data name="WelcomeMessage" xml:space="preserve">
-    <value>PetSoLive'e Hoş Geldiniz!</value>
-  </data>
-  <data name="LeadMessage" xml:space="preserve">
-    <value>Mükemmel arkadaşınızı bulun ve onlara sonsuz bir yuva verin.</value>
-  </data>
-  <data name="Explore Adoptions" xml:space="preserve">
-    <value>Sahiplikleri Keşfet</value>
-  </data>
+  <data name="Home Page" xml:space="preserve"><value>Ana Sayfa</value></data>
+  <data name="WelcomeMessage" xml:space="preserve"><value>PetSoLive'a Hoş Geldiniz!</value></data>
+  <data name="LeadMessage" xml:space="preserve"><value>Hayvan dostlarımız için yeni bir yuva bul, kayıpları bul, yardım iste!</value></data>
+  <data name="Explore Adoptions" xml:space="preserve"><value>Sahiplenilecek Hayvanları Keşfet</value></data>
   
   <!-- Dashboard Statistics -->
   <data name="PlatformStatistics" xml:space="preserve">
@@ -80,33 +72,15 @@
     <value>Ayarlar</value>
   </data>
   
-  <data name="AdoptPet" xml:space="preserve">
-    <value>Evcil Hayvan Sahiplen</value>
-  </data>
-  <data name="AdoptPetDescription" xml:space="preserve">
-    <value>Yeni ailelerini bekleyen sevgi dolu evcil hayvanları keşfedin.</value>
-  </data>
-  <data name="See Pets" xml:space="preserve">
-    <value>Mevcut Evcil Hayvanları Gör</value>
-  </data>
-  <data name="LostPets" xml:space="preserve">
-    <value>Kayıp Evcil Hayvanlar</value>
-  </data>
-  <data name="LostPetsDescription" xml:space="preserve">
-    <value>Kayıp evcil hayvanları sahipleriyle buluşturmaya yardım edin.</value>
-  </data>
-  <data name="View Lost Pets" xml:space="preserve">
-    <value>Kayıp Evcil Hayvanları Görüntüle</value>
-  </data>
-  <data name="Assistance" xml:space="preserve">
-    <value>Yardıma mı ihtiyacınız var?</value>
-  </data>
-  <data name="AssistanceDescription" xml:space="preserve">
-    <value>Evcil hayvan bakımı, sağlık ve daha fazlası için destek alın.</value>
-  </data>
-  <data name="Get Help" xml:space="preserve">
-    <value>Şimdi Yardım Al</value>
-  </data>
+  <data name="AdoptPet" xml:space="preserve"><value>Hayvan Sahiplen</value></data>
+  <data name="AdoptPetDescription" xml:space="preserve"><value>Yüzlerce hayvan yeni yuvasını bekliyor. Hemen sahiplen!</value></data>
+  <data name="See Pets" xml:space="preserve"><value>Hayvanları Gör</value></data>
+  <data name="LostPets" xml:space="preserve"><value>Kayıp Hayvanlar</value></data>
+  <data name="LostPetsDescription" xml:space="preserve"><value>Kayıp hayvan ilanlarını incele, sahiplerine kavuşmalarına yardım et.</value></data>
+  <data name="View Lost Pets" xml:space="preserve"><value>Kayıp Hayvanları Gör</value></data>
+  <data name="Assistance" xml:space="preserve"><value>Yardım</value></data>
+  <data name="AssistanceDescription" xml:space="preserve"><value>Acil yardıma ihtiyacı olanlar için destek iste veya yardım et.</value></data>
+  <data name="Get Help" xml:space="preserve"><value>Yardım Al</value></data>
   <data name="ContactUsButton" xml:space="preserve">
     <value>Bize Ulaşın</value>
   </data>
@@ -267,15 +241,9 @@
   <data name="IoTIntegration" xml:space="preserve">
     <value>IoT Entegrasyonu: Evcil hayvan bakımını ve takibini iyileştirmek için GPS takipçileri ve sağlık monitörleri gibi akıllı cihazlarla entegrasyon.</value>
   </data>
-  <data name="PlayStoreModalTitle" xml:space="preserve">
-    <value>PetSoLive Mobil Uygulaması Yayında!</value>
-  </data>
-  <data name="PlayStoreModalLead" xml:space="preserve">
-    <value>PetSoLive artık Google Play'de! Daha hızlı ve kolay erişim için mobil uygulamamızı indirin.</value>
-  </data>
-  <data name="PlayStoreModalButtonText" xml:space="preserve">
-    <value>Google Play'den İndir</value>
-  </data>
+  <data name="PlayStoreModalTitle" xml:space="preserve"><value>PetSoLive Mobil Uygulaması</value></data>
+  <data name="PlayStoreModalLead" xml:space="preserve"><value>PetSoLive'ı Google Play'den indir, her an yanında olsun!</value></data>
+  <data name="PlayStoreModalButtonText" xml:space="preserve"><value>Google Play'den İndir</value></data>
   <data name="Conclusion" xml:space="preserve">
     <value>Sonuç</value>
   </data>

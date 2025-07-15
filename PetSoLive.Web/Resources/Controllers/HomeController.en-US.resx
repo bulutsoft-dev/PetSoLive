@@ -1,51 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- About.cshtml için gerekli anahtarlar (her biri sadece bir kez) -->
-  <data name="AboutUsTitle" xml:space="preserve"><value>About PetSoLive</value></data>
-  <data name="AboutUsDescription" xml:space="preserve"><value>PetSoLive is an innovative digital platform designed to bring together pet owners, veterinarians, shelters, and the community to enhance animal welfare.</value></data>
-  <data name="Step1Title" xml:space="preserve"><value>Sign Up</value></data>
-  <data name="Step1Desc" xml:space="preserve"><value>Quickly register and create your profile.</value></data>
-  <data name="Step2Title" xml:space="preserve"><value>Discover Pets</value></data>
-  <data name="Step2Desc" xml:space="preserve"><value>Search to adopt or post a lost pet ad.</value></data>
-  <data name="Step3Title" xml:space="preserve"><value>Get in Touch</value></data>
-  <data name="Step3Desc" xml:space="preserve"><value>Easily communicate with owners or veterinarians.</value></data>
-  <data name="Step4Title" xml:space="preserve"><value>Adopt &amp; Support</value></data>
-  <data name="Step4Desc" xml:space="preserve"><value>Adopt a friend or support the community.</value></data>
-  <data name="MissionTitle" xml:space="preserve"><value>Our Mission</value></data>
-  <data name="MissionDesc" xml:space="preserve"><value>To improve animal welfare, simplify adoption processes, and raise social awareness through innovative digital solutions.</value></data>
-  <data name="VisionTitle" xml:space="preserve"><value>Our Vision</value></data>
-  <data name="VisionDesc" xml:space="preserve"><value>To become Turkey's most comprehensive and trusted pet platform, building a sustainable and happy future for our animal friends.</value></data>
-  <data name="WhatWeOfferTitle" xml:space="preserve"><value>What We Offer</value></data>
-  <data name="WhatWeOfferDesc" xml:space="preserve"><value>Our platform offers a range of features designed to streamline adoption, provide emergency help, and improve communication between pet owners and veterinarians.</value></data>
-  <data name="AdoptionStories" xml:space="preserve"><value>Adoption Stories</value></data>
-  <data name="AdoptionStoriesDesc" xml:space="preserve"><value>Be inspired by real adoption stories and change the life of a new friend.</value></data>
-  <data name="LostPetAds" xml:space="preserve"><value>Lost Pet Ads</value></data>
-  <data name="LostPetAdsDesc" xml:space="preserve"><value>Create fast and effective lost pet ads, get support from the community.</value></data>
-  <data name="EmergencyHelp" xml:space="preserve"><value>Emergency Help Requests</value></data>
-  <data name="EmergencyHelpDesc" xml:space="preserve"><value>Request urgent help in emergencies and get instant support.</value></data>
-  <data name="VeterinaryAdvice" xml:space="preserve"><value>Veterinary Advice</value></data>
-  <data name="VeterinaryAdviceDesc" xml:space="preserve"><value>Get reliable advice and health tips from expert veterinarians.</value></data>
-  <data name="PetProfiles" xml:space="preserve"><value>Pet Profiles</value></data>
-  <data name="PetProfilesDesc" xml:space="preserve"><value>Create detailed profiles for your pets and manage their history and health info.</value></data>
-  <data name="RealTimeNotifications" xml:space="preserve"><value>Real-Time Notifications</value></data>
-  <data name="RealTimeNotificationsDesc" xml:space="preserve"><value>Get instantly notified about important updates and messages.</value></data>
-  <data name="WhyChooseUsTitle" xml:space="preserve"><value>Why PetSoLive?</value></data>
-  <data name="WhyChooseUsDesc" xml:space="preserve"><value>PetSoLive stands out with its safe community, innovative features, and animal welfare focus.</value></data>
-  <data name="WhyChooseUs1" xml:space="preserve"><value>Safe and verified user community</value></data>
-  <data name="WhyChooseUs1Desc" xml:space="preserve"><value>All users are verified, so you communicate in a safe environment.</value></data>
-  <data name="WhyChooseUs2" xml:space="preserve"><value>Comprehensive and innovative features</value></data>
-  <data name="WhyChooseUs2Desc" xml:space="preserve"><value>Comprehensive tools for every need, from adoption to emergency help.</value></data>
-  <data name="WhyChooseUs3" xml:space="preserve"><value>Easy and fast communication</value></data>
-  <data name="WhyChooseUs3Desc" xml:space="preserve"><value>Communication on our platform is fast, easy, and effective.</value></data>
-  <data name="WhyChooseUs4" xml:space="preserve"><value>Animal welfare focused approach</value></data>
-  <data name="WhyChooseUs4Desc" xml:space="preserve"><value>The happiness and safety of animals is always our top priority.</value></data>
-  <data name="WhyChooseUs5" xml:space="preserve"><value>Community Support</value></data>
-  <data name="WhyChooseUs5Desc" xml:space="preserve"><value>Always get support and sharing opportunities with an active community.</value></data>
-  <data name="WhyChooseUs6" xml:space="preserve"><value>Reliability &amp; Quality</value></data>
-  <data name="WhyChooseUs6Desc" xml:space="preserve"><value>High-standard service and continuously improving infrastructure.</value></data>
-  <data name="Bulutsoft" xml:space="preserve"><value>Bulutsoft</value></data>
-  <data name="BulutsoftRole" xml:space="preserve"><value>Project Lead</value></data>
-  <data name="BulutsoftDesc" xml:space="preserve"><value>Founder and lead developer. Sets the vision, designs the technical infrastructure and user experience. Passionate about animal welfare and digital innovation.</value></data>
-  <data name="ConclusionTitle" xml:space="preserve"><value>Conclusion</value></data>
-  <data name="ConclusionText" xml:space="preserve"><value>PetSoLive is not just an adoption platform; it is a comprehensive solution that provides critical services for animal welfare, fosters communication, and helps save lives.</value></data>
+  <data name="Home Page" xml:space="preserve"><value>Home Page</value></data>
+  <data name="WelcomeMessage" xml:space="preserve"><value>Welcome to PetSoLive!</value></data>
+  <data name="LeadMessage" xml:space="preserve"><value>Find a new home for our animal friends, find the lost, request help!</value></data>
+  <data name="Explore Adoptions" xml:space="preserve"><value>Explore Adoptions</value></data>
+  <data name="PlayStoreModalTitle" xml:space="preserve"><value>PetSoLive Mobile App</value></data>
+  <data name="PlayStoreModalLead" xml:space="preserve"><value>Download PetSoLive from Google Play and always have it with you!</value></data>
+  <data name="PlayStoreModalButtonText" xml:space="preserve"><value>Get it on Google Play</value></data>
+  <data name="AdoptPet" xml:space="preserve"><value>Adopt a Pet</value></data>
+  <data name="AdoptPetDescription" xml:space="preserve"><value>Hundreds of pets are waiting for a new home. Adopt now!</value></data>
+  <data name="See Pets" xml:space="preserve"><value>See Pets</value></data>
+  <data name="LostPets" xml:space="preserve"><value>Lost Pets</value></data>
+  <data name="LostPetsDescription" xml:space="preserve"><value>Browse lost pet ads and help them reunite with their owners.</value></data>
+  <data name="View Lost Pets" xml:space="preserve"><value>View Lost Pets</value></data>
+  <data name="Assistance" xml:space="preserve"><value>Assistance</value></data>
+  <data name="AssistanceDescription" xml:space="preserve"><value>Request or offer help for those in urgent need.</value></data>
+  <data name="Get Help" xml:space="preserve"><value>Get Help</value></data>
 </root>
