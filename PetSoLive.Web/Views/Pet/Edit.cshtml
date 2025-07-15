@@ -9,11 +9,14 @@
 
 @section HeadSection {
     <link rel="stylesheet" href="~/css/pet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 }
 
 <div class="pet-page">
-    <h2 class="pet-title">@Localizer["EditPetFormHeading"]</h2>
-
+    <div class="pet-card-header">
+        <i class="fa-solid fa-paw"></i>
+        <h2 class="pet-title">@Localizer["EditPetFormHeading"]</h2>
+    </div>
     <div class="pet-container pet-form">
         @if (!ViewData.ModelState.IsValid)
         {
@@ -26,68 +29,102 @@
                 </ul>
             </div>
         }
-
-        <form asp-action="Edit" method="post">
-            <div class="form-group">
-                <label for="Name">@Localizer["NameLabel"]</label>
-                <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required />
-            </div>
-            <div class="form-group">
-                <label for="Species">@Localizer["SpeciesLabel"]</label>
-                <input type="text" class="form-control" id="Species" name="Species" value="@Model.Species" required />
-            </div>
-            <div class="form-group">
-                <label for="Breed">@Localizer["BreedLabel"]</label>
-                <input type="text" class="form-control" id="Breed" name="Breed" value="@Model.Breed" required />
-            </div>
-            <div class="form-group">
-                <label for="Age">@Localizer["AgeLabel"]</label>
-                <input type="number" class="form-control" id="Age" name="Age" value="@Model.Age" required />
-            </div>
-            <div class="form-group">
-                <label for="Gender">@Localizer["GenderLabel"]</label>
-                <input type="text" class="form-control" id="Gender" name="Gender" value="@Model.Gender" required />
-            </div>
-            <div class="form-group">
-                <label for="Weight">@Localizer["WeightLabel"]</label>
-                <input type="number" step="0.1" class="form-control" id="Weight" name="Weight" value="@Model.Weight" required />
-            </div>
-            <div class="form-group">
-                <label for="Color">@Localizer["ColorLabel"]</label>
-                <input type="text" class="form-control" id="Color" name="Color" value="@Model.Color" required />
-            </div>
-            <div class="form-group">
-                <label for="DateOfBirth">@Localizer["DateOfBirthLabel"]</label>
-                <input type="date" class="form-control" id="DateOfBirth" name="DateOfBirth"
-                       value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" required />
-            </div>
-            <div class="form-group">
-                <label for="Description">@Localizer["DescriptionLabel"]</label>
-                <textarea class="form-control" id="Description" name="Description" rows="3">@Model.Description</textarea>
-            </div>
-            <div class="form-group">
-                <label for="VaccinationStatus">@Localizer["VaccinationStatusLabel"]</label>
-                <input type="text" class="form-control" id="VaccinationStatus" name="VaccinationStatus" value="@Model.VaccinationStatus" required />
-            </div>
-            <div class="form-group">
-                <label for="MicrochipId">@Localizer["MicrochipIdLabel"]</label>
-                <input type="text" class="form-control" id="MicrochipId" name="MicrochipId" value="@Model.MicrochipId" required />
-            </div>
-            <div class="form-group">
-                <label for="IsNeutered">@Localizer["IsNeuteredLabel"]</label>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="IsNeutered" name="IsNeutered" value="true"
-                           @(Model?.IsNeutered == true ? "checked" : "") />
-                    <label class="form-check-label" for="IsNeutered">@Localizer["IsNeuteredYes"]</label>
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" alt="Pet Avatar" class="pet-edit-avatar pet-edit-avatar-large" id="petImagePreview" />
+        }
+        <form asp-action="Edit" method="post" enctype="multipart/form-data" autocomplete="off">
+            <div class="form-section">
+                <h4 class="form-section-title"><i class="fa-solid fa-info-circle"></i> @Localizer["BasicInfoSection"]</h4>
+                <div class="form-group">
+                    <label for="Name"><i class="fa-solid fa-signature"></i> @Localizer["PetName"]</label>
+                    <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required placeholder="@Localizer["NamePlaceholder"]" />
+                </div>
+                <div class="form-group">
+                    <label for="Species"><i class="fa-solid fa-dog"></i> @Localizer["Species"]</label>
+                    <input type="text" class="form-control" id="Species" name="Species" value="@Model.Species" required placeholder="@Localizer["SpeciesPlaceholder"]" />
+                </div>
+                <div class="form-group">
+                    <label for="Breed"><i class="fa-solid fa-dna"></i> @Localizer["Breed"]</label>
+                    <input type="text" class="form-control" id="Breed" name="Breed" value="@Model.Breed" required placeholder="@Localizer["BreedPlaceholder"]" />
+                </div>
+                <div class="form-group">
+                    <label for="Age"><i class="fa-solid fa-hourglass-half"></i> @Localizer["Age"]</label>
+                    <input type="number" class="form-control" id="Age" name="Age" value="@Model.Age" required min="0" placeholder="@Localizer["AgePlaceholder"]" />
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-venus-mars"></i> @Localizer["Gender"]</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="Male" name="Gender" value="Male" @(Model.Gender == "Male" ? "checked" : "") required />
+                        <label class="form-check-label" for="Male">@Localizer["Male"]</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="Female" name="Gender" value="Female" @(Model.Gender == "Female" ? "checked" : "") required />
+                        <label class="form-check-label" for="Female">@Localizer["Female"]</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Weight"><i class="fa-solid fa-weight-hanging"></i> @Localizer["Weight"]</label>
+                    <input type="number" step="0.1" class="form-control" id="Weight" name="Weight" value="@Model.Weight" required min="0" placeholder="@Localizer["WeightPlaceholder"]" />
+                </div>
+                <div class="form-group">
+                    <label for="Color"><i class="fa-solid fa-palette"></i> @Localizer["Color"]</label>
+                    <input type="text" class="form-control" id="Color" name="Color" value="@Model.Color" required placeholder="@Localizer["ColorPlaceholder"]" />
+                </div>
+                <div class="form-group">
+                    <label for="DateOfBirth"><i class="fa-solid fa-calendar-days"></i> @Localizer["DateOfBirth"]</label>
+                    <input type="date" class="form-control" id="DateOfBirth" name="DateOfBirth" value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" required />
+                </div>
+                <div class="form-group">
+                    <label for="Description"><i class="fa-solid fa-align-left"></i> @Localizer["Description"]</label>
+                    <textarea class="form-control" id="Description" name="Description" rows="3" placeholder="@Localizer["DescriptionPlaceholder"]">@Model.Description</textarea>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="ImageUrl">@Localizer["ImageUrlLabel"]</label>
-                <input type="text" class="form-control" id="ImageUrl" name="ImageUrl" value="@Model.ImageUrl" />
+            <div class="form-section">
+                <h4 class="form-section-title"><i class="fa-solid fa-shield-dog"></i> @Localizer["HealthInfoSection"]</h4>
+                <div class="form-group">
+                    <label for="image"><i class="fa-solid fa-image"></i> @Localizer["ImageUpload"]</label>
+                    <div class="image-upload-box">
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*" onchange="previewPetImage(event)" />
+                        <span class="image-upload-hint"><i class="fa-solid fa-cloud-arrow-up"></i> @Localizer["ImageUploadHint"]</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="VaccinationStatus"><i class="fa-solid fa-syringe"></i> @Localizer["VaccinationStatus"]</label>
+                    <input type="text" class="form-control" id="VaccinationStatus" name="VaccinationStatus" value="@Model.VaccinationStatus" placeholder="@Localizer["VaccinationStatusPlaceholder"]" />
+                </div>
+                <div class="form-group">
+                    <label for="MicrochipId"><i class="fa-solid fa-microchip"></i> @Localizer["MicrochipId"]</label>
+                    <input type="text" class="form-control" id="MicrochipId" name="MicrochipId" value="@Model.MicrochipId" placeholder="@Localizer["MicrochipIdPlaceholder"]" />
+                </div>
+                <div class="form-group">
+                    <label for="IsNeutered"><i class="fa-solid fa-scissors"></i> @Localizer["IsNeutered"]</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="IsNeutered" name="IsNeutered" value="true" @(Model?.IsNeutered == true ? "checked" : "") />
+                        <label class="form-check-label" for="IsNeutered">@Localizer["IsNeuteredYes"]</label>
+                    </div>
+                </div>
             </div>
-
-            <button type="submit" class="btn-pet">@Localizer["SaveChangesButton"]</button>
-            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary ml-2">@Localizer["CancelButton"]</a>
+            <div class="pet-form-btn-row">
+                <button type="submit" class="btn-pet"><i class="fa-solid fa-floppy-disk"></i> @Localizer["SaveChangesButton"]</button>
+                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary"><i class="fa-solid fa-xmark"></i> @Localizer["CancelButton"]</a>
+            </div>
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function previewPetImage(event) {
+            const input = event.target;
+            const preview = document.getElementById('petImagePreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}
