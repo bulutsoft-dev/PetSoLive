@@ -17,13 +17,31 @@ else
 
     <div class="adoption-page">
         <div class="adoption-container adoption-form">
+            <!-- Stepper/Progress -->
+            <div style="display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
+                <div style="background:#e0e7ef;border-radius:8px;width:100%;height:8px;overflow:hidden;max-width:180px;">
+                    <div style="background:linear-gradient(90deg,#3b82f6,#8b5cf6);height:100%;width:100%;border-radius:8px;"></div>
+                </div>
+                <span style="margin-left:12px;font-size:0.98em;color:#8b5cf6;font-weight:600;">@Localizer["StepIndicator"]</span>
+            </div>
+            <!-- Pet Avatar (Dummy) -->
+            <div style="display:flex;justify-content:center;margin-bottom:10px;">
+                <div style="width:64px;height:64px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px #e0e7ef;">
+                    <span style="font-size:2.2em;">🐾</span>
+                </div>
+            </div>
             <h2 class="text-center">@Localizer["AdoptPetTitle", ViewData["PetName"]]</h2>
-
+            <p style="text-align:center;color:#64748b;font-size:1.01em;margin-bottom:18px;">@Localizer["AdoptPetDescription"]</p>
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger" style="margin-bottom:14px;">@ViewBag.ErrorMessage</div>
+            }
             <form method="post" asp-controller="Adoption" asp-action="Adopt" class="needs-validation" novalidate>
                 <input type="hidden" name="PetId" value="@ViewData["PetId"]" />
 
                 <!-- Kullanıcı Adı -->
                 <div class="form-group">
+                    <span class="input-icon">👤</span>
                     <label for="Name" class="form-label">@Localizer["YourNameLabel"]</label>
                     <input type="text" class="form-control" id="Name" name="Name" 
                            value="@Model.Username" readonly />
@@ -32,6 +50,7 @@ else
 
                 <!-- E-posta -->
                 <div class="form-group">
+                    <span class="input-icon">✉️</span>
                     <label for="Email" class="form-label">@Localizer["YourEmailLabel"]</label>
                     <input type="email" class="form-control" id="Email" name="Email" 
                            value="@Model.Email" readonly />
@@ -40,22 +59,25 @@ else
 
                 <!-- Telefon Numarası -->
                 <div class="form-group">
+                    <span class="input-icon">📞</span>
                     <label for="Phone" class="form-label">@Localizer["YourPhoneLabel"]</label>
                     <input type="tel" class="form-control" id="Phone" name="Phone" 
-                           value="@Model.PhoneNumber" required />
+                           value="@Model.PhoneNumber" required placeholder="@Localizer["PhonePlaceholder"]" />
                     <div class="form-text">@Localizer["UpdatePhoneHelp"]</div>
                 </div>
 
                 <!-- Adres -->
                 <div class="form-group">
+                    <span class="input-icon">🏠</span>
                     <label for="Address" class="form-label">@Localizer["YourAddressLabel"]</label>
                     <input type="text" class="form-control" id="Address" name="Address" 
-                           value="@Model.Address" />
+                           value="@Model.Address" placeholder="@Localizer["AddressPlaceholder"]" />
                     <div class="form-text">@Localizer["RegisteredAddressHelp"]</div>
                 </div>
 
                 <!-- Doğum Tarihi -->
                 <div class="form-group">
+                    <span class="input-icon">🎂</span>
                     <label for="DateOfBirth" class="form-label">@Localizer["YourDateOfBirthLabel"]</label>
                     <input type="date" class="form-control" id="DateOfBirth" name="DateOfBirth" 
                            value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" />
@@ -64,13 +86,19 @@ else
 
                 <!-- Mesaj -->
                 <div class="form-group">
+                    <span class="input-icon">💬</span>
                     <label for="Message" class="form-label">@Localizer["MessageLabel"]</label>
                     <textarea class="form-control" id="Message" name="Message" rows="4" 
                               placeholder="@Localizer["MessagePlaceholder"]" required></textarea>
                 </div>
 
+                <!-- Gizlilik ve Onay -->
+                <div style="margin:10px 0 18px 0;text-align:center;font-size:0.97em;color:#64748b;">
+                    <span style="display:inline-block;max-width:320px;">@Localizer["PrivacyNotice"]</span>
+                </div>
+
                 <!-- Gönder Butonu -->
-                <div class="text-end">
+                <div>
                     <button type="submit" class="btn-adoption">@Localizer["SubmitAdoptionButton"]</button>
                 </div>
             </form>

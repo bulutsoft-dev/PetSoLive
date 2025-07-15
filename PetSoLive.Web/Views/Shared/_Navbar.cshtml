@@ -90,8 +90,9 @@
                             "tr-TR" => "🇹🇷",
                             _ => "🌐"
                         };
+                        var fullUrl = Context.Request.Path + Context.Request.QueryString;
                     }
-                    <a class="nav-link" asp-controller="Home" asp-action="SetLanguage" asp-route-culture="@newCulture" asp-route-returnUrl="@Context.Request.Path">
+                    <a class="nav-link" asp-controller="Home" asp-action="SetLanguage" asp-route-culture="@newCulture" asp-route-returnUrl="@fullUrl">
                         @flag @Localizer["Swicth"]
                     </a>
                 </li>

@@ -1066,3 +1066,112 @@
     background: #6c757d;
 }
 
+/* --- Modern Adoption Form Card --- */
+.adoption-form {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 36px rgba(59,130,246,0.12), 0 2px 12px rgba(139,92,246,0.10);
+  padding: 40px 40px 28px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1.5px solid #e0e7ef;
+}
+
+.adoption-form h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #3b82f6;
+  text-align: center;
+  margin-bottom: 18px;
+  letter-spacing: 0.2px;
+}
+
+.adoption-form .form-group {
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.adoption-form .form-label {
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 1.01em;
+}
+
+.adoption-form .form-control {
+  width: 100%;
+  padding: 10px 12px 10px 38px;
+  border-radius: 8px;
+  border: 1.2px solid #e0e7ef;
+  background: #f8fafc;
+  font-size: 1em;
+  color: #334155;
+  outline: none;
+  transition: border 0.2s;
+  box-sizing: border-box;
+}
+
+.adoption-form .form-control:focus {
+  border-color: #8b5cf6;
+  background: #fff;
+}
+
+.adoption-form .form-text {
+  font-size: 0.93em;
+  color: #64748b;
+  margin-top: 2px;
+  margin-left: 2px;
+}
+
+.adoption-form .input-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.15em;
+  color: #8b5cf6;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.adoption-form textarea.form-control {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.btn-adoption {
+  width: 100%;
+  padding: 12px 0;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.08em;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.10);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-top: 10px;
+}
+
+.btn-adoption:hover {
+  background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+  box-shadow: 0 4px 16px rgba(139,92,246,0.13);
+}
+
+@media (max-width: 700px) {
+  .adoption-form {
+    max-width: 99vw;
+    padding: 18px 4vw 12px 4vw;
+    border-radius: 0;
+    margin: 0;
+    box-shadow: none;
+  }
+}
+

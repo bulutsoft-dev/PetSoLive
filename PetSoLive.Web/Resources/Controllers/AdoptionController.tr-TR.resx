@@ -266,4 +266,73 @@
   <data name="Pets" xml:space="preserve">
     <value>evcil hayvan</value>
   </data>
+  <data name="AdoptPetTitle" xml:space="preserve">
+    <value>Evcil Hayvan Sahiplen</value>
+  </data>
+  <data name="AdoptPetDescription" xml:space="preserve">
+    <value>Lütfen sahiplenme başvurusu için bilgilerinizi eksiksiz doldurun. Bilgileriniz gizli tutulacaktır.</value>
+  </data>
+  <data name="StepIndicator" xml:space="preserve">
+    <value>Adım 1/1: Bilgilerinizi Doldurun</value>
+  </data>
+  <data name="YourNameLabel" xml:space="preserve">
+    <value>Adınız</value>
+  </data>
+  <data name="RegisteredNameHelp" xml:space="preserve">
+    <value>Kayıtlı adınız değiştirilemez.</value>
+  </data>
+  <data name="YourEmailLabel" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="RegisteredEmailHelp" xml:space="preserve">
+    <value>Kayıtlı e-posta adresiniz değiştirilemez.</value>
+  </data>
+  <data name="YourPhoneLabel" xml:space="preserve">
+    <value>Telefon Numarası</value>
+  </data>
+  <data name="PhonePlaceholder" xml:space="preserve">
+    <value>5xx-xxx-xxxx</value>
+  </data>
+  <data name="UpdatePhoneHelp" xml:space="preserve">
+    <value>Telefon numaranızı güncelleyebilirsiniz.</value>
+  </data>
+  <data name="YourAddressLabel" xml:space="preserve">
+    <value>Adres</value>
+  </data>
+  <data name="AddressPlaceholder" xml:space="preserve">
+    <value>Adresinizi giriniz</value>
+  </data>
+  <data name="RegisteredAddressHelp" xml:space="preserve">
+    <value>Kayıtlı adresiniz, gerekirse güncelleyebilirsiniz.</value>
+  </data>
+  <data name="YourDateOfBirthLabel" xml:space="preserve">
+    <value>Doğum Tarihi</value>
+  </data>
+  <data name="RegisteredDateOfBirthHelp" xml:space="preserve">
+    <value>Kayıtlı doğum tarihiniz, gerekirse güncelleyebilirsiniz.</value>
+  </data>
+  <data name="MessageLabel" xml:space="preserve">
+    <value>Mesajınız</value>
+  </data>
+  <data name="MessagePlaceholder" xml:space="preserve">
+    <value>Kendinizi ve neden sahiplenmek istediğinizi kısaca anlatın...</value>
+  </data>
+  <data name="SubmitAdoptionButton" xml:space="preserve">
+    <value>Başvuruyu Gönder</value>
+  </data>
+  <data name="PrivacyNotice" xml:space="preserve">
+    <value>Başvurunuz ve kişisel bilgileriniz sadece sahiplenme işlemi için kullanılacaktır.</value>
+  </data>
+  <data name="ValidationRequired" xml:space="preserve">
+    <value>Bu alan zorunludur.</value>
+  </data>
+  <data name="ValidationInvalidEmail" xml:space="preserve">
+    <value>Geçerli bir e-posta adresi giriniz.</value>
+  </data>
+  <data name="ValidationInvalidPhone" xml:space="preserve">
+    <value>Geçerli bir telefon numarası giriniz.</value>
+  </data>
+  <data name="ValidationInvalidDate" xml:space="preserve">
+    <value>Geçerli bir tarih giriniz.</value>
+  </data>
 </root>

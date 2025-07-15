@@ -266,4 +266,73 @@
   <data name="Pets" xml:space="preserve">
     <value>pets</value>
   </data>
+  <data name="AdoptPetTitle" xml:space="preserve">
+    <value>Adopt a Pet</value>
+  </data>
+  <data name="AdoptPetDescription" xml:space="preserve">
+    <value>Please fill in your information completely for the adoption application. Your information will be kept confidential.</value>
+  </data>
+  <data name="StepIndicator" xml:space="preserve">
+    <value>Step 1/1: Fill in your information</value>
+  </data>
+  <data name="YourNameLabel" xml:space="preserve">
+    <value>Your Name</value>
+  </data>
+  <data name="RegisteredNameHelp" xml:space="preserve">
+    <value>Your registered name cannot be changed.</value>
+  </data>
+  <data name="YourEmailLabel" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="RegisteredEmailHelp" xml:space="preserve">
+    <value>Your registered email cannot be changed.</value>
+  </data>
+  <data name="YourPhoneLabel" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
+  <data name="PhonePlaceholder" xml:space="preserve">
+    <value>5xx-xxx-xxxx</value>
+  </data>
+  <data name="UpdatePhoneHelp" xml:space="preserve">
+    <value>You can update your phone number.</value>
+  </data>
+  <data name="YourAddressLabel" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="AddressPlaceholder" xml:space="preserve">
+    <value>Enter your address</value>
+  </data>
+  <data name="RegisteredAddressHelp" xml:space="preserve">
+    <value>Your registered address, you can update if necessary.</value>
+  </data>
+  <data name="YourDateOfBirthLabel" xml:space="preserve">
+    <value>Date of Birth</value>
+  </data>
+  <data name="RegisteredDateOfBirthHelp" xml:space="preserve">
+    <value>Your registered date of birth, you can update if necessary.</value>
+  </data>
+  <data name="MessageLabel" xml:space="preserve">
+    <value>Your Message</value>
+  </data>
+  <data name="MessagePlaceholder" xml:space="preserve">
+    <value>Briefly introduce yourself and why you want to adopt...</value>
+  </data>
+  <data name="SubmitAdoptionButton" xml:space="preserve">
+    <value>Submit Application</value>
+  </data>
+  <data name="PrivacyNotice" xml:space="preserve">
+    <value>Your application and personal information will only be used for the adoption process.</value>
+  </data>
+  <data name="ValidationRequired" xml:space="preserve">
+    <value>This field is required.</value>
+  </data>
+  <data name="ValidationInvalidEmail" xml:space="preserve">
+    <value>Please enter a valid email address.</value>
+  </data>
+  <data name="ValidationInvalidPhone" xml:space="preserve">
+    <value>Please enter a valid phone number.</value>
+  </data>
+  <data name="ValidationInvalidDate" xml:space="preserve">
+    <value>Please enter a valid date.</value>
+  </data>
 </root>
