@@ -342,6 +342,6 @@
     <value>Add Pet</value>
   </data>
   <data name="ShelterPetButton" xml:space="preserve">
-    <value>Shelter a Pet</value>
+    <value>Add Pet for Adoption</value>
   </data>
 </root>

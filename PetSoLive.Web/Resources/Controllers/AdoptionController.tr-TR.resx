@@ -342,6 +342,6 @@
     <value>Pet Ekle</value>
   </data>
   <data name="ShelterPetButton" xml:space="preserve">
-    <value>Evcil Hayvan Sahiplendir</value>
+    <value>Sahiplendirmek için Pet Ekle</value>
   </data>
 </root>
