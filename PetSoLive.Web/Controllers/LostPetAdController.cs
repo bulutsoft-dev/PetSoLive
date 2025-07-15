@@ -20,7 +20,7 @@ public class LostPetAdController : Controller
     }
 
     // Oturum kontrolü metodu
-    private IActionResult RedirectToLoginIfNotLoggedIn()
+    private IActionResult? RedirectToLoginIfNotLoggedIn()
     {
         if (HttpContext.Session.GetString("Username") == null)
         {

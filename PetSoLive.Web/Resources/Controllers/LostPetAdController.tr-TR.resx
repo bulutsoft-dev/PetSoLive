@@ -157,5 +157,17 @@
     <data name="ViewDetails" xml:space="preserve">
     <value>Detayları Görüntüle</value>
 </data>
+    <data name="Lost" xml:space="preserve">
+    <value>Kayıp</value>
+  </data>
+  <data name="FilterDistrict" xml:space="preserve">
+    <value>İlçe Filtresi</value>
+  </data>
+  <data name="DateRange" xml:space="preserve">
+    <value>Tarih Aralığı</value>
+  </data>
+  <data name="ClearFilters" xml:space="preserve">
+    <value>Filtreleri Temizle</value>
+  </data>
 
 </root>

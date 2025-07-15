@@ -2,6 +2,7 @@
 @using Microsoft.Extensions.Localization
 @using PetSoLive.Web.Controllers
 @inject IStringLocalizer<LostPetAdController> Localizer
+@model IEnumerable<PetSoLive.Core.Entities.LostPetAd>
 
 @{
     ViewData["Title"] = Localizer["Title"];
@@ -9,58 +10,166 @@
 }
 
 @section HeadSection {
-    <link rel="stylesheet" href="~/css/lostPetAd.css" />
+    <link rel="stylesheet" href="~/css/lostPetAd.css?v=3.1" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 }
 
 <div class="lostpet-page">
-    <h2 class="lostpet-title">@Localizer["TitleIndex"]</h2>
-
-    <div class="container">
-        <a href="@Url.Action("Create", "LostPetAd")" class="btn btn-success mb-3">
-            @Localizer["CreateNewAd"]
-        </a>
-
-        @if (TempData["SuccessMessage"] != null)
-        {
-            <div class="alert alert-success">
-                @TempData["SuccessMessage"]
+    <a href="@Url.Action("Create", "LostPetAd")" class="btn btn-success btn-lg lostpet-add-btn" style="display: block; width: 100%; max-width: 1280px; margin: 0 auto 1.2rem auto; font-size: 1.35rem; padding: 1.2rem 0; border-radius: 16px; box-shadow: 0 4px 16px rgba(30,136,229,0.10); font-weight: 800; text-align: center; letter-spacing: 0.02em;">
+        <i class="fas fa-plus-circle"></i> @Localizer["CreateNewAd"]
+    </a>
+    <div class="lostpet-main-flex">
+        <!-- Sol Sidebar Filtre Paneli -->
+        <div class="filter-sidebar" id="filterSidebar">
+            <div class="sidebar-header">
+                <h4><i class="fas fa-filter"></i> @Localizer["FilterLostPets"]</h4>
             </div>
-        }
-        @if (TempData["ErrorMessage"] != null)
-        {
-            <div class="alert alert-danger">
-                @TempData["ErrorMessage"]
-            </div>
-        }
-
-        <!-- Display Lost Pet Ads in Card Layout -->
-        <div class="row">
-            @foreach (var ad in Model)
-            {
-                <div class="col-md-4 mb-4">
-                    <div class="lostpet-card">
-                        @if (!string.IsNullOrEmpty(ad.ImageUrl))
-                        {
-                            <img src="@ad.ImageUrl" alt="@Localizer["PetImage"]">
-                        }
-                        else
-                        {
-                            <img src="https://via.placeholder.com/300" alt="@Localizer["NoImageAvailable"]">
-                        }
-                        <div class="card-body">
-                            <h5 class="card-title">@ad.PetName</h5>
-                            <p class="card-text">@ad.Description</p>
-                            <p class="card-text">
-                                <small class="text-muted">@ad.LastSeenLocation</small>
-                            </p>
-                            <a href="@Url.Action("Details", "LostPetAd", new { id = ad.Id })"
-                               class="btn btn-primary">
-                                @Localizer["ViewDetails"]
-                            </a>
+            <div class="sidebar-content">
+                <div class="active-filters" id="activeFilters"></div>
+                <!-- Şehir -->
+                <div class="filter-section">
+                    <div class="filter-section-header" data-target="cityFilter">
+                        <h5><i class="fas fa-city"></i> @Localizer["FilterCity"]</h5>
+                        <div class="filter-section-controls">
+                            <button class="clear-section-btn" data-section="city" title="@Localizer["ClearFilter"]"><i class="fas fa-times"></i></button>
+                            <i class="fas fa-chevron-right collapse-icon"></i>
                         </div>
                     </div>
+                    <div class="filter-options" id="cityFilter">
+                        <select id="citySelect" class="form-control">
+                            <option value="">@Localizer["AllCities"]</option>
+                            @foreach (var city in ViewData["Cities"] as List<string> ?? new List<string>())
+                            {
+                                <option value="@city">@city</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <!-- İlçe -->
+                <div class="filter-section">
+                    <div class="filter-section-header" data-target="districtFilter">
+                        <h5><i class="fas fa-map"></i> @Localizer["FilterDistrict"]</h5>
+                        <div class="filter-section-controls">
+                            <button class="clear-section-btn" data-section="district" title="@Localizer["ClearFilter"]"><i class="fas fa-times"></i></button>
+                            <i class="fas fa-chevron-right collapse-icon"></i>
+                        </div>
+                    </div>
+                    <div class="filter-options" id="districtFilter">
+                        <select id="districtSelect" class="form-control">
+                            <option value="">@Localizer["AllDistricts"]</option>
+                            @if (ViewData["Districts"] is List<string> districts)
+                            {
+                                foreach (var district in districts)
+                                {
+                                    <option value="@district">@district</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <!-- Tarih Aralığı -->
+                <div class="filter-section">
+                    <div class="filter-section-header" data-target="dateRangeFilter">
+                        <h5><i class="fas fa-calendar-alt"></i> @Localizer["DateRange"]</h5>
+                        <div class="filter-section-controls">
+                            <button class="clear-section-btn" data-section="dateRange" title="@Localizer["ClearFilter"]"><i class="fas fa-times"></i></button>
+                            <i class="fas fa-chevron-right collapse-icon"></i>
+                        </div>
+                    </div>
+                    <div class="date-range-inputs" id="dateRangeFilter">
+                        <div class="range-input-group">
+                            <label>@Localizer["MinDate"]</label>
+                            <input type="date" id="minDate" class="form-control" placeholder="@Localizer["MinDate"]" />
+                        </div>
+                        <div class="range-input-group">
+                            <label>@Localizer["MaxDate"]</label>
+                            <input type="date" id="maxDate" class="form-control" placeholder="@Localizer["MaxDate"]" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Durum -->
+                <div class="filter-section">
+                    <div class="filter-section-header" data-target="statusFilter">
+                        <h5><i class="fas fa-circle-exclamation"></i> @Localizer["Status"]</h5>
+                        <div class="filter-section-controls">
+                            <button class="clear-section-btn" data-section="status" title="@Localizer["ClearFilter"]"><i class="fas fa-times"></i></button>
+                            <i class="fas fa-chevron-right collapse-icon"></i>
+                        </div>
+                    </div>
+                    <div class="filter-options" id="statusFilter">
+                        <label class="filter-option"><input type="radio" name="status" value="" checked> <span>@Localizer["AllStatuses"]</span></label>
+                        <label class="filter-option"><input type="radio" name="status" value="Lost"> <span>@Localizer["Lost"]</span></label>
+                        <label class="filter-option"><input type="radio" name="status" value="Found"> <span>@Localizer["Found"]</span></label>
+                    </div>
+                </div>
+                <div class="filter-actions">
+                    <button type="button" id="clearFilters" class="btn btn-outline-secondary">
+                        <i class="fas fa-times"></i> @Localizer["ClearFilters"]
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Sağ Ana İçerik Alanı -->
+        <div class="lostpet-content-area">
+            <!-- Boydan boya arama çubuğu -->
+            <div class="lostpet-searchbar-full">
+                <div class="lostpet-searchbar-inner">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" class="search-input" placeholder="@Localizer["SearchPlaceholder"]" />
+                    <button class="clear-search-btn" id="clearSearch" title="@Localizer["ClearSearch"]"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+            }
+            <div class="lostpet-grid" id="lostpetGrid">
+                @foreach (var ad in Model)
+                {
+                    <div class="lostpet-card" 
+                         data-city="@ad.LastSeenCity" data-district="@ad.LastSeenDistrict" 
+                         data-date="@ad.LastSeenDate.ToString("yyyy-MM-dd")" data-status="Lost" 
+                         data-name="@ad.PetName" data-description="@(ad.Description ?? "")">
+                        <div class="lostpet-card-img-wrap">
+                            @if (!string.IsNullOrEmpty(ad.ImageUrl))
+                            {
+                                <img src="@ad.ImageUrl" alt="@Localizer["PetImage"]" class="lostpet-card-img" />
+                            }
+                            else
+                            {
+                                <div class="lostpet-card-placeholder"><i class="fa-solid fa-image fa-2x"></i></div>
+                            }
+                            <span class="lostpet-card-status-badge"><i class="fa-solid fa-circle-exclamation"></i> @Localizer["Lost"]</span>
+                        </div>
+                        <div class="lostpet-card-body">
+                            <h5 class="lostpet-card-title"><i class="fa-solid fa-paw"></i> @ad.PetName</h5>
+                            <div class="lostpet-card-meta">
+                                <span class="lostpet-card-location"><i class="fa-solid fa-location-dot"></i> @ad.LastSeenLocation</span>
+                                <span class="lostpet-card-date"><i class="fa-solid fa-calendar-days"></i> @ad.LastSeenDate.ToString("dd/MM/yyyy")</span>
+                            </div>
+                            <div class="lostpet-card-city-badges">
+                                <span class="lostpet-card-badge"><i class="fa-solid fa-city"></i> @ad.LastSeenCity</span>
+                                <span class="lostpet-card-badge"><i class="fa-solid fa-map"></i> @ad.LastSeenDistrict</span>
+                            </div>
+                            <div class="lostpet-card-desc">@((ad.Description?.Length > 80) ? ad.Description.Substring(0, 80) + "..." : ad.Description)</div>
+                            <a href="@Url.Action("Details", "LostPetAd", new { id = ad.Id })" class="btn-lostpet-action btn-lostpet-details"><i class="fa-solid fa-eye"></i> @Localizer["ViewDetails"]</a>
+                        </div>
+                    </div>
+                }
+            </div>
+            @if (!Model.Any())
+            {
+                <div class="no-pets-message">
+                    <p>@Localizer["NoLostPetsAvailable"]</p>
                 </div>
             }
         </div>
     </div>
 </div>
+@section Scripts {
+    <script src="~/js/lostPetAdFilter.js?v=3.1"></script>
+}

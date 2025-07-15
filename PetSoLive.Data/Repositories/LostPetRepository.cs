@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Data;
+using PetSoLive.Core.Entities;
 public class LostPetAdRepository : ILostPetAdRepository
 {
     private readonly ApplicationDbContext _context;

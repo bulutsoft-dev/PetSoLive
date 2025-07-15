@@ -158,6 +158,18 @@
     <data name="ViewDetails" xml:space="preserve">
     <value>View Details</value>
 </data>
+    <data name="Lost" xml:space="preserve">
+    <value>Lost</value>
+  </data>
+  <data name="FilterDistrict" xml:space="preserve">
+    <value>Filter District</value>
+  </data>
+  <data name="DateRange" xml:space="preserve">
+    <value>Date Range</value>
+  </data>
+  <data name="ClearFilters" xml:space="preserve">
+    <value>Clear Filters</value>
+  </data>
 
 
 </root>
