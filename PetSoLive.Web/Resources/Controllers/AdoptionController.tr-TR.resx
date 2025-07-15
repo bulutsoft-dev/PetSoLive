@@ -335,4 +335,13 @@
   <data name="ValidationInvalidDate" xml:space="preserve">
     <value>Geçerli bir tarih giriniz.</value>
   </data>
+  <data name="CreatePetForAdoption" xml:space="preserve">
+    <value>Sahiplendirmek için Pet Oluştur</value>
+  </data>
+  <data name="AddPetButton" xml:space="preserve">
+    <value>Pet Ekle</value>
+  </data>
+  <data name="ShelterPetButton" xml:space="preserve">
+    <value>Evcil Hayvan Sahiplendir</value>
+  </data>
 </root>

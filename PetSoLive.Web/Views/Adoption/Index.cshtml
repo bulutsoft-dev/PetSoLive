@@ -8,8 +8,7 @@
 }
 
 <div class="adoption-container">
-    <!-- Enhanced Tab Navigation -->
-    <div class="tab-navigation">
+    <div class="tab-navigation" style="margin-bottom:0;">
         <button class="tab-button active" data-tab="all">
             <i class="fas fa-th-large"></i> @Localizer["AllPets"]
         </button>
@@ -20,11 +19,10 @@
             <i class="fas fa-heart"></i> @Localizer["AdoptedPets"]
         </button>
     </div>
-
-    <!-- Main Content Area -->
     <div class="main-content">
         <!-- Sidebar Filter Panel -->
         <div class="filter-sidebar" id="filterSidebar">
+            <!-- Buton buradan kaldırıldı -->
             <div class="sidebar-header">
                 <h4><i class="fas fa-filter"></i> @Localizer["FilterPets"]</h4>
             </div>
@@ -287,6 +285,9 @@
 
         <!-- Pets Content -->
         <div class="pets-content">
+            <a href="@Url.Action("Create", "Pet")" class="create-pet-btn sahiplendir-btn" style="margin-bottom:22px;">
+                <i class="fas fa-plus-circle"></i> @Localizer["ShelterPetButton"]
+            </a>
             <!-- Search Bar -->
             <div class="search-container">
                 <div class="search-input-wrapper">

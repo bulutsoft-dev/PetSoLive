@@ -335,4 +335,13 @@
   <data name="ValidationInvalidDate" xml:space="preserve">
     <value>Please enter a valid date.</value>
   </data>
+  <data name="CreatePetForAdoption" xml:space="preserve">
+    <value>Create Pet for Adoption</value>
+  </data>
+  <data name="AddPetButton" xml:space="preserve">
+    <value>Add Pet</value>
+  </data>
+  <data name="ShelterPetButton" xml:space="preserve">
+    <value>Shelter a Pet</value>
+  </data>
 </root>
