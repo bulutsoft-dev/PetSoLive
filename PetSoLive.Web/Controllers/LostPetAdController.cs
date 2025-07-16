@@ -110,6 +110,8 @@ public class LostPetAdController : Controller
             TempData["ErrorMessage"] = _localizer["RetrieveAdsError"]?.Value ?? "Could not retrieve lost pet ads. Please try again later.";
             lostPetAds = new List<LostPetAd>();
         }
+        // ID'ye göre azalan sırala
+        lostPetAds = lostPetAds.OrderByDescending(x => x.Id).ToList();
         ViewData["Cities"] = CityList.Cities;
         ViewData["Districts"] = !string.IsNullOrEmpty(city) ? CityList.GetDistrictsByCity(city) : new List<string>();
         ViewData["SelectedCity"] = city;

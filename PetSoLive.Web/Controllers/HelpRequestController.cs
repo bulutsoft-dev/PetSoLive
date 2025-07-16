@@ -90,6 +90,7 @@ public class HelpRequestController : Controller
     public async Task<IActionResult> Index()
     {
         var helpRequests = await _serviceManager.HelpRequestService.GetHelpRequestsAsync();
+        helpRequests = helpRequests.OrderByDescending(x => x.Id).ToList();
         return View(helpRequests);
     }
 
