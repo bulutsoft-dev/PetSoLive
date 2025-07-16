@@ -22,4 +22,4 @@
 │   ├── AssistanceControllerTests.cs
 │   └── EmailServiceIntegrationTests.cs
 │
-└── PetSoLive.Tests.csproj   <-- Test project file
+└── PetSoLive.Tests.csproj   <-- Test project file.
