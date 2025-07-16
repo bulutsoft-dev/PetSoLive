@@ -13,9 +13,9 @@
 }
 
 <div class="lostpet-page">
-    <h2 class="lostpet-title">@Localizer["Title"]</h2>
+    <h2 class="lostpet-title" style="text-align:center; margin-bottom:2rem;">@Localizer["Title"]</h2>
 
-    <div class="lostpet-container">
+    <div class="lostpet-container" style="max-width:480px; margin:0 auto; background:#fff; border-radius:14px; box-shadow:0 6px 28px rgba(0,0,0,0.10),0 2px 8px rgba(0,0,0,0.06); border:1.5px solid var(--petsolive-primary,#4caf50); padding:2.2rem 2.2rem 1.5rem 2.2rem;">
         @if (TempData["ErrorMessage"] != null)
         {
             <div class="alert alert-danger">
@@ -33,29 +33,24 @@
         <form asp-action="Edit" method="post" enctype="multipart/form-data">
             @Html.AntiForgeryToken()
 
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:1.2rem;">
                 <label for="PetName">@Localizer["PetName"]</label>
-                <input type="text" id="PetName" name="PetName" class="form-control" value="@Model.PetName" required />
+                <input type="text" id="PetName" name="PetName" class="form-control" value="@Model.PetName" required style="border-radius:7px;" />
             </div>
 
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:1.2rem;">
                 <label for="Description">@Localizer["Description"]</label>
-                <textarea id="Description" name="Description" class="form-control" required>@Model.Description</textarea>
+                <textarea id="Description" name="Description" class="form-control" required style="border-radius:7px;">@Model.Description</textarea>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:1.2rem;">
                 <label for="LastSeenDate">@Localizer["LastSeenDate"]</label>
-                <input type="date" id="LastSeenDate" name="LastSeenDate" class="form-control" value="@Model.LastSeenDate.ToString("yyyy-MM-dd")" required />
+                <input type="date" id="LastSeenDate" name="LastSeenDate" class="form-control" value="@Model.LastSeenDate.ToString("yyyy-MM-dd")" required style="border-radius:7px;" />
             </div>
 
-            <div class="form-group">
-                <label for="ImageUrl">@Localizer["PetImage"]</label>
-                <input type="url" id="ImageUrl" name="ImageUrl" class="form-control" value="@Model.ImageUrl" />
-            </div>
-
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:1.2rem;">
                 <label for="city">@Localizer["City"]</label>
-                <select id="city" name="city" class="form-control" required>
+                <select id="city" name="city" class="form-control" required style="border-radius:7px;">
                     <option value="">@Localizer["SelectCity"]</option>
                     @foreach (var city in ViewData["Cities"] as List<string>)
                     {
@@ -64,17 +59,20 @@
                 </select>
             </div>
             
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom:1.2rem;">
                 <label for="district">@Localizer["District"]</label>
-                <select id="district" name="district" class="form-control" required>
+                <select id="district" name="district" class="form-control" required style="border-radius:7px;">
                     <option value="">@Localizer["SelectDistrict"]</option>
                 </select>
             </div>
 
-            <div class="form-group">
-                <button type="submit" class="btn-lostpet">@Localizer["UpdateButton"]</button>
-                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">@Localizer["CancelButton"]</a>
+            <div class="form-group" style="margin-bottom:1.2rem;">
+                <label for="image">@Localizer["ImageUpload"]</label>
+                <input type="file" class="form-control" id="image" name="image" accept="image/*" style="border-radius:7px;" />
             </div>
+
+            <button type="submit" class="btn-lostpet-action" style="width:100%; font-size:1.15rem; padding:0.7rem 0; border-radius:8px; margin-top:1.2rem; font-weight:700; letter-spacing:0.5px;">@Localizer["UpdateButton"]</button>
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary" style="width:100%; margin-top:0.7rem;">@Localizer["CancelButton"]</a>
         </form>
     </div>
 </div>

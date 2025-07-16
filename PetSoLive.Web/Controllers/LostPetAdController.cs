@@ -164,7 +164,7 @@ public class LostPetAdController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, LostPetAd updatedLostPetAd, string city, string district)
+    public async Task<IActionResult> Edit(int id, LostPetAd updatedLostPetAd, string city, string district, IFormFile image)
     {
         var redirectResult = RedirectToLoginIfNotLoggedIn();
         if (redirectResult != null) return redirectResult;
@@ -195,8 +195,17 @@ public class LostPetAdController : Controller
         lostPetAd.Description = updatedLostPetAd.Description;
         lostPetAd.LastSeenCity = city;
         lostPetAd.LastSeenDistrict = district;
-        lostPetAd.ImageUrl = updatedLostPetAd.ImageUrl;
         lostPetAd.LastSeenDate = updatedLostPetAd.LastSeenDate;
+
+        // Eğer yeni bir dosya yüklendiyse, ImgBB'ye upload et ve ImageUrl'yi güncelle
+        if (image != null)
+        {
+            using var ms = new MemoryStream();
+            await image.CopyToAsync(ms);
+            var imageBytes = ms.ToArray();
+            var imageUrl = await _imgBBHelper.UploadImageAsync(imageBytes);
+            lostPetAd.ImageUrl = imageUrl;
+        }
 
         try
         {
