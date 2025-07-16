@@ -56,6 +56,50 @@ public class PetController : ControllerBase
         return Ok(_mapper.Map<PetDto>(pet));
     }
 
+    [HttpGet("details")]
+    public async Task<ActionResult<IEnumerable<PetWithDetailsDto>>> GetAllWithDetails([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        var pets = (await _serviceManager.PetService.GetAllPetsAsync())
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+        var result = new List<PetWithDetailsDto>();
+        foreach (var pet in pets)
+        {
+            // Owner (en güncel sahip)
+            var owner = pet.PetOwners.OrderByDescending(po => po.OwnershipDate).FirstOrDefault();
+            // Adoption (en güncel adoption kaydı)
+            var adoption = pet.AdoptionRequests
+                .OrderByDescending(a => a.Id)
+                .FirstOrDefault(a => a.Status == PetSoLive.Core.Enums.AdoptionStatus.Approved);
+
+            result.Add(new PetWithDetailsDto
+            {
+                Id = pet.Id,
+                Name = pet.Name,
+                Species = pet.Species,
+                Breed = pet.Breed,
+                Age = pet.Age,
+                Gender = pet.Gender,
+                Weight = pet.Weight,
+                Color = pet.Color,
+                DateOfBirth = pet.DateOfBirth,
+                Description = pet.Description,
+                VaccinationStatus = pet.VaccinationStatus,
+                MicrochipId = pet.MicrochipId,
+                IsNeutered = pet.IsNeutered,
+                ImageUrl = pet.ImageUrl,
+                OwnerId = owner?.UserId,
+                OwnerName = owner?.User?.Username,
+                AdoptionId = adoption?.Id,
+                AdoptionStatus = adoption?.Status.ToString(),
+                AdoptedByUserId = adoption?.UserId,
+                AdoptedByUserName = adoption?.User?.Username
+            });
+        }
+        return Ok(result);
+    }
+
     [HttpPost]
     [Authorize]
     public async Task<ActionResult<PetDto>> Create([FromForm] PetDto petDto, IFormFile image)
