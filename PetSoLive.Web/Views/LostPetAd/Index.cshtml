@@ -17,20 +17,42 @@
 }
 
 <div class="lostpet-page">
-    <a href="@Url.Action("Create", "LostPetAd")" class="btn btn-success btn-lg lostpet-add-btn" style="display: block; width: 100%; max-width: 1280px; margin: 0 auto 1.2rem auto; font-size: 1.35rem; padding: 1.2rem 0; border-radius: 16px; box-shadow: 0 4px 16px rgba(30,136,229,0.10); font-weight: 800; text-align: center; letter-spacing: 0.02em;">
-        <i class="fas fa-plus-circle"></i> @Localizer["CreateNewAd"]
-    </a>
+    <div class="lostpet-toolbar" style="display: flex; align-items: center; justify-content: space-between; gap: 1.2rem; width: 100%; margin: 0 0 2rem 0; background: #f4f7fa; border-radius: 8px; box-shadow: 0 2px 16px rgba(30,136,229,0.10); padding: 1.5rem 2.5rem; border: 2.5px solid #e3e8ee; flex-wrap: wrap;">
+        <!-- Şehir filtresi en solda -->
+        <div style="flex:0 0 240px; min-width:160px;">
+            <select id="cityFilterBar" class="form-select" style="width:100%; border-radius: 6px; border: 2px solid #cfd8dc; background: #fff; padding: 0.7rem 1.1rem; font-size: 1.08rem; font-weight: 500; transition: border 0.2s;" aria-label="Şehir seç"
+                onfocus="this.style.borderColor='#42a5f5'" onblur="this.style.borderColor='#cfd8dc'">
+                <option value="">@Localizer["AllCities"]</option>
+                @foreach (var city in (ViewData["Cities"] as List<string> ?? new List<string>()))
+                {
+                    <option value="@city" selected="@(selectedCity == city ? "selected" : null)">@city</option>
+                }
+            </select>
+        </div>
+        <!-- Ortada ilan oluşturma butonu -->
+        <div style="flex:1; display:flex; justify-content:center; min-width:180px;">
+            <a href="@Url.Action("Create", "LostPetAd")" class="btn btn-success btn-lg lostpet-add-btn" style="font-size: 1.13rem; padding: 0.8rem 2.5rem; border-radius: 8px; background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%); border: none; color: #fff; font-weight: 800; box-shadow: 0 2px 8px rgba(30,136,229,0.10); letter-spacing: 0.02em; transition: background 0.2s, box-shadow 0.2s; display: flex; align-items: center; gap: 0.7rem; text-decoration: none; border: 2px solid #1976d2;"
+               onmouseover="this.style.background='linear-gradient(90deg,#1565c0 0%,#42a5f5 100%)';this.style.boxShadow='0 4px 16px rgba(30,136,229,0.18)';" onmouseout="this.style.background='linear-gradient(90deg,#1976d2 0%,#42a5f5 100%)';this.style.boxShadow='0 2px 8px rgba(30,136,229,0.10)';">
+                <i class="fas fa-plus-circle"></i> @Localizer["CreateNewAd"]
+            </a>
+        </div>
+        <!-- En sağda arama çubuğu -->
+        <div style="flex:0 0 340px; min-width:220px; position:relative;">
+            <i class="fas fa-search search-icon" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#42a5f5;"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="@Localizer["SearchByNameOrDesc"]" style="padding-left:2.5rem; width:100%; border-radius: 6px; border: 2px solid #cfd8dc; background: #fff; font-size: 1.08rem; font-weight: 500; padding: 0.7rem 1.1rem 0.7rem 2.5rem; transition: border 0.2s;" onfocus="this.style.borderColor='#42a5f5'" onblur="this.style.borderColor='#cfd8dc'" />
+            <button class="clear-search-btn" id="clearSearch" title="@Localizer["ClearSearch"]" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:transparent; border:none; color:#b0b8c1; font-size:1.1rem; cursor:pointer; padding:0;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <style>
+            @@media (max-width: 1100px) {
+                .lostpet-toolbar { flex-direction: column !important; align-items: stretch !important; gap: 1.1rem !important; padding: 1.2rem 0.7rem !important; }
+                .lostpet-toolbar > div { min-width: 0 !important; flex: 1 1 100% !important; }
+            }
+        </style>
+    </div>
     <div class="lostpet-main-flex">
-        <!-- Filtre paneli tamamen kaldırıldı -->
         <div class="lostpet-content-area" style="width:100%;">
-            <!-- Boydan boya arama çubuğu -->
-            <div class="lostpet-searchbar-full">
-                <div class="lostpet-searchbar-inner">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="searchInput" class="search-input" placeholder="Kayıp ilanlarda isim veya açıklama ile ara..." />
-                    <button class="clear-search-btn" id="clearSearch" title="@Localizer["ClearSearch"]"><i class="fas fa-times"></i></button>
-                </div>
-            </div>
             @if (TempData["SuccessMessage"] != null)
             {
                 <div class="alert alert-success">@TempData["SuccessMessage"]</div>
@@ -78,35 +100,3 @@
         </div>
     </div>
 </div>
-@section Scripts {
-    <script src="~/js/lostPetAdFilter.js?v=3.1"></script>
-    <script>
-// Collapsable filtre bölümleri
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.filter-section-header').forEach(function(header) {
-            header.addEventListener('click', function() {
-                const targetId = header.getAttribute('data-target');
-                const target = document.getElementById(targetId);
-                const icon = header.querySelector('.collapse-icon');
-                const expanded = header.getAttribute('aria-expanded') === 'true';
-                if (expanded) {
-                    target.style.display = 'none';
-                    icon.classList.remove('fa-chevron-down');
-                    icon.classList.add('fa-chevron-right');
-                } else {
-                    target.style.display = 'block';
-                    icon.classList.remove('fa-chevron-right');
-                    icon.classList.add('fa-chevron-down');
-                }
-                header.setAttribute('aria-expanded', !expanded);
-            });
-            header.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    header.click();
-                }
-            });
-        });
-    });
-</script>
-}
