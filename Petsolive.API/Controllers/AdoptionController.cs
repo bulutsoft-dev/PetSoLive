@@ -21,11 +21,20 @@ public class AdoptionController : ControllerBase
     }
 
     [HttpGet("{petId}")]
-    public async Task<ActionResult<AdoptionDto>> GetByPetId(int petId)
+    public async Task<ActionResult<IEnumerable<AdoptionDto>>> GetByPetId(int petId, [FromQuery] int? page = null, [FromQuery] int? pageSize = null)
     {
-        var adoption = await _serviceManager.AdoptionService.GetAdoptionByPetIdAsync(petId);
-        if (adoption == null) return NotFound();
-        return Ok(_mapper.Map<AdoptionDto>(adoption));
+        if (page.HasValue && pageSize.HasValue)
+        {
+            var adoptions = await _serviceManager.AdoptionService.GetAdoptionsPagedAsync(page.Value, pageSize.Value);
+            var adoptionDtos = _mapper.Map<IEnumerable<AdoptionDto>>(adoptions);
+            return Ok(adoptionDtos);
+        }
+        else
+        {
+            var adoption = await _serviceManager.AdoptionService.GetAdoptionByPetIdAsync(petId);
+            if (adoption == null) return NotFound();
+            return Ok(_mapper.Map<AdoptionDto>(adoption));
+        }
     }
 
     [HttpGet("paged")]
