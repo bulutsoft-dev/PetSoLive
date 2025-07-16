@@ -3,18 +3,18 @@
 @using PetSoLive.Web.Controllers
 @inject IStringLocalizer<AccountController> Localizer
 @{
-    Layout = "_Layout";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
     ViewData["Title"] = Localizer["RegisterTitle"];
 }
-
-@section HeadSection {
-    <link rel="stylesheet" href="~/css/register.css" />
-}
-
-<div class="register-page">
+<div class="login-register-box" style="padding:2rem 1.2rem 1.5rem 1.2rem;max-width:350px;">
+    <img src="/logo.png" alt="PetSoLive" class="login-register-logo" style="width:56px;height:56px;margin-bottom:0.3rem;box-shadow:none;background:#fff;border:2px solid #e3f2fd;" />
+    <div class="login-register-divider" style="width:28px;height:2px;margin:0.3rem 0 0.7rem 0;"></div>
+    <div class="login-register-title" style="margin-bottom:0.1rem;font-size:1.35rem;">@Localizer["RegisterTitle"]</div>
+    <div class="login-register-desc" style="margin-bottom:0.8rem;font-size:0.98rem;">@Localizer["RegisterDesc"]</div>
+    <button id="darkModeToggle" type="button" style="position:absolute;top:12px;right:12px;background:none;border:none;cursor:pointer;" title="@Localizer["DarkMode"]"><span id="darkModeIcon" style="font-size:1.1rem;">🌙</span></button>
     @if (!ViewData.ModelState.IsValid)
     {
-        <div class="alert alert-danger">
+        <div class="login-register-alert login-register-alert-danger" style="font-size:0.92rem;padding:0.7rem 0.7rem;">
             <ul>
                 @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                 {
@@ -23,129 +23,72 @@
             </ul>
         </div>
     }
-
-    <div class="register-container">
-        <h2 class="register-title">@Localizer["RegisterTitle"]</h2>
-
-        @if (TempData["SuccessMessage"] != null)
-        {
-            <div class="alert alert-success">
-                @TempData["SuccessMessage"]
-            </div>
-        }
-
-        <form method="post">
-            <div class="form-group">
-                <label for="username">@Localizer["UsernameLabel"]</label>
-                <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    class="form-control"
-                    required
-                />
-            </div>
-
-            <div class="form-group">
-                <label for="email">@Localizer["EmailLabel"]</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    class="form-control"
-                    required
-                />
-            </div>
-
-            <div class="form-group">
-                <label for="password">@Localizer["PasswordLabel"]</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    class="form-control"
-                    required
-                />
-            </div>
-
-            <div class="form-group">
-                <label for="phoneNumber">@Localizer["PhoneNumberLabel"]</label>
-                <input
-                    type="text"
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    class="form-control"
-                    required
-                />
-            </div>
-
-            <div class="form-group">
-                <label for="address">@Localizer["AddressLabel"]</label>
-                <input
-                    type="text"
-                    id="address"
-                    name="address"
-                    class="form-control"
-                    required
-                />
-            </div>
-
-            <div class="form-group">
-                <label for="dateOfBirth">@Localizer["DateOfBirthLabel"]</label>
-                <input
-                    type="date"
-                    id="dateOfBirth"
-                    name="dateOfBirth"
-                    class="form-control"
-                    required
-                />
-            </div>
-            
-            <div class="form-group">
-                <label for="city">@Localizer["CityLabel"]</label>
-                <select
-                    id="city"
-                    name="city"
-                    class="form-control"
-                    required
-                >
-                    <option value="">@Localizer["SelectCity"]</option>
-                    @foreach (var city in ViewData["Cities"] as List<string>)
-                    {
-                        <option value="@city">@city</option>
-                    }
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="district">@Localizer["DistrictLabel"]</label>
-                <select
-                    id="district"
-                    name="district"
-                    class="form-control"
-                    required
-                >
-                    <option value="">@Localizer["SelectDistrict"]</option>
-                </select>
-            </div>
-
-            <button type="submit" class="btn btn-primary register-btn">@Localizer["RegisterButton"]</button>
-        </form>
-
-        <div class="login-link">
-            <p>
-                @Localizer["ExistingAccountText"]
-                <a asp-controller="Account" asp-action="Login">@Localizer["LoginLink"]</a>
-            </p>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="login-register-alert login-register-alert-success" style="font-size:0.92rem;padding:0.7rem 0.7rem;">
+            @TempData["SuccessMessage"]
         </div>
+    }
+    <form method="post" class="login-register-form" style="position:relative;">
+        <div style="position:relative;">
+            <input type="text" id="username" name="username" class="login-register-input" required placeholder="@Localizer["UsernameLabel"]" />
+            <span class="input-info" title="@Localizer["UsernameInfo"]" style="font-size:1rem;">i</span>
+        </div>
+        <div style="position:relative;">
+            <input type="email" id="email" name="email" class="login-register-input" required placeholder="@Localizer["EmailLabel"]" />
+            <span class="input-info" title="@Localizer["EmailInfo"]" style="font-size:1rem;">&#64;</span>
+        </div>
+        <div style="position:relative;">
+            <input type="password" id="password" name="password" class="login-register-input" required placeholder="@Localizer["PasswordLabel"]" />
+            <span class="input-info" title="@Localizer["PasswordInfo"]" style="font-size:1rem;">*</span>
+        </div>
+        <div style="position:relative;">
+            <input type="text" id="phoneNumber" name="phoneNumber" class="login-register-input" required placeholder="@Localizer["PhoneNumberLabel"]" />
+            <span class="input-info" title="@Localizer["PhoneInfo"]" style="font-size:1rem;">☎</span>
+        </div>
+        <div style="position:relative;">
+            <input type="text" id="address" name="address" class="login-register-input" required placeholder="@Localizer["AddressLabel"]" />
+            <span class="input-info" title="@Localizer["AddressInfo"]" style="font-size:1rem;">⌂</span>
+        </div>
+        <input type="date" id="dateOfBirth" name="dateOfBirth" class="login-register-input" required placeholder="@Localizer["DateOfBirthLabel"]" />
+        <select id="city" name="city" class="login-register-input" required>
+            <option value="">@Localizer["SelectCity"]</option>
+            @foreach (var city in ViewData["Cities"] as List<string>)
+            {
+                <option value="@city">@city</option>
+            }
+        </select>
+        <select id="district" name="district" class="login-register-input" required>
+            <option value="">@Localizer["SelectDistrict"]</option>
+        </select>
+        <button type="submit" class="login-register-btn" style="margin-bottom:0.3rem;">@Localizer["RegisterButton"]</button>
+    </form>
+    <div class="login-register-link" style="margin-top:0.5rem;font-size:0.97rem;">
+        @Localizer["ExistingAccountText"] <a asp-controller="Account" asp-action="Login">@Localizer["LoginLink"]</a>
     </div>
 </div>
-
 @section Scripts {
     <script>
-        // Lokalizasyon değerlerini JavaScript'e aktar
+        // Koyu mod toggle
+        const darkModeBtn = document.getElementById('darkModeToggle');
+        const darkModeIcon = document.getElementById('darkModeIcon');
+        function setDarkMode(on) {
+            if(on) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('petsolive-darkmode', '1');
+                darkModeIcon.textContent = '☀️';
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.removeItem('petsolive-darkmode');
+                darkModeIcon.textContent = '🌙';
+            }
+        }
+        if(localStorage.getItem('petsolive-darkmode')) setDarkMode(true);
+        darkModeBtn.addEventListener('click', function() {
+            setDarkMode(!document.body.classList.contains('dark-mode'));
+        });
+        // Animasyon
         var selectDistrictText = '@Localizer["SelectDistrict"]';
-
         $('#city').change(function () {
             var city = $(this).val();
             $.get('/Account/GetDistricts?city=' + city, function (data) {
@@ -156,6 +99,18 @@
                     districtSelect.append('<option value="' + district + '">' + district + '</option>');
                 });
             });
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+            const box = document.querySelector(".login-register-box");
+            if (box) {
+                box.style.opacity = "0";
+                box.style.transform = "scale(0.97)";
+                setTimeout(() => {
+                    box.style.transition = "opacity 1s, transform 0.7s";
+                    box.style.opacity = "1";
+                    box.style.transform = "scale(1)";
+                }, 100);
+            }
         });
     </script>
 }

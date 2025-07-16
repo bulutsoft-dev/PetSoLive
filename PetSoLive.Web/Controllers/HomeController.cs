@@ -56,5 +56,11 @@ namespace PetSoLive.Web.Controllers
             await _context.Database.ExecuteSqlRawAsync(sql);
             return Content($"Adoptions Id sequence sıfırlandı. maxId: {maxId}");
         }
+
+        [HttpGet]
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
     }
 }

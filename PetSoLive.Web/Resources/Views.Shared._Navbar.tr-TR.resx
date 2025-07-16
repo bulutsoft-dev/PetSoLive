@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="PetSoLive" xml:space="preserve">
+    <value>PetSoLive</value>
+  </data>
+  <data name="Toggle Navigation" xml:space="preserve">
+    <value>Navigasyonu Aç/Kapat</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Ana Sayfa</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Hakkında</value>
+  </data>
+  <data name="Adoption" xml:space="preserve">
+    <value>Sahiplenme</value>
+  </data>
+  <data name="Lost Pet Ads" xml:space="preserve">
+    <value>Kayıp Pet İlanları</value>
+  </data>
+  <data name="Help Requests" xml:space="preserve">
+    <value>Yardım Talepleri</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Giriş Yap</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Kayıt Ol</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Hoş Geldin</value>
+  </data>
+  <data name="Veterinarians" xml:space="preserve">
+    <value>Veterinerler</value>
+  </data>
+  <data name="Veterinarian Register" xml:space="preserve">
+    <value>Veteriner Kaydı</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Çıkış Yap</value>
+  </data>
+  <data name="Swicth" xml:space="preserve">
+    <value>Dili Değiştir</value>
+  </data>
+  <data name="Active Users" xml:space="preserve">
+    <value>Aktif Kullanıcılar</value>
+  </data>
+  <data name="Add Pet" xml:space="preserve">
+    <value>Evcil Hayvan Ekle</value>
+  </data>
+  <data name="Adopt Pet" xml:space="preserve">
+    <value>Evcil Hayvan Sahiplen</value>
+  </data>
+  <data name="Adoptions" xml:space="preserve">
+    <value>Sahiplenmeler</value>
+  </data>
+  <data name="Browse Pets" xml:space="preserve">
+    <value>Hayvanları Görüntüle</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="Find your new friend" xml:space="preserve">
+    <value>Yeni arkadaşınızı bulun</value>
+  </data>
+  <data name="Get veterinary assistance" xml:space="preserve">
+    <value>Veteriner yardımı alın</value>
+  </data>
+  <data name="Help find your pet" xml:space="preserve">
+    <value>Evcil hayvanınızı bulmaya yardım edin</value>
+  </data>
+  <data name="Help Request" xml:space="preserve">
+    <value>Yardım Talebi</value>
+  </data>
+  <data name="Humidity" xml:space="preserve">
+    <value>Nem</value>
+  </data>
+  <data name="Lost Pet Found" xml:space="preserve">
+    <value>Kayıp Hayvan Bulundu</value>
+  </data>
+  <data name="Lost Pets Found" xml:space="preserve">
+    <value>Bulunan Kayıp Hayvanlar</value>
+  </data>
+  <data name="Luna the cat was reunited with her family!" xml:space="preserve">
+    <value>Luna adlı kedi ailesiyle yeniden bir araya geldi!</value>
+  </data>
+  <data name="Manisa, Turkey" xml:space="preserve">
+    <value>Manisa, Türkiye</value>
+  </data>
+  <data name="Max the Golden Retriever found a new home!" xml:space="preserve">
+    <value>Max adlı Golden Retriever yeni bir yuva buldu!</value>
+  </data>
+  <data name="New Adoption" xml:space="preserve">
+    <value>Yeni Sahiplenme</value>
+  </data>
+  <data name="New emergency help request from Dr. Smith" xml:space="preserve">
+    <value>Dr. Smith'den yeni acil yardım talebi</value>
+  </data>
+  <data name="Quick Actions" xml:space="preserve">
+    <value>Hızlı İşlemler</value>
+  </data>
+  <data name="Recent Activity" xml:space="preserve">
+    <value>Son Aktiviteler</value>
+  </data>
+  <data name="Register your pet" xml:space="preserve">
+    <value>Evcil hayvanınızı kaydedin</value>
+  </data>
+  <data name="Report Lost Pet" xml:space="preserve">
+    <value>Kayıp Hayvan Bildir</value>
+  </data>
+  <data name="Request Help" xml:space="preserve">
+    <value>Yardım İste</value>
+  </data>
+  <data name="Sunny" xml:space="preserve">
+    <value>Güneşli</value>
+  </data>
+  <data name="Total Pets" xml:space="preserve">
+    <value>Toplam Evcil Hayvan</value>
+  </data>
+  <data name="Track your pet activities and community engagement" xml:space="preserve">
+    <value>Evcil hayvan aktivitelerinizi ve topluluk katılımınızı takip edin</value>
+  </data>
+  <data name="Weather" xml:space="preserve">
+    <value>Hava Durumu</value>
+  </data>
+  <data name="Welcome to PetSoLive Dashboard" xml:space="preserve">
+    <value>PetSoLive Dashboard'a Hoş Geldiniz</value>
+  </data>
+  <data name="Wind" xml:space="preserve">
+    <value>Rüzgar</value>
+  </data>
+</root> 

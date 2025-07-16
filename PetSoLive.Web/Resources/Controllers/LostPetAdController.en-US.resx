@@ -158,6 +158,30 @@
     <data name="ViewDetails" xml:space="preserve">
     <value>View Details</value>
 </data>
+    <data name="Lost" xml:space="preserve">
+    <value>Lost</value>
+  </data>
+  <data name="FilterDistrict" xml:space="preserve">
+    <value>Filter District</value>
+  </data>
+  <data name="DateRange" xml:space="preserve">
+    <value>Date Range</value>
+  </data>
+  <data name="ClearFilters" xml:space="preserve">
+    <value>Clear Filters</value>
+  </data>
+  <data name="AllCities" xml:space="preserve">
+    <value>All Cities</value>
+  </data>
+  <data name="SearchByNameOrDesc" xml:space="preserve">
+    <value>Search by name or description...</value>
+  </data>
+  <data name="ClearSearch" xml:space="preserve">
+    <value>Clear Search</value>
+  </data>
+  <data name="ShowMore" xml:space="preserve"><value>Show More</value></data>
+  <data name="ShowLess" xml:space="preserve"><value>Show Less</value></data>
+  <data name="ContactOwner" xml:space="preserve"><value>Contact Owner</value></data>
 
 
 </root>

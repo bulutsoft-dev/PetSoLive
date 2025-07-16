@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/navbar.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/footer.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/adoption.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/helpRequest.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
@@ -30,166 +32,101 @@
     <link rel="stylesheet" href="~/css/pet.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/register.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/veterinarian.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/footer.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/about.css" asp-append-version="true" />
     @RenderSection("HeadSection", required: false)
+    @RenderSection("Styles", required: false)
 </head>
 <body class="d-flex flex-column min-vh-100">
-<header>
-    <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">
-                @Localizer["PetSoLive"]
+    @await Html.PartialAsync("_Navbar")
+    <!-- Scroll to Top Button (en altta sağda) -->
+    <button id="scrollToTopBtn" class="btn btn-primary position-fixed" style="bottom: 30px; right: 30px; z-index: 999; border-radius: 50%; width: 50px; height: 50px; display: none; align-items: center; justify-content: center;" title="En Üste Çık">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+    <!-- Google Play Button (hemen üstte) -->
+    <button id="googlePlayFab" class="btn btn-success position-fixed" style="bottom: 100px; right: 30px; z-index: 999; border-radius: 50%; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15);" title="@Localizer["GooglePlayTitle"]" data-bs-toggle="modal" data-bs-target="#googlePlayModal">
+        <i class="bi bi-google-play" style="font-size: 1.5rem;"></i>
+    </button>
+    <!-- Google Play Modal -->
+    <div class="modal fade" id="googlePlayModal" tabindex="-1" aria-labelledby="googlePlayModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-2 p-md-4">
+          <div class="modal-header border-0 pb-0">
+            <div class="d-flex align-items-center gap-2">
+              <img src="/logo.png" alt="PetSoLive Logo" style="width:48px;height:48px;">
+              <h5 class="modal-title mb-0" id="googlePlayModalLabel">@Localizer["GooglePlayModalTitle"]</h5>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@Localizer["Close"]"></button>
+          </div>
+          <div class="modal-body text-center">
+            <p class="lead">@Localizer["GooglePlayModalLead"]</p>
+            <ul class="text-start mx-auto mb-3" style="max-width:350px;">
+              <li>@Localizer["GooglePlayFeature1"]</li>
+              <li>@Localizer["GooglePlayFeature2"]</li>
+              <li>@Localizer["GooglePlayFeature3"]</li>
+            </ul>
+            <a href="https://play.google.com/store/apps/details?id=com.petsolive.petsolive" target="_blank">
+              <img src="https://play.google.com/intl/en_us/badges/static/images/badges/tr_badge_web_generic.png" alt="@Localizer["GooglePlayDownload"]" style="max-width: 250px;"/>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="@Localizer["Toggle Navigation"]">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Home" asp-action="Index">
-                            <i class="bi bi-house-door-fill"></i> @Localizer["Home"]
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Home" asp-action="About">
-                            <i class="bi bi-info-circle-fill"></i>@Localizer["About"]
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="Adoption" asp-action="Index">
-                            <i class="bi bi-clipboard-heart-fill"></i> @Localizer["Adoption"]
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="LostPetAd" asp-action="Index">
-                            <i class="bi bi-bookmark-heart-fill"></i> @Localizer["Lost Pet Ads"]
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-controller="HelpRequest" asp-action="Index">
-                            <i class="bi bi-chat-square-heart-fill"></i> @Localizer["Help Requests"]
-                        </a>
-                    </li>
-                </ul>
-
-                <ul class="navbar-nav">
-                    @if (string.IsNullOrEmpty(Context.Session.GetString("Username")))
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Account" asp-action="Login">
-                                <i class="bi bi-box-arrow-in-right"></i> @Localizer["Login"]
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Account" asp-action="Register">
-                                <i class="bi bi-pencil-square"></i> @Localizer["Register"]
-                            </a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                         @{
-                                        var username = Context.Session.GetString("Username");
-                                    }
-                                    <i class="bi bi-person-fill"></i> @Localizer["Welcome"] @username
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" asp-controller="Veterinarian" asp-action="Index">
-                                        <i class="bi bi-gear-fill"></i> @Localizer["Veterinarians Management"]
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-controller="Veterinarian" asp-action="Register">
-                                        <i class="bi bi-clipboard-plus-fill"></i> @Localizer["Veterinarian Register"]
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-controller="Account" asp-action="Logout">
-                                        <i class="bi bi-box-arrow-left"></i> @Localizer["Logout"]
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    }
-                    <li class="nav-item">
-                        @{
-                            var currentCulture = CultureInfo.CurrentCulture.Name;
-                            var newCulture = currentCulture == "en-US" ? "tr-TR" : "en-US";
-                            var flag = currentCulture switch
-                            {
-                                "en-US" => "🇺🇸",
-                                "tr-TR" => "🇹🇷",
-                                _ => "🌐"
-                            };
-                        }
-                        <a class="nav-link text-white" asp-controller="Home" asp-action="SetLanguage" asp-route-culture="@newCulture" asp-route-returnUrl="@Context.Request.Path">
-                            @flag @Localizer["Swicth"]
-                        </a>
-                    </li>
-                </ul>
+            <div class="form-check mt-3">
+              <input class="form-check-input" type="checkbox" value="" id="dontShowAgainCheckbox">
+              <label class="form-check-label" for="dontShowAgainCheckbox">
+                @Localizer["DontShowAgain"]
+              </label>
             </div>
+          </div>
         </div>
-    </nav>
-</header>
-
-
-
-<div class="container pt-3 flex-grow-1">
-    <main role="main" class="pb-3">
+      </div>
+    </div>
+    @if (IsSectionDefined("FullPageBackground"))
+    {
         @RenderBody()
-    </main>
-</div>
-
-<footer class="footer">
-    <div class="container">
-        <div class="row">
-            <!-- About Section -->
-            <div class="col-md-4 mb-4">
-                <h5 class="text-uppercase fw-bold">@Localizer["footerDescription"]</h5>
-                <p>
-                    @Localizer["footerDescriptionContent"]
-                </p>
-            </div>
-            <!-- Quick Links Section -->
-            <div class="col-md-4 mb-4">
-                <h5 class="text-uppercase fw-bold">@Localizer["Quick Links"]</h5>
-                <ul class="list-unstyled">
-                    <li><a href="@Url.Action("Index", "Home")"><i class="bi bi-house-door-fill"></i> @Localizer["Home"]</a></li>
-                    <li><a href="@Url.Action("About", "Home")"><i class="bi bi-info-circle-fill"></i> @Localizer["About Us"]</a></li>
-                    <li><a href="@Url.Action("Index", "Adoption")"><i class="bi bi-clipboard-heart-fill"></i> @Localizer["Adoption"]</a></li>
-                    <li><a href="@Url.Action("Index", "LostPetAd")"><i class="bi bi-bookmark-heart-fill"></i> @Localizer["Lost Pet Ads"]</a></li>
-                    <li><a href="@Url.Action("Index", "HelpRequest")"><i class="bi bi-chat-square-heart-fill"></i> @Localizer["Help Requests"]</a></li>
-                </ul>
-            </div>
-            <!-- Contact Section -->
-            <div class="col-md-4 mb-4">
-                <h5 class="text-uppercase fw-bold">@Localizer["Contact Us"]</h5>
-                <p><i class="bi bi-envelope"></i> <strong>@Localizer["Email"]:</strong> petsolivesoft@gmail.com</p>
-                <p><i class="bi bi-geo-alt"></i> <strong>@Localizer["Address"]:</strong> Muradiye, Manisa, Turkey</p>
-            </div>
+    }
+    else
+    {
+        <div class="container pt-3 flex-grow-1">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
         </div>
-    </div>
-
-    <div class="footer-bottom">
-        <div class="container d-flex justify-content-between align-items-center">
-            <p class="mb-0">&copy; 2025 PetSoLive - BulutSoft @Localizer["All rights reserved."]</p>
-<div class="social-links">
-    <a href="https://x.com/Bulutsoftdev?t=HkM3f1Q8QGRR4JHnCTCzzQ&s=09" class="me-3" target="_blank" title="Bulutsoftdev X"><i class="bi bi-twitter"></i></a>
-    <a href="https://x.com/PetSoLive?t=XVLdwcMK-ObxiWQD7P34Tg&s=09" class="me-3" target="_blank" title="PetSoLive X"><i class="bi bi-twitter"></i></a>
-    <a href="https://www.linkedin.com/company/bulutsoft-dev/" target="_blank" title="Bulutsoft-dev LinkedIn"><i class="bi bi-linkedin"></i></a>
-</div>
-
-          
-        </div>
-    </div>
-</footer>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
-@RenderSection("Scripts", required: false)
+    }
+    @await Html.PartialAsync("_Footer")
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+      // Google Play Modal otomatik açılış (her oturumda bir kez veya bir daha gösterme seçili değilse)
+      document.addEventListener('DOMContentLoaded', function() {
+        var dontShow = localStorage.getItem('googlePlayModalDontShow');
+        if (!dontShow && !localStorage.getItem('googlePlayModalShown')) {
+          var modal = new bootstrap.Modal(document.getElementById('googlePlayModal'));
+          modal.show();
+          localStorage.setItem('googlePlayModalShown', 'true');
+        }
+        // Checkbox kontrolü
+        var checkbox = document.getElementById('dontShowAgainCheckbox');
+        if (checkbox) {
+          checkbox.addEventListener('change', function() {
+            if (this.checked) {
+              localStorage.setItem('googlePlayModalDontShow', 'true');
+            } else {
+              localStorage.removeItem('googlePlayModalDontShow');
+            }
+          });
+        }
+        // Scroll to Top Button logic
+        var scrollBtn = document.getElementById('scrollToTopBtn');
+        window.addEventListener('scroll', function() {
+          if (window.pageYOffset > 300) {
+            scrollBtn.style.display = 'flex';
+          } else {
+            scrollBtn.style.display = 'none';
+          }
+        });
+        scrollBtn.addEventListener('click', function() {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+    </script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

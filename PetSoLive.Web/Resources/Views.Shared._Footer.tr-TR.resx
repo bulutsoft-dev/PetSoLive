@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="About PetSoLive" xml:space="preserve">
+    <value>PetSoLive Hakkında</value>
+  </data>
+  <data name="PetSoLive Description" xml:space="preserve">
+    <value>PetSoLive, evcil hayvanların sevgi dolu yuvalar bulmasına ve kayıp evcil hayvanların aileleriyle yeniden birleşmesine yardım etmeye adanmış kapsamlı bir platformdur. Evcil hayvan sahiplerini, sahiplenenleri ve veterinerleri şefkatli bir toplulukta bir araya getiriyoruz.</value>
+  </data>
+  <data name="Quick Links" xml:space="preserve">
+    <value>Hızlı Bağlantılar</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Ana Sayfa</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Hakkında</value>
+  </data>
+  <data name="Adoption" xml:space="preserve">
+    <value>Sahiplenme</value>
+  </data>
+  <data name="Lost Pet Ads" xml:space="preserve">
+    <value>Kayıp Pet İlanları</value>
+  </data>
+  <data name="Help Requests" xml:space="preserve">
+    <value>Yardım Talepleri</value>
+  </data>
+  <data name="Contact Us" xml:space="preserve">
+    <value>İletişim</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Adres</value>
+  </data>
+  <data name="All rights reserved." xml:space="preserve">
+    <value>Tüm hakları saklıdır.</value>
+  </data>
+  <data name="Swicth" xml:space="preserve">
+    <value>Dili Değiştir</value>
+  </data>
+</root> 

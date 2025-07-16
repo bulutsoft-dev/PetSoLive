@@ -1,0 +1,108 @@
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+<nav class="navbar navbar-expand-lg navbar-dark petsolive-navbar sticky-top shadow-sm">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center gap-2" asp-area="" asp-controller="Home" asp-action="Index">
+            <img src="~/logo.png" alt="PetSoLive Logo" style="height:36px;width:auto;" class="me-2 d-inline-block align-text-top" />
+            <span class="fw-bold">@Localizer["PetSoLive"]</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="@Localizer["Toggle Navigation"]">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-lg-2">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">
+                        <i class="bi bi-house-door-fill"></i> @Localizer["Home"]
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="About">
+                        <i class="bi bi-info-circle-fill"></i> @Localizer["About"]
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Adoption" asp-action="Index">
+                        <i class="bi bi-clipboard-heart-fill"></i> @Localizer["Adoption"]
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="LostPetAd" asp-action="Index">
+                        <i class="bi bi-bookmark-heart-fill"></i> @Localizer["Lost Pet Ads"]
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="HelpRequest" asp-action="Index">
+                        <i class="bi bi-chat-square-heart-fill"></i> @Localizer["Help Requests"]
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav mb-2 mb-lg-0 gap-lg-2 align-items-lg-center">
+                @if (string.IsNullOrEmpty(Context.Session.GetString("Username")))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Account" asp-action="Login">
+                            <i class="bi bi-box-arrow-in-right"></i> @Localizer["Login"]
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Account" asp-action="Register">
+                            <i class="bi bi-pencil-square"></i> @Localizer["Register"]
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            @{
+                                var username = Context.Session.GetString("Username");
+                            }
+                            <i class="bi bi-person-circle"></i> @Localizer["Welcome"] @username
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+                            <li>
+                                <a class="dropdown-item" asp-controller="Veterinarian" asp-action="Index">
+                                    <i class="bi bi-activity"></i> @Localizer["Veterinarians"]
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="Veterinarian" asp-action="Register">
+                                    <i class="bi bi-clipboard-plus-fill"></i> @Localizer["Veterinarian Register"]
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="Account" asp-action="Logout">
+                                    <i class="bi bi-box-arrow-left"></i> @Localizer["Logout"]
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+                <li class="nav-item">
+                    @{
+                        var currentCulture = CultureInfo.CurrentCulture.Name;
+                        var newCulture = currentCulture == "en-US" ? "tr-TR" : "en-US";
+                        var flag = currentCulture switch
+                        {
+                            "en-US" => "🇺🇸",
+                            "tr-TR" => "🇹🇷",
+                            _ => "🌐"
+                        };
+                        var fullUrl = Context.Request.Path + Context.Request.QueryString;
+                    }
+                    <a class="nav-link" asp-controller="Home" asp-action="SetLanguage" asp-route-culture="@newCulture" asp-route-returnUrl="@fullUrl">
+                        @flag @Localizer["Swicth"]
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link theme-toggle-btn" type="button" onclick="toggleTheme()" title="@Localizer["Toggle Theme"]">
+                        <i class="bi bi-moon-fill theme-icon-dark"></i>
+                        <i class="bi bi-sun-fill theme-icon-light" style="display: none;"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav> 

@@ -1,4 +1,5 @@
 using PetSoLive.Core.Entities;
+using PetSoLive.Core.DTOs;
 
 namespace PetSoLive.Core.Interfaces
 {
@@ -12,5 +13,6 @@ namespace PetSoLive.Core.Interfaces
         Task AssignPetOwnerAsync(PetOwner petOwner);
         Task DeletePetAsync(int petId, int userId);
         Task DeletePetOwnerAsync(int petId, int userId);
+        Task<IEnumerable<Pet>> GetFilteredPetsAsync(PetFilterDto filter);
     }
 }

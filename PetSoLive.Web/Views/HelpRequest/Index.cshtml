@@ -13,80 +13,95 @@
     <link rel="stylesheet" href="~/css/helpRequest.css" />
 }
 
-<div class="helprequest-page">
-    <h1 class="helprequest-title">@ViewData["Title"]</h1>
-
-    <div class="container">
-        <div class="row mb-3">
-            <div class="col-12">
-                <a class="btn btn-success btn-lg" href="@Url.Action("Create", "HelpRequest")">
-                    @Localizer["CreateNewHelpRequestButton"]
-                </a>
+<div class="helprequest-page minimalist">
+    <div class="d-flex justify-content-center mb-3">
+        <a href="@Url.Action("Create", "HelpRequest")" class="btn btn-primary btn-lg btn-add-helprequest-main" title="@Localizer["AddHelpRequestButtonTooltip", "Yeni yardım talebi oluştur"]">
+            <i class="fas fa-plus"></i> @Localizer["AddHelpRequestButton", "Yardım Talebi Ekle"]
+        </a>
+    </div>
+    <div class="row align-items-center mb-4" style="max-width: 1200px; margin: 0 auto;">
+        <div class="col-12 d-flex align-items-center justify-content-center">
+            <div class="helprequest-tabs mb-0" aria-label="@Localizer["HelpRequestTabsLabel", "Aciliyet Sekmeleri"]">
+                <button class="helprequest-tab active" data-emergency="all">@Localizer["AllTab", "Tümü"]</button>
+                <button class="helprequest-tab" data-emergency="high">@Localizer["HighTab", "Acil"]</button>
+                <button class="helprequest-tab" data-emergency="medium">@Localizer["MediumTab", "Orta"]</button>
+                <button class="helprequest-tab" data-emergency="low">@Localizer["LowTab", "Düşük"]</button>
             </div>
         </div>
-
-        <div class="row">
+    </div>
+    <h1 class="helprequest-title text-center mb-4">@ViewData["Title"]</h1>
+    <div class="container">
+        <div class="row" id="helprequest-list">
             @foreach (var helpRequest in Model)
             {
-                <div class="col-md-4 mb-4">
-                    <div class="helprequest-card shadow-lg">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5>
+                var emergencyClass = helpRequest.EmergencyLevel switch
+                {
+                    EmergencyLevel.High => "emergency-high",
+                    EmergencyLevel.Medium => "emergency-medium",
+                    EmergencyLevel.Low => "emergency-low",
+                    _ => "emergency-unknown"
+                };
+                var emergencyData = helpRequest.EmergencyLevel switch
+                {
+                    EmergencyLevel.High => "high",
+                    EmergencyLevel.Medium => "medium",
+                    EmergencyLevel.Low => "low",
+                    _ => "unknown"
+                };
+                var emergencyIcon = helpRequest.EmergencyLevel switch
+                {
+                    EmergencyLevel.High => "<i class='fas fa-exclamation-triangle text-danger'></i>",
+                    EmergencyLevel.Medium => "<i class='fas fa-exclamation-circle text-warning'></i>",
+                    EmergencyLevel.Low => "<i class='fas fa-info-circle text-info'></i>",
+                    _ => "<i class='fas fa-question-circle text-secondary'></i>"
+                };
+                <div class="col-md-4 mb-4 helprequest-card-wrapper" data-emergency="@emergencyData">
+                    <div class="helprequest-card shadow-sm border-0">
+                        <div class="emergency-bar @emergencyClass" title="@Localizer[$"EmergencyLevel{helpRequest.EmergencyLevel}Tooltip", Localizer[$"EmergencyLevel{helpRequest.EmergencyLevel}"]]"></div>
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="mb-0">
                                     <a href="@Url.Action("Details", "HelpRequest", new { id = helpRequest.Id })"
-                                       class="card-title text-dark">@helpRequest.Title</a>
+                                       class="card-title text-dark minimalist-link" title="@Localizer["GoToHelpRequestDetails", "Yardım talebi detayına git"]">@helpRequest.Title</a>
                                 </h5>
-                                <span class="badge badge-pill badge-warning">
+                                <span class="badge badge-pill badge-warning bg-transparent border-0 p-0 emergency-badge" title="@Localizer[$"EmergencyLevel{helpRequest.EmergencyLevel}Tooltip", Localizer[$"EmergencyLevel{helpRequest.EmergencyLevel}"]]"><!-- icon + aciliyet -->
+                                    @Html.Raw(emergencyIcon)
                                     @Localizer[$"EmergencyLevel{helpRequest.EmergencyLevel}"]
                                 </span>
                             </div>
-
-                            <p class="card-text">
-                                <strong>@Localizer["StatusLabel"]:</strong>
-                                <span class="status-label 
-                                    @(helpRequest.Status == HelpRequestStatus.Active ? "status-active" : "status-passive")">
+                            <div class="mb-2">
+                                <span class="status-label @(helpRequest.Status == HelpRequestStatus.Active ? "status-active" : "status-passive")" title="@Localizer[$"HelpRequestStatus{helpRequest.Status}Tooltip", Localizer[$"HelpRequestStatus{helpRequest.Status}"]]"><!-- durum -->
                                     @Localizer[$"HelpRequestStatus{helpRequest.Status}"]
                                 </span>
-                            </p>
-
-                            <p class="card-text">
-                                <strong>@Localizer["CreatedAtLabel"]:</strong> 
-                                @helpRequest.CreatedAt.ToString("g")
-                            </p>
-
-                            <p class="card-text">
-                                <strong>@Localizer["LocationLabel"]:</strong> 
-                                @helpRequest.Location
-                            </p>
-
+                                <span class="text-muted small ms-2" title="@Localizer["CreatedAtLabel", "Oluşturulma Tarihi"]">@helpRequest.CreatedAt.ToString("g")</span>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-muted minimalist-label">@Localizer["LocationLabel", "Konum"]:</span> @helpRequest.Location
+                            </div>
                             @if (!string.IsNullOrEmpty(helpRequest.ContactName))
                             {
-                                <p class="card-text">
-                                    <strong>@Localizer["ContactNameLabel"]:</strong> 
-                                    @helpRequest.ContactName
-                                </p>
+                                <div class="mb-1">
+                                    <span class="text-muted minimalist-label">@Localizer["ContactNameLabel", "İletişim Adı"]:</span> @helpRequest.ContactName
+                                </div>
                             }
                             @if (!string.IsNullOrEmpty(helpRequest.ContactPhone))
                             {
-                                <p class="card-text">
-                                    <strong>@Localizer["ContactPhoneLabel"]:</strong> 
-                                    @helpRequest.ContactPhone
-                                </p>
+                                <div class="mb-1">
+                                    <span class="text-muted minimalist-label">@Localizer["ContactPhoneLabel", "Telefon"]:</span> @helpRequest.ContactPhone
+                                </div>
                             }
                             @if (!string.IsNullOrEmpty(helpRequest.ContactEmail))
                             {
-                                <p class="card-text">
-                                    <strong>@Localizer["ContactEmailLabel"]:</strong> 
-                                    @helpRequest.ContactEmail
-                                </p>
+                                <div class="mb-1">
+                                    <span class="text-muted minimalist-label">@Localizer["ContactEmailLabel", "E-posta"]:</span> @helpRequest.ContactEmail
+                                </div>
                             }
-
                             @if (!string.IsNullOrEmpty(helpRequest.ImageUrl))
                             {
-                                <div class="mt-2">
+                                <div class="mt-2 text-center">
                                     <img src="@helpRequest.ImageUrl" 
-                                         alt="@Localizer["HelpRequestImageAlt"]" 
-                                         class="img-fluid rounded" />
+                                         alt="@Localizer["HelpRequestImageAlt", "Yardım Talebi Görseli"]" 
+                                         class="img-fluid rounded minimalist-img helprequest-img" />
                                 </div>
                             }
                         </div>
@@ -96,3 +111,26 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/4e7b8e7e2a.js" crossorigin="anonymous"></script>
+    <script>
+        // Sekme filtreleme
+        const tabs = document.querySelectorAll('.helprequest-tab');
+        const cards = document.querySelectorAll('.helprequest-card-wrapper');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function () {
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                const filter = this.getAttribute('data-emergency');
+                cards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-emergency') === filter) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+}

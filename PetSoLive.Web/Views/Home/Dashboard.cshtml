@@ -1,0 +1,296 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Localization
+@using PetSoLive.Web.Controllers
+@inject IStringLocalizer<HomeController> Localizer
+@{
+    ViewData["Title"] = Localizer["Dashboard"];
+    Layout = "_Layout";
+}
+
+@section HeadSection {
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+}
+
+<div class="dashboard-container">
+    <!-- Welcome Section -->
+    <div class="welcome-section animate-on-scroll">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="welcome-title">
+                        <i class="bi bi-heart-fill text-primary me-3"></i>
+                        @Localizer["Welcome to PetSoLive Dashboard"]
+                    </h1>
+                    <p class="welcome-subtitle">@Localizer["Track your pet activities and community engagement"]</p>
+                </div>
+                <div class="col-lg-4 text-end">
+                    <div class="current-time">
+                        <i class="bi bi-clock-fill me-2"></i>
+                        <span id="current-time"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-card animate-on-scroll">
+                        <div class="stat-icon">
+                            <i class="bi bi-paw-fill"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number" data-target="150">0</h3>
+                            <p class="stat-label">@Localizer["Total Pets"]</p>
+                        </div>
+                        <div class="stat-trend positive">
+                            <i class="bi bi-arrow-up"></i>
+                            <span>+12%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-card animate-on-scroll">
+                        <div class="stat-icon">
+                            <i class="bi bi-heart-fill"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number" data-target="89">0</h3>
+                            <p class="stat-label">@Localizer["Adoptions"]</p>
+                        </div>
+                        <div class="stat-trend positive">
+                            <i class="bi bi-arrow-up"></i>
+                            <span>+8%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-card animate-on-scroll">
+                        <div class="stat-icon">
+                            <i class="bi bi-search-heart-fill"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number" data-target="23">0</h3>
+                            <p class="stat-label">@Localizer["Lost Pets Found"]</p>
+                        </div>
+                        <div class="stat-trend positive">
+                            <i class="bi bi-arrow-up"></i>
+                            <span>+15%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-card animate-on-scroll">
+                        <div class="stat-icon">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-number" data-target="456">0</h3>
+                            <p class="stat-label">@Localizer["Active Users"]</p>
+                        </div>
+                        <div class="stat-trend positive">
+                            <i class="bi bi-arrow-up"></i>
+                            <span>+5%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions-section">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">@Localizer["Quick Actions"]</h2>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="action-card animate-on-scroll">
+                        <div class="action-icon">
+                            <i class="bi bi-plus-circle-fill"></i>
+                        </div>
+                        <h4>@Localizer["Add Pet"]</h4>
+                        <p>@Localizer["Register your pet"]</p>
+                        <a href="@Url.Action("Create", "Pet")" class="btn btn-primary w-100">
+                            <i class="bi bi-plus me-2"></i>@Localizer["Add Pet"]
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="action-card animate-on-scroll">
+                        <div class="action-icon">
+                            <i class="bi bi-search-heart-fill"></i>
+                        </div>
+                        <h4>@Localizer["Report Lost Pet"]</h4>
+                        <p>@Localizer["Help find your pet"]</p>
+                        <a href="@Url.Action("Create", "LostPetAd")" class="btn btn-warning w-100">
+                            <i class="bi bi-search me-2"></i>@Localizer["Report Lost"]
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="action-card animate-on-scroll">
+                        <div class="action-icon">
+                            <i class="bi bi-chat-heart-fill"></i>
+                        </div>
+                        <h4>@Localizer["Request Help"]</h4>
+                        <p>@Localizer["Get veterinary assistance"]</p>
+                        <a href="@Url.Action("Create", "HelpRequest")" class="btn btn-info w-100">
+                            <i class="bi bi-chat me-2"></i>@Localizer["Request Help"]
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="action-card animate-on-scroll">
+                        <div class="action-icon">
+                            <i class="bi bi-heart-fill"></i>
+                        </div>
+                        <h4>@Localizer["Adopt Pet"]</h4>
+                        <p>@Localizer["Find your new friend"]</p>
+                        <a href="@Url.Action("Index", "Adoption")" class="btn btn-success w-100">
+                            <i class="bi bi-heart me-2"></i>@Localizer["Browse Pets"]
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="recent-activity-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="activity-card animate-on-scroll">
+                        <div class="card-header">
+                            <h3><i class="bi bi-activity me-2"></i>@Localizer["Recent Activity"]</h3>
+                        </div>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="bi bi-heart-fill text-success"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h5>@Localizer["New Adoption"]</h5>
+                                    <p>@Localizer["Max the Golden Retriever found a new home!"]</p>
+                                    <small class="text-muted">2 hours ago</small>
+                                </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="bi bi-search-heart-fill text-warning"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h5>@Localizer["Lost Pet Found"]</h5>
+                                    <p>@Localizer["Luna the cat was reunited with her family!"]</p>
+                                    <small class="text-muted">5 hours ago</small>
+                                </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="bi bi-chat-heart-fill text-info"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h5>@Localizer["Help Request"]</h5>
+                                    <p>@Localizer["New emergency help request from Dr. Smith"]</p>
+                                    <small class="text-muted">1 day ago</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="weather-card animate-on-scroll">
+                        <div class="card-header">
+                            <h3><i class="bi bi-sun-fill me-2"></i>@Localizer["Weather"]</h3>
+                        </div>
+                        <div class="weather-content">
+                            <div class="weather-main">
+                                <div class="temperature">22°C</div>
+                                <div class="weather-desc">@Localizer["Sunny"]</div>
+                                <div class="location">@Localizer["Manisa, Turkey"]</div>
+                            </div>
+                            <div class="weather-details">
+                                <div class="weather-item">
+                                    <i class="bi bi-droplet-fill"></i>
+                                    <span>45% @Localizer["Humidity"]</span>
+                                </div>
+                                <div class="weather-item">
+                                    <i class="bi bi-wind"></i>
+                                    <span>12 km/h @Localizer["Wind"]</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Animate statistics numbers
+        function animateNumbers() {
+            const numbers = document.querySelectorAll('.stat-number');
+            numbers.forEach(number => {
+                const target = parseInt(number.getAttribute('data-target'));
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    number.textContent = Math.floor(current);
+                }, 16);
+            });
+        }
+        
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('tr-TR', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('current-time').textContent = timeString;
+        }
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            // Animate numbers when they come into view
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateNumbers();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+            
+            const statsSection = document.querySelector('.stats-section');
+            if (statsSection) {
+                observer.observe(statsSection);
+            }
+        });
+    </script>
+} 

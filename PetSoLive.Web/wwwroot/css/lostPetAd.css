@@ -1,286 +1,982 @@
-﻿.lostpet-page {
-    margin: 20px 0;
-    background: linear-gradient(to right, var(--petsolive-light), var(--petsolive-light));
-    background-size: cover;
+﻿/* Ana sayfa düzeni */
+.lostpet-page {
+  margin: 32px 0 0 0;
+  background: linear-gradient(120deg, var(--petsolive-light) 60%, var(--petsolive-bg) 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.lostpet-main-content {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  max-width: 1280px;
+  gap: 2.5rem;
+  margin: 0 auto 2.5rem auto;
+}
+/* --- Adopt.cshtml ile uyumlu, modern ve kutu gibi filtre paneli --- */
+/* --- Adoption/Index.cshtml ve GitHub'daki filtre paneliyle birebir aynı UI --- */
+/* --- Daha verimli ve kompakt filtre paneli --- */
+/* --- Daha köşeli, toplu ve verimli filtre paneli --- */
+/* --- Filtre paneli itemleri kenarlara sıfır --- */
+.filter-sidebar {
+    background: #f7fafd;
+    border-radius: 3px;
+    box-shadow: 0 1px 4px rgba(30,136,229,0.06);
+    border: 1.5px solid var(--petsolive-primary, #4caf50);
+    padding: 0.2rem 0 0.1rem 0;
+    margin-top: 0.3rem;
+    position: sticky;
+    top: 1.2rem;
+    height: fit-content;
+    min-width: 180px;
+    max-width: 240px;
+}
+.sidebar-header {
+    margin-bottom: 0.2rem;
+    padding-bottom: 0.1rem;
+    border-bottom: 1px solid #e0e7ef;
+    font-size: 0.99rem;
+    font-weight: 700;
+    color: var(--petsolive-primary, #388e3c);
+    letter-spacing: 0.2px;
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+.filter-section {
+    margin-bottom: 0.1rem;
+    padding-bottom: 0.05rem;
+    border-bottom: 1px solid #e0e7ef;
+}
+.filter-section:last-child {
+    border-bottom: none;
+}
+.filter-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-size: 0.93rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 0.04rem;
+    padding: 0.01rem 0.01rem;
+    gap: 0.1rem;
+}
+.filter-section-header i {
+    color: var(--petsolive-primary, #4caf50);
+    font-size: 0.98em;
+    margin-right: 0.1em;
+}
+.filter-sidebar select,
+.filter-sidebar input[type="date"],
+.filter-sidebar input[type="number"] {
+    width: 100%;
+    padding: 0.18em 0.1em;
+    border-radius: 3px;
+    border: 1px solid #e0e7ef;
+    background: #f3f4f6;
+    font-size: 0.93rem;
+    color: #222;
+    margin-bottom: 0.05em;
+    margin-left: 0;
+    margin-right: 0;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+    box-shadow: none;
+    font-family: inherit;
+    min-height: 24px;
+}
+.filter-sidebar select:focus,
+.filter-sidebar input[type="date"]:focus,
+.filter-sidebar input[type="number"]:focus {
+    border-color: var(--petsolive-primary, #4caf50);
+    background: #fff;
+    box-shadow: 0 0 0 1px rgba(76,175,80,0.07);
+}
+.filter-sidebar label,
+.filter-sidebar .filter-section-header h5 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.01em;
+    margin-left: 0;
+    margin-right: 0;
+    letter-spacing: 0.01em;
+    display: flex;
+    align-items: center;
+    gap: 0.05em;
+}
+.filter-option input[type="radio"] {
+    accent-color: var(--petsolive-primary, #4caf50);
+    width: 0.95em;
+    height: 0.95em;
+    margin-right: 0.1em;
+    border-radius: 50%;
+    border: 1px solid #bfc3c7;
+    background: #fff;
+    transition: border-color 0.15s;
+    vertical-align: middle;
+}
+.filter-option input[type="radio"]:focus {
+    border-color: var(--petsolive-primary, #4caf50);
+    outline: none;
+}
+.filter-option span {
+    font-size: 0.93rem;
+    color: #333;
+    vertical-align: middle;
+}
+.filter-actions {
+    margin-top: 0.1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+.clear-section-btn {
+    background: none;
+    border: none;
+    color: #bfc3c7;
+    font-size: 0.93rem;
+    cursor: pointer;
+    padding: 0.01rem 0.05rem;
+    border-radius: 2px;
+    transition: background 0.13s, color 0.13s;
+}
+.clear-section-btn:hover {
+    background: #e0e7ef;
+    color: var(--petsolive-primary, #4caf50);
+}
+.lostpet-content {
+  flex: 1 1 0;
+  min-width: 0;
+  margin-top: 0.5rem;
+}
+.lostpet-title {
+  text-align: left;
+  margin: 2rem 0 1.2rem 0;
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--petsolive-primary);
+  letter-spacing: 1px;
+  width: 100%;
+  max-width: 1280px;
+  padding-left: 0.5rem;
+}
+.lostpet-content-header {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.2rem;
+  justify-content: space-between;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 0.4rem 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  min-width: 220px;
+  max-width: 350px;
+  flex: 1 1 220px;
+}
+.search-bar i {
+  color: #888;
+  font-size: 1.1rem;
+  margin-right: 0.7rem;
+}
+.search-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 1.05rem;
+  flex: 1 1 120px;
+  color: #333;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0.2em 0.1em;
+}
+.clear-search-btn {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+.lostpet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.2rem;
+  margin-top: 1.2rem;
+}
+.lostpet-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+  overflow: hidden;
+  transition: transform 0.15s, box-shadow 0.15s;
+  border: 1.5px solid var(--petsolive-primary, #4caf50);
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+}
+.lostpet-card:hover {
+  transform: translateY(-6px) scale(1.025);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.13), 0 2px 8px rgba(0,0,0,0.08);
+  border-color: var(--petsolive-accent, #388e3c);
+}
+.lostpet-card-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background: #f7f7f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.lostpet-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-bottom: 1.5px solid #e0e0e0;
+}
+.lostpet-card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #bbb;
+  font-size: 2.5rem;
+}
+.lostpet-card-status-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: #e53935;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(229,57,53,0.12);
+  z-index: 2;
+  letter-spacing: 0.5px;
+}
+.lostpet-card-body {
+  padding: 1.2rem 1.5rem 1.2rem 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.lostpet-card-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--petsolive-primary, #388e3c);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.lostpet-card-meta {
+  display: flex;
+  gap: 1.2rem;
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+.lostpet-card-city-badges {
+  display: flex;
+  gap: 0.7rem;
+  margin-bottom: 0.5rem;
+}
+.lostpet-card-badge {
+  background: #f1f8e9;
+  color: #388e3c;
+  border-radius: 8px;
+  padding: 2px 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.lostpet-card-desc {
+  font-size: 1.05rem;
+  color: #444;
+  margin-bottom: 1rem;
+  min-height: 32px;
+}
+.btn-lostpet-action {
+  background: var(--petsolive-primary, #4caf50);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.15s;
+  margin-top: auto;
+  box-shadow: 0 2px 8px rgba(76,175,80,0.08);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.btn-lostpet-action:hover {
+  background: var(--petsolive-accent, #388e3c);
+  color: #fff;
+}
+.no-pets-message {
+  text-align: center;
+  color: #888;
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}
+/* Eklenen stiller (Index.cshtml'den taşındı) */
+.lostpet-main-flex {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    gap: 2.5rem;
+}
+.lostpet-content-area {
+    flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
+}
+.lostpet-searchbar-full {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+}
+/* --- Modern ve kutu gibi arama barı için ek stiller --- */
+/* --- Minimalist ve transparan arama barı için güncelleme --- */
+/* --- Daha küçük ve minimalist search bar --- */
+/* --- Search bar daha geniş placeholder ve transparan arka plan --- */
+.lostpet-searchbar-inner {
+    width: 100%;
+    max-width: 480px;
+    background: transparent;
+    border-radius: 10px;
+    padding: 0.7rem 1.1rem;
+    box-shadow: 0 2px 10px rgba(30,136,229,0.08), 0 1px 2px rgba(0,0,0,0.03);
+    display: flex;
     align-items: center;
-    animation: lostpetBgAnim 12s ease infinite;
+    border: 2px solid var(--petsolive-primary, #4caf50);
+    transition: box-shadow 0.18s, border-color 0.18s;
+    min-height: 38px;
 }
-
-@keyframes lostpetBgAnim {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
+.lostpet-searchbar-inner:focus-within {
+    box-shadow: 0 4px 16px rgba(30,136,229,0.13), 0 1.5px 4px rgba(0,0,0,0.06);
+    border-color: var(--petsolive-accent, #388e3c);
 }
-
-.lostpet-page .lostpet-title {
-    text-align: center;
-    margin: 2rem 0;
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: var(--petsolive-dark);
-}
-
-.lostpet-page .lostpet-container {
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    border-radius: 12px;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    width: 90%;
-    max-width: 700px;
-    margin-bottom: 2rem;
-}
-
-    .lostpet-page .lostpet-container h2 {
-        margin-bottom: 1rem;
-        text-align: center;
-        color: var(--petsolive-dark);
-    }
-
-    .lostpet-page .lostpet-container .form-group {
-        margin-bottom: 1.2rem;
-    }
-
-        .lostpet-page .lostpet-container .form-group label {
-            font-weight: 500;
-            color: var(--petsolive-dark);
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-    .lostpet-page .lostpet-container .form-control {
-        padding: 0.75rem;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        transition: border 0.3s, box-shadow 0.3s;
-        outline: none;
-        font-size: 1rem;
-        width: 100%;
-    }
-
-        .lostpet-page .lostpet-container .form-control:focus {
-            border-color: var(--petsolive-primary);
-            box-shadow: 0 0 0 0.1rem rgba(30, 136, 229, 0.25);
-        }
-
-.lostpet-page .btn-lostpet {
-    display: inline-block;
-    margin-top: 1rem;
-    padding: 0.6rem 1.2rem;
+.lostpet-searchbar-inner input {
+    font-size: 1.18rem;
+    padding: 0.7em 0.2em;
     border: none;
-    border-radius: 6px;
-    background-color: var(--petsolive-primary);
-    color: #fff;
-    font-size: 1rem;
-    transition: background-color 0.3s, transform 0.2s;
+    background: transparent;
+    flex: 1;
+    outline: none;
+    color: #222;
+    font-weight: 400;
+    min-width: 0;
+    height: 2.2em;
+    text-align: center;
+}
+.lostpet-searchbar-inner input::placeholder {
+    color: #bfc3c7;
+    font-size: 1.18em;
+    font-weight: 400;
+    opacity: 1;
+    letter-spacing: 0.01em;
+    text-align: center;
+}
+.lostpet-searchbar-inner .search-icon {
+    font-size: 1.15rem;
+    margin-right: 0.7rem;
+    color: #bfc3c7;
+    opacity: 0.85;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lostpet-searchbar-inner .clear-search-btn {
+    font-size: 1.15rem;
+    background: none;
+    border: none;
+    color: #bfc3c7;
+    margin-left: 0.7rem;
+    cursor: pointer;
+    transition: color 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lostpet-searchbar-inner .clear-search-btn:hover {
+    color: var(--petsolive-primary, #4caf50);
+}
+/* Kart gölgelerini biraz daha belirgin yap */
+.lostpet-card {
+    box-shadow: 0 6px 28px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+    border: 2px solid var(--petsolive-primary, #4caf50);
+}
+.lostpet-card:hover {
+    box-shadow: 0 12px 40px rgba(30,136,229,0.18), 0 4px 16px rgba(0,0,0,0.10);
+    border-color: var(--petsolive-accent, #388e3c);
+}
+.city-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #f7fafd;
+  color: #388e3c;
+  border: 2px solid #4caf50;
+  border-radius: 7px;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.18em 0.85em 0.18em 0.7em;
+  box-shadow: 0 2px 8px rgba(30,136,229,0.07);
+  z-index: 2;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  min-width: 60px;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* --- LOST PET TOOLBAR (üst filtre-bar) --- */
+.lostpet-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  width: 100%;
+  margin: 0 0 2rem 0;
+  background: #f4f7fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(30,136,229,0.10);
+  padding: 1.5rem 2.5rem;
+  border: 2.5px solid #e3e8ee;
+  flex-wrap: wrap;
+}
+.lostpet-toolbar > div {
+  display: flex;
+  align-items: center;
+}
+.lostpet-toolbar select {
+  width: 100%;
+  border-radius: 6px;
+  border: 2px solid #cfd8dc;
+  background: #fff;
+  padding: 0.7rem 1.1rem;
+  font-size: 1.08rem;
+  font-weight: 500;
+  transition: border 0.2s;
+}
+.lostpet-toolbar select:focus {
+  border-color: #42a5f5;
+}
+.lostpet-toolbar .lostpet-add-btn {
+  font-size: 1.13rem;
+  padding: 0.8rem 2.5rem;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
+  border: 2px solid #1976d2;
+  color: #fff;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(30,136,229,0.10);
+  letter-spacing: 0.02em;
+  transition: background 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none;
+}
+.lostpet-toolbar .lostpet-add-btn:hover {
+  background: linear-gradient(90deg,#1565c0 0%,#42a5f5 100%);
+  box-shadow: 0 4px 16px rgba(30,136,229,0.18);
+}
+.lostpet-toolbar .search-input {
+  padding-left: 2.5rem;
+  width: 100%;
+  border-radius: 6px;
+  border: 2px solid #cfd8dc;
+  background: #fff;
+  font-size: 1.08rem;
+  font-weight: 500;
+  padding: 0.7rem 1.1rem 0.7rem 2.5rem;
+  transition: border 0.2s;
+}
+.lostpet-toolbar .search-input:focus {
+  border-color: #42a5f5;
+}
+.lostpet-toolbar .search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #42a5f5;
+}
+.lostpet-toolbar .clear-search-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #b0b8c1;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+.lostpet-toolbar .clear-search-btn:hover {
+  color: #1976d2;
+}
+@media (max-width: 1100px) {
+  .lostpet-toolbar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 1.1rem !important;
+    padding: 1.2rem 0.7rem !important;
+  }
+  .lostpet-toolbar > div {
+    min-width: 0 !important;
+    flex: 1 1 100% !important;
+    justify-content: stretch;
+  }
+}
+@media (max-width: 1100px) {
+  .lostpet-main-content {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+  .filter-sidebar {
+    max-width: 100%;
+    margin-right: 0;
+    margin-bottom: 1.5rem;
+    position: static;
+    min-width: 0;
+    padding: 1rem 0.7rem 1rem 0.7rem;
+  }
+  .lostpet-title, .lostpet-content {
+    max-width: 100%;
+    padding-left: 0;
+  }
+}
+@media (max-width: 700px) {
+  .lostpet-title {
+    font-size: 1.3rem;
+    margin: 1.2rem 0 0.7rem 0;
+    padding-left: 0;
+  }
+  .lostpet-main-content {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+    max-width: 100vw;
+  }
+  .filter-sidebar {
+    min-width: 0;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.7rem 0.5rem 0.7rem 0.5rem;
+  }
+  .lostpet-content-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.7rem;
+  }
+  .search-bar {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+    padding: 0.3rem 0.5rem;
+  }
+  .lostpet-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+}
+@media (max-width: 900px) {
+    .lostpet-main-flex { flex-direction: column; }
+    .filter-sidebar { max-width: 100%; min-width: 0; margin-bottom: 2rem; }
+    .lostpet-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+    .lostpet-searchbar-inner { padding: 0.7rem 1rem; }
+}
+/* --- DARK THEME LOST PET PAGE --- */
+[data-theme="dark"] .lostpet-page {
+  background: linear-gradient(120deg, var(--petsolive-bg) 60%, #23272f 100%);
+}
+[data-theme="dark"] .lostpet-toolbar {
+  background: #181d23;
+  border-color: #23272f;
+  box-shadow: 0 2px 16px rgba(30,136,229,0.18);
+}
+[data-theme="dark"] .lostpet-toolbar select {
+  background: #23272f;
+  color: #e3f2fd;
+  border-color: #23272f;
+}
+[data-theme="dark"] .lostpet-toolbar select:focus {
+  border-color: #42a5f5;
+}
+[data-theme="dark"] .lostpet-toolbar .lostpet-add-btn {
+  background: linear-gradient(90deg, #223a5e 0%, #1976d2 100%);
+  border-color: #223a5e;
+  color: #e3f2fd;
+}
+[data-theme="dark"] .lostpet-toolbar .lostpet-add-btn:hover {
+  background: linear-gradient(90deg, #1565c0 0%, #223a5e 100%);
+}
+[data-theme="dark"] .lostpet-toolbar .search-input {
+  background: #23272f;
+  color: #e3f2fd;
+  border-color: #23272f;
+}
+[data-theme="dark"] .lostpet-toolbar .search-input:focus {
+  border-color: #42a5f5;
+}
+[data-theme="dark"] .lostpet-toolbar .search-icon {
+  color: #90caf9;
+}
+[data-theme="dark"] .lostpet-toolbar .clear-search-btn {
+  color: #b0b8c1;
+}
+[data-theme="dark"] .lostpet-toolbar .clear-search-btn:hover {
+  color: #90caf9;
+}
+[data-theme="dark"] .lostpet-card {
+  background: #23272f;
+  color: #e3f2fd;
+  border-color: #223a5e;
+  box-shadow: 0 8px 32px rgba(30,136,229,0.18), 0 2px 8px rgba(0,0,0,0.13);
+}
+[data-theme="dark"] .lostpet-card:hover {
+  border-color: #42a5f5;
+  box-shadow: 0 12px 40px rgba(30,136,229,0.28), 0 4px 16px rgba(0,0,0,0.18);
+}
+[data-theme="dark"] .lostpet-card-title {
+  color: #90caf9;
+}
+[data-theme="dark"] .lostpet-card-meta {
+  color: #b0b8c1;
+}
+[data-theme="dark"] .lostpet-card-desc {
+  color: #b0b8c1;
+}
+[data-theme="dark"] .btn-lostpet-action {
+  background: #1976d2;
+  color: #fff;
+}
+[data-theme="dark"] .btn-lostpet-action:hover {
+  background: #1565c0;
+  color: #fff;
+}
+[data-theme="dark"] .city-badge {
+  background: #23272f;
+  color: #90caf9;
+  border-color: #1976d2;
+}
+[data-theme="dark"] .lostpet-searchbar-inner {
+  background: #181d23;
+  border-color: #23272f;
+}
+[data-theme="dark"] .lostpet-searchbar-inner input {
+  color: #e3f2fd;
+  background: transparent;
+}
+[data-theme="dark"] .lostpet-searchbar-inner input::placeholder {
+  color: #b0b8c1;
+}
+[data-theme="dark"] .lostpet-searchbar-inner .search-icon {
+  color: #90caf9;
+}
+[data-theme="dark"] .lostpet-searchbar-inner .clear-search-btn {
+  color: #b0b8c1;
+}
+[data-theme="dark"] .lostpet-searchbar-inner .clear-search-btn:hover {
+  color: #90caf9;
+}
+[data-theme="dark"] .no-pets-message {
+  color: #b0b8c1;
+}
+/* --- DARK THEME FILTER SIDEBAR --- */
+[data-theme="dark"] .filter-sidebar {
+  background: #23272f;
+  border-color: #223a5e;
+  box-shadow: 0 1px 6px rgba(30,136,229,0.18);
+}
+[data-theme="dark"] .sidebar-header {
+  color: #90caf9;
+  border-bottom: 1px solid #223a5e;
+}
+[data-theme="dark"] .filter-section {
+  border-bottom: 1px solid #223a5e;
+  background: #23272f;
+}
+[data-theme="dark"] .filter-section-header {
+  color: #e3f2fd;
+  background: #181d23;
+}
+[data-theme="dark"] .filter-section-header i {
+  color: #90caf9;
+}
+[data-theme="dark"] .filter-sidebar select,
+[data-theme="dark"] .filter-sidebar input[type="date"],
+[data-theme="dark"] .filter-sidebar input[type="number"] {
+  background: #181d23;
+  color: #e3f2fd;
+  border-color: #223a5e;
+}
+[data-theme="dark"] .filter-sidebar select:focus,
+[data-theme="dark"] .filter-sidebar input[type="date"]:focus,
+[data-theme="dark"] .filter-sidebar input[type="number"]:focus {
+  border-color: #42a5f5;
+  background: #23272f;
+}
+[data-theme="dark"] .filter-sidebar label,
+[data-theme="dark"] .filter-sidebar .filter-section-header h5 {
+  color: #b0b8c1;
+}
+[data-theme="dark"] .filter-option span {
+  color: #e3f2fd;
+}
+[data-theme="dark"] .filter-option input[type="radio"] {
+  accent-color: #42a5f5;
+  background: #23272f;
+  border-color: #223a5e;
+}
+[data-theme="dark"] .filter-option input[type="radio"]:focus {
+  border-color: #42a5f5;
+}
+[data-theme="dark"] .clear-section-btn {
+  color: #b0b8c1;
+}
+[data-theme="dark"] .clear-section-btn:hover {
+  background: #223a5e;
+  color: #90caf9;
+}d
+.lostpet-details-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    border: 1px solid #e0e0e0;
+    max-width: 650px;
+    margin: 2rem auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.lostpet-image-section {
+    position: relative;
+    width: 100%;
+    min-height: 260px;
+    background: #f7fafd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lostpet-main-img {
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
     cursor: pointer;
 }
-
-    .lostpet-page .btn-lostpet:hover {
-        background-color: #1565C0;
-        transform: translateY(-1px);
-    }
-
-    .lostpet-page .btn-lostpet:focus {
-        outline: none;
-        box-shadow: 0 0 0 0.1rem #ffffff, 0 0 0 0.25rem var(--petsolive-primary);
-    }
-
-.lostpet-page .alert {
-    margin: 1rem auto;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    max-width: 700px;
-    padding: 1rem;
+.lostpet-placeholder {
+    width: 100%;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #bbb;
+    font-size: 2rem;
+    background: #f7fafd;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
 }
-
-.lostpet-page .alert-success {
-    background-color: rgba(67, 160, 71, 0.1);
-    color: var(--petsolive-success);
-    border-left: 4px solid var(--petsolive-success);
-}
-
-.lostpet-page .alert-danger {
-    background-color: rgba(229, 57, 53, 0.1);
-    color: var(--petsolive-danger);
-    border-left: 4px solid var(--petsolive-danger);
-}
-
-.lostpet-page .alert-warning {
-    background-color: rgba(251, 140, 0, 0.1);
-    color: var(--petsolive-warning);
-    border-left: 4px solid var(--petsolive-warning);
-}
-
-.lostpet-page .alert-info {
-    background-color: rgba(142, 35, 170, 0.1);
-    color: var(--petsolive-info);
-    border-left: 4px solid var(--petsolive-info);
-}
-
-.lostpet-page .lostpet-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: box-shadow 0.3s, transform 0.3s;
-    background-color: #fff;
-    margin-bottom: 1rem;
-}
-
-    .lostpet-page .lostpet-card:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        transform: translateY(-5px);
-    }
-
-    .lostpet-page .lostpet-card img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-    }
-
-    .lostpet-page .lostpet-card .card-body {
-        padding: 1rem;
-    }
-
-    .lostpet-page .lostpet-card .card-title {
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
-        color: var(--petsolive-dark);
-    }
-
-    .lostpet-page .lostpet-card .card-text {
-        font-size: 0.95rem;
-        color: #555;
-    }
-
-    .lostpet-page .lostpet-card .btn-primary {
-        margin-top: 0.5rem;
-        background-color: var(--petsolive-primary);
-        border-color: var(--petsolive-primary);
-        color: #fff;
-    }
-
-        .lostpet-page .lostpet-card .btn-primary:hover {
-            background-color: #1565C0;
-            border-color: #0D47A1;
-        }
-
-.lostpet-page .lostpet-details .card {
-    max-width: 700px;
-    margin: 2rem auto;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-    .lostpet-page .lostpet-details .card:hover {
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        transform: translateY(-5px);
-    }
-
-    .lostpet-page .lostpet-details .card img {
-        height: 300px;
-        object-fit: cover;
-        border-radius: 8px 8px 0 0;
-    }
-
-.lostpet-page .lostpet-details .card-header {
-    background-color: var(--petsolive-info);
+.city-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: #388e3c;
     color: #fff;
-    font-size: 1.5rem;
+    padding: 0.3em 1em;
+    border-radius: 8px;
+    font-size: 1rem;
     font-weight: 600;
-    padding: 1rem;
-    text-align: center;
+    z-index: 2;
 }
-
-.lostpet-page .lostpet-details .card-body {
-    padding: 1rem;
-    text-align: center;
-}
-
-.lostpet-page .lostpet-details .card-title {
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
-    color: var(--petsolive-dark);
-}
-
-.lostpet-page .lostpet-details .card-body .btn-group {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-}
-
-.lostpet-page .lostpet-details .card-body .btn-secondary {
-    margin-top: 1rem;
-}
-
-@media (max-width: 768px) {
-    .lostpet-page .lostpet-container {
-        padding: 1rem;
-        margin-bottom: 1rem;
-    }
-
-    .lostpet-page .lostpet-title {
-        font-size: 1.5rem;
-    }
-
-    .lostpet-page .lostpet-card img {
-        height: 180px;
-    }
-
-    .lostpet-page .lostpet-details .card img {
-        height: 250px;
-    }
-}
-
-.lostpet-page .lostpet-details .card-body p,
-.lostpet-page .lostpet-details .card-body h5 {
-    text-align: left;
-}
-
-.lostpet-page .lostpet-details .card-body .btn-group {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-}
-
-.lostpet-page .lostpet-details .card-body .btn-secondary {
-    display: inline-block;
-}
-
-.lostpet-page .lostpet-container form {
+.lostpet-info-section {
+    padding: 2rem 2rem 1.2rem 2rem;
     display: flex;
     flex-direction: column;
+    gap: 1.1rem;
+}
+.lostpet-title {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #388e3c;
+    margin-bottom: 0.5rem;
+    display: flex;
     align-items: center;
+    gap: 0.7rem;
 }
-
-.lostpet-page .lostpet-container .form-group {
-    width: 100%;
+.lostpet-meta-list {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-size: 1rem;
+    color: #555;
 }
-
-    .lostpet-page .lostpet-container .form-group label {
-        margin-bottom: 0.5rem;
+.lostpet-desc-card, .lostpet-owner-card {
+    background: #f7fafd;
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+    border: 1px solid #e0e7ef;
+    margin-bottom: 1rem;
+}
+.lostpet-desc {
+    font-size: 1.05rem;
+    color: #444;
+    margin-bottom: 0.5rem;
+}
+.btn-lostpet-more, .btn-lostpet-edit, .btn-lostpet-delete, .btn-lostpet-contact, .btn-lostpet-back {
+    background: none;
+    border: 1px solid #388e3c;
+    color: #388e3c;
+    border-radius: 6px;
+    padding: 0.4rem 1.1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn-lostpet-more:hover, .btn-lostpet-edit:hover, .btn-lostpet-delete:hover, .btn-lostpet-contact:hover, .btn-lostpet-back:hover {
+    background: #388e3c;
+    color: #fff;
+}
+.lostpet-details-actions {
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    margin-top: 1.1rem;
+}
+.lostpet-image-modal-bg {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.lostpet-image-modal-img {
+    max-width: 90vw;
+    max-height: 80vh;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+.lostpet-image-modal-close {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2.2rem;
+    cursor: pointer;
+    z-index: 1001;
+}
+@media (max-width: 700px) {
+    .lostpet-details-card {
+        max-width: 98vw;
+        margin: 1rem auto;
     }
-
-.lostpet-page .lostpet-container .form-control {
-    width: 100%;
+    .lostpet-info-section {
+        padding: 1.1rem 0.7rem 1rem 0.7rem;
+    }
 }
-
-.lostpet-page .lostpet-container .btn-lostpet {
-    width: 100%;
-    max-width: 300px;
-    align-self: center;
+/* --- DARK THEME LOST PET DETAILS CARD --- */
+[data-theme="dark"] .lostpet-details-card {
+    background: #23272f;
+    border: 1px solid #223a5e;
+    box-shadow: 0 4px 24px rgba(30,136,229,0.18), 0 1.5px 4px rgba(0,0,0,0.13);
+    color: #e3f2fd;
+}
+[data-theme="dark"] .lostpet-image-section {
+    background: #181d23;
+}
+[data-theme="dark"] .lostpet-main-img {
+    border: 1px solid #223a5e;
+}
+[data-theme="dark"] .lostpet-placeholder {
+    background: #181d23;
+    color: #b0b8c1;
+    border: 1px solid #223a5e;
+}
+[data-theme="dark"] .lostpet-info-section {
+    color: #e3f2fd;
+}
+[data-theme="dark"] .lostpet-title {
+    color: #90caf9;
+}
+[data-theme="dark"] .lostpet-meta-list {
+    color: #b0b8c1;
+}
+[data-theme="dark"] .lostpet-desc-card, [data-theme="dark"] .lostpet-owner-card {
+    background: #181d23;
+    border: 1px solid #223a5e;
+}
+[data-theme="dark"] .lostpet-desc {
+    color: #b0b8c1;
+}
+[data-theme="dark"] .btn-lostpet-more, [data-theme="dark"] .btn-lostpet-edit, [data-theme="dark"] .btn-lostpet-delete, [data-theme="dark"] .btn-lostpet-contact, [data-theme="dark"] .btn-lostpet-back {
+    background: none;
+    border: 1px solid #90caf9;
+    color: #90caf9;
+}
+[data-theme="dark"] .btn-lostpet-more:hover, [data-theme="dark"] .btn-lostpet-edit:hover, [data-theme="dark"] .btn-lostpet-delete:hover, [data-theme="dark"] .btn-lostpet-contact:hover, [data-theme="dark"] .btn-lostpet-back:hover {
+    background: #1976d2;
+    color: #fff;
+    border-color: #1976d2;
+}
+[data-theme="dark"] .lostpet-details-actions {
+    /* gap ve flex değişmez, renkler butonlardan alınır */
+}
+[data-theme="dark"] .lostpet-image-modal-bg {
+    background: rgba(20,24,32,0.85);
+}
+[data-theme="dark"] .lostpet-image-modal-img {
+    box-shadow: 0 2px 12px rgba(30,136,229,0.28);
+}
+[data-theme="dark"] .lostpet-image-modal-close {
+    color: #90caf9;
 }

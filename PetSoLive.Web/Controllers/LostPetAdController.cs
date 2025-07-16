@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
+using PetSoLive.Core.DTOs;
 
 namespace PetSoLive.Web.Controllers;
 
@@ -20,7 +21,7 @@ public class LostPetAdController : Controller
     }
 
     // Oturum kontrolü metodu
-    private IActionResult RedirectToLoginIfNotLoggedIn()
+    private IActionResult? RedirectToLoginIfNotLoggedIn()
     {
         if (HttpContext.Session.GetString("Username") == null)
         {
@@ -94,15 +95,27 @@ public class LostPetAdController : Controller
     }
 
     // GET: /LostPetAd/Index
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string city, string district, string petType, DateTime? datePostedAfter)
     {
-        var lostPetAds = await _serviceManager.LostPetAdService.GetAllLostPetAdsAsync();
+        var filterDto = new LostPetAdFilterDto
+        {
+            City = city,
+            District = district,
+            PetType = petType,
+            DatePostedAfter = datePostedAfter
+        };
+        var lostPetAds = await _serviceManager.LostPetAdService.GetFilteredLostPetAdsAsync(filterDto);
         if (lostPetAds == null)
         {
             TempData["ErrorMessage"] = _localizer["RetrieveAdsError"]?.Value ?? "Could not retrieve lost pet ads. Please try again later.";
             lostPetAds = new List<LostPetAd>();
         }
-
+        ViewData["Cities"] = CityList.Cities;
+        ViewData["Districts"] = !string.IsNullOrEmpty(city) ? CityList.GetDistrictsByCity(city) : new List<string>();
+        ViewData["SelectedCity"] = city;
+        ViewData["SelectedDistrict"] = district;
+        ViewData["SelectedPetType"] = petType;
+        ViewData["SelectedDatePostedAfter"] = datePostedAfter;
         return View(lostPetAds);
     }
 
@@ -151,7 +164,7 @@ public class LostPetAdController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, LostPetAd updatedLostPetAd, string city, string district)
+    public async Task<IActionResult> Edit(int id, LostPetAd updatedLostPetAd, string city, string district, IFormFile image)
     {
         var redirectResult = RedirectToLoginIfNotLoggedIn();
         if (redirectResult != null) return redirectResult;
@@ -182,8 +195,17 @@ public class LostPetAdController : Controller
         lostPetAd.Description = updatedLostPetAd.Description;
         lostPetAd.LastSeenCity = city;
         lostPetAd.LastSeenDistrict = district;
-        lostPetAd.ImageUrl = updatedLostPetAd.ImageUrl;
         lostPetAd.LastSeenDate = updatedLostPetAd.LastSeenDate;
+
+        // Eğer yeni bir dosya yüklendiyse, ImgBB'ye upload et ve ImageUrl'yi güncelle
+        if (image != null)
+        {
+            using var ms = new MemoryStream();
+            await image.CopyToAsync(ms);
+            var imageBytes = ms.ToArray();
+            var imageUrl = await _imgBBHelper.UploadImageAsync(imageBytes);
+            lostPetAd.ImageUrl = imageUrl;
+        }
 
         try
         {

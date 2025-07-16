@@ -8,50 +8,79 @@
 }
 
 <div class="lostpet-page">
-    <h2 class="lostpet-title">@ViewData["Title"]</h2>
-
-    <div class="lostpet-container">
-        <div class="card lostpet-details">
+    <div class="lostpet-details-card">
+        <div class="lostpet-image-section">
+            <span class="city-badge">@Model.LastSeenCity</span>
             @if (!string.IsNullOrEmpty(Model.ImageUrl))
             {
-                <img src="@Model.ImageUrl" class="card-img-top" alt="Pet Image">
+                <img src="@Model.ImageUrl" class="lostpet-main-img" alt="@Localizer["PetImage"]" onclick="openLostPetImageModal()">
             }
             else
             {
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="@Localizer["NoImageAvailable"]">
+                <div class="lostpet-placeholder">
+                    <i class="fa-solid fa-image"></i>
+                    <span>@Localizer["NoImageAvailable"]</span>
+                </div>
             }
-
-            <div class="card-body">
-                <h5 class="card-title">@Localizer["PetName"]: @Model.PetName</h5>
-                <p class="card-text">@Localizer["Description"]: @Model.Description</p>
-                <p class="card-text"><strong>@Localizer["Location"]:</strong> @Model.LastSeenLocation</p>
-                <p class="card-text"><strong>@Localizer["LastSeenDate"]:</strong> @Model.LastSeenDate.ToString("dd/MM/yyyy")</p>
-                <p class="card-text"><strong>@Localizer["PostedOn"]:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy")</p>
-
-                <h5 class="mt-4">@Localizer["OwnerInformation"]</h5>
-                <p class="card-text"><strong>@Localizer["Username"]:</strong> @Model.User?.Username</p>
-                <p class="card-text"><strong>@Localizer["Email"]:</strong> @Model.User?.Email</p>
-                <p class="card-text"><strong>@Localizer["PhoneNumber"]:</strong> @Model.User?.PhoneNumber</p>
-                <p class="card-text"><strong>@Localizer["Address"]:</strong> @Model.User?.Address</p>
-                <p class="card-text"><strong>@Localizer["City"]:</strong> @Model.User?.City</p>
-                <p class="card-text"><strong>@Localizer["District"]:</strong> @Model.User?.District</p>
-
+        </div>
+        <div class="lostpet-info-section">
+            <h2 class="lostpet-title">
+                <i class="fa-solid fa-paw"></i> @Model.PetName
+            </h2>
+            <div class="lostpet-meta-list">
+                <div><i class="fa-solid fa-calendar-days"></i> <span>@Localizer["LastSeenDate"]:</span> <b>@Model.LastSeenDate.ToString("dd/MM/yyyy")</b></div>
+                <div><i class="fa-solid fa-location-dot"></i> <span>@Localizer["Location"]:</span> <b>@Model.LastSeenLocation</b></div>
+            </div>
+            <div class="lostpet-desc-card">
+                <div><i class="fa-solid fa-align-left"></i> @Localizer["Description"]:</div>
+                <div class="lostpet-desc" id="descText">@Model.Description</div>
+            </div>
+            <div class="lostpet-owner-card">
+                <h5><i class="fa-solid fa-user"></i> @Localizer["OwnerInformation"]</h5>
+                <div>
+                    <div><i class="fa-solid fa-user"></i> <b>@Localizer["Username"]:</b> @Model.User?.Username</div>
+                    <div><i class="fa-solid fa-envelope"></i> <b>@Localizer["Email"]:</b> @Model.User?.Email</div>
+                    <div><i class="fa-solid fa-phone"></i> <b>@Localizer["PhoneNumber"]:</b> @Model.User?.PhoneNumber</div>
+                    <div><i class="fa-solid fa-location-dot"></i> <b>@Localizer["Address"]:</b> @Model.User?.Address</div>
+                </div>
+            </div>
+            <div class="lostpet-details-actions">
                 @if (ViewBag.CurrentUser == Model.User?.Username)
                 {
-                    <div class="btn-group mt-3" role="group">
-                        <a href="@Url.Action("Edit", "LostPetAd", new { id = Model.Id })" class="btn btn-warning">
-                            <i class="bi bi-pencil-square me-1"></i> @Localizer["EditButton"]
-                        </a>
-                        <a href="@Url.Action("Delete", "LostPetAd", new { id = Model.Id })" class="btn btn-danger">
-                            <i class="bi bi-trash-fill me-1"></i> @Localizer["DeleteButton"]
-                        </a>
-                    </div>
+                    <a href="@Url.Action("Edit", "LostPetAd", new { id = Model.Id })" class="btn-lostpet-edit"><i class="fa-solid fa-pen-to-square"></i> @Localizer["EditButton"]</a>
+                    <a href="@Url.Action("Delete", "LostPetAd", new { id = Model.Id })" class="btn-lostpet-delete"><i class="fa-solid fa-trash"></i> @Localizer["DeleteButton"]</a>
                 }
-
-                <a href="@Url.Action("Index", "LostPetAd")" class="btn btn-secondary mt-3">
-                    <i class="bi bi-arrow-left-circle-fill me-1"></i> @Localizer["BackToList"]
-                </a>
+                else
+                {
+                    <a href="mailto:@Model.User?.Email" class="btn-lostpet-contact"><i class="fa-solid fa-envelope"></i> @Localizer["ContactOwner"]</a>
+                }
+                <a href="@Url.Action("Index", "LostPetAd")" class="btn-lostpet-back"><i class="fa-solid fa-arrow-left"></i> @Localizer["BackToList"]</a>
             </div>
         </div>
     </div>
+    <!-- Modal -->
+    <div class="lostpet-image-modal-bg" id="lostPetImageModal" style="display:none;">
+        <button class="lostpet-image-modal-close" onclick="closeLostPetImageModal()">&times;</button>
+        <img src="@Model.ImageUrl" alt="@Model.PetName" class="lostpet-image-modal-img" />
+    </div>
 </div>
+@section HeadSection {
+    <link rel="stylesheet" href="~/css/lostPetAd.css?v=3.1" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+}
+@section Scripts {
+    <script>
+        function openLostPetImageModal() {
+            document.getElementById('lostPetImageModal').style.display = 'flex';
+        }
+        function closeLostPetImageModal() {
+            document.getElementById('lostPetImageModal').style.display = 'none';
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLostPetImageModal();
+        });
+        document.getElementById('lostPetImageModal').addEventListener('click', function(e) {
+            if (e.target === this) closeLostPetImageModal();
+        });
+    </script>
+}

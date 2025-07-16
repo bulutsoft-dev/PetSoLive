@@ -7,26 +7,45 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    transition: background 0.4s;
 }
 
-    .helprequest-page .helprequest-title {
-        text-align: center;
-        margin: 2rem 0;
-        font-size: 1.8rem;
-        font-weight: 600;
-        color: var(--petsolive-dark);
-    }
+[data-theme="dark"] .helprequest-page {
+    background: linear-gradient(to right, #10151b, #23272f);
+}
 
-    .helprequest-page .helprequest-container {
-        background-color: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(8px);
-        border-radius: 12px;
-        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
-        padding: 2rem;
-        width: 90%;
-        max-width: 700px;
-        margin-bottom: 2rem;
-    }
+.helprequest-page .helprequest-title {
+    text-align: center;
+    margin: 2rem 0;
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: var(--petsolive-dark);
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(30,136,229,0.08);
+    transition: color 0.4s;
+}
+
+[data-theme="dark"] .helprequest-page .helprequest-title {
+    color: var(--petsolive-text);
+    text-shadow: 0 2px 8px rgba(30,136,229,0.18);
+}
+
+.helprequest-page .helprequest-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    width: 90%;
+    max-width: 700px;
+    margin-bottom: 2rem;
+}
+
+[data-theme="dark"] .helprequest-page .helprequest-container {
+    background-color: rgba(35, 39, 47, 0.95);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+}
 
         .helprequest-page .helprequest-container .form-group {
             margin-bottom: 1.2rem;
@@ -241,105 +260,52 @@
             resize: vertical;
         }
 
-    .helprequest-page .helprequest-card {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        overflow: hidden;
-        transition: box-shadow 0.3s, transform 0.3s;
-        background-color: #fff;
-        margin-bottom: 1rem;
-    }
-
-        .helprequest-page .helprequest-card:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            transform: translateY(-5px);
-        }
-
-        .helprequest-page .helprequest-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .helprequest-page .helprequest-card .card-body {
-            padding: 1rem;
-        }
-
-        .helprequest-page .helprequest-card .card-title {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-            color: var(--petsolive-dark);
-        }
-
-        .helprequest-page .helprequest-card .card-text {
-            font-size: 0.95rem;
-            color: #555;
-        }
-
-        .helprequest-page .helprequest-card .btn-primary {
-            margin-top: 0.5rem;
-            background-color: var(--petsolive-primary);
-            border-color: var(--petsolive-primary);
-            color: #fff;
-        }
-
-            .helprequest-page .helprequest-card .btn-primary:hover {
-                background-color: #1565C0;
-                border-color: #0D47A1;
-            }
-
-.status-label {
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.85rem;
+/* Sekme ve kart stilleri (Index.cshtml'den taşındı) */
+.helprequest-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+.helprequest-tab {
+    border: none;
+    background: none;
+    font-size: 1.1em;
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s, color 0.2s;
+}
+.helprequest-tab.active {
+    border-bottom: 2.5px solid #1E88E5;
+    color: #1E88E5;
     font-weight: 600;
-    color: #fff;
 }
-
-.status-active {
-    background-color: var(--petsolive-success);
+.helprequest-card {
+    position: relative;
+    background: #fff;
+    border-radius: 10px;
+    min-height: 220px;
+    overflow: hidden;
 }
-
-.status-passive {
-    background-color: var(--petsolive-danger);
+.helprequest-card .emergency-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 7px;
+    height: 100%;
+    border-radius: 10px 0 0 10px;
 }
-
-.helprequest-page .helprequest-details .card-body img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 6px;
+.emergency-high { background: #E53935; }
+.emergency-medium { background: #FB8C00; }
+.emergency-low { background: #1E88E5; }
+.emergency-unknown { background: #BDBDBD; }
+.emergency-badge {
+    font-size: 1.1em;
 }
-
-@media (max-width: 768px) {
-    .helprequest-page .helprequest-container {
-        padding: 1rem;
-        margin-bottom: 1rem;
-    }
-
-    .helprequest-page .helprequest-title {
-        font-size: 1.5rem;
-    }
-
-    .helprequest-page .helprequest-card img {
-        height: 180px;
-    }
-
-    .helprequest-page .helprequest-details .card img {
-        height: 250px;
-    }
-
-    .helprequest-page .comment-list .list-group-item {
-        padding: 0.8rem;
-    }
-
-        .helprequest-page .comment-list .list-group-item .comment-header {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-            .helprequest-page .comment-list .list-group-item .comment-header .timestamp {
-                margin-top: 0.3rem;
-            }
+.helprequest-img {
+    max-height: 180px;
+    object-fit: cover;
 }
 
 .helprequest-page .helprequest-details .card-body p,
@@ -380,4 +346,561 @@
     width: 100%;
     max-width: 300px;
     align-self: center;
+}
+
+/* HelpRequest Details Modern UI */
+.helprequest-details-card {
+    max-width: 540px;
+    margin: 2rem auto 1.5rem auto;
+    border-radius: 16px;
+    box-shadow: 0 6px 32px rgba(30,136,229,0.10);
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+.helprequest-details-emergency-bar {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 8px;
+    border-radius: 16px 0 0 16px;
+    z-index: 2;
+}
+.emergency-bar-high { background: #E53935; }
+.emergency-bar-medium { background: #FB8C00; }
+.emergency-bar-low { background: #1E88E5; }
+.emergency-bar-unknown { background: #BDBDBD; }
+.helprequest-details-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--petsolive-dark);
+    margin-bottom: 0.5rem;
+}
+.helprequest-details-emergency-badge {
+    font-size: 1em;
+    padding: 0.4em 1.1em;
+    border-radius: 20px;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+.emergency-badge-high { background: #E53935; color: #fff; }
+.emergency-badge-medium { background: #FB8C00; color: #fff; }
+.emergency-badge-low { background: #1E88E5; color: #fff; }
+.emergency-badge-unknown { background: #BDBDBD; color: #fff; }
+.helprequest-details-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem 1.5rem;
+    margin-bottom: 1.2rem;
+    justify-content: flex-start;
+}
+.helprequest-details-info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1em;
+    color: #444;
+    background: #f7fafd;
+    border-radius: 8px;
+    padding: 0.3em 0.9em;
+}
+.helprequest-details-img {
+    max-width: 100%;
+    max-height: 260px;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 2px 12px rgba(30,136,229,0.08);
+}
+.helprequest-details-desc {
+    background: #f9f9fb;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.2rem;
+}
+.helprequest-details-desc .desc-label {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 0.3em;
+}
+.helprequest-details-desc .desc-content {
+    font-size: 1em;
+    color: #333;
+}
+.helprequest-vet-alert {
+    border-radius: 8px;
+    font-size: 1em;
+    padding: 0.7em 1.2em;
+    background: #e3f2fd;
+    color: #1976d2;
+    gap: 0.7em;
+}
+.helprequest-vet-badge {
+    font-size: 0.95em;
+    font-weight: 600;
+    background: #43a047;
+    color: #fff;
+    border-radius: 12px;
+    padding: 0.3em 0.8em;
+    margin-right: 0.5em;
+}
+.helprequest-comments-section {
+    max-width: 540px;
+    margin: 0 auto;
+}
+.helprequest-comment-item {
+    background: #f7fafd;
+    border-radius: 8px;
+    margin-bottom: 0.7em;
+    border: none;
+    box-shadow: 0 1px 4px rgba(30,136,229,0.04);
+}
+.helprequest-comment-item .comment-content {
+    font-size: 0.98em;
+    color: #222;
+    margin-left: 0.2em;
+}
+.add-comment-header {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 0.5em;
+}
+.helprequest-add-comment textarea.form-control {
+    border-radius: 8px;
+    font-size: 1em;
+    min-height: 70px;
+}
+@media (max-width: 600px) {
+    .helprequest-details-card, .helprequest-comments-section {
+        max-width: 98vw;
+        padding: 0.5em;
+    }
+    .helprequest-details-img {
+        max-height: 160px;
+    }
+}
+
+/* Daha geniş ve ferah detay/yorumlar UI */
+.helprequest-details-card.wide,
+.helprequest-comments-section.wide,
+.helprequest-vet-alert.wide,
+.mt-4.text-center.wide {
+    max-width: 800px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.helprequest-details-card.wide {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+    padding: 0 2.5rem 1.5rem 2.5rem;
+}
+.helprequest-comments-section.wide {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+    padding: 0 2.5rem 2rem 2.5rem;
+    background: #f7fafd;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 2px 12px rgba(30,136,229,0.04);
+}
+.helprequest-details-title {
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: var(--petsolive-dark);
+    margin-bottom: 0.7rem;
+}
+.comments-header {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1976d2;
+    margin-bottom: 1.2rem;
+}
+.helprequest-comment-item {
+    font-size: 1.08em;
+    padding: 1.1em 1.2em;
+    margin-bottom: 1.1em;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #e3f2fd;
+    box-shadow: 0 1px 6px rgba(30,136,229,0.04);
+}
+.helprequest-add-comment {
+    background: #f9f9fb;
+    border-radius: 10px;
+    padding: 1.2em 1.2em 1.5em 1.2em;
+    margin-top: 2em;
+    box-shadow: 0 1px 6px rgba(30,136,229,0.03);
+}
+.helprequest-add-comment textarea.form-control {
+    min-height: 90px;
+    font-size: 1.08em;
+}
+.mt-4.text-center.wide {
+    margin-top: 2.5rem !important;
+    margin-bottom: 2.5rem !important;
+}
+@media (max-width: 900px) {
+    .helprequest-details-card.wide,
+    .helprequest-comments-section.wide,
+    .helprequest-vet-alert.wide,
+    .mt-4.text-center.wide {
+        max-width: 98vw;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+    }
+}
+
+/* Yorumlar ve ekleme alanı kart devamı gibi ve karanlık tema desteği */
+.helprequest-comments-section.wide {
+    background: #f7fafd;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 2px 12px rgba(30,136,229,0.04);
+    border-top: 1.5px solid #e3f2fd;
+    margin-top: 0;
+    padding-top: 0;
+}
+[data-theme="dark"] .helprequest-details-card.wide,
+[data-theme="dark"] .helprequest-comments-section.wide {
+    background: #23272f;
+    color: #e3f2fd;
+    box-shadow: 0 2px 16px rgba(30,136,229,0.13);
+    border-color: #1E88E5;
+}
+[data-theme="dark"] .helprequest-details-desc,
+[data-theme="dark"] .helprequest-add-comment {
+    background: #1a1d22;
+    color: #e3f2fd;
+}
+[data-theme="dark"] .helprequest-comment-item {
+    background: #23272f;
+    border: 1px solid #1E88E5;
+    color: #e3f2fd;
+}
+[data-theme="dark"] .helprequest-details-info-item {
+    background: #1a1d22;
+    color: #e3f2fd;
+}
+[data-theme="dark"] .helprequest-add-comment textarea.form-control {
+    background: #23272f;
+    color: #e3f2fd;
+    border: 1px solid #1E88E5;
+}
+[data-theme="dark"] .helprequest-details-title,
+[data-theme="dark"] .comments-header {
+    color: #90caf9;
+}
+.helprequest-comments-list {
+    border-radius: 0 0 16px 16px;
+    background: transparent;
+    margin-bottom: 0;
+}
+.helprequest-comment-item {
+    font-size: 1.08em;
+    padding: 1.1em 1.2em;
+    margin-bottom: 1.1em;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #e3f2fd;
+    box-shadow: 0 1px 6px rgba(30,136,229,0.04);
+    transition: background 0.3s, color 0.3s;
+}
+.helprequest-add-comment {
+    background: #f9f9fb;
+    border-radius: 10px;
+    padding: 1.2em 1.2em 1.5em 1.2em;
+    margin-top: 2em;
+    box-shadow: 0 1px 6px rgba(30,136,229,0.03);
+    border-top: 1.5px solid #e3f2fd;
+}
+.helprequest-add-comment textarea.form-control {
+    min-height: 90px;
+    font-size: 1.08em;
+}
+
+/* Bloklu ve gruplandırılmış kart görünümü */
+.helprequest-block {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(30,136,229,0.04);
+}
+.helprequest-block-header {
+    background: #e3f2fd;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: none;
+    padding-bottom: 1rem;
+}
+.helprequest-block-info {
+    background: #f7fafd;
+    margin-bottom: 1.2rem;
+}
+.helprequest-block-image {
+    background: #f9f9fb;
+    padding: 1.2rem 2rem 2rem 2rem;
+    box-shadow: none;
+}
+.helprequest-block-desc {
+    background: #f5f5f5;
+    margin-bottom: 1.2rem;
+}
+.helprequest-block-actions {
+    background: transparent;
+    box-shadow: none;
+    padding: 0 2rem 0 2rem;
+    margin-bottom: 0.5rem;
+}
+.helprequest-block-comments {
+    background: #f7fafd;
+    border-radius: 16px;
+    box-shadow: 0 1px 6px rgba(30,136,229,0.04);
+    padding: 1.5rem 2rem 1rem 2rem;
+    margin-bottom: 1.2rem;
+}
+.helprequest-block-addcomment {
+    background: #f9f9fb;
+    border-radius: 16px;
+    box-shadow: 0 1px 6px rgba(30,136,229,0.03);
+    padding: 1.5rem 2rem 2rem 2rem;
+}
+@media (max-width: 900px) {
+    .helprequest-block,
+    .helprequest-block-header,
+    .helprequest-block-info,
+    .helprequest-block-image,
+    .helprequest-block-desc,
+    .helprequest-block-comments,
+    .helprequest-block-addcomment {
+        padding-left: 0.7em;
+        padding-right: 0.7em;
+    }
+}
+[data-theme="dark"] .helprequest-block {
+    background: #23272f;
+    color: #e3f2fd;
+    box-shadow: 0 2px 16px rgba(30,136,229,0.13);
+}
+[data-theme="dark"] .helprequest-block-header {
+    background: #1E88E5;
+    color: #fff;
+}
+[data-theme="dark"] .helprequest-block-info {
+    background: #1a1d22;
+}
+[data-theme="dark"] .helprequest-block-image {
+    background: #23272f;
+}
+[data-theme="dark"] .helprequest-block-desc {
+    background: #181b1f;
+}
+[data-theme="dark"] .helprequest-block-comments {
+    background: #1a1d22;
+}
+[data-theme="dark"] .helprequest-block-addcomment {
+    background: #23272f;
+}
+
+/* Sekmelerin üstünde ortalanmış sade ana ekle butonu */
+.btn-add-helprequest-main {
+    min-width: 200px;
+    font-size: 1.08rem;
+    font-weight: 700;
+    padding: 0.7em 1.5em 0.7em 1.1em;
+    border-radius: 8px;
+    background: #1565c0;
+    color: #fff;
+    box-shadow: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    border: 2px solid #1565c0;
+    outline: none;
+    transition: background 0.18s, color 0.18s, border 0.18s, transform 0.14s;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+}
+.btn-add-helprequest-main i {
+    font-size: 1.15em;
+    margin-right: 0.15em;
+    transition: transform 0.14s;
+}
+.btn-add-helprequest-main:hover, .btn-add-helprequest-main:focus {
+    background: #fff;
+    color: #1565c0;
+    border: 2px solid #1565c0;
+    text-decoration: none;
+    transform: translateY(-1px) scale(1.03);
+}
+.btn-add-helprequest-main:hover i, .btn-add-helprequest-main:focus i {
+    transform: scale(1.08);
+}
+[data-theme="dark"] .btn-add-helprequest-main {
+    background: #23283a;
+    color: #90caf9;
+    border: 2px solid #90caf9;
+}
+[data-theme="dark"] .btn-add-helprequest-main:hover, [data-theme="dark"] .btn-add-helprequest-main:focus {
+    background: #90caf9;
+    color: #23283a;
+    border: 2px solid #90caf9;
+}
+
+/* Eski sabit butonları gizle */
+.fixed-top-add-helprequest, .fab-add-helprequest { display: none !important; }
+
+/* Genel arka plan ve kartlar için tema uyumu */
+.helprequest-page.minimalist {
+    background: var(--petsolive-light, #f4f7fa);
+    color: #222;
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+}
+[data-theme="dark"] .helprequest-page.minimalist {
+    background: #15181c;
+    color: #e3f2fd;
+}
+
+.helprequest-card {
+    background: #fff;
+    color: #222;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(30,136,229,0.06);
+    border: 1.5px solid #e3f2fd;
+    transition: background 0.3s, color 0.3s, border 0.3s;
+}
+[data-theme="dark"] .helprequest-card {
+    background: #23283a;
+    color: #f5f7fa;
+    border: 1.5px solid #2d3553;
+    box-shadow: 0 2px 16px rgba(33,150,243,0.13);
+}
+
+.helprequest-title {
+    color: #1976d2;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    transition: color 0.3s;
+}
+[data-theme="dark"] .helprequest-title {
+    color: #64b5f6;
+}
+
+.helprequest-tabs {
+    background: #f7fafd;
+    border-radius: 16px;
+    padding: 0.4em 1.2em;
+    box-shadow: 0 1px 6px rgba(30,136,229,0.04);
+    display: inline-flex;
+    gap: 0.5em;
+    margin-bottom: 0.5em;
+}
+[data-theme="dark"] .helprequest-tabs {
+    background: #23283a;
+    box-shadow: 0 1px 8px rgba(33,150,243,0.13);
+}
+
+.helprequest-tab {
+    background: transparent;
+    color: #1976d2;
+    border: none;
+    font-weight: 600;
+    font-size: 1.08em;
+    padding: 0.5em 1.2em;
+    border-radius: 8px;
+    transition: background 0.18s, color 0.18s;
+}
+.helprequest-tab.active, .helprequest-tab:focus {
+    background: #1976d2;
+    color: #fff;
+}
+[data-theme="dark"] .helprequest-tab {
+    color: #b3cfff;
+}
+[data-theme="dark"] .helprequest-tab.active, [data-theme="dark"] .helprequest-tab:focus {
+    background: #1976d2;
+    color: #fff;
+}
+
+.status-label {
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 0.2em 0.7em;
+    font-size: 0.98em;
+    color: #fff;
+    background: #43a047;
+    margin-right: 0.3em;
+}
+.status-label.status-passive {
+    background: #e53935;
+}
+[data-theme="dark"] .status-label {
+    background: #43a047;
+    color: #e3f2fd;
+}
+[data-theme="dark"] .status-label.status-passive {
+    background: #e53935;
+}
+
+.emergency-bar {
+    transition: background 0.3s;
+}
+.emergency-high { background: #E53935; }
+.emergency-medium { background: #FB8C00; }
+.emergency-low { background: #1E88E5; }
+.emergency-unknown { background: #BDBDBD; }
+
+[data-theme="dark"] .emergency-high { background: #ff5252; }
+[data-theme="dark"] .emergency-medium { background: #ffb300; }
+[data-theme="dark"] .emergency-low { background: #42a5f5; }
+[data-theme="dark"] .emergency-unknown { background: #757575; }
+
+.minimalist-label {
+    color: #1976d2;
+    font-weight: 500;
+    font-size: 0.98em;
+}
+[data-theme="dark"] .minimalist-label {
+    color: #90caf9;
+}
+
+/* Kart başlıkları tema uyumu - düzeltme */
+.helprequest-card .card-title {
+    color: #1565c0 !important;
+    font-weight: 700;
+    font-size: 1.13em;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.2em;
+    transition: color 0.3s;
+}
+[data-theme="dark"] .helprequest-card .card-title {
+    color: #90caf9 !important;
+    font-weight: 700;
+    font-size: 1.13em;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.2em;
+}
+
+.helprequest-card .badge-warning {
+    background: #FB8C00;
+    color: #fff;
+}
+[data-theme="dark"] .helprequest-card .badge-warning {
+    background: #ffb300;
+    color: #23283a;
+}
+
+.helprequest-img {
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(30,136,229,0.06);
+    background: #f7fafd;
+}
+[data-theme="dark"] .helprequest-img {
+    background: #23283a;
+    box-shadow: 0 1px 8px rgba(33,150,243,0.13);
+}
+
+.container {
+    transition: background 0.3s, color 0.3s;
 }

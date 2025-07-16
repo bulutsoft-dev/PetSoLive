@@ -6,5 +6,4 @@ public class LostPetAdFilterDto
     public string? District { get; set; }
     public string? PetType { get; set; }
     public DateTime? DatePostedAfter { get; set; }
-    public bool? IsFound { get; set; }
 }

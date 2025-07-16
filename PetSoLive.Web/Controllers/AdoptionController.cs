@@ -3,6 +3,7 @@ using Microsoft.Extensions.Localization;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.Enums;
 using PetSoLive.Core.Interfaces;
+using PetSoLive.Core.DTOs;
 
 namespace PetSoLive.Web.Controllers;
 
@@ -23,8 +24,44 @@ public class AdoptionController : Controller
     public async Task<IActionResult> Index()
     {
         var pets = await _serviceManager.PetService.GetAllPetsAsync();
+        
+        // Check adoption status for each pet and sort them
+        var petsWithAdoptionStatus = new List<object>();
+        foreach (var pet in pets)
+        {
+            var isAdopted = await _serviceManager.AdoptionService.IsPetAlreadyAdoptedAsync(pet.Id);
+            petsWithAdoptionStatus.Add(new { Pet = pet, IsAdopted = isAdopted });
+        }
+        
+        // Sort: Available pets first, then adopted pets
+        var sortedPets = petsWithAdoptionStatus
+            .OrderBy(p => ((dynamic)p).IsAdopted)
+            .ToList();
+        
         ViewData["Title"] = _localizer["AvailablePetsTitle"];
-        return View(pets);
+        return View(sortedPets);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> FilteredIndex([FromQuery] PetFilterDto filter)
+    {
+        var pets = await _serviceManager.PetService.GetFilteredPetsAsync(filter);
+        
+        // Check adoption status for each pet and sort them
+        var petsWithAdoptionStatus = new List<object>();
+        foreach (var pet in pets)
+        {
+            var isAdopted = await _serviceManager.AdoptionService.IsPetAlreadyAdoptedAsync(pet.Id);
+            petsWithAdoptionStatus.Add(new { Pet = pet, IsAdopted = isAdopted });
+        }
+        
+        // Sort: Available pets first, then adopted pets
+        var sortedPets = petsWithAdoptionStatus
+            .OrderBy(p => ((dynamic)p).IsAdopted)
+            .ToList();
+        
+        ViewData["Title"] = _localizer["AvailablePetsTitle"];
+        return View("Index", sortedPets);
     }
 
 
@@ -153,6 +190,18 @@ public class AdoptionController : Controller
 
     public async Task<IActionResult> ApproveRequest(int adoptionRequestId, int petId)
     {
+        var username = HttpContext.Session.GetString("Username");
+        if (username == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var currentUser = await _serviceManager.UserService.GetUserByUsernameAsync(username);
+        if (currentUser == null)
+        {
+            return BadRequest("User not found.");
+        }
+
         var adoptionRequest = await _serviceManager.AdoptionRequestService.GetAdoptionRequestByIdAsync(adoptionRequestId);
         if (adoptionRequest == null || adoptionRequest.PetId != petId)
         {
@@ -162,7 +211,7 @@ public class AdoptionController : Controller
         var pet = await _serviceManager.PetService.GetPetByIdAsync(petId);
         var petOwner = pet.PetOwners.FirstOrDefault();
 
-        if (petOwner?.UserId.ToString() != User?.Identity?.Name)
+        if (petOwner?.UserId != currentUser.Id)
         {
             return Unauthorized();
         }
@@ -211,7 +260,7 @@ public class AdoptionController : Controller
             await _serviceManager.AdoptionService.CreateAdoptionAsync(adoption);
         }
 
-        return RedirectToAction("Index");
+        return RedirectToAction("Details", "Pet", new { id = petId });
     }
 
     private async Task SendApprovalEmailAsync(User user, Pet pet)

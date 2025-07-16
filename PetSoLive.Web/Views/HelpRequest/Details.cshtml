@@ -13,115 +13,131 @@
 }
 
 <div class="helprequest-page helprequest-details">
-    <div class="card mx-auto">
-        <div class="card-header">
-            <h5 class="mb-0">@Model.Title</h5>
+    <div class="helprequest-details-card card mx-auto wide">
+        <div class="helprequest-details-emergency-bar @($"emergency-bar-{Model.EmergencyLevel.ToString().ToLower()}")"></div>
+        <div class="helprequest-block helprequest-block-header">
+            <h2 class="mb-1 helprequest-details-title">@Model.Title</h2>
+            <span class="badge helprequest-details-emergency-badge @($"emergency-badge-{Model.EmergencyLevel.ToString().ToLower()}")">
+                @Localizer[$"EmergencyLevel{Model.EmergencyLevel}"]
+            </span>
         </div>
-        <div class="card-body">
-            <h5 class="card-title">
-                @Localizer["EmergencyLevelLabel"]:
-                <span class="badge badge-pill badge-info">@Model.EmergencyLevel</span>
-            </h5>
-            <p class="card-text"><strong>@Localizer["CreatedAtLabel"]:</strong> @Model.CreatedAt.ToString("g")</p>
-            <p class="card-text"><strong>@Localizer["LocationLabel"]:</strong> @Model.Location</p>
-
-            @if (!string.IsNullOrEmpty(Model.ContactName))
-            {
-                <p class="card-text"><strong>@Localizer["ContactNameLabel"]:</strong> @Model.ContactName</p>
-            }
-            @if (!string.IsNullOrEmpty(Model.ContactPhone))
-            {
-                <p class="card-text"><strong>@Localizer["ContactPhoneLabel"]:</strong> @Model.ContactPhone</p>
-            }
-            @if (!string.IsNullOrEmpty(Model.ContactEmail))
-            {
-                <p class="card-text"><strong>@Localizer["ContactEmailLabel"]:</strong> @Model.ContactEmail</p>
-            }
-
-            @if (!string.IsNullOrEmpty(Model.ImageUrl))
-            {
-                <div class="mt-3">
-                    <img src="@Model.ImageUrl" alt="Help Request Image" class="img-fluid rounded" />
+        <div class="helprequest-block helprequest-block-info">
+            <div class="helprequest-details-info">
+                <div class="helprequest-details-info-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>@Localizer["CreatedAtLabel"]: <b>@Model.CreatedAt.ToString("g")</b></span>
                 </div>
-            }
-
-            <p class="card-text mt-3"><strong>@Localizer["DescriptionLabel"]:</strong> @Model.Description</p>
-
-            @if (ViewBag.CanEditOrDelete)
-            {
-                <div class="mt-3">
-                    <a href="@Url.Action("Edit", "HelpRequest", new { id = Model.Id })"
-                       class="btn btn-warning">@Localizer["EditButton"]</a>
-                    <form method="post" asp-action="Delete" asp-route-id="@Model.Id" class="d-inline">
-                        <button type="submit" class="btn btn-danger"
-                                onclick="return confirm('@Localizer["DeleteHelpRequestConfirmation"]')">
-                            @Localizer["DeleteButton"]
-                        </button>
-                    </form>
+                <div class="helprequest-details-info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>@Localizer["LocationLabel"]: <b>@Model.Location</b></span>
                 </div>
+                @if (!string.IsNullOrEmpty(Model.ContactName))
+                {
+                    <div class="helprequest-details-info-item">
+                        <i class="fas fa-user"></i>
+                        <span>@Localizer["ContactNameLabel"]: <b>@Model.ContactName</b></span>
+                    </div>
+                }
+                @if (!string.IsNullOrEmpty(Model.ContactPhone))
+                {
+                    <div class="helprequest-details-info-item">
+                        <i class="fas fa-phone"></i>
+                        <span>@Localizer["ContactPhoneLabel"]: <b>@Model.ContactPhone</b></span>
+                    </div>
+                }
+                @if (!string.IsNullOrEmpty(Model.ContactEmail))
+                {
+                    <div class="helprequest-details-info-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>@Localizer["ContactEmailLabel"]: <b>@Model.ContactEmail</b></span>
+                    </div>
+                }
+            </div>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <div class="helprequest-block helprequest-block-image text-center">
+                <img src="@Model.ImageUrl" alt="@Localizer["HelpRequestImageAlt"]" class="img-fluid rounded helprequest-details-img" />
+            </div>
+        }
+        <div class="helprequest-block helprequest-block-desc">
+            <h4 class="desc-label">@Localizer["DescriptionLabel"]</h4>
+            <div class="desc-content">@Model.Description</div>
+        </div>
+        @if (ViewBag.CanEditOrDelete)
+        {
+            <div class="helprequest-block helprequest-block-actions d-flex gap-2 justify-content-end mb-2">
+                <a href="@Url.Action("Edit", "HelpRequest", new { id = Model.Id })"
+                   class="btn btn-warning btn-sm">@Localizer["EditButton"]</a>
+                <form method="post" asp-action="Delete" asp-route-id="@Model.Id" class="d-inline">
+                    <button type="submit" class="btn btn-danger btn-sm"
+                            onclick="return confirm('@Localizer["DeleteHelpRequestConfirmation"]')">
+                        @Localizer["DeleteButton"]
+                    </button>
+                </form>
+            </div>
+        }
+        <div class="helprequest-block helprequest-block-comments wide p-0 border-0 shadow-none bg-transparent">
+            <h3 class="comments-header mb-3">@Localizer["CommentsHeader"]</h3>
+            @if (Model.Comments != null && Model.Comments.Any())
+            {
+                <ul class="list-group comment-list helprequest-comments-list">
+                    @foreach (var comment in Model.Comments)
+                    {
+                        <li class="list-group-item helprequest-comment-item">
+                            <div class="d-flex align-items-center mb-1">
+                                @if (ViewBag.ApprovedVeterinarianUserIds != null && ((List<int>)ViewBag.ApprovedVeterinarianUserIds).Contains(comment.UserId))
+                                {
+                                    <span class="badge badge-info helprequest-vet-badge mr-2">@Localizer["VeterinarianBadge"]</span>
+                                }
+                                <strong class="me-2">@comment.User.Username</strong>
+                                <span class="text-muted small">@comment.CreatedAt.ToString("g")</span>
+                            </div>
+                            <div class="comment-content">@comment.Content</div>
+                            @if (ViewBag.CanEditOrDeleteComment != null && ViewBag.CanEditOrDeleteComment.Contains(comment.Id))
+                            {
+                                <div class="btn-group mt-1">
+                                    <a href="@Url.Action("EditComment", "HelpRequest", new { id = comment.Id })"
+                                       class="btn btn-warning btn-sm">@Localizer["EditButton"]</a>
+                                    <form method="post" asp-action="DeleteComment"
+                                          asp-route-commentId="@comment.Id" class="d-inline"
+                                          onsubmit="return confirm('@Localizer["DeleteCommentConfirmation"]');">
+                                        <button type="submit" class="btn btn-danger btn-sm">@Localizer["DeleteButton"]</button>
+                                    </form>
+                                </div>
+                            }
+                        </li>
+                    }
+                </ul>
             }
+            else
+            {
+                <p class="text-muted">@Localizer["NoCommentsText"]</p>
+            }
+        </div>
+        <div class="helprequest-block helprequest-block-addcomment">
+            <h5 class="add-comment-header">@Localizer["AddCommentHeader"]</h5>
+            <form method="post" asp-action="AddComment" asp-route-id="@Model.Id">
+                <div class="form-group mb-2">
+                    <textarea class="form-control" name="Content" rows="3"
+                              placeholder="@Localizer["CommentPlaceholder"]" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">@Localizer["PostCommentButton"]</button>
+            </form>
         </div>
     </div>
 
     @if (ViewBag.IsVeterinarian)
     {
-        <div class="alert alert-info mt-3 d-flex align-items-center">
-            <span class="badge badge-pill badge-success mr-3">
+        <div class="alert alert-info mt-3 d-flex align-items-center helprequest-vet-alert wide">
+            <span class="badge badge-success mr-3 helprequest-vet-badge">
                 <i class="fas fa-stethoscope"></i> @Localizer["VeterinarianBadge"]
             </span>
             <span><strong>@Localizer["VeterinarianAlert"]</strong></span>
         </div>
     }
 
-    <div class="mt-4">
-        <h3>@Localizer["CommentsHeader"]</h3>
-        @if (Model.Comments != null && Model.Comments.Any())
-        {
-            <ul class="list-group comment-list">
-                @foreach (var comment in Model.Comments)
-                {
-                    <li class="list-group-item">
-                        @if (ViewBag.ApprovedVeterinarianUserIds != null && ((List<int>)ViewBag.ApprovedVeterinarianUserIds).Contains(comment.UserId))
-                        {
-                            <strong class="text-info">@Localizer["VeterinarianBadge"]</strong>
-                        }
-                        <strong>@comment.User.Username</strong>
-                        <span class="text-muted">@comment.CreatedAt.ToString("g")</span>
-                        <p>@comment.Content</p>
-
-                        @if (ViewBag.CanEditOrDeleteComment != null &&
-                             ViewBag.CanEditOrDeleteComment.Contains(comment.Id))
-                        {
-                            <div class="btn-group">
-                                <a href="@Url.Action("EditComment", "HelpRequest", new { id = comment.Id })"
-                                   class="btn btn-warning btn-sm">@Localizer["EditButton"]</a>
-                                <form method="post" asp-action="DeleteComment"
-                                      asp-route-commentId="@comment.Id" class="d-inline"
-                                      onsubmit="return confirm('@Localizer["DeleteCommentConfirmation"]');">
-                                    <button type="submit" class="btn btn-danger btn-sm">@Localizer["DeleteButton"]</button>
-                                </form>
-                            </div>
-                        }
-                    </li>
-                }
-            </ul>
-        }
-        else
-        {
-            <p>@Localizer["NoCommentsText"]</p>
-        }
-
-        <h4 class="mt-4">@Localizer["AddCommentHeader"]</h4>
-        <form method="post" asp-action="AddComment" asp-route-id="@Model.Id">
-            <div class="form-group">
-                <textarea class="form-control" name="Content" rows="3"
-                          placeholder="@Localizer["CommentPlaceholder"]" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">@Localizer["PostCommentButton"]</button>
-        </form>
-    </div>
-
-    <div class="mt-3">
-        <a href="@Url.Action("Index", "HelpRequest")" class="btn btn-secondary">@Localizer["BackToRequests"]</a>
+    <div class="mt-4 text-center wide">
+        <a href="@Url.Action("Index", "HelpRequest")" class="btn btn-secondary btn-lg px-5">@Localizer["BackToRequests"]</a>
     </div>
 </div>

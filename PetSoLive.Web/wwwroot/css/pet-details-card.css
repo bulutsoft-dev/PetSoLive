@@ -1,0 +1,254 @@
+/* Adoption Index ile Uyumlu Pet Details Kartı */
+.pet-details-modern-card {
+    background: #fff;
+    border-radius: 0.5rem;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    margin-bottom: 2rem;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+    transition: box-shadow 0.2s, border-color 0.2s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.pet-details-modern-card:hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+    border-color: #90caf9;
+}
+.pet-details-img-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.1rem;
+    position: relative;
+}
+.pet-details-img {
+    width: 100%;
+    max-width: 320px;
+    border-radius: 0.5rem;
+    border: 1px solid #e9ecef;
+    object-fit: cover;
+    background: #f8f9fa;
+}
+.pet-status-badge {
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    z-index: 2;
+    padding: 0.32rem 1.1rem;
+    border-radius: 0.5rem;
+    font-size: 0.98rem;
+    font-weight: 500;
+    background: #f8f9fa;
+    color: #495057;
+    border: 1px solid #e9ecef;
+    display: inline-block;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    letter-spacing: 0.01em;
+}
+.pet-status-badge.adopted {
+    background: #fbe9e7;
+    color: #b71c1c;
+    border-color: #e57373;
+}
+.pet-status-badge.available {
+    background: #e8f5e9;
+    color: #1b5e20;
+    border-color: #81c784;
+}
+.pet-details-title {
+    font-size: 1.45rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #232323;
+    text-align: center;
+    letter-spacing: 0.01em;
+}
+.pet-details-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.99rem;
+    width: 100%;
+}
+.pet-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: #495057;
+    padding: 0.2rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+.pet-meta-item:last-child {
+    border-bottom: none;
+}
+.pet-details-extra {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+.pet-details-desc {
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+    border: 1px solid #ececec;
+    padding: 0.7rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.98rem;
+    color: #333;
+    width: 100%;
+}
+.pet-details-adoption {
+    background: #e8f5e9;
+    border-radius: 0.5rem;
+    border: 1px solid #e0e0e0;
+    padding: 0.7rem 1rem;
+    margin-top: 1rem;
+    color: #1b5e20;
+    font-size: 0.98rem;
+    width: 100%;
+}
+.card-deck .card {
+    min-width: 180px;
+    border-radius: 0.5rem;
+    border: 1px solid #e9ecef;
+    box-shadow: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fafbfc;
+}
+.card-deck .card:hover {
+    border-color: #90caf9;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+.btn-lg, .btn {
+    font-size: 1rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    box-shadow: none;
+    border: none;
+    letter-spacing: 0.01em;
+}
+.btn-primary, .btn-danger, .btn-warning, .btn-secondary, .btn-success {
+    border-radius: 0.5rem !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+.list-group-item {
+    border-radius: 0.5rem !important;
+    margin-bottom: 0.7rem;
+    border: 1px solid #e9ecef;
+    box-shadow: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.list-group-item.bg-light.border-primary {
+    border: 2px solid #1976d2 !important;
+    background: #f0f7ff !important;
+}
+.list-group-item .btn {
+    min-width: 100px;
+    border-radius: 0.5rem;
+    border: none;
+}
+.list-group-item .avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #e3e3e3;
+    color: #1976d2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-right: 0.7rem;
+}
+.modal-content {
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+@media (max-width: 600px) {
+    .pet-details-modern-card {
+        padding: 1rem 0.3rem 0.7rem 0.3rem;
+    }
+    .pet-details-img {
+        max-width: 100%;
+    }
+    .pet-details-meta {
+        grid-template-columns: 1fr;
+    }
+    .pet-details-title {
+        font-size: 1.1rem;
+    }
+    .pet-details-desc, .pet-details-adoption {
+        font-size: 0.93rem;
+        padding: 0.6rem 0.4rem;
+    }
+    .list-group-item .avatar {
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+}
+[data-theme="dark"] .pet-details-modern-card {
+    background: #23272b;
+    border-color: #343a40;
+}
+[data-theme="dark"] .pet-details-img {
+    background: #23272b;
+    border-color: #343a40;
+}
+[data-theme="dark"] .pet-status-badge {
+    background: #343a40;
+    color: #f8f9fa;
+    border-color: #23272b;
+}
+[data-theme="dark"] .pet-status-badge.adopted {
+    background: #3a2323;
+    color: #ffb4b4;
+    border-color: #b71c1c;
+}
+[data-theme="dark"] .pet-status-badge.available {
+    background: #233a23;
+    color: #b9f6ca;
+    border-color: #1b5e20;
+}
+[data-theme="dark"] .pet-details-title {
+    color: #f8f9fa;
+}
+[data-theme="dark"] .pet-meta-item {
+    color: #b0b8c1;
+    border-bottom: 1px solid #343a40;
+}
+[data-theme="dark"] .pet-details-desc {
+    background: #23272b;
+    border-color: #343a40;
+    color: #b0b8c1;
+}
+[data-theme="dark"] .pet-details-adoption {
+    background: #233a23;
+    border-color: #1b5e20;
+    color: #b9f6ca;
+}
+[data-theme="dark"] .list-group-item {
+    background: #23272b;
+    border-color: #343a40;
+}
+[data-theme="dark"] .list-group-item.bg-light.border-primary {
+    background: #1a2636 !important;
+    border-color: #1976d2 !important;
+}
+[data-theme="dark"] .modal-content {
+    background: #23272b;
+    border-color: #343a40;
+} 

@@ -48,4 +48,9 @@ public class AdoptionService : IAdoptionService
     {
         return await _adoptionRepository.GetAdoptionByPetAndUserAsync(petId, userId);
     }
+
+    public async Task<bool> IsPetAlreadyAdoptedAsync(int petId)
+    {
+        return await _adoptionRepository.IsPetAlreadyAdoptedAsync(petId);
+    }
 }

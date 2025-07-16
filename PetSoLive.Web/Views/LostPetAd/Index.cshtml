@@ -2,63 +2,172 @@
 @using Microsoft.Extensions.Localization
 @using PetSoLive.Web.Controllers
 @inject IStringLocalizer<LostPetAdController> Localizer
+@model IEnumerable<PetSoLive.Core.Entities.LostPetAd>
 
 @{
     ViewData["Title"] = Localizer["Title"];
     Layout = "_Layout";
+    var selectedCity = ViewData["SelectedCity"] as string;
+    var selectedDistrict = ViewData["SelectedDistrict"] as string;
 }
 
 @section HeadSection {
-    <link rel="stylesheet" href="~/css/lostPetAd.css" />
+    <link rel="stylesheet" href="~/css/lostPetAd.css?v=3.1" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+}
+
+@section Scripts {
+    <script src="~/js/lostPetAdFilter.js?v=3.1"></script>
 }
 
 <div class="lostpet-page">
-    <h2 class="lostpet-title">@Localizer["TitleIndex"]</h2>
-
-    <div class="container">
-        <a href="@Url.Action("Create", "LostPetAd")" class="btn btn-success mb-3">
-            @Localizer["CreateNewAd"]
-        </a>
-
-        @if (TempData["SuccessMessage"] != null)
-        {
-            <div class="alert alert-success">
-                @TempData["SuccessMessage"]
-            </div>
-        }
-        @if (TempData["ErrorMessage"] != null)
-        {
-            <div class="alert alert-danger">
-                @TempData["ErrorMessage"]
-            </div>
-        }
-
-        <!-- Display Lost Pet Ads in Card Layout -->
-        <div class="row">
-            @foreach (var ad in Model)
+    <div class="lostpet-toolbar">
+        <!-- Şehir filtresi en solda -->
+        <div>
+            <select id="cityFilterBar" class="form-select">
+                <option value="">@Localizer["AllCities"]</option>
+                <option value="Adana">Adana</option>
+                <option value="Adıyaman">Adıyaman</option>
+                <option value="Afyonkarahisar">Afyonkarahisar</option>
+                <option value="Ağrı">Ağrı</option>
+                <option value="Amasya">Amasya</option>
+                <option value="Ankara">Ankara</option>
+                <option value="Antalya">Antalya</option>
+                <option value="Artvin">Artvin</option>
+                <option value="Aydın">Aydın</option>
+                <option value="Balıkesir">Balıkesir</option>
+                <option value="Bilecik">Bilecik</option>
+                <option value="Bingöl">Bingöl</option>
+                <option value="Bitlis">Bitlis</option>
+                <option value="Bolu">Bolu</option>
+                <option value="Burdur">Burdur</option>
+                <option value="Bursa">Bursa</option>
+                <option value="Çanakkale">Çanakkale</option>
+                <option value="Çankırı">Çankırı</option>
+                <option value="Çorum">Çorum</option>
+                <option value="Denizli">Denizli</option>
+                <option value="Diyarbakır">Diyarbakır</option>
+                <option value="Edirne">Edirne</option>
+                <option value="Elazığ">Elazığ</option>
+                <option value="Erzincan">Erzincan</option>
+                <option value="Erzurum">Erzurum</option>
+                <option value="Eskişehir">Eskişehir</option>
+                <option value="Gaziantep">Gaziantep</option>
+                <option value="Giresun">Giresun</option>
+                <option value="Gümüşhane">Gümüşhane</option>
+                <option value="Hakkari">Hakkari</option>
+                <option value="Hatay">Hatay</option>
+                <option value="Isparta">Isparta</option>
+                <option value="Mersin">Mersin</option>
+                <option value="İstanbul">İstanbul</option>
+                <option value="İzmir">İzmir</option>
+                <option value="Kars">Kars</option>
+                <option value="Kastamonu">Kastamonu</option>
+                <option value="Kayseri">Kayseri</option>
+                <option value="Kırklareli">Kırklareli</option>
+                <option value="Kırşehir">Kırşehir</option>
+                <option value="Kocaeli">Kocaeli</option>
+                <option value="Konya">Konya</option>
+                <option value="Kütahya">Kütahya</option>
+                <option value="Malatya">Malatya</option>
+                <option value="Manisa">Manisa</option>
+                <option value="Kahramanmaraş">Kahramanmaraş</option>
+                <option value="Mardin">Mardin</option>
+                <option value="Muğla">Muğla</option>
+                <option value="Muş">Muş</option>
+                <option value="Nevşehir">Nevşehir</option>
+                <option value="Niğde">Niğde</option>
+                <option value="Ordu">Ordu</option>
+                <option value="Rize">Rize</option>
+                <option value="Sakarya">Sakarya</option>
+                <option value="Samsun">Samsun</option>
+                <option value="Siirt">Siirt</option>
+                <option value="Sinop">Sinop</option>
+                <option value="Sivas">Sivas</option>
+                <option value="Tekirdağ">Tekirdağ</option>
+                <option value="Tokat">Tokat</option>
+                <option value="Trabzon">Trabzon</option>
+                <option value="Tunceli">Tunceli</option>
+                <option value="Şanlıurfa">Şanlıurfa</option>
+                <option value="Uşak">Uşak</option>
+                <option value="Van">Van</option>
+                <option value="Yozgat">Yozgat</option>
+                <option value="Zonguldak">Zonguldak</option>
+                <option value="Aksaray">Aksaray</option>
+                <option value="Bayburt">Bayburt</option>
+                <option value="Karaman">Karaman</option>
+                <option value="Kırıkkale">Kırıkkale</option>
+                <option value="Batman">Batman</option>
+                <option value="Şırnak">Şırnak</option>
+                <option value="Bartın">Bartın</option>
+                <option value="Ardahan">Ardahan</option>
+                <option value="Iğdır">Iğdır</option>
+                <option value="Yalova">Yalova</option>
+                <option value="Karabük">Karabük</option>
+                <option value="Kilis">Kilis</option>
+                <option value="Osmaniye">Osmaniye</option>
+                <option value="Düzce">Düzce</option>
+            </select>
+        </div>
+        <!-- Ortada ilan oluşturma butonu -->
+        <div>
+            <a href="/LostPetAd/Create" class="btn btn-success btn-lg lostpet-add-btn">
+                <i class="fas fa-plus-circle"></i> @Localizer["CreateNewAd"]
+            </a>
+        </div>
+        <!-- En sağda arama çubuğu -->
+        <div style="position:relative;">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="@Localizer["SearchByNameOrDesc"]">
+            <button class="clear-search-btn" id="clearSearch" title="@Localizer["ClearSearch"]">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="lostpet-main-flex">
+        <div class="lostpet-content-area" style="width:100%;">
+            @if (TempData["SuccessMessage"] != null)
             {
-                <div class="col-md-4 mb-4">
-                    <div class="lostpet-card">
-                        @if (!string.IsNullOrEmpty(ad.ImageUrl))
-                        {
-                            <img src="@ad.ImageUrl" alt="@Localizer["PetImage"]">
-                        }
-                        else
-                        {
-                            <img src="https://via.placeholder.com/300" alt="@Localizer["NoImageAvailable"]">
-                        }
-                        <div class="card-body">
-                            <h5 class="card-title">@ad.PetName</h5>
-                            <p class="card-text">@ad.Description</p>
-                            <p class="card-text">
-                                <small class="text-muted">@ad.LastSeenLocation</small>
-                            </p>
-                            <a href="@Url.Action("Details", "LostPetAd", new { id = ad.Id })"
-                               class="btn btn-primary">
-                                @Localizer["ViewDetails"]
-                            </a>
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+            }
+            <div class="lostpet-grid" id="lostpetGrid">
+                @foreach (var ad in Model)
+                {
+                    <div class="lostpet-card" 
+                         data-city="@ad.LastSeenCity" data-district="@ad.LastSeenDistrict" 
+                         data-date="@ad.LastSeenDate.ToString("yyyy-MM-dd")" data-status="Lost" 
+                         data-name="@ad.PetName" data-description="@(ad.Description ?? "")">
+                        <div class="lostpet-card-img-wrap" style="position:relative;">
+                            @if (!string.IsNullOrEmpty(ad.ImageUrl))
+                            {
+                                <img src="@ad.ImageUrl" alt="@Localizer["PetImage"]" class="lostpet-card-img" />
+                            }
+                            else
+                            {
+                                <div class="lostpet-card-placeholder"><i class="fa-solid fa-image fa-2x"></i></div>
+                            }
+                            <span class="city-badge">@ad.LastSeenCity</span>
+                        </div>
+                        <div class="lostpet-card-body">
+                            <h5 class="lostpet-card-title"><i class="fa-solid fa-paw"></i> @ad.PetName</h5>
+                            <div class="lostpet-card-meta">
+                                <span class="lostpet-card-location"><i class="fa-solid fa-location-dot"></i> @ad.LastSeenLocation</span>
+                                <span class="lostpet-card-date"><i class="fa-solid fa-calendar-days"></i> @ad.LastSeenDate.ToString("dd/MM/yyyy")</span>
+                            </div>
+                            <div class="lostpet-card-desc">@((ad.Description?.Length > 80) ? ad.Description.Substring(0, 80) + "..." : ad.Description)</div>
+                            <a href="@Url.Action("Details", "LostPetAd", new { id = ad.Id })" class="btn-lostpet-action btn-lostpet-details"><i class="fa-solid fa-eye"></i> @Localizer["ViewDetails"]</a>
                         </div>
                     </div>
+                }
+            </div>
+            @if (!Model.Any())
+            {
+                <div class="no-pets-message">
+                    <p>@Localizer["NoLostPetsAvailable"]</p>
                 </div>
             }
         </div>

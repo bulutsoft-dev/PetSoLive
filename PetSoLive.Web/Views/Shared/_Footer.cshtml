@@ -1,0 +1,59 @@
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <!-- About Section -->
+            <div class="col-md-4 mb-4">
+                <h5 class="text-uppercase fw-bold">@Localizer["About PetSoLive"]</h5>
+                <p>
+                    <img src="/logo.png" alt="PetSoLive Logo" style="height: 38px; margin-bottom: 6px; margin-right: 8px; vertical-align: middle; border-radius: 8px; box-shadow: 0 2px 8px rgba(30,136,229,0.10);"> @Localizer["PetSoLive Description"]
+                </p>
+            </div>
+            <!-- Quick Links Section -->
+            <div class="col-md-4 mb-4">
+                <h5 class="text-uppercase fw-bold">@Localizer["Quick Links"]</h5>
+                <ul class="list-unstyled">
+                    <li><a href="@Url.Action("Index", "Home")"><i class="bi bi-house-door-fill"></i> @Localizer["Home"]</a></li>
+                    <li><a href="@Url.Action("About", "Home")"><i class="bi bi-info-circle-fill"></i> @Localizer["About"]</a></li>
+                    <li><a href="@Url.Action("Index", "Adoption")"><i class="bi bi-clipboard-heart-fill"></i> @Localizer["Adoption"]</a></li>
+                    <li><a href="@Url.Action("Index", "LostPetAd")"><i class="bi bi-bookmark-heart-fill"></i> @Localizer["Lost Pet Ads"]</a></li>
+                    <li><a href="@Url.Action("Index", "HelpRequest")"><i class="bi bi-chat-square-heart-fill"></i> @Localizer["Help Requests"]</a></li>
+                </ul>
+            </div>
+            <!-- Contact Section -->
+            <div class="col-md-4 mb-4">
+                <h5 class="text-uppercase fw-bold">@Localizer["Contact Us"]</h5>
+                <p><i class="bi bi-envelope"></i> <strong>@Localizer["Email"]:</strong> petsolivesoft@gmail.com</p>
+                <p><i class="bi bi-geo-alt"></i> <strong>@Localizer["Address"]:</strong> Muradiye, Manisa, Turkey</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="social-links">
+                <a href="https://www.linkedin.com/company/bulutsoft-dev/" class="me-3" target="_blank" title="Bulutsoft-dev LinkedIn"><i class="bi bi-linkedin"></i></a>
+                <a href="https://x.com/Bulutsoftdev?t=HkM3f1Q8QGRR4JHnCTCzzQ&s=09" class="me-3" target="_blank" title="Bulutsoftdev X"><i class="bi bi-twitter"></i></a>
+                <a href="https://x.com/PetSoLive?t=XVLdwcMK-ObxiWQD7P34Tg&s=09" class="me-3" target="_blank" title="PetSoLive X"><i class="bi bi-twitter"></i></a>
+            </div>
+            <p class="mb-0">&copy; 2025 PetSoLive - BulutSoft @Localizer["All rights reserved."]</p>
+            <div class="d-flex align-items-center justify-content-center">
+                @{
+                    var footerCurrentCulture = CultureInfo.CurrentCulture.Name;
+                    var footerNewCulture = footerCurrentCulture == "en-US" ? "tr-TR" : "en-US";
+                    var footerFlag = footerCurrentCulture switch
+                    {
+                        "en-US" => "🇺🇸",
+                        "tr-TR" => "🇹🇷",
+                        _ => "🌐"
+                    };
+                }
+                <a href="@Url.Action("SetLanguage", "Home", new { culture = footerNewCulture, returnUrl = Context.Request.Path })" class="footer-language-link ms-2">
+                    <i class="bi bi-translate"></i> @footerFlag @Localizer["Swicth"]
+                </a>
+            </div>
+        </div>
+    </div>
+</footer> 

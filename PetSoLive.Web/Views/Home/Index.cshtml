@@ -11,6 +11,24 @@
     <link rel="stylesheet" href="~/css/home.css" />
 }
 
+<!-- Google Play Reklam Kartı (en üste taşındı) -->
+<div class="container mt-4">
+    <div class="row g-4 justify-content-center mb-2">
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="info-card p-4 d-flex flex-md-row align-items-center gap-4 shadow-sm w-100" style="border-radius: 1.5rem; background: var(--petsolive-light);">
+                <img src="/logo.png" alt="PetSoLive Logo" class="d-none d-md-block" style="width: 80px; height: 80px; object-fit: contain; background: #fff; border-radius: 1rem; box-shadow: 0 2px 8px rgba(30,136,229,0.10);">
+                <div class="flex-grow-1">
+                    <h4 class="mb-2">@Localizer["PlayStoreModalTitle"]</h4>
+                    <p class="mb-2">@Localizer["PlayStoreModalLead"]</p>
+                    <a href="https://play.google.com/store/apps/details?id=com.petsolive.petsolive" target="_blank">
+                        <img src="https://play.google.com/intl/en_us/badges/static/images/badges/tr_badge_web_generic.png" alt="@(Localizer["PlayStoreModalButtonText"] )" style="max-width: 180px;"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Hero Section -->
 <div class="home-hero">
     <div class="home-hero-overlay">
@@ -26,30 +44,77 @@
 </div>
 
 <div class="container my-5">
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="info-card p-4 text-center shadow-sm">
+    <div class="row g-4 justify-content-center mt-1">
+        <div class="col-12 col-md-4 d-flex">
+            <div class="info-card p-4 text-center shadow-sm h-100 d-flex flex-column justify-content-between w-100">
                 <i class="bi bi-heart-fill icon-big text-petsolive"></i>
                 <h3>@Localizer["AdoptPet"]</h3>
                 <p>@Localizer["AdoptPetDescription"]</p>
-                <a asp-controller="Adoption" asp-action="Index" class="btn btn-primary">@Localizer["See Pets"]</a>
+                <a asp-controller="Adoption" asp-action="Index" class="btn btn-primary mt-auto">@Localizer["See Pets"]</a>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="info-card p-4 text-center shadow-sm">
+        <div class="col-12 col-md-4 d-flex">
+            <div class="info-card p-4 text-center shadow-sm h-100 d-flex flex-column justify-content-between w-100">
                 <i class="bi bi-search icon-big text-petsolive"></i>
                 <h3>@Localizer["LostPets"]</h3>
                 <p>@Localizer["LostPetsDescription"]</p>
-                <a asp-controller="LostPetAd" asp-action="Index" class="btn btn-primary">@Localizer["View Lost Pets"]</a>
+                <a asp-controller="LostPetAd" asp-action="Index" class="btn btn-primary mt-auto">@Localizer["View Lost Pets"]</a>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="info-card p-4 text-center shadow-sm">
+        <div class="col-12 col-md-4 d-flex">
+            <div class="info-card p-4 text-center shadow-sm h-100 d-flex flex-column justify-content-between w-100">
                 <i class="bi bi-geo-alt-fill icon-big text-petsolive"></i>
                 <h3>@Localizer["Assistance"]</h3>
                 <p>@Localizer["AssistanceDescription"]</p>
-                <a asp-controller="HelpRequest" asp-action="Index" class="btn btn-primary">@Localizer["Get Help"]</a>
+                <a asp-controller="HelpRequest" asp-action="Index" class="btn btn-primary mt-auto">@Localizer["Get Help"]</a>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Google Play Modal -->
+<div class="modal fade" id="playStoreModal" tabindex="-1" aria-labelledby="playStoreModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-2 p-md-4">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title mb-0" id="playStoreModalLabel">@Localizer["PlayStoreModalTitle"]</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="lead">@Localizer["PlayStoreModalLead"]</p>
+        <a href="https://play.google.com/store/apps/details?id=com.petsolive.petsolive" target="_blank">
+          <img src="https://play.google.com/intl/en_us/badges/static/images/badges/tr_badge_web_generic.png" alt="@(Localizer["PlayStoreModalButtonText"])" style="max-width: 250px;"/>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+@section Scripts {
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        if (!localStorage.getItem('playStoreModalShown')) {
+          var modal = new bootstrap.Modal(document.getElementById('playStoreModal'));
+          modal.show();
+          localStorage.setItem('playStoreModalShown', 'true');
+        }
+
+        // Animate statistics numbers
+        const statNumbers = document.querySelectorAll('.stat-number');
+        statNumbers.forEach(stat => {
+            const target = parseInt(stat.getAttribute('data-target'));
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                stat.textContent = Math.floor(current);
+            }, 16);
+        });
+      });
+    </script>
+}

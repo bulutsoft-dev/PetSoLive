@@ -248,4 +248,46 @@
   <data name="HelpRequestImageAlt" xml:space="preserve">
   <value>Help request image</value>
 </data>
+  <data name="AllTab" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="HighTab" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="MediumTab" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="LowTab" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="AddHelpRequestButton" xml:space="preserve">
+    <value>Add Help Request</value>
+  </data>
+  <data name="HelpRequestTabsLabel" xml:space="preserve">
+    <value>Urgency Tabs</value>
+  </data>
+  <data name="EmergencyLevelHighTooltip" xml:space="preserve">
+    <value>High urgency</value>
+  </data>
+  <data name="EmergencyLevelMediumTooltip" xml:space="preserve">
+    <value>Medium urgency</value>
+  </data>
+  <data name="EmergencyLevelLowTooltip" xml:space="preserve">
+    <value>Low urgency</value>
+  </data>
+  <data name="EmergencyLevelUnknownTooltip" xml:space="preserve">
+    <value>Unknown urgency</value>
+  </data>
+  <data name="GoToHelpRequestDetails" xml:space="preserve">
+    <value>Go to help request details</value>
+  </data>
+  <data name="HelpRequestStatusActiveTooltip" xml:space="preserve">
+    <value>Active help request</value>
+  </data>
+  <data name="HelpRequestStatusPassiveTooltip" xml:space="preserve">
+    <value>Passive help request</value>
+  </data>
+  <data name="CreatedAtLabel" xml:space="preserve">
+    <value>Created At</value>
+  </data>
 </root>

@@ -1,79 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <data name="PetSoLive" xml:space="preserve">
-    <value>PetSoLive</value>
+  <data name="GooglePlayTitle" xml:space="preserve">
+    <value>Google Play</value>
   </data>
-  <data name="PetSoLive Description" xml:space="preserve">
-    <value>PetSoLive, evcil hayvan severler için güvenli ve destekleyici bir topluluk oluşturmayı, evlat edinme fırsatları, kaybolan evcil hayvan ilanları ve yardım talepleri gibi değerli kaynaklar sunmayı amaçlamaktadır.</value>
+  <data name="GooglePlayModalTitle" xml:space="preserve">
+    <value>PetSoLive Mobil Uygulaması!</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Anasayfa</value>
+  <data name="Close" xml:space="preserve">
+    <value>Kapat</value>
   </data>
-  <data name="About" xml:space="preserve">
-    <value>Hakkımızda</value>
+  <data name="GooglePlayModalLead" xml:space="preserve">
+    <value>PetSoLive artık Google Play'de! Mobil uygulamamızı indirerek daha hızlı ve kolay erişim sağlayabilirsiniz.</value>
   </data>
-  <data name="Adoption" xml:space="preserve">
-    <value>Evlat Edinme</value>
+  <data name="GooglePlayFeature1" xml:space="preserve">
+    <value>Bildirimlerle anında güncellemeler</value>
   </data>
-  <data name="Lost Pet Ads" xml:space="preserve">
-    <value>Kayıp Hayvan İlanları</value>
+  <data name="GooglePlayFeature2" xml:space="preserve">
+    <value>Kolay ve hızlı yardım talebi</value>
   </data>
-  <data name="Help Requests" xml:space="preserve">
-    <value>Yardım Talepleri</value>
+  <data name="GooglePlayFeature3" xml:space="preserve">
+    <value>Kayıp ve sahiplendirme ilanlarına mobil erişim</value>
   </data>
-  <data name="Login" xml:space="preserve">
-    <value>Giriş Yap</value>
+  <data name="GooglePlayDownload" xml:space="preserve">
+    <value>Google Play'den indirin</value>
   </data>
-  <data name="Register" xml:space="preserve">
-    <value>Kayıt Ol</value>
+  <data name="DontShowAgain" xml:space="preserve">
+    <value>Bir daha gösterme</value>
   </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Çıkış Yap</value>
-  </data>
-  <data name="Veterinarians Management" xml:space="preserve">
-    <value>Veteriner Yönetimi</value>
-  </data>
-  <data name="Veterinarian Register" xml:space="preserve">
-    <value>Veteriner Kayıt</value>
-  </data>
-  <data name="Welcome" xml:space="preserve">
-    <value>Hoş Geldiniz</value>
-  </data>
-  <data name="All rights reserved." xml:space="preserve">
-    <value>Tüm hakları saklıdır.</value>
-  </data>
-  <data name="Email" xml:space="preserve">
-    <value>E-posta</value>
-  </data>
-  <data name="Phone" xml:space="preserve">
-    <value>Telefon</value>
-  </data>
-  <data name="Address" xml:space="preserve">
-    <value>Adres</value>
-  </data>
-  <data name="About PetSoLive" xml:space="preserve">
-    <value>PetSoLive Hakkında</value>
-  </data>
-  <data name="Quick Links" xml:space="preserve">
-    <value>Hızlı Linkler</value>
-  </data>
-  <data name="Contact Us" xml:space="preserve">
-    <value>Bize Ulaşın</value>
-  </data>
-  <data name="footerDescription" xml:space="preserve">
-    <value>PetSoLive Hakkında</value>
-  </data>
-  <data name="footerDescriptionContent" xml:space="preserve">
-    <value>PetSoLive, evcil hayvan severler için sıcak bir topluluk kurmayı, evlat edinme fırsatları, kayıp evcil hayvan ilanları ve yardım talepleri gibi değerli kaynaklarla bu topluluğu desteklemeyi hedefliyor.</value>
-  </data>
-  <data name="About Us" xml:space="preserve">
-    <value>Biz Kimiz?</value>
-  </data>
-
-  <data name="Swicth" xml:space="preserve">
-    <value>Türkçe</value>
-</data> 
-  <data name="Account" xml:space="preserve">
-    <value>Hesap</value>
-</data>
-</root>
+</root> 

@@ -110,11 +110,13 @@ namespace PetSoLive.Web.Controllers
                 ? _localizer["PetAdopted"].Value
                 : _localizer["PetAvailable"].Value;
 
-            ViewData["IsUserLoggedIn"] = isUserLoggedIn;
-            ViewData["Adoption"] = adoption;
-            ViewData["IsOwner"] = isOwner;
-            ViewData["AdoptionRequests"] = adoptionRequests;
-            ViewData["HasAdoptionRequest"] = hasAdoptionRequest;
+            ViewBag.IsUserLoggedIn = isUserLoggedIn;
+            ViewBag.LoggedInUser = user;
+            ViewBag.LoggedInUsername = user?.Username;
+            ViewBag.Adoption = adoption;
+            ViewBag.IsOwner = isOwner;
+            ViewBag.AdoptionRequests = adoptionRequests;
+            ViewBag.HasAdoptionRequest = hasAdoptionRequest;
 
             return View(pet);
         }

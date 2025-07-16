@@ -157,5 +157,29 @@
     <data name="ViewDetails" xml:space="preserve">
     <value>Detayları Görüntüle</value>
 </data>
+    <data name="Lost" xml:space="preserve">
+    <value>Kayıp</value>
+  </data>
+  <data name="FilterDistrict" xml:space="preserve">
+    <value>İlçe Filtresi</value>
+  </data>
+  <data name="DateRange" xml:space="preserve">
+    <value>Tarih Aralığı</value>
+  </data>
+  <data name="ClearFilters" xml:space="preserve">
+    <value>Filtreleri Temizle</value>
+  </data>
+  <data name="AllCities" xml:space="preserve">
+    <value>Tüm Şehirler</value>
+  </data>
+  <data name="SearchByNameOrDesc" xml:space="preserve">
+    <value>İsim veya açıklama ile ara...</value>
+  </data>
+  <data name="ClearSearch" xml:space="preserve">
+    <value>Aramayı Temizle</value>
+  </data>
+  <data name="ShowMore" xml:space="preserve"><value>Daha Fazla</value></data>
+  <data name="ShowLess" xml:space="preserve"><value>Daha Az</value></data>
+  <data name="ContactOwner" xml:space="preserve"><value>Sahip ile İletişime Geç</value></data>
 
 </root>
