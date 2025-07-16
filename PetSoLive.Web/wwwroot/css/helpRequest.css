@@ -260,133 +260,52 @@
             resize: vertical;
         }
 
+/* Sekme ve kart stilleri (Index.cshtml'den taşındı) */
+.helprequest-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+.helprequest-tab {
+    border: none;
+    background: none;
+    font-size: 1.1em;
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s, color 0.2s;
+}
+.helprequest-tab.active {
+    border-bottom: 2.5px solid #1E88E5;
+    color: #1E88E5;
+    font-weight: 600;
+}
 .helprequest-card {
-    border-radius: 18px;
-    box-shadow: 0 4px 16px rgba(30, 136, 229, 0.08);
-    background: #fff;
-    transition: box-shadow 0.3s, background 0.4s, border 0.3s;
-    border: 1.5px solid #e3f2fd;
-    margin-bottom: 1.5rem;
-    min-height: 340px;
     position: relative;
+    background: #fff;
+    border-radius: 10px;
+    min-height: 220px;
+    overflow: hidden;
 }
-
-[data-theme="dark"] .helprequest-card {
-    background: #23272f;
-    border: 1.5px solid #1E88E5;
-    box-shadow: 0 4px 16px rgba(30, 136, 229, 0.18);
+.helprequest-card .emergency-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 7px;
+    height: 100%;
+    border-radius: 10px 0 0 10px;
 }
-
-.helprequest-card .card-body {
-    padding: 1.5rem;
-    border-radius: 18px;
+.emergency-high { background: #E53935; }
+.emergency-medium { background: #FB8C00; }
+.emergency-low { background: #1E88E5; }
+.emergency-unknown { background: #BDBDBD; }
+.emergency-badge {
+    font-size: 1.1em;
 }
-
-.helprequest-card .card-title {
-    font-weight: 700;
-    color: var(--petsolive-dark);
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    transition: color 0.4s;
-}
-
-[data-theme="dark"] .helprequest-card .card-title {
-    color: var(--petsolive-text);
-}
-
-.helprequest-page .helprequest-details .card-body img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 6px;
-}
-
-.status-label {
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #fff;
-}
-
-.status-active {
-    background-color: var(--petsolive-success);
-}
-
-.status-passive {
-    background-color: var(--petsolive-danger);
-}
-
-.status-label.status-active {
-    color: #43A047;
-    font-weight: 600;
-}
-.status-label.status-passive {
-    color: #E53935;
-    font-weight: 600;
-}
-
-.badge {
-    font-size: 0.9rem;
-    padding: 0.4rem 0.7rem;
-    border-radius: 6px;
-    color: #fff;
-    margin-left: 0.5rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-}
-
-.badge-warning {
-    background-color: var(--petsolive-warning);
-}
-
-[data-theme="dark"] .badge-warning {
-    background-color: #FB8C00;
-}
-
-#theme-toggle {
-    margin-right: 1rem;
-    min-width: 170px;
-}
-
-@media (max-width: 768px) {
-    .helprequest-page .helprequest-container {
-        padding: 1rem;
-        margin-bottom: 1rem;
-    }
-
-    .helprequest-page .helprequest-title {
-        font-size: 1.4rem;
-    }
-
-    .helprequest-page .helprequest-card img {
-        height: 180px;
-    }
-
-    .helprequest-page .helprequest-details .card img {
-        height: 250px;
-    }
-
-    .helprequest-page .comment-list .list-group-item {
-        padding: 0.8rem;
-    }
-
-        .helprequest-page .comment-list .list-group-item .comment-header {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-            .helprequest-page .comment-list .list-group-item .comment-header .timestamp {
-                margin-top: 0.3rem;
-            }
-    .helprequest-card {
-        min-height: 260px;
-        padding: 0.5rem;
-    }
-    #theme-toggle {
-        min-width: 120px;
-        font-size: 0.9rem;
-    }
+.helprequest-img {
+    max-height: 180px;
+    object-fit: cover;
 }
 
 .helprequest-page .helprequest-details .card-body p,

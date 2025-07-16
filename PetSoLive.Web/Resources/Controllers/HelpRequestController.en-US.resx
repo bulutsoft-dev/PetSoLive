@@ -248,4 +248,16 @@
   <data name="HelpRequestImageAlt" xml:space="preserve">
   <value>Help request image</value>
 </data>
+  <data name="AllTab" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="HighTab" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="MediumTab" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="LowTab" xml:space="preserve">
+    <value>Low</value>
+  </data>
 </root>

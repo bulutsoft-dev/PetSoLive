@@ -248,4 +248,16 @@
   <data name="HelpRequestImageAlt" xml:space="preserve">
   <value>Yardım talebi resmi</value>
 </data>
+  <data name="AllTab" xml:space="preserve">
+    <value>Tümü</value>
+  </data>
+  <data name="HighTab" xml:space="preserve">
+    <value>Acil</value>
+  </data>
+  <data name="MediumTab" xml:space="preserve">
+    <value>Orta</value>
+  </data>
+  <data name="LowTab" xml:space="preserve">
+    <value>Düşük</value>
+  </data>
 </root>
