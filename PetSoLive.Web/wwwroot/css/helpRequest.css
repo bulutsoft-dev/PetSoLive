@@ -698,3 +698,209 @@
 [data-theme="dark"] .helprequest-block-addcomment {
     background: #23272f;
 }
+
+/* Sekmelerin üstünde ortalanmış sade ana ekle butonu */
+.btn-add-helprequest-main {
+    min-width: 200px;
+    font-size: 1.08rem;
+    font-weight: 700;
+    padding: 0.7em 1.5em 0.7em 1.1em;
+    border-radius: 8px;
+    background: #1565c0;
+    color: #fff;
+    box-shadow: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    border: 2px solid #1565c0;
+    outline: none;
+    transition: background 0.18s, color 0.18s, border 0.18s, transform 0.14s;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+}
+.btn-add-helprequest-main i {
+    font-size: 1.15em;
+    margin-right: 0.15em;
+    transition: transform 0.14s;
+}
+.btn-add-helprequest-main:hover, .btn-add-helprequest-main:focus {
+    background: #fff;
+    color: #1565c0;
+    border: 2px solid #1565c0;
+    text-decoration: none;
+    transform: translateY(-1px) scale(1.03);
+}
+.btn-add-helprequest-main:hover i, .btn-add-helprequest-main:focus i {
+    transform: scale(1.08);
+}
+[data-theme="dark"] .btn-add-helprequest-main {
+    background: #23283a;
+    color: #90caf9;
+    border: 2px solid #90caf9;
+}
+[data-theme="dark"] .btn-add-helprequest-main:hover, [data-theme="dark"] .btn-add-helprequest-main:focus {
+    background: #90caf9;
+    color: #23283a;
+    border: 2px solid #90caf9;
+}
+
+/* Eski sabit butonları gizle */
+.fixed-top-add-helprequest, .fab-add-helprequest { display: none !important; }
+
+/* Genel arka plan ve kartlar için tema uyumu */
+.helprequest-page.minimalist {
+    background: var(--petsolive-light, #f4f7fa);
+    color: #222;
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+}
+[data-theme="dark"] .helprequest-page.minimalist {
+    background: #15181c;
+    color: #e3f2fd;
+}
+
+.helprequest-card {
+    background: #fff;
+    color: #222;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(30,136,229,0.06);
+    border: 1.5px solid #e3f2fd;
+    transition: background 0.3s, color 0.3s, border 0.3s;
+}
+[data-theme="dark"] .helprequest-card {
+    background: #23283a;
+    color: #f5f7fa;
+    border: 1.5px solid #2d3553;
+    box-shadow: 0 2px 16px rgba(33,150,243,0.13);
+}
+
+.helprequest-title {
+    color: #1976d2;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    transition: color 0.3s;
+}
+[data-theme="dark"] .helprequest-title {
+    color: #64b5f6;
+}
+
+.helprequest-tabs {
+    background: #f7fafd;
+    border-radius: 16px;
+    padding: 0.4em 1.2em;
+    box-shadow: 0 1px 6px rgba(30,136,229,0.04);
+    display: inline-flex;
+    gap: 0.5em;
+    margin-bottom: 0.5em;
+}
+[data-theme="dark"] .helprequest-tabs {
+    background: #23283a;
+    box-shadow: 0 1px 8px rgba(33,150,243,0.13);
+}
+
+.helprequest-tab {
+    background: transparent;
+    color: #1976d2;
+    border: none;
+    font-weight: 600;
+    font-size: 1.08em;
+    padding: 0.5em 1.2em;
+    border-radius: 8px;
+    transition: background 0.18s, color 0.18s;
+}
+.helprequest-tab.active, .helprequest-tab:focus {
+    background: #1976d2;
+    color: #fff;
+}
+[data-theme="dark"] .helprequest-tab {
+    color: #b3cfff;
+}
+[data-theme="dark"] .helprequest-tab.active, [data-theme="dark"] .helprequest-tab:focus {
+    background: #1976d2;
+    color: #fff;
+}
+
+.status-label {
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 0.2em 0.7em;
+    font-size: 0.98em;
+    color: #fff;
+    background: #43a047;
+    margin-right: 0.3em;
+}
+.status-label.status-passive {
+    background: #e53935;
+}
+[data-theme="dark"] .status-label {
+    background: #43a047;
+    color: #e3f2fd;
+}
+[data-theme="dark"] .status-label.status-passive {
+    background: #e53935;
+}
+
+.emergency-bar {
+    transition: background 0.3s;
+}
+.emergency-high { background: #E53935; }
+.emergency-medium { background: #FB8C00; }
+.emergency-low { background: #1E88E5; }
+.emergency-unknown { background: #BDBDBD; }
+
+[data-theme="dark"] .emergency-high { background: #ff5252; }
+[data-theme="dark"] .emergency-medium { background: #ffb300; }
+[data-theme="dark"] .emergency-low { background: #42a5f5; }
+[data-theme="dark"] .emergency-unknown { background: #757575; }
+
+.minimalist-label {
+    color: #1976d2;
+    font-weight: 500;
+    font-size: 0.98em;
+}
+[data-theme="dark"] .minimalist-label {
+    color: #90caf9;
+}
+
+/* Kart başlıkları tema uyumu - düzeltme */
+.helprequest-card .card-title {
+    color: #1565c0 !important;
+    font-weight: 700;
+    font-size: 1.13em;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.2em;
+    transition: color 0.3s;
+}
+[data-theme="dark"] .helprequest-card .card-title {
+    color: #90caf9 !important;
+    font-weight: 700;
+    font-size: 1.13em;
+    letter-spacing: 0.01em;
+    margin-bottom: 0.2em;
+}
+
+.helprequest-card .badge-warning {
+    background: #FB8C00;
+    color: #fff;
+}
+[data-theme="dark"] .helprequest-card .badge-warning {
+    background: #ffb300;
+    color: #23283a;
+}
+
+.helprequest-img {
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px rgba(30,136,229,0.06);
+    background: #f7fafd;
+}
+[data-theme="dark"] .helprequest-img {
+    background: #23283a;
+    box-shadow: 0 1px 8px rgba(33,150,243,0.13);
+}
+
+.container {
+    transition: background 0.3s, color 0.3s;
+}

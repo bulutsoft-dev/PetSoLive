@@ -29,7 +29,8 @@
             </div>
         }
 
-        <form asp-action="Edit" method="post">
+        @using (Html.BeginForm("Edit", "HelpRequest", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
             <!-- Başlık -->
             <div class="form-group">
                 <label asp-for="Title" class="control-label">@Localizer["TitleLabel"]</label>
@@ -93,10 +94,9 @@
                 <span asp-validation-for="ContactEmail" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label">@Localizer["ImageUrlLabel"]</label>
-                <input asp-for="ImageUrl" type="url" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            <div class="form-group mb-3">
+                <label for="image">@Localizer["ImageLabel", "Görsel Yükle"]</label>
+                <input type="file" name="image" id="image" class="form-control" accept="image/*" />
             </div>
 
             <!-- Butonlar -->
@@ -104,7 +104,7 @@
                 <button type="submit" class="btn-helprequest">@Localizer["SaveChangesButton"]</button>
                 <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">@Localizer["CancelButton"]</a>
             </div>
-        </form>
+        }
     </div>
 </div>
 

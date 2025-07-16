@@ -260,4 +260,34 @@
   <data name="LowTab" xml:space="preserve">
     <value>Düşük</value>
   </data>
+  <data name="AddHelpRequestButton" xml:space="preserve">
+    <value>Yardım Talebi Ekle</value>
+  </data>
+  <data name="HelpRequestTabsLabel" xml:space="preserve">
+    <value>Aciliyet Sekmeleri</value>
+  </data>
+  <data name="EmergencyLevelHighTooltip" xml:space="preserve">
+    <value>Acil seviye</value>
+  </data>
+  <data name="EmergencyLevelMediumTooltip" xml:space="preserve">
+    <value>Orta seviye</value>
+  </data>
+  <data name="EmergencyLevelLowTooltip" xml:space="preserve">
+    <value>Düşük seviye</value>
+  </data>
+  <data name="EmergencyLevelUnknownTooltip" xml:space="preserve">
+    <value>Bilinmeyen seviye</value>
+  </data>
+  <data name="GoToHelpRequestDetails" xml:space="preserve">
+    <value>Yardım talebi detayına git</value>
+  </data>
+  <data name="HelpRequestStatusActiveTooltip" xml:space="preserve">
+    <value>Aktif yardım talebi</value>
+  </data>
+  <data name="HelpRequestStatusPassiveTooltip" xml:space="preserve">
+    <value>Pasif yardım talebi</value>
+  </data>
+  <data name="CreatedAtLabel" xml:space="preserve">
+    <value>Oluşturulma Tarihi</value>
+  </data>
 </root>

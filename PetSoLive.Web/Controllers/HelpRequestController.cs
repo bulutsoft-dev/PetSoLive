@@ -146,7 +146,7 @@ public class HelpRequestController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(HelpRequest helpRequest)
+    public async Task<IActionResult> Edit(HelpRequest helpRequest, IFormFile image)
     {
         var username = HttpContext.Session.GetString("Username");
         if (string.IsNullOrEmpty(username))
@@ -176,8 +176,15 @@ public class HelpRequestController : Controller
             existingRequest.ContactName = helpRequest.ContactName;
             existingRequest.ContactPhone = helpRequest.ContactPhone;
             existingRequest.ContactEmail = helpRequest.ContactEmail;
-            existingRequest.ImageUrl = helpRequest.ImageUrl;
-
+            // Yeni resim yüklendiyse upload et
+            if (image != null)
+            {
+                using var ms = new MemoryStream();
+                await image.CopyToAsync(ms);
+                var imageBytes = ms.ToArray();
+                var imageUrl = await _imgBBHelper.UploadImageAsync(imageBytes);
+                existingRequest.ImageUrl = imageUrl;
+            }
             await _serviceManager.HelpRequestService.UpdateHelpRequestAsync(existingRequest);
 
             var veterinarians = await _serviceManager.VeterinarianService.GetAllVeterinariansAsync();

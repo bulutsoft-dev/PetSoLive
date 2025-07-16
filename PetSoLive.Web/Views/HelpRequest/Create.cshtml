@@ -29,7 +29,8 @@
             </div>
         }
 
-        <form asp-action="Create" method="post" enctype="multipart/form-data">
+        @using (Html.BeginForm("Create", "HelpRequest", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
             <div class="row">
                 <!-- Başlık -->
                 <div class="col-md-6 mb-3">
@@ -100,8 +101,8 @@
                 <!-- Resim URL -->
                 <div class="col-md-6 mb-3">
                     <div class="form-group">
-                        <label for="image">@Localizer["ImageUploadLabel"]</label>
-                        <input class="form-control" id="image" name="image" type="file" accept="image/*" />
+                        <label for="image">@Localizer["ImageLabel", "Görsel Yükle"]</label>
+                        <input type="file" name="image" id="image" class="form-control" accept="image/*" />
                     </div>
                 </div>
 
@@ -110,7 +111,7 @@
                     <button type="submit" class="btn-helprequest">@Localizer["CreateButton"]</button>
                 </div>
             </div>
-        </form>
+        }
     </div>
 </div>
 

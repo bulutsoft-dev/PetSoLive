@@ -260,4 +260,34 @@
   <data name="LowTab" xml:space="preserve">
     <value>Low</value>
   </data>
+  <data name="AddHelpRequestButton" xml:space="preserve">
+    <value>Add Help Request</value>
+  </data>
+  <data name="HelpRequestTabsLabel" xml:space="preserve">
+    <value>Urgency Tabs</value>
+  </data>
+  <data name="EmergencyLevelHighTooltip" xml:space="preserve">
+    <value>High urgency</value>
+  </data>
+  <data name="EmergencyLevelMediumTooltip" xml:space="preserve">
+    <value>Medium urgency</value>
+  </data>
+  <data name="EmergencyLevelLowTooltip" xml:space="preserve">
+    <value>Low urgency</value>
+  </data>
+  <data name="EmergencyLevelUnknownTooltip" xml:space="preserve">
+    <value>Unknown urgency</value>
+  </data>
+  <data name="GoToHelpRequestDetails" xml:space="preserve">
+    <value>Go to help request details</value>
+  </data>
+  <data name="HelpRequestStatusActiveTooltip" xml:space="preserve">
+    <value>Active help request</value>
+  </data>
+  <data name="HelpRequestStatusPassiveTooltip" xml:space="preserve">
+    <value>Passive help request</value>
+  </data>
+  <data name="CreatedAtLabel" xml:space="preserve">
+    <value>Created At</value>
+  </data>
 </root>
