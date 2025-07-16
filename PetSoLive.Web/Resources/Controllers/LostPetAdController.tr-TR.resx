@@ -178,5 +178,8 @@
   <data name="ClearSearch" xml:space="preserve">
     <value>Aramayı Temizle</value>
   </data>
+  <data name="ShowMore" xml:space="preserve"><value>Daha Fazla</value></data>
+  <data name="ShowLess" xml:space="preserve"><value>Daha Az</value></data>
+  <data name="ContactOwner" xml:space="preserve"><value>Sahip ile İletişime Geç</value></data>
 
 </root>

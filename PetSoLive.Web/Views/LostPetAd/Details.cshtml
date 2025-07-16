@@ -8,61 +8,55 @@
 }
 
 <div class="lostpet-page">
-    <div class="lostpet-details-card" style="background:#fff; border-radius:14px; box-shadow:0 6px 28px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06); border:2px solid var(--petsolive-primary,#4caf50); max-width:700px; margin:2.5rem auto 2.5rem auto; display:flex; flex-direction:column; overflow:hidden;">
-        <div class="lostpet-image-section" style="position:relative; width:100%; min-height:320px; background:#f7fafd; display:flex; align-items:center; justify-content:center;">
-            <span class="city-badge" style="top:18px; left:18px;">@Model.LastSeenCity</span>
+    <div class="lostpet-details-card">
+        <div class="lostpet-image-section">
+            <span class="city-badge">@Model.LastSeenCity</span>
             @if (!string.IsNullOrEmpty(Model.ImageUrl))
             {
-                <img src="@Model.ImageUrl" class="lostpet-main-img" alt="Pet Image" style="width:100%; max-height:340px; object-fit:cover; border-radius:10px; border:1.5px solid #e0e0e0;" onclick="openLostPetImageModal()">
+                <img src="@Model.ImageUrl" class="lostpet-main-img" alt="@Localizer["PetImage"]" onclick="openLostPetImageModal()">
             }
             else
             {
-                <div class="lostpet-placeholder" style="width:100%; height:220px; display:flex; align-items:center; justify-content:center; color:#bbb; font-size:2.5rem;">
-                    <i class="fa-solid fa-image fa-3x"></i>
-                    <span style="margin-left:0.7em;">@Localizer["NoImageAvailable"]</span>
+                <div class="lostpet-placeholder">
+                    <i class="fa-solid fa-image"></i>
+                    <span>@Localizer["NoImageAvailable"]</span>
                 </div>
             }
         </div>
-        <div class="lostpet-info-section" style="padding:2.2rem 2.2rem 1.5rem 2.2rem; display:flex; flex-direction:column; gap:1.2rem;">
-            <div class="lostpet-title-row" style="margin-bottom:0.5rem;">
-                <h2 class="lostpet-title" style="font-size:2rem; font-weight:800; color:var(--petsolive-primary,#388e3c); margin:0; display:flex; align-items:center; gap:0.7rem;">
-                    <i class="fa-solid fa-paw"></i> @Model.PetName
-                </h2>
+        <div class="lostpet-info-section">
+            <h2 class="lostpet-title">
+                <i class="fa-solid fa-paw"></i> @Model.PetName
+            </h2>
+            <div class="lostpet-meta-list">
+                <div><i class="fa-solid fa-calendar-days"></i> <span>@Localizer["LastSeenDate"]:</span> <b>@Model.LastSeenDate.ToString("dd/MM/yyyy")</b></div>
+                <div><i class="fa-solid fa-location-dot"></i> <span>@Localizer["Location"]:</span> <b>@Model.LastSeenLocation</b></div>
             </div>
-            <div class="lostpet-meta-list" style="display:flex; gap:2.2rem; flex-wrap:wrap; font-size:1.08rem; color:#555;">
-                <div class="lostpet-meta-item"><i class="fa-solid fa-calendar-days"></i> <span>@Localizer["LastSeenDate"]:</span> <b>@Model.LastSeenDate.ToString("dd/MM/yyyy")</b></div>
-                <div class="lostpet-meta-item"><i class="fa-solid fa-location-dot"></i> <span>@Localizer["Location"]:</span> <b>@Model.LastSeenLocation</b></div>
+            <div class="lostpet-desc-card">
+                <div><i class="fa-solid fa-align-left"></i> @Localizer["Description"]:</div>
+                <div class="lostpet-desc" id="descText">@Model.Description</div>
+                <button type="button" class="btn-lostpet-more" id="descToggleBtn" onclick="toggleDesc()">@Localizer["ShowMore"]</button>
             </div>
-            <div class="lostpet-desc-card" style="background:#f7fafd; border-radius:8px; padding:1.1rem 1.2rem; margin:0.7rem 0 0.7rem 0; border:1.5px solid #e0e7ef;">
-                <div style="font-weight:600; color:#388e3c; margin-bottom:0.5rem;"><i class="fa-solid fa-align-left"></i> @Localizer["Description"]:</div>
-                <div class="lostpet-desc" id="descText" style="font-size:1.08rem; color:#444;">
-                    @Model.Description
-                </div>
-                <button type="button" class="btn-lostpet-action btn-lostpet-more" id="descToggleBtn" onclick="toggleDesc()" style="margin-top:0.7rem; font-size:0.98rem; padding:0.4rem 1.2rem;">@Localizer["ShowMore"]</button>
-            </div>
-            <div class="lostpet-owner-card" style="background:#f7fafd; border-radius:8px; padding:1.1rem 1.2rem; border:1.5px solid #e0e7ef;">
-                <h5 style="font-size:1.1rem; font-weight:700; color:#388e3c; margin-bottom:0.7rem;"><i class="fa-solid fa-user"></i> @Localizer["OwnerInformation"]</h5>
-                <div class="lostpet-owner-info" style="display:flex; flex-direction:column; gap:0.5rem;">
-                    <div class="lostpet-owner-avatar" style="margin-bottom:0.3rem;"><i class="fa-solid fa-user-circle fa-2x"></i></div>
+            <div class="lostpet-owner-card">
+                <h5><i class="fa-solid fa-user"></i> @Localizer["OwnerInformation"]</h5>
+                <div>
                     <div><i class="fa-solid fa-user"></i> <b>@Localizer["Username"]:</b> @Model.User?.Username</div>
                     <div><i class="fa-solid fa-envelope"></i> <b>@Localizer["Email"]:</b> @Model.User?.Email</div>
                     <div><i class="fa-solid fa-phone"></i> <b>@Localizer["PhoneNumber"]:</b> @Model.User?.PhoneNumber</div>
                     <div><i class="fa-solid fa-location-dot"></i> <b>@Localizer["Address"]:</b> @Model.User?.Address</div>
                 </div>
             </div>
-            <div class="lostpet-details-actions" style="display:flex; gap:1.1rem; flex-wrap:wrap; margin-top:1.2rem;">
+            <div class="lostpet-details-actions">
                 @if (ViewBag.CurrentUser == Model.User?.Username)
                 {
-                    <a href="@Url.Action("Edit", "LostPetAd", new { id = Model.Id })" class="btn-lostpet-action btn-lostpet-edit"><i class="fa-solid fa-pen-to-square"></i> @Localizer["EditButton"]</a>
-                    <a href="@Url.Action("Delete", "LostPetAd", new { id = Model.Id })" class="btn-lostpet-action btn-lostpet-delete"><i class="fa-solid fa-trash"></i> @Localizer["DeleteButton"]</a>
+                    <a href="@Url.Action("Edit", "LostPetAd", new { id = Model.Id })" class="btn-lostpet-edit"><i class="fa-solid fa-pen-to-square"></i> @Localizer["EditButton"]</a>
+                    <a href="@Url.Action("Delete", "LostPetAd", new { id = Model.Id })" class="btn-lostpet-delete"><i class="fa-solid fa-trash"></i> @Localizer["DeleteButton"]</a>
                 }
                 else
                 {
-                    <a href="mailto:@Model.User?.Email" class="btn-lostpet-action btn-lostpet-contact"><i class="fa-solid fa-envelope"></i> @Localizer["ContactOwner"]</a>
+                    <a href="mailto:@Model.User?.Email" class="btn-lostpet-contact"><i class="fa-solid fa-envelope"></i> @Localizer["ContactOwner"]</a>
                 }
-                <a href="@Url.Action("Index", "LostPetAd")" class="btn-lostpet-action btn-lostpet-back"><i class="fa-solid fa-arrow-left"></i> @Localizer["BackToList"]</a>
+                <a href="@Url.Action("Index", "LostPetAd")" class="btn-lostpet-back"><i class="fa-solid fa-arrow-left"></i> @Localizer["BackToList"]</a>
             </div>
-            <div id="toast" class="lostpet-toast" style="display:none;"></div>
         </div>
     </div>
     <!-- Modal -->
@@ -89,7 +83,6 @@
         document.getElementById('lostPetImageModal').addEventListener('click', function(e) {
             if (e.target === this) closeLostPetImageModal();
         });
-        // Açıklama daha fazla/daha az
         function toggleDesc() {
             var desc = document.getElementById('descText');
             var btn = document.getElementById('descToggleBtn');
@@ -100,13 +93,6 @@
                 desc.classList.add('desc-collapsed');
                 btn.innerText = '@Localizer["ShowMore"]';
             }
-        }
-        // Toast örneği (kullanmak için: showToast('Mesaj'))
-        function showToast(msg) {
-            var toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.style.display = 'block';
-            setTimeout(function(){ toast.style.display = 'none'; }, 3000);
         }
     </script>
 }
