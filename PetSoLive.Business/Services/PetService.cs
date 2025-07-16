@@ -125,4 +125,9 @@ public class PetService : IPetService
         }
         return query.ToList();
     }
+
+    public async Task<IEnumerable<Pet>> GetPetsPagedAsync(int page, int pageSize)
+    {
+        return await _petRepository.GetPagedAsync(page, pageSize);
+    }
 }

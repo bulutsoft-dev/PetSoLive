@@ -65,5 +65,14 @@ namespace PetSoLive.Data
             return await _context.Adoptions
                 .FirstOrDefaultAsync(a => a.PetId == petId && a.UserId == userId);
         }
+
+        public async Task<List<Adoption>> GetPagedAsync(int page, int pageSize)
+        {
+            return await _context.Adoptions
+                .OrderBy(a => a.Id)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
     }
 }
