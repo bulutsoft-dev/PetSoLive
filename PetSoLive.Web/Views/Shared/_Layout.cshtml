@@ -77,11 +77,18 @@
         </div>
       </div>
     </div>
-    <div class="container pt-3 flex-grow-1">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    @if (IsSectionDefined("FullPageBackground"))
+    {
+        @RenderBody()
+    }
+    else
+    {
+        <div class="container pt-3 flex-grow-1">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    }
     @await Html.PartialAsync("_Footer")
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

@@ -3,14 +3,27 @@
 @using PetSoLive.Web.Controllers
 @inject IStringLocalizer<AccountController> Localizer
 @{
-    Layout = "_Layout";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
     ViewData["Title"] = Localizer["LoginTitle"];
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var newCulture = currentCulture == "en-US" ? "tr-TR" : "en-US";
+    var flag = currentCulture == "en-US" ? "🇹🇷" : "🇺🇸";
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
 }
-
-<div class="login-page">
+<div class="login-register-box" style="padding:2rem 1.2rem 1.5rem 1.2rem;max-width:350px;">
+    <div style="width:100%;display:flex;justify-content:center;align-items:center;gap:8px;margin-bottom:0.2rem;">
+        <button id="darkModeToggle" type="button" style="background:none;border:none;cursor:pointer;" title="@Localizer["DarkMode"]"><span id="darkModeIcon" style="font-size:1.1rem;">🌙</span></button>
+        <a href="@Url.Action("SetLanguage", "Home", new { culture = newCulture, returnUrl = returnUrl })" title="@(currentCulture == "en-US" ? Localizer["SwitchToTurkish"] : Localizer["SwitchToEnglish"])" style="background:none;border:none;cursor:pointer;font-size:1.1rem;text-decoration:none;outline:none;display:inline-flex;align-items:center;justify-content:center;">
+            @flag
+        </a>
+    </div>
+    <img src="/logo.png" alt="PetSoLive" class="login-register-logo" style="width:56px;height:56px;margin-bottom:0.3rem;box-shadow:none;background:#fff;border:2px solid #e3f2fd;" />
+    <div class="login-register-divider" style="width:28px;height:2px;margin:0.3rem 0 0.7rem 0;"></div>
+    <div class="login-register-title" style="margin-bottom:0.1rem;font-size:1.35rem;">@Localizer["LoginTitle"]</div>
+    <div class="login-register-desc" style="margin-bottom:0.8rem;font-size:0.98rem;">@Localizer["LoginDesc"]</div>
     @if (!ViewData.ModelState.IsValid)
     {
-        <div class="alert alert-danger">
+        <div class="login-register-alert login-register-alert-danger" style="font-size:0.92rem;padding:0.7rem 0.7rem;">
             <ul>
                 @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                 {
@@ -19,53 +32,83 @@
             </ul>
         </div>
     }
-
-    <div class="login-container">
-        <h2 class="login-title">@Localizer["LoginTitle"]</h2>
-
-        <form method="post">
-            <div class="form-group">
-                <label for="username">@Localizer["UsernameLabel"]</label>
-                <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    class="form-control"
-                    required
-                />
-            </div>
-            <div class="form-group">
-                <label for="password">@Localizer["PasswordLabel"]</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    class="form-control"
-                    required
-                />
-            </div>
-            <button type="submit" class="btn btn-primary">@Localizer["LoginButton"]</button>
-        </form>
-
-        <div class="register-link">
-            <p>@Localizer["NoAccountText"]
-                <a asp-controller="Account" asp-action="Register">@Localizer["RegisterLink"]</a>
-            </p>
+    <form method="post" class="login-register-form" style="position:relative;">
+        <div style="position:relative;">
+            <input type="text" id="username" name="username" class="login-register-input" required placeholder="@Localizer["UsernameLabel"]" />
+            <span class="input-info" title="@Localizer["UsernameInfo"]" style="font-size:1rem;">i</span>
         </div>
+        <div style="position:relative;">
+            <input type="password" id="password" name="password" class="login-register-input" required placeholder="@Localizer["PasswordLabel"]" />
+            <span class="input-info" title="@Localizer["PasswordInfo"]" style="font-size:1rem;">*</span>
+        </div>
+        <button type="submit" class="login-register-btn" style="margin-bottom:0.3rem;">@Localizer["LoginButton"]</button>
+    </form>
+    <div class="login-register-link" style="margin-top:0.5rem;font-size:0.97rem;">
+        @Localizer["NoAccountText"] <a asp-controller="Account" asp-action="Register">@Localizer["RegisterLink"]</a>
+    </div>
+    <div class="login-register-link" style="margin-top:0.7rem; font-size:0.93rem;">
+        <a href="/" style="opacity:0.7;">← @Localizer["BackToHome"]</a>
     </div>
 </div>
-
 @section Scripts {
     <script>
+        // Koyu mod toggle
+        const darkModeBtn = document.getElementById('darkModeToggle');
+        const darkModeIcon = document.getElementById('darkModeIcon');
+        function setDarkMode(on) {
+            if(on) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('petsolive-darkmode', '1');
+                darkModeIcon.textContent = '☀️';
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.removeItem('petsolive-darkmode');
+                darkModeIcon.textContent = '🌙';
+            }
+        }
+        if(localStorage.getItem('petsolive-darkmode')) setDarkMode(true);
+        darkModeBtn.addEventListener('click', function() {
+            setDarkMode(!document.body.classList.contains('dark-mode'));
+        });
+        // Dil değiştirme
+        const langSwitchBtn = document.getElementById('langSwitchBtn');
+        const langSwitchIcon = document.getElementById('langSwitchIcon');
+        function getCurrentCulture() {
+            const match = document.cookie.match(/\.AspNetCore.Culture=([^;]+)/);
+            if (match) {
+                return decodeURIComponent(match[1]).split('|')[0];
+            }
+            return navigator.language.startsWith('tr') ? 'tr-TR' : 'en-US';
+        }
+        function switchCulture() {
+            const current = getCurrentCulture();
+            const next = current === 'tr-TR' ? 'en-US' : 'tr-TR';
+            let url = new URL(window.location.href);
+            url.searchParams.set('culture', next);
+            window.location.href = url.toString();
+        }
+        function setLangIcon() {
+            const current = getCurrentCulture();
+            if(current === 'tr-TR') {
+                langSwitchIcon.textContent = '🇺🇸';
+                langSwitchBtn.title = '@Localizer["SwitchToEnglish"]';
+            } else {
+                langSwitchIcon.textContent = '🇹🇷';
+                langSwitchBtn.title = '@Localizer["SwitchToTurkish"]';
+            }
+        }
+        setLangIcon();
+        langSwitchBtn.addEventListener('click', switchCulture);
+        // Animasyon
         document.addEventListener("DOMContentLoaded", function () {
-            const container = document.querySelector(".login-container");
-            if (container) {
-                container.style.opacity = "0";
-                container.style.transform = "scale(0.95)";
+            const box = document.querySelector(".login-register-box");
+            if (box) {
+                box.style.opacity = "0";
+                box.style.transform = "scale(0.97)";
                 setTimeout(() => {
-                    container.style.transition = "opacity 1s ease, transform 0.7s ease";
-                    container.style.opacity = "1";
-                    container.style.transform = "scale(1)";
+                    box.style.transition = "opacity 1s, transform 0.7s";
+                    box.style.opacity = "1";
+                    box.style.transform = "scale(1)";
                 }, 100);
             }
         });

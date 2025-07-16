@@ -132,6 +132,46 @@
             text-decoration: underline;
         }
 
+.minimalist-input {
+    background: #fafbfc;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: none;
+    font-size: 1rem;
+    padding: 0.7rem 1rem;
+    transition: border 0.2s;
+}
+.minimalist-input:focus {
+    border-color: var(--petsolive-primary);
+    background: #fff;
+}
+.minimalist-btn {
+    background: var(--petsolive-primary);
+    color: #fff;
+    border-radius: 8px;
+    border: none;
+    box-shadow: none;
+    font-weight: 500;
+    font-size: 1.05rem;
+    padding: 0.7rem 0;
+    transition: background 0.2s, color 0.2s;
+}
+.minimalist-btn:hover {
+    background: #1565C0;
+    color: #fff;
+}
+.minimalist-link a {
+    color: var(--petsolive-primary);
+    text-decoration: underline dotted;
+    font-weight: 400;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+}
+.minimalist-link a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
 @media (max-width: 768px) {
     .register-container {
         padding: 1rem;

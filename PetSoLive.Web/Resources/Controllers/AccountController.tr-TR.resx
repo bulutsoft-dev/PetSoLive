@@ -17,63 +17,33 @@
   </resheader>
 
   <!-- Login Sayfası -->
-  <data name="LoginTitle" xml:space="preserve">
-    <value>Giriş Yap</value>
-  </data>
-  <data name="UsernameLabel" xml:space="preserve">
-    <value>Kullanıcı Adı</value>
-  </data>
-  <data name="PasswordLabel" xml:space="preserve">
-    <value>Şifre</value>
-  </data>
-  <data name="LoginButton" xml:space="preserve">
-    <value>Giriş Yap</value>
-  </data>
-  <data name="NoAccountText" xml:space="preserve">
-    <value>Hesabınız yok mu?</value>
-  </data>
-  <data name="RegisterLink" xml:space="preserve">
-    <value>Kayıt Ol</value>
-  </data>
-
-  <!-- Register Sayfası -->
-  <data name="RegisterTitle" xml:space="preserve">
-    <value>Kayıt Ol</value>
-  </data>
-  <data name="EmailLabel" xml:space="preserve">
-    <value>E-posta</value>
-  </data>
-  <data name="PhoneNumberLabel" xml:space="preserve">
-    <value>Telefon Numarası</value>
-  </data>
-  <data name="AddressLabel" xml:space="preserve">
-    <value>Adres</value>
-  </data>
-  <data name="DateOfBirthLabel" xml:space="preserve">
-    <value>Doğum Tarihi</value>
-  </data>
-  <data name="ProfileImageUrlLabel" xml:space="preserve">
-    <value>Profil Resmi URL</value>
-  </data>
-  <data name="CityLabel" xml:space="preserve">
-    <value>Şehir</value>
-  </data>
-  <data name="DistrictLabel" xml:space="preserve">
-    <value>İlçe</value>
-  </data>
-  <data name="SelectCity" xml:space="preserve">
-    <value>Şehir Seçiniz</value>
-  </data>
-  <data name="SelectDistrict" xml:space="preserve">
-    <value>İlçe Seçiniz</value>
-  </data>
-  <data name="RegisterButton" xml:space="preserve">
-    <value>Kayıt Ol</value>
-  </data>
-  <data name="ExistingAccountText" xml:space="preserve">
-    <value>Zaten hesabınız var mı?</value>
-  </data>
-  <data name="LoginLink" xml:space="preserve">
-    <value>Giriş Yapın</value>
-  </data>
+  <data name="LoginTitle" xml:space="preserve"><value>Giriş Yap</value></data>
+  <data name="LoginDesc" xml:space="preserve"><value>Pet sahipleri ve hayvanseverler için güvenli giriş yapın.</value></data>
+  <data name="RegisterTitle" xml:space="preserve"><value>Kayıt Ol</value></data>
+  <data name="RegisterDesc" xml:space="preserve"><value>Hesabınızı oluşturun ve PetSoLive dünyasına katılın.</value></data>
+  <data name="UsernameLabel" xml:space="preserve"><value>Kullanıcı Adı</value></data>
+  <data name="PasswordLabel" xml:space="preserve"><value>Şifre</value></data>
+  <data name="EmailLabel" xml:space="preserve"><value>E-posta</value></data>
+  <data name="PhoneNumberLabel" xml:space="preserve"><value>Telefon</value></data>
+  <data name="AddressLabel" xml:space="preserve"><value>Adres</value></data>
+  <data name="DateOfBirthLabel" xml:space="preserve"><value>Doğum Tarihi</value></data>
+  <data name="SelectCity" xml:space="preserve"><value>Şehir Seçiniz</value></data>
+  <data name="SelectDistrict" xml:space="preserve"><value>İlçe Seçiniz</value></data>
+  <data name="LoginButton" xml:space="preserve"><value>Giriş Yap</value></data>
+  <data name="RegisterButton" xml:space="preserve"><value>Kayıt Ol</value></data>
+  <data name="ContinueWithoutRegister" xml:space="preserve"><value>Kayıt olmadan devam et</value></data>
+  <data name="NoAccountText" xml:space="preserve"><value>Hesabınız yok mu?</value></data>
+  <data name="RegisterLink" xml:space="preserve"><value>Kayıt Ol</value></data>
+  <data name="ExistingAccountText" xml:space="preserve"><value>Zaten hesabınız var mı?</value></data>
+  <data name="LoginLink" xml:space="preserve"><value>Giriş Yap</value></data>
+  <data name="BackToHome" xml:space="preserve"><value>PetSoLive ana sayfaya dön</value></data>
+  <data name="DarkMode" xml:space="preserve"><value>Koyu Mod</value></data>
+  <data name="UsernameInfo" xml:space="preserve"><value>Kullanıcı adınızı girin.</value></data>
+  <data name="PasswordInfo" xml:space="preserve"><value>Şifrenizi girin.</value></data>
+  <data name="EmailInfo" xml:space="preserve"><value>E-posta adresinizi girin.</value></data>
+  <data name="PhoneInfo" xml:space="preserve"><value>Telefon numaranızı girin.</value></data>
+  <data name="AddressInfo" xml:space="preserve"><value>Adresinizi girin.</value></data>
+  <data name="SwitchLanguage" xml:space="preserve"><value>Dili Değiştir</value></data>
+  <data name="SwitchToEnglish" xml:space="preserve"><value>İngilizce'ye geç</value></data>
+  <data name="SwitchToTurkish" xml:space="preserve"><value>Türkçe'ye geç</value></data>
 </root>
