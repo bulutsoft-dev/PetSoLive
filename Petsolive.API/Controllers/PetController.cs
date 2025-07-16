@@ -32,6 +32,14 @@ public class PetController : ControllerBase
         return Ok(petDtos);
     }
 
+    [HttpGet("paged")]
+    public async Task<ActionResult<IEnumerable<PetDto>>> GetPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        var pets = await _serviceManager.PetService.GetPetsPagedAsync(page, pageSize);
+        var petDtos = _mapper.Map<IEnumerable<PetDto>>(pets);
+        return Ok(petDtos);
+    }
+
     [HttpGet("{id}")]
     public async Task<ActionResult<PetDto>> GetById(int id)
     {

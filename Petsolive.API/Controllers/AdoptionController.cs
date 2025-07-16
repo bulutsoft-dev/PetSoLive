@@ -28,6 +28,14 @@ public class AdoptionController : ControllerBase
         return Ok(_mapper.Map<AdoptionDto>(adoption));
     }
 
+    [HttpGet("paged")]
+    public async Task<ActionResult<IEnumerable<AdoptionDto>>> GetPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        var adoptions = await _serviceManager.AdoptionService.GetAdoptionsPagedAsync(page, pageSize);
+        var adoptionDtos = _mapper.Map<IEnumerable<AdoptionDto>>(adoptions);
+        return Ok(adoptionDtos);
+    }
+
     [HttpPost]
     [Authorize]
     public async Task<IActionResult> Create([FromBody] AdoptionDto adoptionDto)
