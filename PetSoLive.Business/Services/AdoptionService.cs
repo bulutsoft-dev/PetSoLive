@@ -53,4 +53,9 @@ public class AdoptionService : IAdoptionService
     {
         return await _adoptionRepository.IsPetAlreadyAdoptedAsync(petId);
     }
+
+    public async Task<IEnumerable<Adoption>> GetAdoptionsPagedAsync(int page, int pageSize)
+    {
+        return await _adoptionRepository.GetPagedAsync(page, pageSize);
+    }
 }

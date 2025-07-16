@@ -47,4 +47,13 @@ public class PetRepository : IPetRepository
         _context.Pets.Remove(pet);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<List<Pet>> GetPagedAsync(int page, int pageSize)
+    {
+        return await _context.Pets
+            .OrderBy(p => p.Id)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+    }
 }

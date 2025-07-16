@@ -25,9 +25,25 @@ public class PetController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<PetDto>>> GetAll()
+    public async Task<ActionResult<IEnumerable<PetDto>>> GetAll([FromQuery] int? page = null, [FromQuery] int? pageSize = null)
     {
-        var pets = await _serviceManager.PetService.GetAllPetsAsync();
+        IEnumerable<Pet> pets;
+        if (page.HasValue && pageSize.HasValue)
+        {
+            pets = await _serviceManager.PetService.GetPetsPagedAsync(page.Value, pageSize.Value);
+        }
+        else
+        {
+            pets = await _serviceManager.PetService.GetAllPetsAsync();
+        }
+        var petDtos = _mapper.Map<IEnumerable<PetDto>>(pets);
+        return Ok(petDtos);
+    }
+
+    [HttpGet("paged")]
+    public async Task<ActionResult<IEnumerable<PetDto>>> GetPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        var pets = await _serviceManager.PetService.GetPetsPagedAsync(page, pageSize);
         var petDtos = _mapper.Map<IEnumerable<PetDto>>(pets);
         return Ok(petDtos);
     }
