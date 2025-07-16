@@ -170,6 +170,15 @@
   <data name="ClearFilters" xml:space="preserve">
     <value>Clear Filters</value>
   </data>
+  <data name="AllCities" xml:space="preserve">
+    <value>All Cities</value>
+  </data>
+  <data name="SearchByNameOrDesc" xml:space="preserve">
+    <value>Search by name or description...</value>
+  </data>
+  <data name="ClearSearch" xml:space="preserve">
+    <value>Clear Search</value>
+  </data>
 
 
 </root>

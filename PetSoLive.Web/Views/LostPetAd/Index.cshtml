@@ -25,7 +25,7 @@
         <!-- Şehir filtresi en solda -->
         <div>
             <select id="cityFilterBar" class="form-select">
-                <option value="">AllCities</option>
+                <option value="">@Localizer["AllCities"]</option>
                 <option value="Adana">Adana</option>
                 <option value="Adıyaman">Adıyaman</option>
                 <option value="Afyonkarahisar">Afyonkarahisar</option>
@@ -112,14 +112,14 @@
         <!-- Ortada ilan oluşturma butonu -->
         <div>
             <a href="/LostPetAd/Create" class="btn btn-success btn-lg lostpet-add-btn">
-                <i class="fas fa-plus-circle"></i> Yeni Kayıp Evcil Hayvan İlanı Oluştur
+                <i class="fas fa-plus-circle"></i> @Localizer["CreateNewAd"]
             </a>
         </div>
         <!-- En sağda arama çubuğu -->
         <div style="position:relative;">
             <i class="fas fa-search search-icon"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="SearchByNameOrDesc">
-            <button class="clear-search-btn" id="clearSearch" title="ClearSearch">
+            <input type="text" id="searchInput" class="search-input" placeholder="@Localizer["SearchByNameOrDesc"]">
+            <button class="clear-search-btn" id="clearSearch" title="@Localizer["ClearSearch"]">
                 <i class="fas fa-times"></i>
             </button>
         </div>

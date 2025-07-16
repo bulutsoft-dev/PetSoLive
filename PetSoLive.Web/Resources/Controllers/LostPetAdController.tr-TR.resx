@@ -169,5 +169,14 @@
   <data name="ClearFilters" xml:space="preserve">
     <value>Filtreleri Temizle</value>
   </data>
+  <data name="AllCities" xml:space="preserve">
+    <value>Tüm Şehirler</value>
+  </data>
+  <data name="SearchByNameOrDesc" xml:space="preserve">
+    <value>İsim veya açıklama ile ara...</value>
+  </data>
+  <data name="ClearSearch" xml:space="preserve">
+    <value>Aramayı Temizle</value>
+  </data>
 
 </root>
