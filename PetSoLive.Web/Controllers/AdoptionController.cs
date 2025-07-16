@@ -33,9 +33,10 @@ public class AdoptionController : Controller
             petsWithAdoptionStatus.Add(new { Pet = pet, IsAdopted = isAdopted });
         }
         
-        // Sort: Available pets first, then adopted pets
+        // Önce id'ye göre azalan sırala, sonra mevcut sıralamayı koru
         var sortedPets = petsWithAdoptionStatus
-            .OrderBy(p => ((dynamic)p).IsAdopted)
+            .OrderByDescending(p => ((dynamic)p).Pet.Id)
+            .ThenBy(p => ((dynamic)p).IsAdopted)
             .ToList();
         
         ViewData["Title"] = _localizer["AvailablePetsTitle"];
