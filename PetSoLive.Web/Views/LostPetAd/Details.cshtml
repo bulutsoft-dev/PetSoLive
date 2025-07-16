@@ -34,7 +34,6 @@
             <div class="lostpet-desc-card">
                 <div><i class="fa-solid fa-align-left"></i> @Localizer["Description"]:</div>
                 <div class="lostpet-desc" id="descText">@Model.Description</div>
-                <button type="button" class="btn-lostpet-more" id="descToggleBtn" onclick="toggleDesc()">@Localizer["ShowMore"]</button>
             </div>
             <div class="lostpet-owner-card">
                 <h5><i class="fa-solid fa-user"></i> @Localizer["OwnerInformation"]</h5>
@@ -83,16 +82,5 @@
         document.getElementById('lostPetImageModal').addEventListener('click', function(e) {
             if (e.target === this) closeLostPetImageModal();
         });
-        function toggleDesc() {
-            var desc = document.getElementById('descText');
-            var btn = document.getElementById('descToggleBtn');
-            if (desc.classList.contains('desc-collapsed')) {
-                desc.classList.remove('desc-collapsed');
-                btn.innerText = '@Localizer["ShowLess"]';
-            } else {
-                desc.classList.add('desc-collapsed');
-                btn.innerText = '@Localizer["ShowMore"]';
-            }
-        }
     </script>
 }
