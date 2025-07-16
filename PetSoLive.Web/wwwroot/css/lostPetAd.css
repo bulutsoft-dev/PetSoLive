@@ -625,3 +625,156 @@
 @media (max-width: 600px) {
     .lostpet-searchbar-inner { padding: 0.7rem 1rem; }
 }
+/* --- DARK THEME LOST PET PAGE --- */
+[data-theme="dark"] .lostpet-page {
+  background: linear-gradient(120deg, var(--petsolive-bg) 60%, #23272f 100%);
+}
+[data-theme="dark"] .lostpet-toolbar {
+  background: #181d23;
+  border-color: #23272f;
+  box-shadow: 0 2px 16px rgba(30,136,229,0.18);
+}
+[data-theme="dark"] .lostpet-toolbar select {
+  background: #23272f;
+  color: #e3f2fd;
+  border-color: #23272f;
+}
+[data-theme="dark"] .lostpet-toolbar select:focus {
+  border-color: #42a5f5;
+}
+[data-theme="dark"] .lostpet-toolbar .lostpet-add-btn {
+  background: linear-gradient(90deg, #223a5e 0%, #1976d2 100%);
+  border-color: #223a5e;
+  color: #e3f2fd;
+}
+[data-theme="dark"] .lostpet-toolbar .lostpet-add-btn:hover {
+  background: linear-gradient(90deg, #1565c0 0%, #223a5e 100%);
+}
+[data-theme="dark"] .lostpet-toolbar .search-input {
+  background: #23272f;
+  color: #e3f2fd;
+  border-color: #23272f;
+}
+[data-theme="dark"] .lostpet-toolbar .search-input:focus {
+  border-color: #42a5f5;
+}
+[data-theme="dark"] .lostpet-toolbar .search-icon {
+  color: #90caf9;
+}
+[data-theme="dark"] .lostpet-toolbar .clear-search-btn {
+  color: #b0b8c1;
+}
+[data-theme="dark"] .lostpet-toolbar .clear-search-btn:hover {
+  color: #90caf9;
+}
+[data-theme="dark"] .lostpet-card {
+  background: #23272f;
+  color: #e3f2fd;
+  border-color: #223a5e;
+  box-shadow: 0 8px 32px rgba(30,136,229,0.18), 0 2px 8px rgba(0,0,0,0.13);
+}
+[data-theme="dark"] .lostpet-card:hover {
+  border-color: #42a5f5;
+  box-shadow: 0 12px 40px rgba(30,136,229,0.28), 0 4px 16px rgba(0,0,0,0.18);
+}
+[data-theme="dark"] .lostpet-card-title {
+  color: #90caf9;
+}
+[data-theme="dark"] .lostpet-card-meta {
+  color: #b0b8c1;
+}
+[data-theme="dark"] .lostpet-card-desc {
+  color: #b0b8c1;
+}
+[data-theme="dark"] .btn-lostpet-action {
+  background: #1976d2;
+  color: #fff;
+}
+[data-theme="dark"] .btn-lostpet-action:hover {
+  background: #1565c0;
+  color: #fff;
+}
+[data-theme="dark"] .city-badge {
+  background: #23272f;
+  color: #90caf9;
+  border-color: #1976d2;
+}
+[data-theme="dark"] .lostpet-searchbar-inner {
+  background: #181d23;
+  border-color: #23272f;
+}
+[data-theme="dark"] .lostpet-searchbar-inner input {
+  color: #e3f2fd;
+  background: transparent;
+}
+[data-theme="dark"] .lostpet-searchbar-inner input::placeholder {
+  color: #b0b8c1;
+}
+[data-theme="dark"] .lostpet-searchbar-inner .search-icon {
+  color: #90caf9;
+}
+[data-theme="dark"] .lostpet-searchbar-inner .clear-search-btn {
+  color: #b0b8c1;
+}
+[data-theme="dark"] .lostpet-searchbar-inner .clear-search-btn:hover {
+  color: #90caf9;
+}
+[data-theme="dark"] .no-pets-message {
+  color: #b0b8c1;
+}
+/* --- DARK THEME FILTER SIDEBAR --- */
+[data-theme="dark"] .filter-sidebar {
+  background: #23272f;
+  border-color: #223a5e;
+  box-shadow: 0 1px 6px rgba(30,136,229,0.18);
+}
+[data-theme="dark"] .sidebar-header {
+  color: #90caf9;
+  border-bottom: 1px solid #223a5e;
+}
+[data-theme="dark"] .filter-section {
+  border-bottom: 1px solid #223a5e;
+  background: #23272f;
+}
+[data-theme="dark"] .filter-section-header {
+  color: #e3f2fd;
+  background: #181d23;
+}
+[data-theme="dark"] .filter-section-header i {
+  color: #90caf9;
+}
+[data-theme="dark"] .filter-sidebar select,
+[data-theme="dark"] .filter-sidebar input[type="date"],
+[data-theme="dark"] .filter-sidebar input[type="number"] {
+  background: #181d23;
+  color: #e3f2fd;
+  border-color: #223a5e;
+}
+[data-theme="dark"] .filter-sidebar select:focus,
+[data-theme="dark"] .filter-sidebar input[type="date"]:focus,
+[data-theme="dark"] .filter-sidebar input[type="number"]:focus {
+  border-color: #42a5f5;
+  background: #23272f;
+}
+[data-theme="dark"] .filter-sidebar label,
+[data-theme="dark"] .filter-sidebar .filter-section-header h5 {
+  color: #b0b8c1;
+}
+[data-theme="dark"] .filter-option span {
+  color: #e3f2fd;
+}
+[data-theme="dark"] .filter-option input[type="radio"] {
+  accent-color: #42a5f5;
+  background: #23272f;
+  border-color: #223a5e;
+}
+[data-theme="dark"] .filter-option input[type="radio"]:focus {
+  border-color: #42a5f5;
+}
+[data-theme="dark"] .clear-section-btn {
+  color: #b0b8c1;
+}
+[data-theme="dark"] .clear-section-btn:hover {
+  background: #223a5e;
+  color: #90caf9;
+}

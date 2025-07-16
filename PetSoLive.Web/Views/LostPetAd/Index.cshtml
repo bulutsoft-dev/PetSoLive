@@ -21,39 +21,108 @@
 }
 
 <div class="lostpet-page">
-    <div class="lostpet-toolbar" style="display: flex; align-items: center; justify-content: space-between; gap: 1.2rem; width: 100%; margin: 0 0 2rem 0; background: #f4f7fa; border-radius: 8px; box-shadow: 0 2px 16px rgba(30,136,229,0.10); padding: 1.5rem 2.5rem; border: 2.5px solid #e3e8ee; flex-wrap: wrap;">
+    <div class="lostpet-toolbar">
         <!-- Şehir filtresi en solda -->
-        <div style="flex:0 0 240px; min-width:160px;">
-            <select id="cityFilterBar" class="form-select" style="width:100%; border-radius: 6px; border: 2px solid #cfd8dc; background: #fff; padding: 0.7rem 1.1rem; font-size: 1.08rem; font-weight: 500; transition: border 0.2s;" aria-label="Şehir seç"
-                onfocus="this.style.borderColor='#42a5f5'" onblur="this.style.borderColor='#cfd8dc'">
-                <option value="">@Localizer["AllCities"]</option>
-                @foreach (var city in (ViewData["Cities"] as List<string> ?? new List<string>()))
-                {
-                    <option value="@city" selected="@(selectedCity == city ? "selected" : null)">@city</option>
-                }
+        <div>
+            <select id="cityFilterBar" class="form-select">
+                <option value="">AllCities</option>
+                <option value="Adana">Adana</option>
+                <option value="Adıyaman">Adıyaman</option>
+                <option value="Afyonkarahisar">Afyonkarahisar</option>
+                <option value="Ağrı">Ağrı</option>
+                <option value="Amasya">Amasya</option>
+                <option value="Ankara">Ankara</option>
+                <option value="Antalya">Antalya</option>
+                <option value="Artvin">Artvin</option>
+                <option value="Aydın">Aydın</option>
+                <option value="Balıkesir">Balıkesir</option>
+                <option value="Bilecik">Bilecik</option>
+                <option value="Bingöl">Bingöl</option>
+                <option value="Bitlis">Bitlis</option>
+                <option value="Bolu">Bolu</option>
+                <option value="Burdur">Burdur</option>
+                <option value="Bursa">Bursa</option>
+                <option value="Çanakkale">Çanakkale</option>
+                <option value="Çankırı">Çankırı</option>
+                <option value="Çorum">Çorum</option>
+                <option value="Denizli">Denizli</option>
+                <option value="Diyarbakır">Diyarbakır</option>
+                <option value="Edirne">Edirne</option>
+                <option value="Elazığ">Elazığ</option>
+                <option value="Erzincan">Erzincan</option>
+                <option value="Erzurum">Erzurum</option>
+                <option value="Eskişehir">Eskişehir</option>
+                <option value="Gaziantep">Gaziantep</option>
+                <option value="Giresun">Giresun</option>
+                <option value="Gümüşhane">Gümüşhane</option>
+                <option value="Hakkari">Hakkari</option>
+                <option value="Hatay">Hatay</option>
+                <option value="Isparta">Isparta</option>
+                <option value="Mersin">Mersin</option>
+                <option value="İstanbul">İstanbul</option>
+                <option value="İzmir">İzmir</option>
+                <option value="Kars">Kars</option>
+                <option value="Kastamonu">Kastamonu</option>
+                <option value="Kayseri">Kayseri</option>
+                <option value="Kırklareli">Kırklareli</option>
+                <option value="Kırşehir">Kırşehir</option>
+                <option value="Kocaeli">Kocaeli</option>
+                <option value="Konya">Konya</option>
+                <option value="Kütahya">Kütahya</option>
+                <option value="Malatya">Malatya</option>
+                <option value="Manisa">Manisa</option>
+                <option value="Kahramanmaraş">Kahramanmaraş</option>
+                <option value="Mardin">Mardin</option>
+                <option value="Muğla">Muğla</option>
+                <option value="Muş">Muş</option>
+                <option value="Nevşehir">Nevşehir</option>
+                <option value="Niğde">Niğde</option>
+                <option value="Ordu">Ordu</option>
+                <option value="Rize">Rize</option>
+                <option value="Sakarya">Sakarya</option>
+                <option value="Samsun">Samsun</option>
+                <option value="Siirt">Siirt</option>
+                <option value="Sinop">Sinop</option>
+                <option value="Sivas">Sivas</option>
+                <option value="Tekirdağ">Tekirdağ</option>
+                <option value="Tokat">Tokat</option>
+                <option value="Trabzon">Trabzon</option>
+                <option value="Tunceli">Tunceli</option>
+                <option value="Şanlıurfa">Şanlıurfa</option>
+                <option value="Uşak">Uşak</option>
+                <option value="Van">Van</option>
+                <option value="Yozgat">Yozgat</option>
+                <option value="Zonguldak">Zonguldak</option>
+                <option value="Aksaray">Aksaray</option>
+                <option value="Bayburt">Bayburt</option>
+                <option value="Karaman">Karaman</option>
+                <option value="Kırıkkale">Kırıkkale</option>
+                <option value="Batman">Batman</option>
+                <option value="Şırnak">Şırnak</option>
+                <option value="Bartın">Bartın</option>
+                <option value="Ardahan">Ardahan</option>
+                <option value="Iğdır">Iğdır</option>
+                <option value="Yalova">Yalova</option>
+                <option value="Karabük">Karabük</option>
+                <option value="Kilis">Kilis</option>
+                <option value="Osmaniye">Osmaniye</option>
+                <option value="Düzce">Düzce</option>
             </select>
         </div>
         <!-- Ortada ilan oluşturma butonu -->
-        <div style="flex:1; display:flex; justify-content:center; min-width:180px;">
-            <a href="@Url.Action("Create", "LostPetAd")" class="btn btn-success btn-lg lostpet-add-btn" style="font-size: 1.13rem; padding: 0.8rem 2.5rem; border-radius: 8px; background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%); border: none; color: #fff; font-weight: 800; box-shadow: 0 2px 8px rgba(30,136,229,0.10); letter-spacing: 0.02em; transition: background 0.2s, box-shadow 0.2s; display: flex; align-items: center; gap: 0.7rem; text-decoration: none; border: 2px solid #1976d2;"
-               onmouseover="this.style.background='linear-gradient(90deg,#1565c0 0%,#42a5f5 100%)';this.style.boxShadow='0 4px 16px rgba(30,136,229,0.18)';" onmouseout="this.style.background='linear-gradient(90deg,#1976d2 0%,#42a5f5 100%)';this.style.boxShadow='0 2px 8px rgba(30,136,229,0.10)';">
-                <i class="fas fa-plus-circle"></i> @Localizer["CreateNewAd"]
+        <div>
+            <a href="/LostPetAd/Create" class="btn btn-success btn-lg lostpet-add-btn">
+                <i class="fas fa-plus-circle"></i> Yeni Kayıp Evcil Hayvan İlanı Oluştur
             </a>
         </div>
         <!-- En sağda arama çubuğu -->
-        <div style="flex:0 0 340px; min-width:220px; position:relative;">
-            <i class="fas fa-search search-icon" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#42a5f5;"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="@Localizer["SearchByNameOrDesc"]" style="padding-left:2.5rem; width:100%; border-radius: 6px; border: 2px solid #cfd8dc; background: #fff; font-size: 1.08rem; font-weight: 500; padding: 0.7rem 1.1rem 0.7rem 2.5rem; transition: border 0.2s;" onfocus="this.style.borderColor='#42a5f5'" onblur="this.style.borderColor='#cfd8dc'" />
-            <button class="clear-search-btn" id="clearSearch" title="@Localizer["ClearSearch"]" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:transparent; border:none; color:#b0b8c1; font-size:1.1rem; cursor:pointer; padding:0;">
+        <div style="position:relative;">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="SearchByNameOrDesc">
+            <button class="clear-search-btn" id="clearSearch" title="ClearSearch">
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        <style>
-            @@media (max-width: 1100px) {
-                .lostpet-toolbar { flex-direction: column !important; align-items: stretch !important; gap: 1.1rem !important; padding: 1.2rem 0.7rem !important; }
-                .lostpet-toolbar > div { min-width: 0 !important; flex: 1 1 100% !important; }
-            }
-        </style>
     </div>
     <div class="lostpet-main-flex">
         <div class="lostpet-content-area" style="width:100%;">
