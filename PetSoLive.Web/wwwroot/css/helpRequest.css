@@ -347,3 +347,354 @@
     max-width: 300px;
     align-self: center;
 }
+
+/* HelpRequest Details Modern UI */
+.helprequest-details-card {
+    max-width: 540px;
+    margin: 2rem auto 1.5rem auto;
+    border-radius: 16px;
+    box-shadow: 0 6px 32px rgba(30,136,229,0.10);
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+.helprequest-details-emergency-bar {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 8px;
+    border-radius: 16px 0 0 16px;
+    z-index: 2;
+}
+.emergency-bar-high { background: #E53935; }
+.emergency-bar-medium { background: #FB8C00; }
+.emergency-bar-low { background: #1E88E5; }
+.emergency-bar-unknown { background: #BDBDBD; }
+.helprequest-details-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--petsolive-dark);
+    margin-bottom: 0.5rem;
+}
+.helprequest-details-emergency-badge {
+    font-size: 1em;
+    padding: 0.4em 1.1em;
+    border-radius: 20px;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+.emergency-badge-high { background: #E53935; color: #fff; }
+.emergency-badge-medium { background: #FB8C00; color: #fff; }
+.emergency-badge-low { background: #1E88E5; color: #fff; }
+.emergency-badge-unknown { background: #BDBDBD; color: #fff; }
+.helprequest-details-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem 1.5rem;
+    margin-bottom: 1.2rem;
+    justify-content: flex-start;
+}
+.helprequest-details-info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1em;
+    color: #444;
+    background: #f7fafd;
+    border-radius: 8px;
+    padding: 0.3em 0.9em;
+}
+.helprequest-details-img {
+    max-width: 100%;
+    max-height: 260px;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 2px 12px rgba(30,136,229,0.08);
+}
+.helprequest-details-desc {
+    background: #f9f9fb;
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.2rem;
+}
+.helprequest-details-desc .desc-label {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 0.3em;
+}
+.helprequest-details-desc .desc-content {
+    font-size: 1em;
+    color: #333;
+}
+.helprequest-vet-alert {
+    border-radius: 8px;
+    font-size: 1em;
+    padding: 0.7em 1.2em;
+    background: #e3f2fd;
+    color: #1976d2;
+    gap: 0.7em;
+}
+.helprequest-vet-badge {
+    font-size: 0.95em;
+    font-weight: 600;
+    background: #43a047;
+    color: #fff;
+    border-radius: 12px;
+    padding: 0.3em 0.8em;
+    margin-right: 0.5em;
+}
+.helprequest-comments-section {
+    max-width: 540px;
+    margin: 0 auto;
+}
+.helprequest-comment-item {
+    background: #f7fafd;
+    border-radius: 8px;
+    margin-bottom: 0.7em;
+    border: none;
+    box-shadow: 0 1px 4px rgba(30,136,229,0.04);
+}
+.helprequest-comment-item .comment-content {
+    font-size: 0.98em;
+    color: #222;
+    margin-left: 0.2em;
+}
+.add-comment-header {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 0.5em;
+}
+.helprequest-add-comment textarea.form-control {
+    border-radius: 8px;
+    font-size: 1em;
+    min-height: 70px;
+}
+@media (max-width: 600px) {
+    .helprequest-details-card, .helprequest-comments-section {
+        max-width: 98vw;
+        padding: 0.5em;
+    }
+    .helprequest-details-img {
+        max-height: 160px;
+    }
+}
+
+/* Daha geniş ve ferah detay/yorumlar UI */
+.helprequest-details-card.wide,
+.helprequest-comments-section.wide,
+.helprequest-vet-alert.wide,
+.mt-4.text-center.wide {
+    max-width: 800px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.helprequest-details-card.wide {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+    padding: 0 2.5rem 1.5rem 2.5rem;
+}
+.helprequest-comments-section.wide {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+    padding: 0 2.5rem 2rem 2.5rem;
+    background: #f7fafd;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 2px 12px rgba(30,136,229,0.04);
+}
+.helprequest-details-title {
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: var(--petsolive-dark);
+    margin-bottom: 0.7rem;
+}
+.comments-header {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1976d2;
+    margin-bottom: 1.2rem;
+}
+.helprequest-comment-item {
+    font-size: 1.08em;
+    padding: 1.1em 1.2em;
+    margin-bottom: 1.1em;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #e3f2fd;
+    box-shadow: 0 1px 6px rgba(30,136,229,0.04);
+}
+.helprequest-add-comment {
+    background: #f9f9fb;
+    border-radius: 10px;
+    padding: 1.2em 1.2em 1.5em 1.2em;
+    margin-top: 2em;
+    box-shadow: 0 1px 6px rgba(30,136,229,0.03);
+}
+.helprequest-add-comment textarea.form-control {
+    min-height: 90px;
+    font-size: 1.08em;
+}
+.mt-4.text-center.wide {
+    margin-top: 2.5rem !important;
+    margin-bottom: 2.5rem !important;
+}
+@media (max-width: 900px) {
+    .helprequest-details-card.wide,
+    .helprequest-comments-section.wide,
+    .helprequest-vet-alert.wide,
+    .mt-4.text-center.wide {
+        max-width: 98vw;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+    }
+}
+
+/* Yorumlar ve ekleme alanı kart devamı gibi ve karanlık tema desteği */
+.helprequest-comments-section.wide {
+    background: #f7fafd;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 2px 12px rgba(30,136,229,0.04);
+    border-top: 1.5px solid #e3f2fd;
+    margin-top: 0;
+    padding-top: 0;
+}
+[data-theme="dark"] .helprequest-details-card.wide,
+[data-theme="dark"] .helprequest-comments-section.wide {
+    background: #23272f;
+    color: #e3f2fd;
+    box-shadow: 0 2px 16px rgba(30,136,229,0.13);
+    border-color: #1E88E5;
+}
+[data-theme="dark"] .helprequest-details-desc,
+[data-theme="dark"] .helprequest-add-comment {
+    background: #1a1d22;
+    color: #e3f2fd;
+}
+[data-theme="dark"] .helprequest-comment-item {
+    background: #23272f;
+    border: 1px solid #1E88E5;
+    color: #e3f2fd;
+}
+[data-theme="dark"] .helprequest-details-info-item {
+    background: #1a1d22;
+    color: #e3f2fd;
+}
+[data-theme="dark"] .helprequest-add-comment textarea.form-control {
+    background: #23272f;
+    color: #e3f2fd;
+    border: 1px solid #1E88E5;
+}
+[data-theme="dark"] .helprequest-details-title,
+[data-theme="dark"] .comments-header {
+    color: #90caf9;
+}
+.helprequest-comments-list {
+    border-radius: 0 0 16px 16px;
+    background: transparent;
+    margin-bottom: 0;
+}
+.helprequest-comment-item {
+    font-size: 1.08em;
+    padding: 1.1em 1.2em;
+    margin-bottom: 1.1em;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #e3f2fd;
+    box-shadow: 0 1px 6px rgba(30,136,229,0.04);
+    transition: background 0.3s, color 0.3s;
+}
+.helprequest-add-comment {
+    background: #f9f9fb;
+    border-radius: 10px;
+    padding: 1.2em 1.2em 1.5em 1.2em;
+    margin-top: 2em;
+    box-shadow: 0 1px 6px rgba(30,136,229,0.03);
+    border-top: 1.5px solid #e3f2fd;
+}
+.helprequest-add-comment textarea.form-control {
+    min-height: 90px;
+    font-size: 1.08em;
+}
+
+/* Bloklu ve gruplandırılmış kart görünümü */
+.helprequest-block {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(30,136,229,0.04);
+}
+.helprequest-block-header {
+    background: #e3f2fd;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: none;
+    padding-bottom: 1rem;
+}
+.helprequest-block-info {
+    background: #f7fafd;
+    margin-bottom: 1.2rem;
+}
+.helprequest-block-image {
+    background: #f9f9fb;
+    padding: 1.2rem 2rem 2rem 2rem;
+    box-shadow: none;
+}
+.helprequest-block-desc {
+    background: #f5f5f5;
+    margin-bottom: 1.2rem;
+}
+.helprequest-block-actions {
+    background: transparent;
+    box-shadow: none;
+    padding: 0 2rem 0 2rem;
+    margin-bottom: 0.5rem;
+}
+.helprequest-block-comments {
+    background: #f7fafd;
+    border-radius: 16px;
+    box-shadow: 0 1px 6px rgba(30,136,229,0.04);
+    padding: 1.5rem 2rem 1rem 2rem;
+    margin-bottom: 1.2rem;
+}
+.helprequest-block-addcomment {
+    background: #f9f9fb;
+    border-radius: 16px;
+    box-shadow: 0 1px 6px rgba(30,136,229,0.03);
+    padding: 1.5rem 2rem 2rem 2rem;
+}
+@media (max-width: 900px) {
+    .helprequest-block,
+    .helprequest-block-header,
+    .helprequest-block-info,
+    .helprequest-block-image,
+    .helprequest-block-desc,
+    .helprequest-block-comments,
+    .helprequest-block-addcomment {
+        padding-left: 0.7em;
+        padding-right: 0.7em;
+    }
+}
+[data-theme="dark"] .helprequest-block {
+    background: #23272f;
+    color: #e3f2fd;
+    box-shadow: 0 2px 16px rgba(30,136,229,0.13);
+}
+[data-theme="dark"] .helprequest-block-header {
+    background: #1E88E5;
+    color: #fff;
+}
+[data-theme="dark"] .helprequest-block-info {
+    background: #1a1d22;
+}
+[data-theme="dark"] .helprequest-block-image {
+    background: #23272f;
+}
+[data-theme="dark"] .helprequest-block-desc {
+    background: #181b1f;
+}
+[data-theme="dark"] .helprequest-block-comments {
+    background: #1a1d22;
+}
+[data-theme="dark"] .helprequest-block-addcomment {
+    background: #23272f;
+}
