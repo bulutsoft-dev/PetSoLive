@@ -11,5 +11,6 @@ namespace PetSoLive.Core.Interfaces
         Task<List<PetOwner>> GetPetOwnersAsync(int petId);
         Task DeleteAsync(Pet pet);
         Task<List<Pet>> GetPagedAsync(int page, int pageSize);
+        IQueryable<Pet> Query();
     }
 }

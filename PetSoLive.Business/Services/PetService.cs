@@ -1,6 +1,7 @@
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Core.Entities;
 using PetSoLive.Core.DTOs;
+using Microsoft.EntityFrameworkCore;
 
 public class PetService : IPetService
 {
@@ -124,6 +125,61 @@ public class PetService : IPetService
                 query = query.Where(p => !p.AdoptionRequests.Any(a => a.Status == PetSoLive.Core.Enums.AdoptionStatus.Approved));
         }
         return query.ToList();
+    }
+
+    public async Task<(List<PetListItemDto> Pets, int TotalCount)> GetPetsAdvancedAsync(
+        int page, int pageSize, string species, string color, string breed, string adoptedStatus, string search, int? ownerId)
+    {
+        var query = _petRepository.Query();
+
+        if (!string.IsNullOrEmpty(species))
+            query = query.Where(p => p.Species == species);
+        if (!string.IsNullOrEmpty(color))
+            query = query.Where(p => p.Color == color);
+        if (!string.IsNullOrEmpty(breed))
+            query = query.Where(p => p.Breed == breed);
+        if (ownerId.HasValue)
+            query = query.Where(p => p.PetOwners.Any(po => po.UserId == ownerId.Value));
+        if (!string.IsNullOrEmpty(search))
+            query = query.Where(p => p.Name.Contains(search));
+        if (!string.IsNullOrEmpty(adoptedStatus))
+        {
+            if (adoptedStatus == "adopted")
+                query = query.Where(p => p.AdoptionRequests.Any(a => a.Status == PetSoLive.Core.Enums.AdoptionStatus.Approved));
+            else if (adoptedStatus == "waiting")
+                query = query.Where(p => !p.AdoptionRequests.Any(a => a.Status == PetSoLive.Core.Enums.AdoptionStatus.Approved));
+        }
+        var totalCount = await query.CountAsync();
+        var pets = await query
+            .OrderByDescending(p => p.Id)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(p => new PetListItemDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Species = p.Species,
+                Color = p.Color,
+                Breed = p.Breed,
+                Age = p.Age,
+                Gender = p.Gender,
+                ImageUrl = p.ImageUrl,
+                Description = p.Description,
+                VaccinationStatus = p.VaccinationStatus,
+                IsAdopted = p.AdoptionRequests.Any(a => a.Status == PetSoLive.Core.Enums.AdoptionStatus.Approved),
+                AdoptedOwnerName = p.PetOwners
+                    .OrderByDescending(po => po.OwnershipDate)
+                    .Select(po => po.User.Username)
+                    .FirstOrDefault(),
+                OwnerId = p.PetOwners
+                    .OrderByDescending(po => po.OwnershipDate)
+                    .Select(po => po.UserId)
+                    .FirstOrDefault(),
+                CreatedAt = p.DateOfBirth, // Eğer ilan tarihi farklı bir property ise onu kullan
+                UpdatedAt = null // Eğer güncelleme tarihi varsa onu kullan
+            })
+            .ToListAsync();
+        return (pets, totalCount);
     }
 
     public async Task<IEnumerable<Pet>> GetPetsPagedAsync(int page, int pageSize)

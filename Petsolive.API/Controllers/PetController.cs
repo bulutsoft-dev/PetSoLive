@@ -100,6 +100,21 @@ public class PetController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("advanced-list")]
+    public async Task<IActionResult> GetAdvancedList(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20,
+        [FromQuery] string species = null,
+        [FromQuery] string color = null,
+        [FromQuery] string breed = null,
+        [FromQuery] string adoptedStatus = null,
+        [FromQuery] string search = null,
+        [FromQuery] int? ownerId = null)
+    {
+        var (pets, totalCount) = await _serviceManager.PetService.GetPetsAdvancedAsync(page, pageSize, species, color, breed, adoptedStatus, search, ownerId);
+        return Ok(new { pets, totalCount });
+    }
+
     [HttpPost]
     [Authorize]
     public async Task<ActionResult<PetDto>> Create([FromForm] PetDto petDto, IFormFile image)
