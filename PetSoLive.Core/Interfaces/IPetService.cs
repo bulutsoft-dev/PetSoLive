@@ -15,5 +15,6 @@ namespace PetSoLive.Core.Interfaces
         Task DeletePetOwnerAsync(int petId, int userId);
         Task<IEnumerable<Pet>> GetFilteredPetsAsync(PetFilterDto filter);
         Task<IEnumerable<Pet>> GetPetsPagedAsync(int page, int pageSize);
+        Task<(List<PetListItemDto> Pets, int TotalCount)> GetPetsAdvancedAsync(int page, int pageSize, string species, string color, string breed, string adoptedStatus, string search, int? ownerId);
     }
 }

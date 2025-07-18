@@ -56,4 +56,12 @@ public class PetRepository : IPetRepository
             .Take(pageSize)
             .ToListAsync();
     }
+
+    public IQueryable<Pet> Query()
+    {
+        return _context.Pets
+            .Include(p => p.PetOwners)
+                .ThenInclude(po => po.User)
+            .Include(p => p.AdoptionRequests);
+    }
 }
