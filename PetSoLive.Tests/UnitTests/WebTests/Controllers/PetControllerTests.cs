@@ -11,6 +11,7 @@ using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Web.Controllers;
 using Xunit;
+using PetSoLive.Web.Helpers;
 
 namespace PetSoLive.Tests.Controllers
 {
@@ -24,6 +25,7 @@ namespace PetSoLive.Tests.Controllers
         private readonly Mock<IAdoptionRequestService> _adoptionRequestServiceMock;
         private readonly Mock<IEmailService> _emailServiceMock;
         private readonly Mock<ISession> _sessionMock;
+        private readonly Mock<ImgBBHelper> _imgBBHelperMock;
         private readonly PetController _controller;
         private readonly DefaultHttpContext _httpContext;
 
@@ -37,6 +39,7 @@ namespace PetSoLive.Tests.Controllers
             _adoptionRequestServiceMock = new Mock<IAdoptionRequestService>();
             _emailServiceMock = new Mock<IEmailService>();
             _sessionMock = new Mock<ISession>();
+            _imgBBHelperMock = new Mock<ImgBBHelper>("dummy_api_key");
 
             // Setup IServiceManager
             _serviceManagerMock.SetupGet(m => m.PetService).Returns(_petServiceMock.Object);
@@ -56,7 +59,7 @@ namespace PetSoLive.Tests.Controllers
             {
                 Session = _sessionMock.Object
             };
-            _controller = new PetController(_serviceManagerMock.Object, _localizerMock.Object)
+            _controller = new PetController(_serviceManagerMock.Object, _localizerMock.Object, _imgBBHelperMock.Object)
             {
                 ControllerContext = new ControllerContext
                 {
@@ -110,7 +113,7 @@ namespace PetSoLive.Tests.Controllers
             _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny)).Returns(false);
 
             // Act
-            var result = await _controller.Create(pet);
+            var result = await _controller.Create(pet, null);
 
             // Assert
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
@@ -133,7 +136,7 @@ namespace PetSoLive.Tests.Controllers
             _petServiceMock.Setup(s => s.AssignPetOwnerAsync(It.IsAny<PetOwner>())).Returns(Task.CompletedTask);
 
             // Act
-            var result = await _controller.Create(pet);
+            var result = await _controller.Create(pet, null);
 
             // Assert
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
@@ -160,7 +163,7 @@ namespace PetSoLive.Tests.Controllers
             _controller.ModelState.AddModelError("Name", "Required");
 
             // Act
-            var result = await _controller.Create(pet);
+            var result = await _controller.Create(pet, null);
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
@@ -183,7 +186,7 @@ namespace PetSoLive.Tests.Controllers
             _petServiceMock.Setup(s => s.AssignPetOwnerAsync(It.IsAny<PetOwner>())).Returns(Task.CompletedTask);
 
             // Act
-            var result = await _controller.Create(pet);
+            var result = await _controller.Create(pet, null);
 
             // Assert
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
