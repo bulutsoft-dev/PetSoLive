@@ -11,6 +11,7 @@ using PetSoLive.Core.Entities;
 using PetSoLive.Core.Enums;
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Web.Controllers;
+using PetSoLive.Web.Helpers;
 
 namespace PetSoLive.Tests.Controllers;
 
@@ -24,6 +25,7 @@ public class HelpRequestControllerTests
     private readonly Mock<IEmailService> _emailServiceMock;
     private readonly Mock<ICommentService> _commentServiceMock;
     private readonly Mock<ISession> _sessionMock;
+    private readonly Mock<ImgBBHelper> _imgBBHelperMock;
     private readonly HelpRequestController _controller;
     private readonly DefaultHttpContext _httpContext;
 
@@ -37,6 +39,7 @@ public class HelpRequestControllerTests
         _emailServiceMock = new Mock<IEmailService>();
         _commentServiceMock = new Mock<ICommentService>();
         _sessionMock = new Mock<ISession>();
+        _imgBBHelperMock = new Mock<ImgBBHelper>("dummy_api_key");
 
         // Setup IServiceManager to return mocked services
         _serviceManagerMock.SetupGet(m => m.UserService).Returns(_userServiceMock.Object);
@@ -50,7 +53,7 @@ public class HelpRequestControllerTests
             Session = _sessionMock.Object
         };
 
-        _controller = new HelpRequestController(_serviceManagerMock.Object, _localizerMock.Object)
+        _controller = new HelpRequestController(_serviceManagerMock.Object, _localizerMock.Object, _imgBBHelperMock.Object)
         {
             ControllerContext = new ControllerContext
             {
@@ -109,7 +112,7 @@ public class HelpRequestControllerTests
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny)).Returns(false);
 
         // Act
-        var result = await _controller.Create(newHelpRequest);
+        var result = await _controller.Create(newHelpRequest, null);
 
         // Assert
         var redirectResult = Assert.IsType<RedirectToActionResult>(result);
@@ -152,7 +155,7 @@ public class HelpRequestControllerTests
         _emailServiceMock.Setup(e => e.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
         // Act
-        var result = await _controller.Create(newHelpRequest);
+        var result = await _controller.Create(newHelpRequest, null);
 
         // Assert
         var redirectResult = Assert.IsType<RedirectToActionResult>(result);
@@ -184,7 +187,7 @@ public class HelpRequestControllerTests
         _controller.ModelState.AddModelError("Title", "Title is required.");
 
         // Act
-        var result = await _controller.Create(invalidHelpRequest);
+        var result = await _controller.Create(invalidHelpRequest, null);
 
         // Assert
         var viewResult = Assert.IsType<ViewResult>(result);
@@ -414,7 +417,7 @@ public class HelpRequestControllerTests
         _emailServiceMock.Setup(e => e.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
 
         // Act
-        var result = await _controller.Edit(updatedRequest);
+        var result = await _controller.Edit(updatedRequest, null);
 
         // Assert
         var redirectResult = Assert.IsType<RedirectToActionResult>(result);
@@ -458,7 +461,7 @@ public class HelpRequestControllerTests
         _controller.ModelState.AddModelError("Title", "Title is required.");
 
         // Act
-        var result = await _controller.Edit(invalidRequest);
+        var result = await _controller.Edit(invalidRequest, null);
 
         // Assert
         var viewResult = Assert.IsType<ViewResult>(result);
