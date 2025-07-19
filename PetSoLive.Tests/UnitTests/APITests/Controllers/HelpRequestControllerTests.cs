@@ -95,6 +95,8 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
             var entity = new HelpRequest { Id = 1 };
             _mapperMock.Setup(m => m.Map<HelpRequest>(dto)).Returns(entity);
             _serviceManagerMock.Setup(s => s.HelpRequestService.CreateHelpRequestAsync(entity)).Returns(Task.CompletedTask);
+            _serviceManagerMock.Setup(s => s.VeterinarianService.GetAllVeterinariansAsync()).ReturnsAsync(new List<Veterinarian>());
+            _serviceManagerMock.Setup(s => s.UserService.GetUserByIdAsync(It.IsAny<int>())).ReturnsAsync(new User());
 
             // Act
             var result = await _controller.Create(dto, null);
@@ -125,6 +127,8 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
             var entity = new HelpRequest { Id = 1 };
             _mapperMock.Setup(m => m.Map<HelpRequest>(dto)).Returns(entity);
             _serviceManagerMock.Setup(s => s.HelpRequestService.CreateHelpRequestAsync(entity)).ThrowsAsync(new Exception("DB error"));
+            _serviceManagerMock.Setup(s => s.VeterinarianService.GetAllVeterinariansAsync()).ReturnsAsync(new List<Veterinarian>());
+            _serviceManagerMock.Setup(s => s.UserService.GetUserByIdAsync(It.IsAny<int>())).ReturnsAsync(new User());
 
             // Act & Assert
             await Assert.ThrowsAsync<Exception>(() => _controller.Create(dto, null));
@@ -158,6 +162,8 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
             var entity = new HelpRequest { Id = id };
             _mapperMock.Setup(m => m.Map<HelpRequest>(dto)).Returns(entity);
             _serviceManagerMock.Setup(s => s.HelpRequestService.UpdateHelpRequestAsync(entity)).Returns(Task.CompletedTask);
+            _serviceManagerMock.Setup(s => s.VeterinarianService.GetAllVeterinariansAsync()).ReturnsAsync(new List<Veterinarian>());
+            _serviceManagerMock.Setup(s => s.UserService.GetUserByIdAsync(It.IsAny<int>())).ReturnsAsync(new User());
 
             // Act
             var result = await _controller.Update(id, dto, null);
@@ -210,6 +216,8 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
             var entity = new HelpRequest { Id = id };
             _mapperMock.Setup(m => m.Map<HelpRequest>(dto)).Returns(entity);
             _serviceManagerMock.Setup(s => s.HelpRequestService.UpdateHelpRequestAsync(entity)).ThrowsAsync(new Exception("DB error"));
+            _serviceManagerMock.Setup(s => s.VeterinarianService.GetAllVeterinariansAsync()).ReturnsAsync(new List<Veterinarian>());
+            _serviceManagerMock.Setup(s => s.UserService.GetUserByIdAsync(It.IsAny<int>())).ReturnsAsync(new User());
 
             // Act & Assert
             await Assert.ThrowsAsync<Exception>(() => _controller.Update(id, dto, null));
