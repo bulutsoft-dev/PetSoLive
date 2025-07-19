@@ -5,6 +5,7 @@ using PetSoLive.Web.Controllers;
 using Xunit;
 using Microsoft.Extensions.Logging;
 using PetSoLive.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace PetSoLive.Tests.Controllers
 {
@@ -18,9 +19,11 @@ namespace PetSoLive.Tests.Controllers
             var localizerMock = new Mock<IStringLocalizer<HomeController>>();
             localizerMock.Setup(l => l["Home Page"]).Returns(new LocalizedString("Home Page", "Home Page"));
             var loggerMock = new Mock<ILogger<HomeController>>();
-            var dbContextMock = new Mock<ApplicationDbContext>();
-
-            _controller = new HomeController(localizerMock.Object, loggerMock.Object, dbContextMock.Object);
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .Options;
+            var dbContext = new ApplicationDbContext(options);
+            _controller = new HomeController(localizerMock.Object, loggerMock.Object, dbContext);
         }
 
         [Fact]

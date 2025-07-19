@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using PetSoLive.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace PetSoLive.Tests.UnitTests.APITests.Controllers
 {
@@ -14,15 +15,18 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
     {
         private readonly Mock<IServiceManager> _serviceManagerMock;
         private readonly Mock<IMapper> _mapperMock;
-        private readonly Mock<ApplicationDbContext> _dbContextMock;
+        private readonly ApplicationDbContext _dbContext;
         private readonly AdminController _controller;
 
         public AdminControllerTests()
         {
             _serviceManagerMock = new Mock<IServiceManager>();
             _mapperMock = new Mock<IMapper>();
-            _dbContextMock = new Mock<ApplicationDbContext>();
-            _controller = new AdminController(_serviceManagerMock.Object, _mapperMock.Object, _dbContextMock.Object);
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .Options;
+            _dbContext = new ApplicationDbContext(options);
+            _controller = new AdminController(_serviceManagerMock.Object, _mapperMock.Object, _dbContext);
         }
 
         [Fact]

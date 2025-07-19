@@ -1,0 +1,481 @@
+PetSoLive.Tests (401 tests) Success
+  UnitTests (401 tests) Success
+    APITests (92 tests) Success
+      Controllers (75 tests) Success
+        AccountControllerTests (5 tests) Success
+          Login_ReturnsOk_WithTokenAndUser_WhenCredentialsAreValid Success
+          Login_ReturnsUnauthorized_WhenCredentialsAreInvalid Success
+          Register_ReturnsBadRequest_OnArgumentException Success
+          Register_ReturnsBadRequest_WhenModelIsInvalid Success
+          Register_ReturnsOk_WhenModelIsValid Success
+        AdminControllerTests (3 tests) Success
+          IsUserAdmin_ReturnsOkFalse_WhenUserIsNotAdmin Success
+          IsUserAdmin_ReturnsOkTrue_WhenUserIsAdmin Success
+          IsUserAdmin_ThrowsException_Returns500 Success
+        AdoptionControllerTests (5 tests) Success
+          Create_ReturnsBadRequest_WhenModelStateIsInvalid Success
+          Create_ReturnsOk_OnSuccess Success
+          Create_ThrowsException_Returns500OrThrows Success
+          GetByPetId_ReturnsNotFound_WhenAdoptionIsNull Success
+          GetByPetId_ReturnsOk_WithAdoptionDto Success
+        AdoptionRequestControllerTests (3 tests) Success
+          Create_SendsEmailToPetOwnerAndUser Success
+          GetById_ReturnsNotFound_WhenRequestIsNull Success
+          GetById_ReturnsOk_WithAdoptionRequestDto Success
+        CommentControllerTests (6 tests) Success
+          Add_ReturnsBadRequest_WhenModelStateIsInvalid Success
+          Add_ReturnsOk_OnSuccess Success
+          Add_ThrowsException_WhenServiceFails Success
+          Delete_ReturnsNoContent_OnSuccess Success
+          Delete_ThrowsException_WhenServiceFails Success
+          GetByHelpRequestId_ReturnsOk_WithListOfCommentDto Success
+        HelpRequestControllerTests (14 tests) Success
+          Create_ReturnsBadRequest_WhenModelStateIsInvalid Success
+          Create_ReturnsOk_OnSuccess Success
+          Create_SendsEmailToAllVeterinarians Success
+          Create_ThrowsException_WhenServiceFails Success
+          Delete_ReturnsNoContent_OnSuccess Success
+          Delete_SendsEmailToAllVeterinarians Success
+          Delete_ThrowsException_WhenServiceFails Success
+          GetAll_ReturnsOk_WithListOfHelpRequestDto Success
+          GetById_ReturnsNotFound_WhenHelpRequestIsNull Success
+          GetById_ReturnsOk_WithHelpRequestDto Success
+          Update_ReturnsBadRequest_WhenModelStateIsInvalid Success
+          Update_ReturnsNoContent_OnSuccess Success
+          Update_SendsEmailToAllVeterinarians Success
+          Update_ThrowsException_WhenServiceFails Success
+        LostPetAdControllerTests (15 tests) Success
+          Create_ReturnsBadRequest_WhenModelStateIsInvalid Success
+          Create_ReturnsOk_OnSuccess Success
+          Create_SendsEmailToUser Success
+          Create_ThrowsException_WhenServiceFails Success
+          Delete_ReturnsNoContent_OnSuccess Success
+          Delete_ReturnsNotFound_WhenAdIsNull Success
+          Delete_SendsEmailToUser Success
+          Delete_ThrowsException_WhenServiceFails Success
+          GetAll_ReturnsOk_WithListOfLostPetAdDto Success
+          GetById_ReturnsNotFound_WhenAdIsNull Success
+          GetById_ReturnsOk_WithLostPetAdDto Success
+          Update_ReturnsBadRequest_WhenModelStateIsInvalid Success
+          Update_ReturnsNoContent_OnSuccess Success
+          Update_SendsEmailToUser Success
+          Update_ThrowsException_WhenServiceFails Success
+        PetControllerTests (14 tests) Success
+          Create_ReturnsCreatedAtAction_OnSuccess Success
+          Create_ReturnsUnauthorized_WhenUserIdMissing Success
+          Create_SendsEmailToOwner Success
+          Delete_ReturnsForbidden_WhenUserIsNotOwner Success
+          Delete_ReturnsNoContent_OnSuccess Success
+          Delete_ReturnsUnauthorized_WhenUserIdMissing Success
+          Delete_SendsEmailToAdoptionRequestUsers Success
+          GetAll_ReturnsOk_WithListOfPetDto Success
+          GetById_ReturnsNotFound_WhenPetDoesNotExist Success
+          GetById_ReturnsOk_WhenPetExists Success
+          Update_ReturnsForbid_WhenUserIsNotOwner Success
+          Update_ReturnsNoContent_OnSuccess Success
+          Update_ReturnsUnauthorized_WhenUserIdMissing Success
+          Update_SendsEmailToAdoptionRequestUsers Success
+        PetOwnerControllerTests (2 tests) Success
+          GetByPetId_ReturnsNotFound_WhenPetOwnerIsNull Success
+          GetByPetId_ReturnsOk_WithPetOwnerDto Success
+        UserControllerTests (4 tests) Success
+          GetAll_ReturnsOk_WithListOfUserDto Success
+          GetById_ReturnsNotFound_WhenUserIsNull Success
+          GetById_ReturnsOk_WithUserDto Success
+          Update_ReturnsNoContent_OnSuccess Success
+        VeterinarianControllerTests (4 tests) Success
+          Approve_ReturnsNoContent_OnSuccess Success
+          GetAll_ReturnsOk_WithListOfVeterinarianDto Success
+          Register_ReturnsOk_WithVeterinarianDto Success
+          Reject_ReturnsNoContent_OnSuccess Success
+      Helpers (3 tests) Success
+        JwtHelperTests (3 tests) Success
+          Constructor_ThrowsException_IfSecretKeyNotSet Success
+          GenerateToken_ContainsCorrectClaims Success
+          GenerateToken_ReturnsNonEmptyString_ForValidInput Success
+      Mapping (14 tests) Success
+        MappingProfileTests (14 tests) Success
+          Admin_To_AdminDto_Maps_UserName Success
+          Adoption_To_AdoptionDto_Maps_Nested_And_Status Success
+          AdoptionRequest_To_AdoptionRequestDto_Maps_Nested_And_Status Success
+          AuthDto_To_User_Maps_Username_And_Password Success
+          Comment_To_CommentDto_Maps_Nested Success
+          HelpRequest_To_HelpRequestDto_Maps_Enums_And_Nested Success
+          LostPetAd_To_LostPetAdDto_Maps_Nested_And_Dates Success
+          MappingProfile_Configuration_IsValid Success
+          Pet_To_PetDto_And_Back_Maps_All_Properties Success
+          PetOwner_To_PetOwnerDto_Maps_Nested_Properties Success
+          RegisterDto_To_User_Maps_Username_And_Password Success
+          User_To_AuthResponseDto_Maps_User Success
+          User_To_UserDto_Maps_All_Properties Success
+          Veterinarian_To_VeterinarianDto_Maps_Status_And_UserName Success
+    BusinessTests (72 tests) Success
+      ServiceTests (72 tests) Success
+        AdminServiceTests (2 tests) Success
+          IsUserAdminAsync_WhenUserIsAdmin_ReturnsTrue Success
+          IsUserAdminAsync_WhenUserIsNotAdmin_ReturnsFalse Success
+        AdoptionRequestServiceTests (5 tests) Success
+          GetAdoptionRequestByIdAsync_ShouldReturnAdoptionRequest_WhenRequestExists Success
+          GetAdoptionRequestByIdAsync_ShouldThrowKeyNotFoundException_WhenRequestDoesNotExist Success
+          GetPendingRequestsByPetIdAsync_ShouldReturnEmptyList_WhenNoRequestsExist Success
+          GetPendingRequestsByPetIdAsync_ShouldReturnRequests_WhenRequestsExist Success
+          UpdateAdoptionRequestAsync_ShouldCallRepositoryUpdate_WhenValid Success
+        AdoptionServiceTests (6 tests) Success
+          CreateAdoptionAsync_ShouldCreateAdoption_WhenPetIsNotAdopted Success
+          CreateAdoptionAsync_ShouldThrowException_WhenPetIsAlreadyAdopted Success
+          CreateAdoptionRequestAsync_ShouldCreateRequest_WhenPetIsNotAdopted Success
+          CreateAdoptionRequestAsync_ShouldThrowException_WhenPetIsAlreadyAdopted Success
+          GetAdoptionByPetIdAsync_ShouldReturnAdoption_WhenAdoptionExists Success
+          GetAdoptionRequestByUserAndPetAsync_ShouldReturnAdoptionRequest_WhenExists Success
+        CommentServiceTests (5 tests) Success
+          AddCommentAsync_WhenCalled_InvokesRepositoryWithCorrectComment Success
+          DeleteCommentAsync_WhenCalled_InvokesRepositoryWithCorrectId Success
+          GetCommentByIdAsync_WhenCalled_ReturnsComment Success
+          GetCommentsByHelpRequestIdAsync_WhenCalled_ReturnsCommentsList Success
+          UpdateCommentAsync_WhenCalled_InvokesRepositoryWithCorrectComment Success
+        EmailServiceTests (4 tests) Success
+          SendEmailAsync_ShouldSendEmail_WhenValidParameters Success
+          SendEmailAsync_ShouldThrowArgumentNullException_WhenBodyIsNull Success
+          SendEmailAsync_ShouldThrowArgumentNullException_WhenSubjectIsNull Success
+          SendEmailAsync_ShouldThrowArgumentNullException_WhenToIsNull Success
+        HelpRequestServiceTests (6 tests) Success
+          CreateHelpRequestAsync_WhenCalled_SetsStatusToActiveAndCallsRepository Success
+          DeleteHelpRequestAsync_WhenCalled_DeletesHelpRequestById Success
+          GetHelpRequestByIdAsync_WhenCalled_ReturnsSingleHelpRequest Success
+          GetHelpRequestsAsync_WhenCalled_ReturnsListOfHelpRequests Success
+          GetHelpRequestsByUserAsync_WhenCalled_ReturnsListOfHelpRequests Success
+          UpdateHelpRequestAsync_WhenCalled_UpdatesHelpRequest Success
+        LostPetAdServiceTests (7 tests) Success
+          CreateLostPetAdAsync_WhenCalled_SendsEmailsToUsersInLocation Success
+          CreateLostPetAdAsync_WhenCalled_SetsCityAndDistrictAndCreatesLostPetAd Success
+          CreateLostPetAdAsync_WhenUserNotFound_ThrowsInvalidOperationException Success
+          DeleteLostPetAdAsync_WhenCalled_DeletesLostPetAd Success
+          GetLostPetAdByIdAsync_WhenCalled_ReturnsLostPetAd Success
+          GetLostPetAdByIdAsync_WhenLostPetAdExists_FetchesAndAttachesUser Success
+          UpdateLostPetAdAsync_WhenCalled_UpdatesLostPetAd Success
+        PetOwnerServiceTests (4 tests) Success
+          GetPetOwnerAsync_ShouldReturnPetOwner_WhenPetOwnerExists Success
+          GetPetOwnerAsync_ShouldThrowException_WhenPetOwnerNotFound Success
+          GetPetOwnerByPetIdAsync_ShouldReturnPetOwner_WhenPetOwnerExists Success
+          GetPetOwnerByPetIdAsync_ShouldThrowInvalidOperationException_WhenPetOwnerNotFound Success
+        PetServiceTests (12 tests) Success
+          AssignPetOwnerAsync_ShouldCallAddAsync_WhenPetOwnerIsValid Success
+          AssignPetOwnerAsync_ShouldThrowArgumentNullException_WhenPetOwnerIsNull Success
+          CreatePetAsync_ShouldCallAddAsync_WhenPetIsValid Success
+          CreatePetAsync_ShouldThrowArgumentNullException_WhenPetIsNull Success
+          DeletePetAsync_ShouldDeletePet_WhenUserIsOwner Success
+          DeletePetAsync_ShouldThrowKeyNotFoundException_WhenPetNotFound Success
+          DeletePetAsync_ShouldThrowUnauthorizedAccessException_WhenUserIsNotOwner Success
+          GetPetByIdAsync_ShouldReturnPet_WhenPetIsFound Success
+          GetPetByIdAsync_ShouldThrowKeyNotFoundException_WhenPetNotFound Success
+          IsUserOwnerOfPetAsync_ShouldReturnTrue_WhenUserIsOwner Success
+          UpdatePetAsync_ShouldThrowKeyNotFoundException_WhenPetNotFound Success
+          UpdatePetAsync_ShouldThrowUnauthorizedAccessException_WhenUserIsNotOwner Success
+        UserServiceTests (11 tests) Success
+          AuthenticateAsync_ShouldReturnNull_WhenCredentialsAreInvalid Success
+          AuthenticateAsync_ShouldReturnUser_WhenCredentialsAreValid Success
+          GetUserByIdAsync_ShouldReturnUser_WhenFound Success
+          GetUserByIdAsync_ShouldThrowKeyNotFoundException_WhenNotFound Success
+          GetUserByUsernameAsync_ShouldReturnNull_WhenNotFound Success
+          GetUserByUsernameAsync_ShouldReturnUser_WhenFound Success
+          RegisterAsync_ShouldAddUser_WhenValid Success
+          RegisterAsync_ShouldThrowArgumentException_WhenUsernameOrEmailExists Success
+          UpdateUserAsync_ShouldThrowArgumentNullException_WhenUserIsNull Success
+          UpdateUserAsync_ShouldThrowKeyNotFoundException_WhenUserNotFound Success
+          UpdateUserAsync_ShouldUpdateUser_WhenValidChanges Success
+        VeterinarianServiceTests (10 tests) Success
+          ApproveVeterinarianAsync_WhenVetIsFound_UpdatesStatusToApproved Success
+          ApproveVeterinarianAsync_WhenVetNotFound_ThrowsKeyNotFoundException Success
+          GetAllVeterinariansAsync_WhenCalled_ReturnsListOfVeterinarians Success
+          GetApprovedByUserIdAsync_ShouldReturnApprovedVeterinarian_WhenUserIdExists Success
+          GetApprovedByUserIdAsync_ShouldReturnNull_WhenNoApprovedVeterinarianExists Success
+          GetByIdAsync_WhenCalled_ReturnsVeterinarian Success
+          GetByUserIdAsync_WhenCalled_ReturnsVeterinarian Success
+          RegisterVeterinarianAsync_WhenCalled_CreatesAndReturnsVeterinarian Success
+          RejectVeterinarianAsync_WhenVetIsFound_UpdatesStatusToRejected Success
+          RejectVeterinarianAsync_WhenVetNotFound_ThrowsKeyNotFoundException Success
+    CoreTests (47 tests) Success
+      EntitiyTests (24 tests) Success
+        AdminTests (1 test) Success
+          Admin_ShouldHaveValidProperties_WhenInitialized Success
+        AdoptionRequestTests (1 test) Success
+          AdoptionRequest_ShouldHaveValidProperties_WhenInitialized Success
+        AdoptionTests (1 test) Success
+          Adoption_ShouldHaveCorrectRelationships_WhenInitialized Success
+        AssistanceTest (1 test) Success
+          Assistance_ShouldHaveValidProperties_WhenInitialized Success
+        CommentTests (2 tests) Success
+          Comment_CanBeCreatedWithoutVeterinarian Success
+          Comment_ShouldHaveValidProperties_WhenAllAreSet Success
+        HelpRequestTests (8 tests) Success
+          HelpRequest_DescriptionTooLong_ShouldFailValidation Success
+          HelpRequest_InvalidEmail_ShouldFailValidation Success
+          HelpRequest_InvalidPhone_ShouldFailValidation Success
+          HelpRequest_LocationTooLong_ShouldFailValidation Success
+          HelpRequest_MissingRequiredFields_ShouldFailValidation Success
+          HelpRequest_ShouldHaveValidProperties_WhenInitialized Success
+          HelpRequest_TitleTooLong_ShouldFailValidation Success
+          HelpRequest_ValidModel_ShouldPassValidation Success
+        LostPetAdTests (3 tests) Success
+          LostPetAd_CreatedAt_DefaultsToNowIfNotSet Success
+          LostPetAd_LastSeenLocation_ShouldReturnCombinedCityAndDistrict Success
+          LostPetAd_ShouldHaveValidProperties_WhenInitialized Success
+        PetOwnerTests (1 test) Success
+          PetOwner_ShouldHaveValidRelationships_WhenInitialized Success
+        PetTests (1 test) Success
+          Pet_ShouldHaveDefaultValues_WhenInitialized Success
+        SmptSeettingsTests (2 tests) Success
+          SmtpSettings_CanDisableSsl Success
+          SmtpSettings_ShouldHaveValidProperties_WhenInitialized Success
+        UserTests (1 test) Success
+          User_ShouldHaveValidProperties_WhenInitialized Success
+        VeterinarianTests (2 tests) Success
+          Veterinarian_CommentsCanBeNullOrEmpty_ByDefault Success
+          Veterinarian_ShouldHaveValidProperties_WhenInitialized Success
+      EnumTests (14 tests) Success
+        AdoptionStatusTests (3 tests) Success
+          AdoptionStatus_ShouldContainAllValues Success
+          AdoptionStatus_ShouldHaveCorrectValues Success
+          AdoptionStatus_ShouldReturnCorrectStringRepresentation Success
+        EmergencyLevelTests (4 tests) Success
+          EmergencyLevel_ParseFromString_ReturnsCorrectEnum (3 tests) Success
+            EmergencyLevel_ParseFromString_ReturnsCorrectEnum(input: "High", expected: High) Success
+            EmergencyLevel_ParseFromString_ReturnsCorrectEnum(input: "Low", expected: Low) Success
+            EmergencyLevel_ParseFromString_ReturnsCorrectEnum(input: "Medium", expected: Medium) Success
+          EmergencyLevel_Values_ShouldMatchExpectedIntegers Success
+        HelpRequestStatusTests (3 tests) Success
+          HelpRequestStatus_ParseFromString_ReturnsCorrectEnum (2 tests) Success
+            HelpRequestStatus_ParseFromString_ReturnsCorrectEnum(input: "Active", expected: Active) Success
+            HelpRequestStatus_ParseFromString_ReturnsCorrectEnum(input: "Passive", expected: Passive) Success
+          HelpRequestStatus_Values_ShouldMatchExpectedIntegers Success
+        VeterinarianStatusTests (4 tests) Success
+          VeterinarianStatus_ParseFromString_ReturnsCorrectEnum (3 tests) Success
+            VeterinarianStatus_ParseFromString_ReturnsCorrectEnum(input: "Approved", expected: Approved) Success
+            VeterinarianStatus_ParseFromString_ReturnsCorrectEnum(input: "Pending", expected: Pending) Success
+            VeterinarianStatus_ParseFromString_ReturnsCorrectEnum(input: "Rejected", expected: Rejected) Success
+          VeterinarianStatus_Values_ShouldMatchExpectedIntegers Success
+      HelperTests (9 tests) Success
+        CityListTests (6 tests) Success
+          Cities_ShouldContainExpectedCities Success
+          GetDistrictsByCity_WhenCityIsKnown_ReturnsCorrectDistricts (4 tests) Success
+            GetDistrictsByCity_WhenCityIsKnown_ReturnsCorrectDistricts(city: "İstanbul", expectedDistricts: ["Kadıköy", "Beşiktaş", "Üsküdar", "Fatih"]) Success
+            GetDistrictsByCity_WhenCityIsKnown_ReturnsCorrectDistricts(city: "İzmir", expectedDistricts: ["Karşıyaka", "Konak", "Bornova", "Buca"]) Success
+            GetDistrictsByCity_WhenCityIsKnown_ReturnsCorrectDistricts(city: "Manisa", expectedDistricts: ["Akhisar", "Turgutlu", "Salihli", "Alaşehir"]) Success
+            GetDistrictsByCity_WhenCityIsKnown_ReturnsCorrectDistricts(city: "Muğla", expectedDistricts: ["Menteşe", "Bodrum", "Fethiye", "Marmaris"]) Success
+          GetDistrictsByCity_WhenCityIsUnknown_ReturnsOther Success
+        EmailHelperTests (3 tests) Success
+          GenerateAdoptionRequestConfirmationEmailBody_ShouldGenerateCorrectEmail Success
+          GenerateAdoptionRequestEmailBody_ShouldGenerateCorrectEmail Success
+          GenerateRejectionEmailBody_ShouldGenerateCorrectEmail Success
+    DataTests (55 tests) Success
+      RepositoriesTests (52 tests) Success
+        AdminRepositoryTests (3 tests) Success
+          IsUserAdminAsync_WhenNoAdminsExist_ReturnsFalse Success
+          IsUserAdminAsync_WhenUserIsAdmin_ReturnsTrue Success
+          IsUserAdminAsync_WhenUserIsNotAdmin_ReturnsFalse Success
+        AdoptionRepositoryTests (5 tests) Success
+          AddAsync_ShouldAddAdoption_WhenValidAdoptionPassed Success
+          GetAdoptionByPetIdAsync_ShouldReturnAdoption_WhenPetIdIsValid Success
+          GetAdoptionRequestByUserAndPetAsync_ShouldReturnAdoptionRequest_WhenValidUserAndPetId Success
+          HasUserAlreadyRequestedAdoptionAsync_ShouldReturnTrue_WhenUserHasRequestedAdoption Success
+          IsPetAlreadyAdoptedAsync_ShouldReturnTrue_WhenPetIsAdopted Success
+        AdoptionRequestRepositoryTests (5 tests) Success
+          GetAdoptionRequestsByPetIdAsync_ShouldReturnRequestsForPet Success
+          GetByIdAsync_ShouldReturnCorrectRequest Success
+          GetByIdAsync_ShouldReturnNullIfNotFound Success
+          GetPendingRequestsByPetIdAsync_ShouldReturnOnlyPendingRequests Success
+          UpdateAsync_ShouldUpdateRequestStatus Success
+        CommentRepositoryTests (4 tests) Success
+          AddCommentAsync_WhenCalled_InsertsCommentIntoDatabase Success
+          DeleteCommentAsync_WhenCommentExists_DeletesComment Success
+          DeleteCommentAsync_WhenCommentNotFound_NoExceptionThrown Success
+          UpdateCommentAsync_WhenCalled_UpdatesCommentInDatabase Success
+        HelpRequestRepositoryTests (5 tests) Success
+          CreateHelpRequestAsync_WhenCalled_AddsHelpRequestToDatabase Success
+          DeleteHelpRequestAsync_WhenCalled_RemovesRequestIfItExists Success
+          DeleteHelpRequestAsync_WhenRequestNotFound_DoesNothing Success
+          UpdateHelpRequestAsync_WhenCalled_UpdatesExistingHelpRequest Success
+          UpdateHelpRequestAsync_WhenHelpRequestNotFound_DoesNothing Success
+        LostPetRepositoryTests (5 tests) Success
+          CreateLostPetAdAsync_WhenCalled_AddsLostPetAdToDatabase Success
+          DeleteLostPetAdAsync_WhenCalled_RemovesLostPetAdFromDatabase Success
+          GetAllAsync_WhenCalled_ReturnsAllLostPetAds Success
+          GetByIdAsync_WhenAdExists_ReturnsLostPetAd Success
+          UpdateLostPetAdAsync_WhenCalled_UpdatesLostPetAdInDatabase Success
+        PetOwnerRepositoryTests (4 tests) Success
+          AddAsync_Should_Add_PetOwner_To_Database Success
+          GetPetOwnerByPetIdAsync_Should_Return_Correct_PetOwner Success
+          GetPetOwnerByPetIdAsync_Should_Return_Null_If_Not_Found Success
+          SaveChangesAsync_Should_Persist_Changes Success
+        PetRepositoryTests (6 tests) Success
+          AddAsync_Should_Add_Pet_To_Database Success
+          DeleteAsync_Should_Remove_Pet_From_Database Success
+          GetAllAsync_Should_Return_All_Pets Success
+          GetByIdAsync_Should_Return_Correct_Pet Success
+          GetPetOwnersAsync_Should_Return_PetOwners_For_Given_PetId Success
+          UpdateAsync_Should_Update_Existing_Pet Success
+        UserRepositoryTests (5 tests) Success
+          AddAsync_Should_Add_User_To_Db Success
+          GetAllAsync_Should_Return_All_Users Success
+          GetByIdAsync_Should_Return_Null_When_User_Not_Found Success
+          GetByIdAsync_Should_Return_User_When_Found Success
+          UpdateAsync_Should_Update_User_In_Db Success
+        VeterinarianRepositoryTests (10 tests) Success
+          CreateAsync_WhenCalled_SavesVetToDatabase Success
+          GetAllAsync_WhenCalled_ReturnsAllVetsWithUsers Success
+          GetAllVeterinariansAsync_WhenCalled_ReturnsOnlyApprovedVets Success
+          GetApprovedByUserIdAsync_WhenVetDoesNotExist_ReturnsNull Success
+          GetApprovedByUserIdAsync_WhenVetExistsAndApproved_ReturnsApprovedVet Success
+          GetApprovedByUserIdAsync_WhenVetExistsButNotApproved_ReturnsNull Success
+          GetByIdAsync_WhenCalled_ReturnsVet Success
+          GetByUserIdAsync_WhenVetExists_ReturnsVet Success
+          GetByUserIdAsync_WhenVetNotFound_ReturnsNull Success
+          UpdateAsync_WhenCalled_UpdatesVetInDatabase Success
+      ApplicationDbContextTests (3 tests) Success
+        AddAdoptionRequest_Should_Add_AdoptionRequest_To_Db Success
+        AddPetOwner_Should_Associate_Pet_With_User Success
+        AddUser_Should_Add_User_To_Db Success
+    WebTests (135 tests) Success
+      Controllers (135 tests) Success
+        AccountControllerTests (9 tests) Success
+          GetDistricts_ReturnsJsonWithDistricts Success
+          Login_Get_ReturnsView Success
+          Login_Post_EmptyCredentials_ReturnsViewWithError Success
+          Login_Post_InvalidCredentials_ReturnsViewWithError Success
+          Login_Post_ValidCredentials_RedirectsToHome Success
+          Logout_ClearsSession_RedirectsToLogin Success
+          Register_Get_ReturnsViewWithCities Success
+          Register_Post_InvalidModelState_ReturnsViewWithCitiesAndDistricts Success
+          Register_Post_ValidModelState_RedirectsToLogin Success
+        AdoptionControllerTests (8 tests) Success
+          Adopt_ShouldCreateAdoptionRequestAndSendEmail_WhenRequestIsValid Success
+          Adopt_ShouldRedirectToLogin_WhenUserIsNotLoggedIn Success
+          Adopt_ShouldReturnAdoptionRequestExistsView_WhenUserAlreadyRequestedAdoption Success
+          Adopt_ShouldReturnNotFound_WhenPetDoesNotExist Success
+          ApproveRequest_ShouldApproveRequestAndSendEmails Success
+          ApproveRequest_ShouldReturnNotFound_WhenRequestDoesNotExist Success
+          ApproveRequest_ShouldReturnUnauthorized_WhenUserIsNotOwner Success
+          Index_ShouldReturnViewWithPets Success
+        HelpRequestControllerTests (26 tests) Success
+          AddComment_Post_WhenHelpRequestNotFound_ReturnsNotFound Success
+          AddComment_Post_WhenUserLoggedIn_AddsCommentAndRedirects Success
+          AddComment_Post_WhenUserNotLoggedIn_RedirectsToLogin Success
+          Create_Get_WhenNoUserLoggedIn_RedirectsToLogin Success
+          Create_Get_WhenUserLoggedIn_ReturnsView Success
+          Create_Post_WhenInvalidModel_ReturnsViewWithModel Success
+          Create_Post_WhenNoUserLoggedIn_RedirectsToLogin Success
+          Create_Post_WhenValidModel_SendsEmailsToAllVetsAndRedirectsToIndex Success
+          Delete_Post_WhenUserNotOwner_ReturnsUnauthorized Success
+          Delete_Post_WhenValid_DeletesAndSendsEmails Success
+          DeleteComment_Post_WhenUserNotOwner_ReturnsUnauthorized Success
+          DeleteComment_Post_WhenValid_DeletesCommentAndRedirects Success
+          Details_Get_WhenHelpRequestFound_ReturnsViewWithCommentsAndViewBags Success
+          Details_Get_WhenHelpRequestNotFound_ReturnsNotFound Success
+          Details_Get_WhenUserLoggedIn_SetsCanEditOrDeleteComment Success
+          Edit_Get_WhenHelpRequestDoesNotBelongToUser_ReturnsUnauthorized Success
+          Edit_Get_WhenNotLoggedIn_RedirectsToLogin Success
+          Edit_Get_WhenValid_ReturnsViewWithHelpRequest Success
+          Edit_Post_WhenInvalidModel_ReturnsViewWithModel Success
+          Edit_Post_WhenValidModel_UpdatesAndSendsEmails Success
+          EditComment_Get_WhenCommentNotFound_ReturnsNotFound Success
+          EditComment_Get_WhenNotLoggedIn_RedirectsToLogin Success
+          EditComment_Get_WhenValid_ReturnsViewWithComment Success
+          EditComment_Post_WhenInvalidContent_ReturnsViewWithComment Success
+          EditComment_Post_WhenValid_UpdatesCommentAndRedirects Success
+          Index_Get_ReturnsViewWithHelpRequests Success
+        HomeControllerTests (2 tests) Success
+          About_ReturnsView Success
+          Index_ReturnsView Success
+        LostPetAdControllerTests (30 tests) Success
+          Create_Get_WhenLoggedIn_ReturnsViewWithCities Success
+          Create_Get_WhenNotLoggedIn_RedirectsToLogin Success
+          Create_Post_WhenCityOrDistrictMissing_ReturnsViewWithError Success
+          Create_Post_WhenNotLoggedIn_RedirectsToLogin Success
+          Create_Post_WhenValid_CreatesAdAndRedirects Success
+          Delete_Get_WhenAdNotFound_RedirectsToIndexWithError Success
+          Delete_Get_WhenNotLoggedIn_RedirectsToIndexWithError Success
+          Delete_Get_WhenNotOwner_RedirectsToIndexWithError Success
+          Delete_Get_WhenUserNull_RedirectsToIndexWithError Success
+          Delete_Get_WhenValidOwner_ReturnsView Success
+          Delete_Post_WhenAdNotFound_RedirectsToIndexWithError Success
+          Delete_Post_WhenNotLoggedIn_RedirectsToIndexWithError Success
+          Delete_Post_WhenNotOwner_RedirectsToIndexWithError Success
+          Delete_Post_WhenUserNull_RedirectsToIndexWithError Success
+          Delete_Post_WhenValid_DeletesAdAndRedirects Success
+          Details_WhenAdFound_ReturnsViewWithAd Success
+          Details_WhenAdNotFound_RedirectsToIndexWithError Success
+          Edit_Get_WhenAdNotFound_RedirectsToIndexWithError Success
+          Edit_Get_WhenNotLoggedIn_RedirectsToLogin Success
+          Edit_Get_WhenNotOwner_RedirectsToIndexWithError Success
+          Edit_Get_WhenValidOwner_ReturnsViewWithAd Success
+          Edit_Post_WhenAdNotFound_RedirectsToIndexWithError Success
+          Edit_Post_WhenIdMismatch_RedirectsToIndexWithError Success
+          Edit_Post_WhenNotLoggedIn_RedirectsToLogin Success
+          Edit_Post_WhenNotOwner_RedirectsToIndexWithError Success
+          Edit_Post_WhenUpdateFails_RedirectsToIndexWithError Success
+          Edit_Post_WhenValid_UpdatesAdAndRedirects Success
+          GetDistrictsByCity_WhenCalled_ReturnsJsonResultWithDistricts Success
+          Index_WhenAdsNull_ReturnsViewWithEmptyListAndError Success
+          Index_WhenCalled_ReturnsViewWithLostPetAds Success
+        PetControllerTests (33 tests) Success
+          Create_Get_WhenUserLoggedIn_ReturnsView Success
+          Create_Get_WhenUserNotLoggedIn_RedirectsToLogin Success
+          Create_Post_WhenIsNeuteredNull_SetsToFalse Success
+          Create_Post_WhenModelIsInvalid_ReturnsView Success
+          Create_Post_WhenModelIsValid_CreatesPetAndRedirectsToIndex Success
+          Create_Post_WhenUserNotLoggedIn_RedirectsToLogin Success
+          Delete_Get_WhenNotOwner_ReturnsErrorView Success
+          Delete_Get_WhenPetAlreadyAdopted_ReturnsErrorView Success
+          Delete_Get_WhenPetNotFound_ReturnsErrorView Success
+          Delete_Get_WhenUserNotLoggedIn_RedirectsToLogin Success
+          Delete_Get_WhenValid_ReturnsViewWithPet Success
+          Delete_Post_WhenNotAuthorized_ThrowsUnauthorizedAccessException Success
+          Delete_Post_WhenPetAlreadyAdopted_ReturnsErrorView Success
+          Delete_Post_WhenPetNotFound_ReturnsErrorView Success
+          Delete_Post_WhenPetNotFoundInService_ThrowsKeyNotFoundException Success
+          Delete_Post_WhenUserNotLoggedIn_RedirectsToLogin Success
+          Delete_Post_WhenValid_DeletesPetAndSendsEmails Success
+          Details_WhenPetAdopted_SetsAdoptionStatus Success
+          Details_WhenPetFound_ReturnsViewWithPetAndViewData Success
+          Details_WhenPetNotFound_ReturnsErrorViewWithMessage Success
+          Details_WhenUserLoggedIn_SetsUserSpecificViewData Success
+          Edit_Get_WhenNotOwner_ReturnsErrorView Success
+          Edit_Get_WhenPetAlreadyAdopted_ReturnsErrorView Success
+          Edit_Get_WhenPetNotFound_ReturnsErrorView Success
+          Edit_Get_WhenUserNotLoggedIn_RedirectsToLogin Success
+          Edit_Get_WhenValid_ReturnsViewWithPet Success
+          Edit_Post_WhenIsNeuteredNull_SetsToFalse Success
+          Edit_Post_WhenModelIsInvalid_ReturnsView Success
+          Edit_Post_WhenNotOwner_ReturnsErrorView Success
+          Edit_Post_WhenPetNotFound_ReturnsErrorView Success
+          Edit_Post_WhenUnauthorized_ThrowsUnauthorizedAccessException Success
+          Edit_Post_WhenUserNotLoggedIn_RedirectsToLogin Success
+          Edit_Post_WhenValid_SendsEmailsAndRedirects Success
+        VeterinarianControllerTests (27 tests) Success
+          Approve_WhenNotAdmin_RedirectsToError Success
+          Approve_WhenNotLoggedIn_RedirectsToLogin Success
+          Approve_WhenNotPending_ReturnsError Success
+          Approve_WhenPending_CallsServiceAndRedirects Success
+          Approve_WhenUserNotFound_RedirectsToLogin Success
+          Approve_WhenVeterinarianNotFound_RedirectsToError Success
+          Index_WhenAdmin_ReturnsViewWithVeterinarians Success
+          Index_WhenNotAdmin_RedirectsToError Success
+          Index_WhenNotLoggedIn_RedirectsToLogin Success
+          Index_WhenUserNotFound_RedirectsToLogin Success
+          Register_Get_WhenExistingApplication_SetsViewDataFlag Success
+          Register_Get_WhenNoExistingApplication_ReturnsView Success
+          Register_Get_WhenNotLoggedIn_RedirectsToLogin Success
+          Register_Get_WhenUserNotFound_RedirectsToLogin Success
+          Register_Post_WhenExistingApplication_ReturnsViewWithError Success
+          Register_Post_WhenInvalidInputs_ReturnsViewWithErrors Success
+          Register_Post_WhenNotLoggedIn_RedirectsToLogin Success
+          Register_Post_WhenServiceThrows_ReturnsViewWithError Success
+          Register_Post_WhenUserIdMismatch_RedirectsToError Success
+          Register_Post_WhenUserNotFound_RedirectsToLogin Success
+          Register_Post_WhenValid_RegistersAndRedirects Success
+          Reject_WhenNotAdmin_RedirectsToError Success
+          Reject_WhenNotLoggedIn_RedirectsToLogin Success
+          Reject_WhenNotPending_ReturnsError Success
+          Reject_WhenPending_CallsServiceAndRedirects Success
+          Reject_WhenUserNotFound_RedirectsToLogin Success
+          Reject_WhenVeterinarianNotFound_RedirectsToError Success

@@ -26,7 +26,7 @@ public class EmailHelperTests
         Assert.Contains(user.Username, emailBody);    // Check that username is included
         Assert.Contains(pet.Name, emailBody);         // Check that pet's name is included
         Assert.Contains(adoptionRequest.Message, emailBody);  // Check that the adoption request message is included
-        Assert.Contains("<link rel='stylesheet' type='text/css' href='https://yourdomain.com/path/to/email.css'>", emailBody);  // Check for CSS link
+        Assert.Contains("<link rel='stylesheet' type='text/css' href='https://www.petsolive.com.tr/css/email.css'>", emailBody);  // Check for CSS link
         Assert.Contains("<strong>Status:</strong> Pending", emailBody);  // Check adoption status
     }
 

@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Petsolive.API.DTOs;
 using PetSoLive.Core.Entities;
+using Petsolive.API.Helpers;
+using System.Linq;
 
 namespace PetSoLive.Tests.UnitTests.APITests.Controllers
 {
@@ -17,6 +19,7 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
         private readonly Mock<IServiceManager> _serviceManagerMock;
         private readonly Mock<IMapper> _mapperMock;
         private readonly Mock<IEmailService> _emailServiceMock;
+        private readonly Mock<ImgBBHelper> _imgBBHelperMock;
         private readonly HelpRequestController _controller;
 
         public HelpRequestControllerTests()
@@ -24,8 +27,9 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
             _serviceManagerMock = new Mock<IServiceManager>();
             _mapperMock = new Mock<IMapper>();
             _emailServiceMock = new Mock<IEmailService>();
+            _imgBBHelperMock = new Mock<ImgBBHelper>("dummy_api_key");
             _serviceManagerMock.SetupGet(s => s.EmailService).Returns(_emailServiceMock.Object);
-            _controller = new HelpRequestController(_serviceManagerMock.Object, _mapperMock.Object);
+            _controller = new HelpRequestController(_serviceManagerMock.Object, _mapperMock.Object, _imgBBHelperMock.Object);
         }
 
         [Fact]
@@ -42,7 +46,13 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            Assert.Equal(helpRequestDtos, okResult.Value);
+            var model = Assert.IsAssignableFrom<IEnumerable<HelpRequestDto>>(okResult.Value);
+            Assert.Equal(helpRequestDtos.Count, model.Count());
+            var modelList = model.ToList();
+            for (int i = 0; i < helpRequestDtos.Count; i++)
+            {
+                Assert.Equal(helpRequestDtos[i].Id, modelList[i].Id);
+            }
         }
 
         [Fact]
@@ -85,9 +95,11 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
             var entity = new HelpRequest { Id = 1 };
             _mapperMock.Setup(m => m.Map<HelpRequest>(dto)).Returns(entity);
             _serviceManagerMock.Setup(s => s.HelpRequestService.CreateHelpRequestAsync(entity)).Returns(Task.CompletedTask);
+            _serviceManagerMock.Setup(s => s.VeterinarianService.GetAllVeterinariansAsync()).ReturnsAsync(new List<Veterinarian>());
+            _serviceManagerMock.Setup(s => s.UserService.GetUserByIdAsync(It.IsAny<int>())).ReturnsAsync(new User());
 
             // Act
-            var result = await _controller.Create(dto);
+            var result = await _controller.Create(dto, null);
 
             // Assert
             Assert.IsType<OkResult>(result);
@@ -101,7 +113,7 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
             _controller.ModelState.AddModelError("Title", "Required");
 
             // Act
-            var result = await _controller.Create(dto);
+            var result = await _controller.Create(dto, null);
 
             // Assert
             Assert.IsType<BadRequestResult>(result); // Controller'da bu yok, eklenirse bu test çalışır
@@ -115,9 +127,11 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
             var entity = new HelpRequest { Id = 1 };
             _mapperMock.Setup(m => m.Map<HelpRequest>(dto)).Returns(entity);
             _serviceManagerMock.Setup(s => s.HelpRequestService.CreateHelpRequestAsync(entity)).ThrowsAsync(new Exception("DB error"));
+            _serviceManagerMock.Setup(s => s.VeterinarianService.GetAllVeterinariansAsync()).ReturnsAsync(new List<Veterinarian>());
+            _serviceManagerMock.Setup(s => s.UserService.GetUserByIdAsync(It.IsAny<int>())).ReturnsAsync(new User());
 
             // Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.Create(dto));
+            await Assert.ThrowsAsync<Exception>(() => _controller.Create(dto, null));
         }
 
         [Fact]
@@ -134,7 +148,7 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
             _serviceManagerMock.Setup(s => s.HelpRequestService.CreateHelpRequestAsync(entity)).Returns(Task.CompletedTask);
             _serviceManagerMock.Setup(s => s.VeterinarianService.GetAllVeterinariansAsync()).ReturnsAsync(veterinarians);
             _serviceManagerMock.Setup(s => s.UserService.GetUserByIdAsync(2)).ReturnsAsync(user);
-            var result = await _controller.Create(dto);
+            var result = await _controller.Create(dto, null);
             _emailServiceMock.Verify(e => e.SendEmailAsync("vet1@mail.com", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             _emailServiceMock.Verify(e => e.SendEmailAsync("vet2@mail.com", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
@@ -148,9 +162,11 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
             var entity = new HelpRequest { Id = id };
             _mapperMock.Setup(m => m.Map<HelpRequest>(dto)).Returns(entity);
             _serviceManagerMock.Setup(s => s.HelpRequestService.UpdateHelpRequestAsync(entity)).Returns(Task.CompletedTask);
+            _serviceManagerMock.Setup(s => s.VeterinarianService.GetAllVeterinariansAsync()).ReturnsAsync(new List<Veterinarian>());
+            _serviceManagerMock.Setup(s => s.UserService.GetUserByIdAsync(It.IsAny<int>())).ReturnsAsync(new User());
 
             // Act
-            var result = await _controller.Update(id, dto);
+            var result = await _controller.Update(id, dto, null);
 
             // Assert
             Assert.IsType<NoContentResult>(result);
@@ -165,7 +181,7 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
             _controller.ModelState.AddModelError("Title", "Required");
 
             // Act
-            var result = await _controller.Update(id, dto);
+            var result = await _controller.Update(id, dto, null);
 
             // Assert
             Assert.IsType<BadRequestResult>(result); // Controller'da bu yok, eklenirse bu test çalışır
@@ -186,7 +202,7 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
             _serviceManagerMock.Setup(s => s.HelpRequestService.UpdateHelpRequestAsync(entity)).Returns(Task.CompletedTask);
             _serviceManagerMock.Setup(s => s.VeterinarianService.GetAllVeterinariansAsync()).ReturnsAsync(veterinarians);
             _serviceManagerMock.Setup(s => s.UserService.GetUserByIdAsync(2)).ReturnsAsync(user);
-            var result = await _controller.Update(id, dto);
+            var result = await _controller.Update(id, dto, null);
             _emailServiceMock.Verify(e => e.SendEmailAsync("vet1@mail.com", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             _emailServiceMock.Verify(e => e.SendEmailAsync("vet2@mail.com", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
@@ -200,9 +216,11 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
             var entity = new HelpRequest { Id = id };
             _mapperMock.Setup(m => m.Map<HelpRequest>(dto)).Returns(entity);
             _serviceManagerMock.Setup(s => s.HelpRequestService.UpdateHelpRequestAsync(entity)).ThrowsAsync(new Exception("DB error"));
+            _serviceManagerMock.Setup(s => s.VeterinarianService.GetAllVeterinariansAsync()).ReturnsAsync(new List<Veterinarian>());
+            _serviceManagerMock.Setup(s => s.UserService.GetUserByIdAsync(It.IsAny<int>())).ReturnsAsync(new User());
 
             // Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.Update(id, dto));
+            await Assert.ThrowsAsync<Exception>(() => _controller.Update(id, dto, null));
         }
 
         [Fact]
