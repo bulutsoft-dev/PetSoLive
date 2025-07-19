@@ -11,6 +11,7 @@ using PetSoLive.Core.Entities;
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Web.Controllers;
 using Xunit;
+using PetSoLive.Web.Helpers;
 
 namespace PetSoLive.Tests.Controllers;
 
@@ -22,6 +23,7 @@ public class LostPetAdControllerTests
     private readonly Mock<IUserService> _userServiceMock;
     private readonly Mock<IEmailService> _emailServiceMock;
     private readonly Mock<ISession> _sessionMock;
+    private readonly Mock<ImgBBHelper> _imgBBHelperMock;
     private readonly LostPetAdController _controller;
     private readonly DefaultHttpContext _httpContext;
 
@@ -33,6 +35,7 @@ public class LostPetAdControllerTests
         _userServiceMock = new Mock<IUserService>();
         _emailServiceMock = new Mock<IEmailService>();
         _sessionMock = new Mock<ISession>();
+        _imgBBHelperMock = new Mock<ImgBBHelper>("dummy_api_key");
 
         // Setup IServiceManager to return mocked services
         _serviceManagerMock.SetupGet(m => m.LostPetAdService).Returns(_lostPetAdServiceMock.Object);
@@ -50,7 +53,7 @@ public class LostPetAdControllerTests
             Session = _sessionMock.Object
         };
 
-        _controller = new LostPetAdController(_serviceManagerMock.Object, _localizerMock.Object)
+        _controller = new LostPetAdController(_serviceManagerMock.Object, _localizerMock.Object, _imgBBHelperMock.Object)
         {
             ControllerContext = new ControllerContext
             {
@@ -131,7 +134,7 @@ public class LostPetAdControllerTests
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny)).Returns(false);
 
         // Act
-        var result = await _controller.Create(lostPetAd, city, district);
+        var result = await _controller.Create(lostPetAd, city, district, null);
 
         // Assert
         var redirectResult = Assert.IsType<RedirectToActionResult>(result);
@@ -163,7 +166,7 @@ public class LostPetAdControllerTests
             .Returns(Task.CompletedTask);
 
         // Act
-        var result = await _controller.Create(lostPetAd, city, district);
+        var result = await _controller.Create(lostPetAd, city, district, null);
 
         // Assert
         var redirectResult = Assert.IsType<RedirectToActionResult>(result);
@@ -193,7 +196,7 @@ public class LostPetAdControllerTests
         var district = "Bornova";
 
         // Act
-        var result = await _controller.Create(lostPetAd, city, district);
+        var result = await _controller.Create(lostPetAd, city, district, null);
 
         // Assert
         var viewResult = Assert.IsType<ViewResult>(result);
@@ -218,7 +221,7 @@ public class LostPetAdControllerTests
         _lostPetAdServiceMock.Setup(s => s.GetAllLostPetAdsAsync()).ReturnsAsync(ads);
 
         // Act
-        var result = await _controller.Index();
+        var result = await _controller.Index(null, null, null, null);
 
         // Assert
         var viewResult = Assert.IsType<ViewResult>(result);
@@ -232,7 +235,7 @@ public class LostPetAdControllerTests
         _lostPetAdServiceMock.Setup(s => s.GetAllLostPetAdsAsync()).ReturnsAsync((List<LostPetAd>)null);
 
         // Act
-        var result = await _controller.Index();
+        var result = await _controller.Index(null, null, null, null);
 
         // Assert
         var viewResult = Assert.IsType<ViewResult>(result);
@@ -383,7 +386,7 @@ public class LostPetAdControllerTests
         _sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny)).Returns(false);
 
         // Act
-        var result = await _controller.Edit(10, ad, city, district);
+        var result = await _controller.Edit(10, ad, city, district, null);
 
         // Assert
         var redirectResult = Assert.IsType<RedirectToActionResult>(result);
@@ -404,7 +407,7 @@ public class LostPetAdControllerTests
         var district = "Bornova";
 
         // Act
-        var result = await _controller.Edit(10, ad, city, district);
+        var result = await _controller.Edit(10, ad, city, district, null);
 
         // Assert
         var redirectResult = Assert.IsType<RedirectToActionResult>(result);
@@ -426,7 +429,7 @@ public class LostPetAdControllerTests
         _lostPetAdServiceMock.Setup(s => s.GetLostPetAdByIdAsync(10)).ReturnsAsync((LostPetAd)null);
 
         // Act
-        var result = await _controller.Edit(10, ad, city, district);
+        var result = await _controller.Edit(10, ad, city, district, null);
 
         // Assert
         var redirectResult = Assert.IsType<RedirectToActionResult>(result);
@@ -453,7 +456,7 @@ public class LostPetAdControllerTests
         _lostPetAdServiceMock.Setup(s => s.GetLostPetAdByIdAsync(10)).ReturnsAsync(existingAd);
 
         // Act
-        var result = await _controller.Edit(10, updatedAd, city, district);
+        var result = await _controller.Edit(10, updatedAd, city, district, null);
 
         // Assert
         var redirectResult = Assert.IsType<RedirectToActionResult>(result);
@@ -494,7 +497,7 @@ public class LostPetAdControllerTests
         _lostPetAdServiceMock.Setup(s => s.UpdateLostPetAdAsync(It.IsAny<LostPetAd>())).Returns(Task.CompletedTask);
 
         // Act
-        var result = await _controller.Edit(10, updatedAd, city, district);
+        var result = await _controller.Edit(10, updatedAd, city, district, null);
 
         // Assert
         var redirectResult = Assert.IsType<RedirectToActionResult>(result);
@@ -531,7 +534,7 @@ public class LostPetAdControllerTests
             .ThrowsAsync(new Exception("Update failed"));
 
         // Act
-        var result = await _controller.Edit(10, updatedAd, city, district);
+        var result = await _controller.Edit(10, updatedAd, city, district, null);
 
         // Assert
         var redirectResult = Assert.IsType<RedirectToActionResult>(result);
