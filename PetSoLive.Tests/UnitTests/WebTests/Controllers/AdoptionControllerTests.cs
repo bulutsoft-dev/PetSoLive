@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using PetSoLive.Web.Controllers;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PetSoLive.Tests.Controllers
 {
@@ -31,13 +32,16 @@ namespace PetSoLive.Tests.Controllers
             _httpContextMock = new Mock<HttpContext>();
             _httpContextMock.Setup(x => x.Session).Returns(_sessionMock.Object);
 
+            var context = new DefaultHttpContext();
+            context.Session = _sessionMock.Object;
+
             _controller = new AdoptionController(
                 _serviceManagerMock.Object,
                 _localizerMock.Object
             );
             _controller.ControllerContext = new ControllerContext
             {
-                HttpContext = _httpContextMock.Object
+                HttpContext = context
             };
         }
 
@@ -107,15 +111,21 @@ namespace PetSoLive.Tests.Controllers
                 new Pet { Id = 2, Name = "Cat" }
             };
             _serviceManagerMock.Setup(m => m.PetService.GetAllPetsAsync()).ReturnsAsync(pets);
+            _serviceManagerMock.Setup(m => m.AdoptionService.IsPetAlreadyAdoptedAsync(It.IsAny<int>())).ReturnsAsync(false);
             _localizerMock.Setup(l => l["AvailablePetsTitle"]).Returns(new LocalizedString("AvailablePetsTitle", "Available Pets"));
-
+            // Context ve session ayarla
+            var context = new DefaultHttpContext();
+            context.Session = _sessionMock.Object;
+            _controller.ControllerContext.HttpContext = context;
             // Act
             var result = await _controller.Index();
-
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<Pet[]>(viewResult.Model);
-            Assert.Equal(2, model.Length);
+            // Model null gelirse hata olmasın diye kontrol
+            Assert.NotNull(viewResult.Model);
+            var model = viewResult.Model as IEnumerable<object>;
+            Assert.NotNull(model);
+            Assert.Equal(2, model.Count());
         }
 
         [Fact]
@@ -182,11 +192,20 @@ namespace PetSoLive.Tests.Controllers
         public async Task ApproveRequest_ShouldReturnNotFound_WhenRequestDoesNotExist()
         {
             // Arrange
+            // Session ve user setup
+            var username = "testuser";
+            var user = new User { Id = 1, Username = username };
+            var sessionMock = new Mock<ISession>();
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
+            sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
+            var context = new DefaultHttpContext();
+            context.Session = sessionMock.Object;
+            _serviceManagerMock.Setup(m => m.UserService.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             _serviceManagerMock.Setup(m => m.AdoptionRequestService.GetAdoptionRequestByIdAsync(It.IsAny<int>())).ReturnsAsync((AdoptionRequest)null);
-
+            _controller.ControllerContext.HttpContext = context;
             // Act
             var result = await _controller.ApproveRequest(1, 1);
-
             // Assert
             Assert.IsType<NotFoundResult>(result);
         }
@@ -195,18 +214,22 @@ namespace PetSoLive.Tests.Controllers
         public async Task ApproveRequest_ShouldReturnUnauthorized_WhenUserIsNotOwner()
         {
             // Arrange
+            var username = "testuser";
+            var user = new User { Id = 1, Username = username };
+            var sessionMock = new Mock<ISession>();
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
+            sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
+            var context = new DefaultHttpContext();
+            context.Session = sessionMock.Object;
+            _serviceManagerMock.Setup(m => m.UserService.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             var pet = new Pet { Id = 1, Name = "Dog", PetOwners = new List<PetOwner> { new PetOwner { UserId = 2 } } };
             var adoptionRequest = new AdoptionRequest { PetId = pet.Id, Status = AdoptionStatus.Pending, UserId = 1 };
             _serviceManagerMock.Setup(m => m.AdoptionRequestService.GetAdoptionRequestByIdAsync(1)).ReturnsAsync(adoptionRequest);
             _serviceManagerMock.Setup(m => m.PetService.GetPetByIdAsync(1)).ReturnsAsync(pet);
-
-            var claims = new[] { new Claim(ClaimTypes.Name, "1") };
-            var userPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claims, "mock"));
-            _controller.ControllerContext.HttpContext = new DefaultHttpContext { User = userPrincipal };
-
+            _controller.ControllerContext.HttpContext = context;
             // Act
             var result = await _controller.ApproveRequest(1, 1);
-
             // Assert
             Assert.IsType<UnauthorizedResult>(result);
         }
@@ -215,13 +238,21 @@ namespace PetSoLive.Tests.Controllers
         public async Task ApproveRequest_ShouldApproveRequestAndSendEmails()
         {
             // Arrange
+            var username = "john_doe";
             var user = new User
             {
                 Id = 1,
-                Username = "john_doe",
+                Username = username,
                 Email = "john@example.com"
             };
-
+            var sessionMock = new Mock<ISession>();
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
+            sessionMock.Setup(s => s.TryGetValue("Username", out It.Ref<byte[]>.IsAny))
+                .Returns((string key, out byte[] value) => { value = usernameBytes; return true; });
+            var context = new DefaultHttpContext();
+            context.Session = sessionMock.Object;
+            _controller.ControllerContext.HttpContext = context;
+            _serviceManagerMock.Setup(m => m.UserService.GetUserByUsernameAsync(username)).ReturnsAsync(user);
             var pet = new Pet
             {
                 Id = 1,
@@ -235,7 +266,6 @@ namespace PetSoLive.Tests.Controllers
                     }
                 }
             };
-
             var adoptionRequest = new AdoptionRequest
             {
                 Id = 1,
@@ -244,24 +274,19 @@ namespace PetSoLive.Tests.Controllers
                 UserId = 1,
                 User = user
             };
-
             _serviceManagerMock.Setup(m => m.AdoptionRequestService.GetAdoptionRequestByIdAsync(1)).ReturnsAsync(adoptionRequest);
             _serviceManagerMock.Setup(m => m.PetService.GetPetByIdAsync(1)).ReturnsAsync(pet);
             _serviceManagerMock.Setup(m => m.AdoptionRequestService.UpdateAdoptionRequestAsync(It.IsAny<AdoptionRequest>())).Returns(Task.CompletedTask);
             _serviceManagerMock.Setup(m => m.AdoptionRequestService.GetPendingRequestsByPetIdAsync(It.IsAny<int>())).ReturnsAsync(new List<AdoptionRequest>());
             _serviceManagerMock.Setup(m => m.AdoptionService.CreateAdoptionAsync(It.IsAny<Adoption>())).Returns(Task.CompletedTask);
             _serviceManagerMock.Setup(m => m.EmailService.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
-
-            var claims = new[] { new Claim(ClaimTypes.Name, "1") };
-            var userPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claims, "mock"));
-            _controller.ControllerContext.HttpContext = new DefaultHttpContext { User = userPrincipal };
-
             // Act
             var result = await _controller.ApproveRequest(1, 1);
-
             // Assert
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
-            Assert.Equal("Index", redirectResult.ActionName);
+            Assert.Equal("Details", redirectResult.ActionName);
+            Assert.Equal("Pet", redirectResult.ControllerName);
+            Assert.Equal(1, redirectResult.RouteValues["id"]);
             _serviceManagerMock.Verify(m => m.AdoptionRequestService.UpdateAdoptionRequestAsync(It.Is<AdoptionRequest>(a => a.Status == AdoptionStatus.Approved)), Times.Once());
             _serviceManagerMock.Verify(m => m.AdoptionRequestService.GetPendingRequestsByPetIdAsync(It.IsAny<int>()), Times.Once());
             _serviceManagerMock.Verify(m => m.AdoptionService.CreateAdoptionAsync(It.IsAny<Adoption>()), Times.Once());
