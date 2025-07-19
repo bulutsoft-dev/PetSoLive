@@ -68,6 +68,7 @@
     </div>
 </div>
 @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Koyu mod toggle
         const darkModeBtn = document.getElementById('darkModeToggle');
@@ -91,7 +92,9 @@
         var selectDistrictText = '@Localizer["SelectDistrict"]';
         $('#city').change(function () {
             var city = $(this).val();
+            console.log("Seçilen şehir:", city); // Debug için
             $.get('/Account/GetDistricts?city=' + city, function (data) {
+                console.log("Gelen ilçeler:", data); // Debug için
                 var districtSelect = $('#district');
                 districtSelect.empty();
                 districtSelect.append('<option value="">' + selectDistrictText + '</option>');
