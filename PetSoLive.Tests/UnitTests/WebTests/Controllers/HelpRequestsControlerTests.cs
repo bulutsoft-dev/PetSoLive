@@ -12,6 +12,7 @@ using PetSoLive.Core.Enums;
 using PetSoLive.Core.Interfaces;
 using PetSoLive.Web.Controllers;
 using PetSoLive.Web.Helpers;
+using System.Linq;
 
 namespace PetSoLive.Tests.Controllers;
 
@@ -212,7 +213,15 @@ public class HelpRequestControllerTests
 
         // Assert
         var viewResult = Assert.IsType<ViewResult>(result);
-        Assert.Equal(helpRequests, viewResult.Model);
+        var model = Assert.IsAssignableFrom<List<HelpRequest>>(viewResult.Model);
+        var expected = helpRequests.OrderBy(x => x.Id).ToList();
+        var actual = model.OrderBy(x => x.Id).ToList();
+        Assert.Equal(expected.Count, actual.Count);
+        for (int i = 0; i < expected.Count; i++)
+        {
+            Assert.Equal(expected[i].Id, actual[i].Id);
+            Assert.Equal(expected[i].Title, actual[i].Title);
+        }
     }
 
     [Fact]

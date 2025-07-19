@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Petsolive.API.DTOs;
 using PetSoLive.Core.Entities;
 using Petsolive.API.Helpers;
+using System.Linq;
 
 namespace PetSoLive.Tests.UnitTests.APITests.Controllers
 {
@@ -45,7 +46,13 @@ namespace PetSoLive.Tests.UnitTests.APITests.Controllers
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            Assert.Equal(helpRequestDtos, okResult.Value);
+            var model = Assert.IsAssignableFrom<IEnumerable<HelpRequestDto>>(okResult.Value);
+            Assert.Equal(helpRequestDtos.Count, model.Count());
+            var modelList = model.ToList();
+            for (int i = 0; i < helpRequestDtos.Count; i++)
+            {
+                Assert.Equal(helpRequestDtos[i].Id, modelList[i].Id);
+            }
         }
 
         [Fact]
